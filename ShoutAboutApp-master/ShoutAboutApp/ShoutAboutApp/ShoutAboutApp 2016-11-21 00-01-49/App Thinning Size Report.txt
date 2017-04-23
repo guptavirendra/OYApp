@@ -1,0 +1,120 @@
+
+App Thinning Size Report for All Variants of ShoutAboutApp
+
+Variant: ShoutAboutApp-iPad (4th generation)-etc.ipa
+Supported devices: iPad (3rd generation) and iPad (4th generation)
+App + On Demand Resources size: 3.5 MB compressed, 8 MB uncompressed
+App size: 3.5 MB compressed, 8 MB uncompressed
+On Demand Resources size: Zero KB compressed, Zero KB uncompressed
+
+
+Variant: ShoutAboutApp-iPad 2-etc.ipa
+Supported devices: iPad 2 and iPad mini
+App + On Demand Resources size: 3.5 MB compressed, 8 MB uncompressed
+App size: 3.5 MB compressed, 8 MB uncompressed
+On Demand Resources size: Zero KB compressed, Zero KB uncompressed
+
+
+Variant: ShoutAboutApp-iPad Pro (12.9-inch).ipa
+Supported devices: iPad Pro (12.9-inch)
+App + On Demand Resources size: 3.4 MB compressed, 8.1 MB uncompressed
+App size: 3.4 MB compressed, 8.1 MB uncompressed
+On Demand Resources size: Zero KB compressed, Zero KB uncompressed
+
+
+Variant: ShoutAboutApp-iPad Pro (9.7-inch).ipa
+Supported devices: iPad Pro (9.7-inch)
+App + On Demand Resources size: 3.4 MB compressed, 8.1 MB uncompressed
+App size: 3.4 MB compressed, 8.1 MB uncompressed
+On Demand Resources size: Zero KB compressed, Zero KB uncompressed
+
+
+Variant: ShoutAboutApp-iPad mini 3-etc.ipa
+Supported devices: iPad Air, iPad mini 2, and iPad mini 3
+App + On Demand Resources size: 3.4 MB compressed, 8.1 MB uncompressed
+App size: 3.4 MB compressed, 8.1 MB uncompressed
+On Demand Resources size: Zero KB compressed, Zero KB uncompressed
+
+
+Variant: ShoutAboutApp-iPad mini 4-etc.ipa
+Supported devices: iPad Air 2 and iPad mini 4
+App + On Demand Resources size: 3.4 MB compressed, 8.1 MB uncompressed
+App size: 3.4 MB compressed, 8.1 MB uncompressed
+On Demand Resources size: Zero KB compressed, Zero KB uncompressed
+
+
+Variant: ShoutAboutApp-iPhone 4S.ipa
+Supported devices: iPhone 4S
+App + On Demand Resources size: 3.5 MB compressed, 8 MB uncompressed
+App size: 3.5 MB compressed, 8 MB uncompressed
+On Demand Resources size: Zero KB compressed, Zero KB uncompressed
+
+
+Variant: ShoutAboutApp-iPhone 5-etc.ipa
+Supported devices: iPhone 5 and iPhone 5c
+App + On Demand Resources size: 3.5 MB compressed, 8 MB uncompressed
+App size: 3.5 MB compressed, 8 MB uncompressed
+On Demand Resources size: Zero KB compressed, Zero KB uncompressed
+
+
+Variant: ShoutAboutApp-iPhone 5s.ipa
+Supported devices: iPhone 5s
+App + On Demand Resources size: 3.4 MB compressed, 8.1 MB uncompressed
+App size: 3.4 MB compressed, 8.1 MB uncompressed
+On Demand Resources size: Zero KB compressed, Zero KB uncompressed
+
+
+Variant: ShoutAboutApp-iPhone 6 Plus.ipa
+Supported devices: iPhone 6 Plus
+App + On Demand Resources size: 3.4 MB compressed, 8.1 MB uncompressed
+App size: 3.4 MB compressed, 8.1 MB uncompressed
+On Demand Resources size: Zero KB compressed, Zero KB uncompressed
+
+
+Variant: ShoutAboutApp-iPhone 6.ipa
+Supported devices: iPhone 6
+App + On Demand Resources size: 3.4 MB compressed, 8.1 MB uncompressed
+App size: 3.4 MB compressed, 8.1 MB uncompressed
+On Demand Resources size: Zero KB compressed, Zero KB uncompressed
+
+
+Variant: ShoutAboutApp-iPhone 6s Plus.ipa
+Supported devices: iPhone 6s Plus
+App + On Demand Resources size: 3.4 MB compressed, 8.1 MB uncompressed
+App size: 3.4 MB compressed, 8.1 MB uncompressed
+On Demand Resources size: Zero KB compressed, Zero KB uncompressed
+
+
+Variant: ShoutAboutApp-iPhone 6s.ipa
+Supported devices: iPhone 6s
+App + On Demand Resources size: 3.4 MB compressed, 8.1 MB uncompressed
+App size: 3.4 MB compressed, 8.1 MB uncompressed
+On Demand Resources size: Zero KB compressed, Zero KB uncompressed
+
+
+Variant: ShoutAboutApp-iPhone SE.ipa
+Supported devices: iPhone SE
+App + On Demand Resources size: 3.4 MB compressed, 8.1 MB uncompressed
+App size: 3.4 MB compressed, 8.1 MB uncompressed
+On Demand Resources size: Zero KB compressed, Zero KB uncompressed
+
+
+Variant: ShoutAboutApp-iPod touch (6th generation).ipa
+Supported devices: iPod touch (6th generation)
+App + On Demand Resources size: 3.4 MB compressed, 8.1 MB uncompressed
+App size: 3.4 MB compressed, 8.1 MB uncompressed
+On Demand Resources size: Zero KB compressed, Zero KB uncompressed
+
+
+Variant: ShoutAboutApp-iPod touch.ipa
+Supported devices: iPod touch
+App + On Demand Resources size: 3.5 MB compressed, 8 MB uncompressed
+App size: 3.5 MB compressed, 8 MB uncompressed
+On Demand Resources size: Zero KB compressed, Zero KB uncompressed
+
+
+Variant: ShoutAboutApp.ipa
+Supported devices: Universal
+App + On Demand Resources size: 5.2 MB compressed, 14.4 MB uncompressed
+App size: 5.2 MB compressed, 14.4 MB uncompressed
+On Demand Resources size: Zero KB compressed, Zero KB uncompressed
