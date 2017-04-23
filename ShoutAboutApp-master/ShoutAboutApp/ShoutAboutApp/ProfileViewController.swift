@@ -205,7 +205,7 @@ extension ProfileViewController
             }
             self.imageView!.setImageWithURL(NSURL(string:urlString ), placeholderImage: self.imageView!.image)
         }
-            SDWebImageDownloader.sharedDownloader().downloadImageWithURL(NSURL(string:urlString ), options: .ProgressiveDownload, progress: { (recievedSize, expectedSize) in
+            /*SDWebImageDownloader.sharedDownloader().downloadImageWithURL(NSURL(string:urlString ), options: .ProgressiveDownload, progress: { (recievedSize, expectedSize) in
             
             }, completed: { (image, data, error, finished) in
               
@@ -230,7 +230,7 @@ extension ProfileViewController
                 }
                 
                 
-          })
+          })*/
         
     }
 }

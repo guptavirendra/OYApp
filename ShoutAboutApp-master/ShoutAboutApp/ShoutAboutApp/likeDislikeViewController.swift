@@ -46,7 +46,7 @@ class likeDislikeViewController: UIViewController {
         cell?.nameLabel.text = "Welcome to the world of xcode"
         cell?.dateLabel.text = "26-Nov"
         cell?.UserImageView.makeImageRounded()
-        cell?.UserImageView.setImageWithURL(NSURL(string:"dp"), placeholderImage: UIImage(named: "profile"))
+       /// cell?.UserImageView.setImageWithURL(NSURL(string:"dp"), placeholderImage: UIImage(named: "profile"))
         cell?.contentView.setGraphicEffects()
         return cell!
         

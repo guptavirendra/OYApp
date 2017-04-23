@@ -111,8 +111,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "189"
             endingLineNumber = "189"
-            landmarkName = "clearSearchHistory()"
-            landmarkType = "5">
+            landmarkName = "MainSearchViewController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -233,13 +233,13 @@
                   symbolName = "ShoutAboutApp.JoinViewController.(postContactToServer (Swift.Dictionary&lt;Swift.String, Swift.String&gt;, postDict : Swift.Dictionary&lt;Swift.String, Swift.String&gt;) -&gt; ()).(closure #1)"
                   moduleName = "ShoutAboutApp"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/virendragupta/ShoutAboutApp/ShoutAboutApp/ShoutAboutApp/JoinViewController.swift"
-                  timestampString = "508509679.807709"
+                  urlString = "file:///Users/virendragupta/OYApp/ShoutAboutApp-master/ShoutAboutApp/ShoutAboutApp/JoinViewController.swift"
+                  timestampString = "514655113.313"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "600"
-                  endingLineNumber = "600"
-                  offsetFromSymbolStart = "359">
+                  startingLineNumber = "602"
+                  endingLineNumber = "602"
+                  offsetFromSymbolStart = "73">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
@@ -248,13 +248,13 @@
                   symbolName = "ShoutAboutApp.JoinViewController.(postContactToServer (Swift.Dictionary&lt;Swift.String, Swift.String&gt;, postDict : Swift.Dictionary&lt;Swift.String, Swift.String&gt;) -&gt; ()).(closure #1).(closure #1)"
                   moduleName = "ShoutAboutApp"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/virendragupta/ShoutAboutApp/ShoutAboutApp/ShoutAboutApp/JoinViewController.swift"
-                  timestampString = "508509679.807995"
+                  urlString = "file:///Users/virendragupta/OYApp/ShoutAboutApp-master/ShoutAboutApp/ShoutAboutApp/JoinViewController.swift"
+                  timestampString = "514655113.313235"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "600"
-                  endingLineNumber = "600"
-                  offsetFromSymbolStart = "41">
+                  startingLineNumber = "603"
+                  endingLineNumber = "603"
+                  offsetFromSymbolStart = "12">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -278,31 +278,31 @@
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "ShoutAboutApp.JoinViewController.(postContactToServer (Swift.Dictionary&lt;Swift.String, Swift.String&gt;, postDict : Swift.Dictionary&lt;Swift.String, Swift.String&gt;) -&gt; ()).(closure #2)"
+                  symbolName = "ShoutAboutApp.JoinViewController.(postContactToServer (Swift.Dictionary&lt;Swift.String, Swift.String&gt;, postDict : Swift.Dictionary&lt;Swift.String, Swift.String&gt;) -&gt; ()).(closure #1)"
                   moduleName = "ShoutAboutApp"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/virendragupta/ShoutAboutApp/ShoutAboutApp/ShoutAboutApp/JoinViewController.swift"
-                  timestampString = "508509679.810243"
+                  urlString = "file:///Users/virendragupta/OYApp/ShoutAboutApp-master/ShoutAboutApp/ShoutAboutApp/JoinViewController.swift"
+                  timestampString = "514655113.314938"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "612"
                   endingLineNumber = "612"
-                  offsetFromSymbolStart = "50">
+                  offsetFromSymbolStart = "884">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "ShoutAboutApp.JoinViewController.(postContactToServer (Swift.Dictionary&lt;Swift.String, Swift.String&gt;, postDict : Swift.Dictionary&lt;Swift.String, Swift.String&gt;) -&gt; ()).(closure #2).(closure #1)"
+                  symbolName = "ShoutAboutApp.JoinViewController.(postContactToServer (Swift.Dictionary&lt;Swift.String, Swift.String&gt;, postDict : Swift.Dictionary&lt;Swift.String, Swift.String&gt;) -&gt; ()).(closure #1).(closure #2)"
                   moduleName = "ShoutAboutApp"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/virendragupta/ShoutAboutApp/ShoutAboutApp/ShoutAboutApp/JoinViewController.swift"
-                  timestampString = "508509679.810672"
+                  urlString = "file:///Users/virendragupta/OYApp/ShoutAboutApp-master/ShoutAboutApp/ShoutAboutApp/JoinViewController.swift"
+                  timestampString = "514655113.315191"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "614"
-                  endingLineNumber = "614"
-                  offsetFromSymbolStart = "21">
+                  startingLineNumber = "612"
+                  endingLineNumber = "612"
+                  offsetFromSymbolStart = "332">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -321,6 +321,38 @@
             endingLineNumber = "604"
             landmarkName = "postContactToServer(_:postDict:)"
             landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ShoutAboutApp.JoinViewController.(postContactToServer (Swift.Dictionary&lt;Swift.String, Swift.String&gt;, postDict : Swift.Dictionary&lt;Swift.String, Swift.String&gt;) -&gt; ()).(closure #1)"
+                  moduleName = "ShoutAboutApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/virendragupta/OYApp/ShoutAboutApp-master/ShoutAboutApp/ShoutAboutApp/JoinViewController.swift"
+                  timestampString = "514655113.316998"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "605"
+                  endingLineNumber = "605"
+                  offsetFromSymbolStart = "337">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ShoutAboutApp.JoinViewController.(postContactToServer (Swift.Dictionary&lt;Swift.String, Swift.String&gt;, postDict : Swift.Dictionary&lt;Swift.String, Swift.String&gt;) -&gt; ()).(closure #1).(closure #1)"
+                  moduleName = "ShoutAboutApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/virendragupta/OYApp/ShoutAboutApp-master/ShoutAboutApp/ShoutAboutApp/JoinViewController.swift"
+                  timestampString = "514655113.317236"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "605"
+                  endingLineNumber = "605"
+                  offsetFromSymbolStart = "34">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -337,6 +369,38 @@
             endingLineNumber = "632"
             landmarkName = "getContactForPage()"
             landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ShoutAboutApp.JoinViewController.getContactForPage () -&gt; ()"
+                  moduleName = "ShoutAboutApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/virendragupta/OYApp/ShoutAboutApp-master/ShoutAboutApp/ShoutAboutApp/JoinViewController.swift"
+                  timestampString = "514655113.318498"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "633"
+                  endingLineNumber = "633"
+                  offsetFromSymbolStart = "12">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ShoutAboutApp.JoinViewController.(getContactForPage () -&gt; ()).(closure #1)"
+                  moduleName = "ShoutAboutApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator9.3.sdk/usr/include/dispatch/queue.h"
+                  timestampString = "514655113.318768"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "325"
+                  endingLineNumber = "325"
+                  offsetFromSymbolStart = "44">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -353,38 +417,6 @@
             endingLineNumber = "638"
             landmarkName = "getContactForPage()"
             landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "ShoutAboutApp.JoinViewController.(getContactForPage () -&gt; ()).(closure #1)"
-                  moduleName = "ShoutAboutApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/virendragupta/ShoutAboutApp/ShoutAboutApp/ShoutAboutApp/JoinViewController.swift"
-                  timestampString = "508509679.823315"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "638"
-                  endingLineNumber = "638"
-                  offsetFromSymbolStart = "367">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "ShoutAboutApp.JoinViewController.(getContactForPage () -&gt; ()).(closure #2)"
-                  moduleName = "ShoutAboutApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Volumes/Yosemite/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator9.3.sdk/usr/include/dispatch/queue.h"
-                  timestampString = "508509679.823539"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "325"
-                  endingLineNumber = "325"
-                  offsetFromSymbolStart = "27">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -511,8 +543,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "222"
             endingLineNumber = "222"
-            landmarkName = "ProfileViewController"
-            landmarkType = "3">
+            landmarkName = "setProfileImgeForURL(_:)"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1279,55 +1311,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "630"
             endingLineNumber = "630"
-            landmarkName = "ProfileViewController"
-            landmarkType = "3">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "protocol witness for ShoutAboutApp.CropperViewControllerDelegate.croppedImage (__ObjC.UIImage, vc : __ObjC.UIViewController) -&gt; () in conformance ShoutAboutApp.ProfileViewController : ShoutAboutApp.CropperViewControllerDelegate in ShoutAboutApp"
-                  moduleName = "ShoutAboutApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/virendragupta/ShoutAboutApp/ShoutAboutApp/ShoutAboutApp/ProfileViewController.swift"
-                  timestampString = "508509679.840603"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "631"
-                  endingLineNumber = "631"
-                  offsetFromSymbolStart = "16">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "ShoutAboutApp.ProfileViewController.croppedImage (__ObjC.UIImage, vc : __ObjC.UIViewController) -&gt; ()"
-                  moduleName = "ShoutAboutApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/virendragupta/ShoutAboutApp/ShoutAboutApp/ShoutAboutApp/ProfileViewController.swift"
-                  timestampString = "508509679.840874"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "633"
-                  endingLineNumber = "633"
-                  offsetFromSymbolStart = "41">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "dynamic ShoutAboutApp.ProfileViewController.croppedImage (__ObjC.UIImage, vc : __ObjC.UIViewController) -&gt; ()"
-                  moduleName = "ShoutAboutApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/virendragupta/ShoutAboutApp/ShoutAboutApp/ShoutAboutApp/ProfileViewController.swift"
-                  timestampString = "508509679.841104"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "631"
-                  endingLineNumber = "631"
-                  offsetFromSymbolStart = "24">
-               </Location>
-            </Locations>
+            landmarkName = "getProfileData()"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1342,55 +1327,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "631"
             endingLineNumber = "631"
-            landmarkName = "croppedImage(_:vc:)"
+            landmarkName = "getProfileData()"
             landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "protocol witness for ShoutAboutApp.CropperViewControllerDelegate.croppedImage (__ObjC.UIImage, vc : __ObjC.UIViewController) -&gt; () in conformance ShoutAboutApp.ProfileViewController : ShoutAboutApp.CropperViewControllerDelegate in ShoutAboutApp"
-                  moduleName = "ShoutAboutApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/virendragupta/ShoutAboutApp/ShoutAboutApp/ShoutAboutApp/ProfileViewController.swift"
-                  timestampString = "508509679.843589"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "631"
-                  endingLineNumber = "631"
-                  offsetFromSymbolStart = "16">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "ShoutAboutApp.ProfileViewController.croppedImage (__ObjC.UIImage, vc : __ObjC.UIViewController) -&gt; ()"
-                  moduleName = "ShoutAboutApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/virendragupta/ShoutAboutApp/ShoutAboutApp/ShoutAboutApp/ProfileViewController.swift"
-                  timestampString = "508509679.848208"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "633"
-                  endingLineNumber = "633"
-                  offsetFromSymbolStart = "41">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "dynamic ShoutAboutApp.ProfileViewController.croppedImage (__ObjC.UIImage, vc : __ObjC.UIViewController) -&gt; ()"
-                  moduleName = "ShoutAboutApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/virendragupta/ShoutAboutApp/ShoutAboutApp/ShoutAboutApp/ProfileViewController.swift"
-                  timestampString = "508509679.848905"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "631"
-                  endingLineNumber = "631"
-                  offsetFromSymbolStart = "24">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1421,8 +1359,40 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "365"
             endingLineNumber = "365"
-            landmarkName = "hideKeyBoard(_:)"
+            landmarkName = "showKeyBoard(_:)"
             landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ShoutAboutApp.ProfileViewController.showKeyBoard (__ObjC.NSNotification) -&gt; ()"
+                  moduleName = "ShoutAboutApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/virendragupta/OYApp/ShoutAboutApp-master/ShoutAboutApp/ShoutAboutApp/ProfileViewController.swift"
+                  timestampString = "514655113.325228"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "366"
+                  endingLineNumber = "366"
+                  offsetFromSymbolStart = "659">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ShoutAboutApp.ProfileViewController.showKeyBoard (__ObjC.NSNotification) -&gt; ()"
+                  moduleName = "ShoutAboutApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/virendragupta/OYApp/ShoutAboutApp-master/ShoutAboutApp/ShoutAboutApp/ProfileViewController.swift"
+                  timestampString = "514655113.325384"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "366"
+                  endingLineNumber = "366"
+                  offsetFromSymbolStart = "1175">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1437,8 +1407,40 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "338"
             endingLineNumber = "338"
-            landmarkName = "textFieldShouldReturn(_:)"
+            landmarkName = "editButtonClickedForCell(_:)"
             landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ShoutAboutApp.ProfileViewController.editButtonClickedForCell (ShoutAboutApp.EditProfileTableViewCell) -&gt; ()"
+                  moduleName = "ShoutAboutApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/virendragupta/OYApp/ShoutAboutApp-master/ShoutAboutApp/ShoutAboutApp/ProfileViewController.swift"
+                  timestampString = "514655113.326506"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "339"
+                  endingLineNumber = "339"
+                  offsetFromSymbolStart = "16">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "dynamic ShoutAboutApp.ProfileViewController.editButtonClickedForCell (ShoutAboutApp.EditProfileTableViewCell) -&gt; ()"
+                  moduleName = "ShoutAboutApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/virendragupta/OYApp/ShoutAboutApp-master/ShoutAboutApp/ShoutAboutApp/ProfileViewController.swift"
+                  timestampString = "514655113.326665"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "339"
+                  endingLineNumber = "339"
+                  offsetFromSymbolStart = "59">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1453,7 +1455,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "289"
             endingLineNumber = "289"
-            landmarkName = "tableView(_:heightForRowAtIndexPath:)"
+            landmarkName = "tableView(_:cellForRowAtIndexPath:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1693,7 +1695,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "233"
             endingLineNumber = "233"
-            landmarkName = "tableView(_:cellForRowAtIndexPath:)"
+            landmarkName = "setProfileImgeForURL(_:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1981,7 +1983,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "712"
             endingLineNumber = "712"
-            landmarkName = "preview()"
+            landmarkName = "getProfileData()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -2023,13 +2025,13 @@
                   symbolName = "ShoutAboutApp.SpamFavBlockViewController.(blockList () -&gt; ()).(closure #1)"
                   moduleName = "ShoutAboutApp"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/virendragupta/ShoutAboutApp/ShoutAboutApp/ShoutAboutApp/SpamFavBlockViewController.swift"
-                  timestampString = "508509679.868767"
+                  urlString = "file:///Users/virendragupta/OYApp/ShoutAboutApp-master/ShoutAboutApp/ShoutAboutApp/SpamFavBlockViewController.swift"
+                  timestampString = "514655113.334149"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "76"
                   endingLineNumber = "76"
-                  offsetFromSymbolStart = "62">
+                  offsetFromSymbolStart = "64">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
@@ -2038,13 +2040,13 @@
                   symbolName = "ShoutAboutApp.SpamFavBlockViewController.(blockList () -&gt; ()).(closure #1).(closure #1)"
                   moduleName = "ShoutAboutApp"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/virendragupta/ShoutAboutApp/ShoutAboutApp/ShoutAboutApp/SpamFavBlockViewController.swift"
-                  timestampString = "508509679.869025"
+                  urlString = "file:///Users/virendragupta/OYApp/ShoutAboutApp-master/ShoutAboutApp/ShoutAboutApp/SpamFavBlockViewController.swift"
+                  timestampString = "514655113.334293"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "77"
                   endingLineNumber = "77"
-                  offsetFromSymbolStart = "30">
+                  offsetFromSymbolStart = "19">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -2141,8 +2143,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "767"
             endingLineNumber = "767"
-            landmarkName = "blockButtonClicked(_:)"
-            landmarkType = "5">
+            landmarkName = "ProfileViewController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2175,6 +2177,38 @@
             endingLineNumber = "309"
             landmarkName = "spamUserID(_:onFinish:onError:)"
             landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ShoutAboutApp.DataSession.sendVideoORImageMessage (Swift.String, message_type : Swift.String, mediaPath : Swift.Optional&lt;Swift.Array&lt;Swift.String&gt;&gt;, name : Swift.Optional&lt;Swift.Array&lt;Swift.String&gt;&gt;, onFinish : (response : Swift.AnyObject, deserializedResponse : Swift.AnyObject) -&gt; (), onError : (error : Swift.AnyObject) -&gt; ()) -&gt; ()"
+                  moduleName = "ShoutAboutApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/virendragupta/OYApp/ShoutAboutApp-master/ShoutAboutApp/ShoutAboutApp/DataSession.swift"
+                  timestampString = "514655113.338794"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "310"
+                  endingLineNumber = "310"
+                  offsetFromSymbolStart = "709">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ShoutAboutApp.DataSession.(sendVideoORImageMessage (Swift.String, message_type : Swift.String, mediaPath : Swift.Optional&lt;Swift.Array&lt;Swift.String&gt;&gt;, name : Swift.Optional&lt;Swift.Array&lt;Swift.String&gt;&gt;, onFinish : (response : Swift.AnyObject, deserializedResponse : Swift.AnyObject) -&gt; (), onError : (error : Swift.AnyObject) -&gt; ()) -&gt; ()).(closure #1)"
+                  moduleName = "ShoutAboutApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/virendragupta/OYApp/ShoutAboutApp-master/ShoutAboutApp/ShoutAboutApp/DataSession.swift"
+                  timestampString = "514655113.338944"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "311"
+                  endingLineNumber = "311"
+                  offsetFromSymbolStart = "24">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2189,8 +2223,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "788"
             endingLineNumber = "788"
-            landmarkName = "spamButtonClicked(_:)"
-            landmarkType = "5">
+            landmarkName = "ProfileViewController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2205,40 +2239,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "793"
             endingLineNumber = "793"
-            landmarkName = "spamButtonClicked(_:)"
+            landmarkName = "blockButtonClicked(_:)"
             landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "ShoutAboutApp.ProfileViewController.(spamButtonClicked (__ObjC.UIButton) -&gt; ()).(closure #1)"
-                  moduleName = "ShoutAboutApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/virendragupta/ShoutAboutApp/ShoutAboutApp/ShoutAboutApp/ProfileViewController.swift"
-                  timestampString = "508509679.879607"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "794"
-                  endingLineNumber = "794"
-                  offsetFromSymbolStart = "326">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "ShoutAboutApp.ProfileViewController.(spamButtonClicked (__ObjC.UIButton) -&gt; ()).(closure #1).(closure #1)"
-                  moduleName = "ShoutAboutApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/virendragupta/ShoutAboutApp/ShoutAboutApp/ShoutAboutApp/ProfileViewController.swift"
-                  timestampString = "508509679.879914"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "794"
-                  endingLineNumber = "794"
-                  offsetFromSymbolStart = "205">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2389,13 +2391,13 @@
                   symbolName = "ShoutAboutApp.SpamFavBlockViewController.buttonClicked (ShoutAboutApp.ContactTableViewCell, button : __ObjC.UIButton) -&gt; ()"
                   moduleName = "ShoutAboutApp"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/virendragupta/ShoutAboutApp/ShoutAboutApp/ShoutAboutApp/SpamFavBlockViewController.swift"
-                  timestampString = "508509679.887094"
+                  urlString = "file:///Users/virendragupta/OYApp/ShoutAboutApp-master/ShoutAboutApp/ShoutAboutApp/SpamFavBlockViewController.swift"
+                  timestampString = "514655113.343248"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "275"
                   endingLineNumber = "275"
-                  offsetFromSymbolStart = "4303">
+                  offsetFromSymbolStart = "3823">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
@@ -2404,13 +2406,13 @@
                   symbolName = "ShoutAboutApp.SpamFavBlockViewController.buttonClicked (ShoutAboutApp.ContactTableViewCell, button : __ObjC.UIButton) -&gt; ()"
                   moduleName = "ShoutAboutApp"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/virendragupta/ShoutAboutApp/ShoutAboutApp/ShoutAboutApp/SpamFavBlockViewController.swift"
-                  timestampString = "508509679.887873"
+                  urlString = "file:///Users/virendragupta/OYApp/ShoutAboutApp-master/ShoutAboutApp/ShoutAboutApp/SpamFavBlockViewController.swift"
+                  timestampString = "514655113.343396"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "275"
                   endingLineNumber = "275"
-                  offsetFromSymbolStart = "10030">
+                  offsetFromSymbolStart = "9222">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -2442,7 +2444,9 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "217"
-            endingLineNumber = "217">
+            endingLineNumber = "217"
+            landmarkName = "applicationWillResignActive(_:)"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2457,7 +2461,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "188"
             endingLineNumber = "188"
-            landmarkName = "setProfileImgeForURL(_:)"
+            landmarkName = "goToReviewScreen()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -2473,8 +2477,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "193"
             endingLineNumber = "193"
-            landmarkName = "setProfileImgeForURL(_:)"
-            landmarkType = "5">
+            landmarkName = "ProfileViewController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2521,8 +2525,40 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "727"
             endingLineNumber = "727"
-            landmarkName = "showFile(_:)"
+            landmarkName = "getProfileData()"
             landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ShoutAboutApp.ProfileViewController.(getProfileData () -&gt; ()).(closure #2)"
+                  moduleName = "ShoutAboutApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/virendragupta/OYApp/ShoutAboutApp-master/ShoutAboutApp/ShoutAboutApp/ProfileViewController.swift"
+                  timestampString = "514655113.347235"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "727"
+                  endingLineNumber = "727"
+                  offsetFromSymbolStart = "293">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ShoutAboutApp.ProfileViewController.(getProfileData () -&gt; ()).(closure #2).(closure #1)"
+                  moduleName = "ShoutAboutApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/virendragupta/OYApp/ShoutAboutApp-master/ShoutAboutApp/ShoutAboutApp/ProfileViewController.swift"
+                  timestampString = "514655113.347469"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "727"
+                  endingLineNumber = "727"
+                  offsetFromSymbolStart = "142">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2537,40 +2573,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "173"
             endingLineNumber = "173"
-            landmarkName = "connectToFcm()"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "ShoutAboutApp.connectToFcm () -&gt; ()"
-                  moduleName = "ShoutAboutApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/virendragupta/ShoutAboutApp/ShoutAboutApp/ShoutAboutApp/AppDelegate.swift"
-                  timestampString = "508509679.900841"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "173"
-                  endingLineNumber = "173"
-                  offsetFromSymbolStart = "3">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "ShoutAboutApp.(connectToFcm () -&gt; ()).(closure #1)"
-                  moduleName = "ShoutAboutApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/virendragupta/ShoutAboutApp/ShoutAboutApp/ShoutAboutApp/AppDelegate.swift"
-                  timestampString = "508509679.901107"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "174"
-                  endingLineNumber = "174"
-                  offsetFromSymbolStart = "24">
-               </Location>
-            </Locations>
+            landmarkName = "application(_:didFinishLaunchingWithOptions:)"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2585,8 +2589,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "176"
             endingLineNumber = "176"
-            landmarkName = "connectToFcm()"
-            landmarkType = "7">
+            landmarkName = "application(_:didFinishLaunchingWithOptions:)"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2601,8 +2605,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "180"
             endingLineNumber = "180"
-            landmarkName = "connectToFcm()"
-            landmarkType = "7">
+            landmarkName = "application(_:didFinishLaunchingWithOptions:)"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2617,8 +2621,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "193"
             endingLineNumber = "193"
-            landmarkName = "application(_:didReceiveRemoteNotification:fetchCompletionHandler:)"
-            landmarkType = "7">
+            landmarkName = "application(_:didFinishLaunchingWithOptions:)"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2633,8 +2637,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "154"
             endingLineNumber = "154"
-            landmarkName = "application(_:didRegisterForRemoteNotificationsWithDeviceToken:)"
-            landmarkType = "7">
+            landmarkName = "application(_:didFinishLaunchingWithOptions:)"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2648,9 +2652,39 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "35"
-            endingLineNumber = "35"
-            landmarkName = "tokenRefreshNotification(_:)"
-            landmarkType = "5">
+            endingLineNumber = "35">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ShoutAboutApp.AppDelegate.__deallocating_deinit"
+                  moduleName = "ShoutAboutApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/virendragupta/OYApp/ShoutAboutApp-master/ShoutAboutApp/ShoutAboutApp/AppDelegate.swift"
+                  timestampString = "514655113.351633"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "4">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "main"
+                  moduleName = "ShoutAboutApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/virendragupta/OYApp/ShoutAboutApp-master/ShoutAboutApp/ShoutAboutApp/AppDelegate.swift"
+                  timestampString = "514655113.351793"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "39"
+                  endingLineNumber = "39"
+                  offsetFromSymbolStart = "22">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2665,8 +2699,40 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "38"
             endingLineNumber = "38"
-            landmarkName = "tokenRefreshNotification(_:)"
-            landmarkType = "5">
+            landmarkName = "AppDelegate"
+            landmarkType = "3">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ShoutAboutApp.AppDelegate.__deallocating_deinit"
+                  moduleName = "ShoutAboutApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/virendragupta/OYApp/ShoutAboutApp-master/ShoutAboutApp/ShoutAboutApp/AppDelegate.swift"
+                  timestampString = "514655113.35281"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "4">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "main"
+                  moduleName = "ShoutAboutApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/virendragupta/OYApp/ShoutAboutApp-master/ShoutAboutApp/ShoutAboutApp/AppDelegate.swift"
+                  timestampString = "514655113.352964"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "39"
+                  endingLineNumber = "39"
+                  offsetFromSymbolStart = "22">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2681,8 +2747,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "148"
             endingLineNumber = "148"
-            landmarkName = "application(_:didFailToRegisterForRemoteNotificationsWithError:)"
-            landmarkType = "7">
+            landmarkName = "application(_:didFinishLaunchingWithOptions:)"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2697,8 +2763,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "191"
             endingLineNumber = "191"
-            landmarkName = "application(_:didReceiveRemoteNotification:fetchCompletionHandler:)"
-            landmarkType = "7">
+            landmarkName = "application(_:didFinishLaunchingWithOptions:)"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2713,8 +2779,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "196"
             endingLineNumber = "196"
-            landmarkName = "application(_:didReceiveRemoteNotification:fetchCompletionHandler:)"
-            landmarkType = "7">
+            landmarkName = "application(_:didFinishLaunchingWithOptions:)"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2729,8 +2795,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "203"
             endingLineNumber = "203"
-            landmarkName = "application(_:didReceiveRemoteNotification:)"
-            landmarkType = "7">
+            landmarkName = "application(_:didFinishLaunchingWithOptions:)"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2745,8 +2811,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "190"
             endingLineNumber = "190"
-            landmarkName = "application(_:didReceiveRemoteNotification:fetchCompletionHandler:)"
-            landmarkType = "7">
+            landmarkName = "application(_:didFinishLaunchingWithOptions:)"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2761,8 +2827,70 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "74"
             endingLineNumber = "74"
-            landmarkName = "viewDidLoad()"
-            landmarkType = "5">
+            landmarkName = "ProfileViewController"
+            landmarkType = "3">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ShoutAboutApp.ProfileViewController.nameTextField.getter : weak Swift.Optional&lt;__ObjC.UITextField&gt;"
+                  moduleName = "ShoutAboutApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/virendragupta/OYApp/ShoutAboutApp-master/ShoutAboutApp/ShoutAboutApp/ProfileViewController.swift"
+                  timestampString = "514655113.356519"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "75"
+                  endingLineNumber = "75"
+                  offsetFromSymbolStart = "27">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ShoutAboutApp.ProfileViewController.nameTextField.setter : weak Swift.Optional&lt;__ObjC.UITextField&gt;"
+                  moduleName = "ShoutAboutApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/virendragupta/OYApp/ShoutAboutApp-master/ShoutAboutApp/ShoutAboutApp/ProfileViewController.swift"
+                  timestampString = "514655113.35667"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "75"
+                  endingLineNumber = "75"
+                  offsetFromSymbolStart = "42">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ShoutAboutApp.ProfileViewController.init (nibName : Swift.Optional&lt;Swift.String&gt;, bundle : Swift.Optional&lt;__ObjC.NSBundle&gt;) -&gt; ShoutAboutApp.ProfileViewController"
+                  moduleName = "ShoutAboutApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/virendragupta/OYApp/ShoutAboutApp-master/ShoutAboutApp/ShoutAboutApp/ProfileViewController.swift"
+                  timestampString = "514655113.356822"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "75"
+                  endingLineNumber = "75"
+                  offsetFromSymbolStart = "769">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ShoutAboutApp.ProfileViewController.init (coder : __ObjC.NSCoder) -&gt; Swift.Optional&lt;ShoutAboutApp.ProfileViewController&gt;"
+                  moduleName = "ShoutAboutApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/virendragupta/OYApp/ShoutAboutApp-master/ShoutAboutApp/ShoutAboutApp/ProfileViewController.swift"
+                  timestampString = "514655113.356966"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "75"
+                  endingLineNumber = "75"
+                  offsetFromSymbolStart = "679">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2787,13 +2915,13 @@
                   symbolName = "ShoutAboutApp.MyTabViewController.tabBarController (__ObjC.UITabBarController, didSelectViewController : __ObjC.UIViewController) -&gt; ()"
                   moduleName = "ShoutAboutApp"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/virendragupta/ShoutAboutApp/ShoutAboutApp/MyTabViewController.swift"
-                  timestampString = "508509679.923316"
+                  urlString = "file:///Users/virendragupta/OYApp/ShoutAboutApp-master/ShoutAboutApp/MyTabViewController.swift"
+                  timestampString = "514655113.35849"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "40"
                   endingLineNumber = "40"
-                  offsetFromSymbolStart = "36">
+                  offsetFromSymbolStart = "32">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
@@ -2802,13 +2930,13 @@
                   symbolName = "ShoutAboutApp.MyTabViewController.tabBarController (__ObjC.UITabBarController, didSelectViewController : __ObjC.UIViewController) -&gt; ()"
                   moduleName = "ShoutAboutApp"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/virendragupta/ShoutAboutApp/ShoutAboutApp/MyTabViewController.swift"
-                  timestampString = "508509679.923586"
+                  urlString = "file:///Users/virendragupta/OYApp/ShoutAboutApp-master/ShoutAboutApp/MyTabViewController.swift"
+                  timestampString = "514655113.358641"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "40"
                   endingLineNumber = "40"
-                  offsetFromSymbolStart = "145">
+                  offsetFromSymbolStart = "169">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -2891,6 +3019,38 @@
             endingLineNumber = "157"
             landmarkName = "viewWillAppear(_:)"
             landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ShoutAboutApp.ProfileViewController.viewWillAppear (Swift.Bool) -&gt; ()"
+                  moduleName = "ShoutAboutApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/virendragupta/OYApp/ShoutAboutApp-master/ShoutAboutApp/ShoutAboutApp/ProfileViewController.swift"
+                  timestampString = "514655113.361824"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "174"
+                  endingLineNumber = "174"
+                  offsetFromSymbolStart = "122">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ShoutAboutApp.ProfileViewController.viewWillAppear (Swift.Bool) -&gt; ()"
+                  moduleName = "ShoutAboutApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/virendragupta/OYApp/ShoutAboutApp-master/ShoutAboutApp/ShoutAboutApp/ProfileViewController.swift"
+                  timestampString = "514655113.361983"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "174"
+                  endingLineNumber = "174"
+                  offsetFromSymbolStart = "315">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2905,8 +3065,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "181"
             endingLineNumber = "181"
-            landmarkName = "setProfileImgeForURL(_:)"
-            landmarkType = "5">
+            landmarkName = "ProfileViewController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2921,7 +3081,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "606"
             endingLineNumber = "606"
-            landmarkName = "getProfileData()"
+            landmarkName = "makeImageRoundedWithGray()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -2937,7 +3097,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "681"
             endingLineNumber = "681"
-            landmarkName = "getProfileData()"
+            landmarkName = "croppedImage(_:vc:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -2953,8 +3113,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "237"
             endingLineNumber = "237"
-            landmarkName = "tableView(_:cellForRowAtIndexPath:)"
-            landmarkType = "5">
+            landmarkName = "ProfileViewController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2985,7 +3145,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "814"
             endingLineNumber = "814"
-            landmarkName = "submitButtonClicked(_:)"
+            landmarkName = "spamButtonClicked(_:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

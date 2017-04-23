@@ -10,6 +10,28 @@ import UIKit
 import Firebase
 import FirebaseMessaging
 
+
+/*
+ Small Talk Header
+ */
+
+import UIKit
+import XMPPFramework
+import Fabric
+import Crashlytics
+import DigitsKit
+import ReactiveCocoa
+import OpenUDID
+import TSMessages
+import DeepLinkKit
+import ChameleonFramework
+import youtube_ios_player_helper
+import Watchdog
+
+/***** cloase******/
+
+
+
 @UIApplicationMain
 
 
@@ -18,6 +40,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate
 {
 
     var window: UIWindow?
+    
+    /*
+        Small Talk variable
+     */
+    
+    //var window: UIWindow?
+    lazy var router: DPLDeepLinkRouter = DPLDeepLinkRouter()
+    var globalColor: UIColor?
+    var backgroundColor: UIColor?
+    var darkColor: UIColor?
+    var selfColor: UIColor?
+    var highlightColor: UIColor?
+    let watchdog = Watchdog(threshold: 0.016) //60 frames a second
+    let crashlytics = Crashlytics.sharedInstance()
+    
+    /*****************************/
+    
+    
+    
     
     //MARK:// GET CONTACT
     func retrieveContacts() -> [SearchPerson]?
@@ -44,6 +85,54 @@ class AppDelegate: UIResponder, UIApplicationDelegate
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool
     {
+        if User.isLoggedIn()
+        {
+            crashlytics.setUserIdentifier(User.username)
+            if let displayName = User.displayName
+            {
+                crashlytics.setUserName(displayName)
+            }
+        }
+        Fabric.with([crashlytics, Digits.self()])
+        // Register a class to a route using object subscripting
+        self.router["/messsage/:thread"] = MessageDeeplinkRouteHandler.self
+        
+        let controller: FirstViewController = FirstViewController()
+        
+        // Show View Controller from Main storyboard
+        self.window!.rootViewController = UINavigationController(rootViewController: controller)
+        self.window!.backgroundColor = UIColor.whiteColor()
+        self.window!.rootViewController?.navigationController?.navigationBarHidden = true
+        let darkBlue = UIColor(hexString: "2C3E50")
+        let red = UIColor(hexString: "E74C3C")
+        let light = UIColor(hexString: "ECF0F1")
+        let lightBlue = UIColor(hexString: "3498DB")
+        let medBlue = UIColor(hexString: "2980B9")
+        self.backgroundColor = light
+        self.darkColor = darkBlue
+        self.selfColor = UIColor.whiteColor()
+        self.highlightColor = red
+        UIBarButtonItem.appearance().tintColor = lightBlue
+        UIBarButtonItem.my_appearanceWhenContainedIn(UISearchBar.self).tintColor = lightBlue
+        UIBarButtonItem.my_appearanceWhenContainedIn(UINavigationBar.self).tintColor = lightBlue
+        UIBarButtonItem.my_appearanceWhenContainedIn(UIToolbar.self).tintColor = lightBlue
+        
+        UINavigationBar.appearance().barTintColor = light
+        UINavigationBar.appearance().tintColor = lightBlue
+        UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: red]
+        
+        UITableViewCell.appearance().backgroundColor = light
+        UICollectionView.appearance().backgroundColor = light
+        UIScrollView.appearance().backgroundColor = light
+        UITableView.appearance().backgroundColor = light
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         
@@ -117,7 +206,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate
         application.registerUserNotificationSettings(pushNotificationSettings)
         application.registerForRemoteNotifications()
          
- 
         return true
 }
 
@@ -220,5 +308,4 @@ func application(application: UIApplication, didReceiveRemoteNotification userIn
     
     print(userInfo)
     FIRMessaging.messaging().appDidReceiveMessage(userInfo)
-    
 }

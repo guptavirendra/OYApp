@@ -120,7 +120,7 @@ extension MainSearchViewController
         if let urlString = personContact.photo
         {
             
-            cell.profileImageView.setImageWithURL(NSURL(string:urlString ), placeholderImage: UIImage(named: "profile"))
+            ///cell.profileImageView.setImageWithURL(NSURL(string:urlString ), placeholderImage: UIImage(named: "profile"))
             
         }else
         {

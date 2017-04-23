@@ -28,7 +28,7 @@ class AlertViewController: UIViewController,AlertTableViewCellProtocol {
         
         let appUserToken = NSUserDefaults.standardUserDefaults().objectForKey(kapp_user_token) as! String
         
-        let dict = [kapp_user_id:String(appUserId), user_report_spam_post:"1",kapp_user_token :appUserToken]
+        _ = [kapp_user_id:String(appUserId), user_report_spam_post:"1",kapp_user_token :appUserToken]
         
         
         loadAlertAPICall()
@@ -90,7 +90,7 @@ class AlertViewController: UIViewController,AlertTableViewCellProtocol {
         
         cell?.dateLabel.text = dataList.created_at
         cell?.UserImageView.makeImageRounded()
-        cell?.UserImageView.setImageWithURL(NSURL(string:comModel.performed.photo), placeholderImage: UIImage(named: "profile"))
+        ///cell?.UserImageView.setImageWithURL(NSURL(string:comModel.performed.photo), placeholderImage: UIImage(named: "profile"))
         cell?.contentView.setGraphicEffects()
         return cell!
         
