@@ -44,6 +44,7 @@
 		F12C277F1DCF763F00AEE0A3 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F12C277E1DCF763F00AEE0A3 /* ProfileViewController.swift */; };
 		F12C27811DCF765300AEE0A3 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F12C27801DCF765300AEE0A3 /* ChatViewController.swift */; };
 		F12C27831DCF85CB00AEE0A3 /* RateANdReviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F12C27821DCF85CB00AEE0A3 /* RateANdReviewViewController.swift */; };
+		F12EF5451EB0786F004FDF09 /* TCViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F12EF5441EB0786F004FDF09 /* TCViewController.swift */; };
 		F13AD92E1EACE617009B88F1 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F13AD92D1EACE617009B88F1 /* SWRevealViewController.m */; };
 		F1707F1A1EACDFEF0004F14F /* Array+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1707EDD1EACDFEF0004F14F /* Array+Ext.swift */; };
 		F1707F1B1EACDFEF0004F14F /* String+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1707EDE1EACDFEF0004F14F /* String+Ext.swift */; };
@@ -179,6 +180,8 @@
 		F12C277E1DCF763F00AEE0A3 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		F12C27801DCF765300AEE0A3 /* ChatViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
 		F12C27821DCF85CB00AEE0A3 /* RateANdReviewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RateANdReviewViewController.swift; sourceTree = "<group>"; };
+		F12EF5411EAD0DCF004FDF09 /* ARLRDBD.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = ARLRDBD.TTF; sourceTree = "<group>"; };
+		F12EF5441EB0786F004FDF09 /* TCViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TCViewController.swift; sourceTree = "<group>"; };
 		F13AD92C1EACE617009B88F1 /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRevealViewController.h; sourceTree = "<group>"; };
 		F13AD92D1EACE617009B88F1 /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
 		F1707EDD1EACDFEF0004F14F /* Array+Ext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+Ext.swift"; sourceTree = "<group>"; };
@@ -439,6 +442,7 @@
 				F11B75FD1DE373AD0075DDCB /* GoogleService-Info.plist */,
 				F12C275C1DCE45A800AEE0A3 /* Info.plist */,
 				F1DD71F91DE8B81700DE0A12 /* TitilliumWeb-Bold.ttf */,
+				F12EF5411EAD0DCF004FDF09 /* ARLRDBD.TTF */,
 				F1DD71FA1DE8B81700DE0A12 /* TitilliumWeb-Italic.ttf */,
 				F1DD71FB1DE8B81700DE0A12 /* TitilliumWeb-Light.ttf */,
 				F1DD71FC1DE8B81700DE0A12 /* TitilliumWeb-Regular.ttf */,
@@ -612,6 +616,7 @@
 		F18839311DD8CF0A00362B1B /* LoginAndOTP */ = {
 			isa = PBXGroup;
 			children = (
+				F12EF5441EB0786F004FDF09 /* TCViewController.swift */,
 				F12C27501DCE45A800AEE0A3 /* AppDelegate.swift */,
 				F11B75F91DE0C70C0075DDCB /* MyTabViewController.swift */,
 				F12C27521DCE45A800AEE0A3 /* ViewController.swift */,
@@ -827,6 +832,7 @@
 				8EA72D671E7BD48C00425AC9 /* subViewController.swift in Sources */,
 				8EA72D691E7BEEAF00425AC9 /* settingCell.swift in Sources */,
 				8E8033811E7932B100BADA63 /* photopreviewViewController.swift in Sources */,
+				F12EF5451EB0786F004FDF09 /* TCViewController.swift in Sources */,
 				F12C277D1DCF761D00AEE0A3 /* FeedsViewController.swift in Sources */,
 				F1707F361EACDFEF0004F14F /* ConversationsListViewModel.swift in Sources */,
 				F12C276B1DCE6DDF00AEE0A3 /* DataSession.swift in Sources */,

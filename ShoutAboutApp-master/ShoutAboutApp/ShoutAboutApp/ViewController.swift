@@ -18,6 +18,7 @@ class ViewController: UIViewController
     override func viewDidLoad()
     {
         super.viewDidLoad()
+        self.navigationController?.navigationBarHidden = true
         mobileNumberTextField.addTarget(self, action:#selector(ViewController.edited), forControlEvents:UIControlEvents.EditingChanged)
         submitButton.userInteractionEnabled = false
         submitButton.alpha = 0.5

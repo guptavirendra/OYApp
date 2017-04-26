@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" initialViewController="01J-lp-oVM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" initialViewController="01J-lp-oVM">
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <mutableArray key="ARLRDBD.TTF">
+            <string>ArialRoundedMTBold</string>
+        </mutableArray>
+    </customFonts>
     <scenes>
         <!--View Controller-->
         <scene sceneID="EHf-IW-A2E">
@@ -17,16 +21,21 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash" translatesAutoresizingMaskIntoConstraints="NO" id="sWo-sb-jVJ">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="OYAPP" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bwo-aO-Woa">
+                                <rect key="frame" x="175" y="258" width="250" height="77"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="250" id="4Cf-hr-rv5"/>
+                                    <constraint firstAttribute="height" constant="77" id="jh0-fK-zQg"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="ArialRoundedMTBold" family="Arial Rounded MT Bold" pointSize="70"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.066666666669999999" green="0.47450980390000003" blue="0.74509803919999995" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="sWo-sb-jVJ" secondAttribute="trailing" id="1It-G9-3HZ"/>
-                            <constraint firstItem="sWo-sb-jVJ" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="MEc-od-L36"/>
-                            <constraint firstItem="sWo-sb-jVJ" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="Z9q-6o-y8U"/>
-                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="sWo-sb-jVJ" secondAttribute="bottom" id="dao-TZ-p9h"/>
+                            <constraint firstItem="bwo-aO-Woa" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" constant="-3.5" id="Emg-1R-5cJ"/>
+                            <constraint firstItem="bwo-aO-Woa" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="Jvf-xk-Spb"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -35,7 +44,4 @@
             <point key="canvasLocation" x="306" y="330"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="splash" width="1242" height="2208"/>
-    </resources>
 </document>

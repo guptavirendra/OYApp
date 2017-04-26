@@ -38,6 +38,8 @@ pod 'JSQMessagesViewController'
     pod "Watchdog", "2.1"
     pod 'SwiftDate', '~>3.0.8'
     pod 'CocoaLumberjack', '~> 2.4.0'
+    pod 'FBSDKCoreKit'
+    pod 'FBSDKLoginKit'
 
 end
 

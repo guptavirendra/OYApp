@@ -11,8 +11,8 @@ import UIKit
 import MobileCoreServices
 
 
-//var doctorBaseURL = "http://139.59.31.73/api/"
-var doctorBaseURL = "http://demo.varyavega.co.in/shoutaboutapp/api/"
+var doctorBaseURL = "http://139.59.31.73/api/"
+//var doctorBaseURL = "http://demo.varyavega.co.in/shoutaboutapp/api/"
 var baseURL = doctorBaseURL
 
 
@@ -106,6 +106,7 @@ public class BaseNSURLSession: NSObject
     {
         
         mNSURLSessionConfiguration = sessionConfiguration
+        mNSURLSessionConfiguration.allowsCellularAccess = true
         mNSURLSession              = NSURLSession(configuration: sessionConfiguration, delegate: nil, delegateQueue: NSOperationQueue.mainQueue()) //NSURLSession.sharedSession()//Session Class
         
         print("\(stringURL)")

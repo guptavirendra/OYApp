@@ -100,7 +100,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate
         let controller: FirstViewController = FirstViewController()
         
         // Show View Controller from Main storyboard
-        self.window!.rootViewController = UINavigationController(rootViewController: controller)
+    /* Small talk block*/    //self.window!.rootViewController = UINavigationController(rootViewController: controller)
         self.window!.backgroundColor = UIColor.whiteColor()
         self.window!.rootViewController?.navigationController?.navigationBarHidden = true
         let darkBlue = UIColor(hexString: "2C3E50")
@@ -113,12 +113,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate
         self.selfColor = UIColor.whiteColor()
         self.highlightColor = red
         UIBarButtonItem.appearance().tintColor = lightBlue
-        UIBarButtonItem.my_appearanceWhenContainedIn(UISearchBar.self).tintColor = lightBlue
-        UIBarButtonItem.my_appearanceWhenContainedIn(UINavigationBar.self).tintColor = lightBlue
-        UIBarButtonItem.my_appearanceWhenContainedIn(UIToolbar.self).tintColor = lightBlue
+        //UIBarButtonItem.my_appearanceWhenContainedIn(UISearchBar.self).tintColor = lightBlue
+       // UIBarButtonItem.my_appearanceWhenContainedIn(UINavigationBar.self).tintColor = lightBlue
+        //UIBarButtonItem.my_appearanceWhenContainedIn(UIToolbar.self).tintColor = lightBlue
         
-        UINavigationBar.appearance().barTintColor = light
-        UINavigationBar.appearance().tintColor = lightBlue
+       // UINavigationBar.appearance().barTintColor = light
+        //UINavigationBar.appearance().tintColor = lightBlue
         UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: red]
         
         UITableViewCell.appearance().backgroundColor = light

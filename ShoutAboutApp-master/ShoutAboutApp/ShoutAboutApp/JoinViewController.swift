@@ -42,7 +42,7 @@ extension UITableView
 
 
 
-class JoinViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, InputTableViewCellProtocol, ClickTableViewCellProtocol
+class JoinViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, InputTableViewCellProtocol, ClickTableViewCellProtocol, UIPickerViewDataSource, UIPickerViewDelegate
 {
     var objects = [CNContact]()
     var allValidContacts = [SearchPerson]()
@@ -63,6 +63,8 @@ class JoinViewController: UIViewController, UITableViewDataSource, UITableViewDe
             
             print("do something");
     }
+    
+    var pickOption = ["Male", "Female"]
     override func viewDidLoad()
     {
         super.viewDidLoad()
@@ -98,7 +100,7 @@ extension JoinViewController
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
     {
-        if indexPath.row == 0 || indexPath.row == 1 || indexPath.row == 2 || indexPath.row == 3
+        if indexPath.row == 0 || indexPath.row == 1 || indexPath.row == 2 || indexPath.row == 3 || indexPath.row == 4
 
         {
         
@@ -128,21 +130,79 @@ extension JoinViewController
             }
             if indexPath.row == 3
             {
-                cell.inputTextField.placeholder = kWebsite
-                cell.inputImage.image = UIImage(named: kWebsite)
+                cell.inputTextField.placeholder = kBirthDay
+                cell.inputImage.image = UIImage(named: kBirthDay)
                 cell.inputTextField.tag = 3
                 
+                
+                
+                
+                let toolBar = UIToolbar(frame: CGRectMake(0, 0, cell.inputTextField.frame.size.width, 44))
+                
+                var items = [UIBarButtonItem]()
+                
+                let  flexibleSpaceLeft = UIBarButtonItem(barButtonSystemItem: .FlexibleSpace, target: self, action: nil)
+                
+                let doneButton =     UIBarButtonItem(title: "Done", style: .Done, target: self, action: #selector(JoinViewController.dissMissKeyBoard(_:)))
+                
+                items.append(flexibleSpaceLeft)
+                items.append(doneButton)
+                toolBar.items = items
+                
+                
+                
+                let datePicker = UIDatePicker()
+                datePicker.addTarget(self, action: #selector(JoinViewController.handleDatePicker(_:)), forControlEvents: .ValueChanged)
+                datePicker.datePickerMode = .Date
+                cell.inputTextField.inputView = datePicker
+                cell.inputTextField.inputAccessoryView = toolBar
+                
+                
             }
+            if indexPath.row == 4
+            {
+                cell.inputTextField.placeholder = kBirthDay
+                cell.inputImage.image = UIImage(named: kBirthDay)
+                cell.inputTextField.tag = 4
+                
+                
+                
+                
+                let toolBar = UIToolbar(frame: CGRectMake(0, 0, cell.inputTextField.frame.size.width, 44))
+                
+                var items = [UIBarButtonItem]()
+                
+                let  flexibleSpaceLeft = UIBarButtonItem(barButtonSystemItem: .FlexibleSpace, target: self, action: nil)
+                
+                let doneButton =     UIBarButtonItem(title: "Done", style: .Done, target: self, action: #selector(JoinViewController.dissMissKeyBoard(_:)))
+                
+                items.append(flexibleSpaceLeft)
+                items.append(doneButton)
+                toolBar.items = items
+                
+                
+                
+                let pickerView = UIPickerView()
+                pickerView.delegate = self
+                
+                
+                cell.inputTextField.inputView = pickerView
+                cell.inputTextField.inputAccessoryView = toolBar
+                
+                
+            }
+            
+            
             
             return cell
         }
         
-        if indexPath.row == 4 || indexPath.row == 6
+        if indexPath.row == 5 || indexPath.row == 7
         {
         let  cell = tableView.dequeueReusableCellWithIdentifier("button", forIndexPath: indexPath) as! ClickTableViewCell
         cell.delegate = self
         
-        if indexPath.row == 4
+        if indexPath.row == 5
         {
             cell.button.setTitle("Join", forState: .Normal)
             cell.widthConstraints?.constant = cell.contentView.bounds.size.width - 60
@@ -160,8 +220,9 @@ extension JoinViewController
             //let width = NSLayoutConstraint(item: cell.button, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .Width, multiplier: 1.0, constant: 30)
             
             //cell.button.addConstraint(width)
-        }*/
+        }
         
+             
         if indexPath.row == 6
         {
             cell.widthConstraints?.constant = 80
@@ -169,7 +230,7 @@ extension JoinViewController
             cell.button.backgroundColor = UIColor.blackColor()
             let centerx = NSLayoutConstraint(item: cell.button, attribute: .CenterX, relatedBy: .Equal, toItem: cell.contentView, attribute: .CenterX, multiplier: 1.0, constant: 0)
             cell.contentView.addConstraint(centerx)
-        }
+        }*/
         
         
         return cell
@@ -180,6 +241,50 @@ extension JoinViewController
         return cell
         
       }
+    
+    
+    func handleDatePicker(sender: UIDatePicker)
+    {
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "dd MMM yyyy"
+        
+        self.activeTextField?.text = dateFormatter.stringFromDate(sender.date)
+        
+        
+    }
+    
+    
+    func dissMissKeyBoard(sender:UIBarButtonItem)
+    {
+        if let datePicker =  self.activeTextField?.inputView as?UIDatePicker
+        {
+            let dateFormatter = NSDateFormatter()
+            dateFormatter.dateFormat = "dd MMM yyyy"
+            self.activeTextField?.text = dateFormatter.stringFromDate(datePicker.date)
+        }
+        self.activeTextField?.resignFirstResponder()
+        
+    }
+    
+    
+    
+    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return pickOption.count
+    }
+    
+    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return pickOption[row]
+    }
+    
+    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int)
+    {
+        self.activeTextField?.text = pickOption[row]
+    }
+    
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat
     {
