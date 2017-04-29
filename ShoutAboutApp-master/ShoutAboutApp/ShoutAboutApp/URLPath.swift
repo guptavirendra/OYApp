@@ -29,6 +29,7 @@ let kEmail   = "Email"
 let kName    = "Name"
 let kAddress = "Address"
 let kWebsite = "Website"
+let kGender  = "Gender"
 
 let bgColor = UIColor(patternImage: UIImage(named: "bg")!)
 let appColor = UIColor(red: 31.0/255.0, green: 141.0/255.0, blue: 200.0/255.0, alpha: 1.0)

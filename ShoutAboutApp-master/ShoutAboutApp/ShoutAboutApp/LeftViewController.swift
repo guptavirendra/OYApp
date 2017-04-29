@@ -82,6 +82,8 @@ extension LeftViewController
         let text = choiceArray[indexPath.row]
         cell?.nameLabel.textColor = UIColor.darkGrayColor()
         cell?.nameLabel?.text = text
+        cell?.iconView.image  = UIImage(named: text)?.imageWithRenderingMode(.AlwaysTemplate)
+        cell?.iconView.tintColor = UIColor.grayColor()
         cell?.textLabel?.font = UIFont(name: "TitilliumWeb-Regular", size: 18)
 //        cell?.contentView.setGraphicEffects()
         return cell!
@@ -104,17 +106,35 @@ extension LeftViewController
         
          if (indexPath.row == 0 ||  indexPath.row == 1 || indexPath.row == 2)
         {
-             self.performSegueWithIdentifier("spam", sender: cell)
+            
+            
+           let vc = self.storyboard?.instantiateViewControllerWithIdentifier("SpamFavBlockViewController") as! SpamFavBlockViewController
+            if indexPath.row == 0
+            {
+                vc.favSpamBlock = .block
+            }
+            if indexPath.row == 1
+            {
+                vc.favSpamBlock = .spam
+            }
+            if indexPath.row == 2
+            {
+                vc.favSpamBlock = .fav
+            }
+            self.navigationController?.pushViewController(vc, animated: true)
+             //self.performSegueWithIdentifier("spam", sender: self)
             
         }
             
         if (indexPath.row == 3)
         {
-            self.performSegueWithIdentifier("setting", sender: cell)
+            let vc = self.storyboard?.instantiateViewControllerWithIdentifier("subViewController") as! subViewController
+            self.navigationController?.pushViewController(vc, animated: true)
+            //self.performSegueWithIdentifier("setting", sender: self)
             
         }
         
-        else if indexPath.row == 6
+        else if indexPath.row == 5
         {
             NSUserDefaults.standardUserDefaults().removeObjectForKey(kapp_user_id)
             NSUserDefaults.standardUserDefaults().removeObjectForKey(kapp_user_token)
@@ -172,5 +192,20 @@ extension LeftViewController
                 }
             }
         }
+    }
+    
+    
+    @IBAction func editProfileButtonCliceked(sender:UIButton)
+    {
+    
+       let profileViewController = self.storyboard?.instantiateViewControllerWithIdentifier("NewProfileViewController") as! NewProfileViewController
+        profileViewController.personalProfile = ProfileManager.sharedInstance.personalProfile
+         let navigation = UINavigationController(rootViewController: profileViewController)
+        
+        self.presentViewController(navigation, animated: true, completion: nil)
+    
+        
+        
+    
     }
 }

@@ -8,11 +8,14 @@
 
 import UIKit
 
-class settingCell: UITableViewCell {
+class settingCell: UITableViewCell
+{
     
     @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var iconView:UIImageView!
     
-    override func awakeFromNib() {
+    override func awakeFromNib()
+    {
         super.awakeFromNib()
         // Initialization code
     }

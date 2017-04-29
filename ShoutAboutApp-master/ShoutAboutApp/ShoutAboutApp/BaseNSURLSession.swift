@@ -11,7 +11,7 @@ import UIKit
 import MobileCoreServices
 
 
-var doctorBaseURL = "http://139.59.31.73/api/"
+var doctorBaseURL = "http://oyapp.in/api/"
 //var doctorBaseURL = "http://demo.varyavega.co.in/shoutaboutapp/api/"
 var baseURL = doctorBaseURL
 

@@ -27,6 +27,9 @@ class NewProfileViewController: ProfileViewController, UIPopoverPresentationCont
      @IBOutlet weak var blockLabel:UILabel?
      @IBOutlet weak var spamLabel:UILabel?
      @IBOutlet weak var favoriteLabel:UILabel?
+    
+    
+    @IBOutlet weak var doneButton:UIBarButtonItem?
 
      var popOver : UIPopoverPresentationController!
     
@@ -43,6 +46,12 @@ class NewProfileViewController: ProfileViewController, UIPopoverPresentationCont
     override func viewDidLoad()
     {
         super.viewDidLoad()
+        
+        if self.isBeingPresented()
+        {
+            doneButton?.title = "Done"
+            
+        }
          
         /*
         //self.view.addBackGroundImageView()
@@ -150,8 +159,8 @@ class NewProfileViewController: ProfileViewController, UIPopoverPresentationCont
         popOver = navController!.popoverPresentationController
         
         popOver.delegate = self
-        popOver.sourceView = sender
-        popOver.sourceRect = sender.bounds
+        popOver.sourceView = self.view
+        popOver.sourceRect = self.view.bounds
         
         popOver.permittedArrowDirections = UIPopoverArrowDirection(rawValue: 0)
         
@@ -181,6 +190,9 @@ class NewProfileViewController: ProfileViewController, UIPopoverPresentationCont
     
     @IBAction func Clicked(sender:AnyObject)
     {
+       
+        self.dismissViewControllerAnimated(true, completion: nil)
+         
         
         let alertVc = self.storyboard?.instantiateViewControllerWithIdentifier("AlertViewController") as? AlertViewController
         self.navigationController!.pushViewController(alertVc!, animated: true)

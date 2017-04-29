@@ -51,7 +51,9 @@ class JoinViewController: UIViewController, UITableViewDataSource, UITableViewDe
     var name:String = ""
     var email:String = ""
     var address:String = ""
-    var website:String = ""
+    var dob:String = ""
+    var notify_token:String = " "
+    var gender:String = ""
 
     var completionHandler: (Float)->Void =
         {
@@ -133,7 +135,7 @@ extension JoinViewController
                 cell.inputTextField.placeholder = kBirthDay
                 cell.inputImage.image = UIImage(named: kBirthDay)
                 cell.inputTextField.tag = 3
-                
+            
                 
                 
                 
@@ -152,6 +154,7 @@ extension JoinViewController
                 
                 
                 let datePicker = UIDatePicker()
+                datePicker.maximumDate = NSDate()
                 datePicker.addTarget(self, action: #selector(JoinViewController.handleDatePicker(_:)), forControlEvents: .ValueChanged)
                 datePicker.datePickerMode = .Date
                 cell.inputTextField.inputView = datePicker
@@ -161,8 +164,8 @@ extension JoinViewController
             }
             if indexPath.row == 4
             {
-                cell.inputTextField.placeholder = kBirthDay
-                cell.inputImage.image = UIImage(named: kBirthDay)
+                cell.inputTextField.placeholder = kGender
+                cell.inputImage.image = UIImage(named: kGender)
                 cell.inputTextField.tag = 4
                 
                 
@@ -246,21 +249,30 @@ extension JoinViewController
     func handleDatePicker(sender: UIDatePicker)
     {
         let dateFormatter = NSDateFormatter()
-        dateFormatter.dateFormat = "dd MMM yyyy"
+        dateFormatter.dateFormat = "yyyy-MM-dd"
         
         self.activeTextField?.text = dateFormatter.stringFromDate(sender.date)
-        
+        self.dob = (self.activeTextField?.text)!
         
     }
     
     
     func dissMissKeyBoard(sender:UIBarButtonItem)
     {
-        if let datePicker =  self.activeTextField?.inputView as?UIDatePicker
+        if let datePicker =  self.activeTextField?.inputView as? UIDatePicker
         {
             let dateFormatter = NSDateFormatter()
-            dateFormatter.dateFormat = "dd MMM yyyy"
+            dateFormatter.dateFormat = "yyyy-MM-dd"
             self.activeTextField?.text = dateFormatter.stringFromDate(datePicker.date)
+            self.dob = (self.activeTextField?.text)!
+        }
+        
+        if let picker = self.activeTextField?.inputView as? UIPickerView
+        {
+           
+            self.activeTextField?.text = pickOption[ picker.selectedRowInComponent(0)]
+            self.gender = (self.activeTextField?.text)!
+            
         }
         self.activeTextField?.resignFirstResponder()
         
@@ -288,7 +300,7 @@ extension JoinViewController
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat
     {
-        if indexPath.row == 5
+        if indexPath.row == 6
         {
             return 66
         }
@@ -301,12 +313,9 @@ extension JoinViewController
 {
     func buttonClicked(cell: ClickTableViewCell)
     {
-        getFireBaseAuth()
+        //getFireBaseAuth()
         
-        dispatch_async(dispatch_get_global_queue(0, 0),
-                       {
-                        self.getContacts()
-        })
+        
         
         if cell.button.titleLabel?.text == "Skip"
         {
@@ -324,13 +333,13 @@ extension JoinViewController
         {
             print("join")
             
-            print(" email:\(self.email), name:\(self.name),  web:\(self.website ), address:f \(self.address) ")
+            print(" email:\(self.email), name:\(self.name),  web:\(self.dob ), address:f \(self.address) ")
             
             if self.name.characters.count == 0
             {
                 self.displayAlertMessage("Please enter name")
                 
-            }else if self.email.characters.count == 0
+            }/*else if self.email.characters.count == 0
             {
                 self.displayAlertMessage("Please enter email")
                              }
@@ -342,15 +351,19 @@ extension JoinViewController
             {
                 self.displayAlertMessage("Please enter website")
                 
-            }else
+            }*/else
             {
                 let appUserId = NSUserDefaults.standardUserDefaults().objectForKey(kapp_user_id) as! Int
                 let appUserToken = NSUserDefaults.standardUserDefaults().objectForKey(kapp_user_token) as! String
                 
-                let dict = ["name":self.name, "email":self.email, "website":self.website, "address":self.address, kapp_user_id:String(appUserId), kapp_user_token :appUserToken, "notify_token":"text"]
+                
+                
+                let dict = ["name":self.name, "email":self.email, "dob":self.dob, "address":self.address, "website":"webite", kapp_user_id:String(appUserId), kapp_user_token :appUserToken, "notify_token":"text", "gender":self.gender.lowercaseString]
                 postData(dict)
             }
         }
+        
+        
     }
     
     
@@ -360,11 +373,16 @@ extension JoinViewController
         let okAction = UIAlertAction(title: "OK", style: .Default)
         { (action) in
             self.dismissViewControllerAnimated(false, completion: nil)
-            let tabBarVC = self.storyboard?.instantiateViewControllerWithIdentifier("SWRevealViewController") as? SWRevealViewController
+            let tabBarVC = self.storyboard?.instantiateViewControllerWithIdentifier("tabBarVC") as? MyTabViewController
             let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
             appDelegate.window?.backgroundColor = UIColor(red: 236.0, green: 238.0, blue: 241.0, alpha: 1.0)
             appDelegate.window?.rootViewController = tabBarVC
             appDelegate.window?.makeKeyAndVisible()
+            
+            dispatch_async(dispatch_get_global_queue(0, 0),
+            {
+                            self.getContacts()
+            })
             
         }
         alert.addAction(okAction)
@@ -421,7 +439,12 @@ extension JoinViewController
         }
         if cell.inputTextField.tag == 3
         {
-            self.website = text
+            self.dob = text
+            
+        }
+        if cell.inputTextField.tag == 4
+        {
+            self.gender = text
             
         }
     }

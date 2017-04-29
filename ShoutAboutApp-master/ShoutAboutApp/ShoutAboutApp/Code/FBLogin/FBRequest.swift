@@ -36,7 +36,7 @@ class FBRequest: NSObject {
                 }
                 }
                 else{
-                ActivityIndicator.stopActivityIndicatorOnView(vc.view)
+                //ActivityIndicator.stopActivityIndicatorOnView(vc.view)
                 }
             }
         })
@@ -72,7 +72,7 @@ class FBRequest: NSObject {
         let request = FBSDKGraphRequest(graphPath:"/me?fields=invitable_friends", parameters: nil);
         request.startWithCompletionHandler { (connection : FBSDKGraphRequestConnection!, result : AnyObject!, error : NSError!) -> Void in
             let resultdict = result as! NSDictionary
-            DLog("Result Dict: \(resultdict)")
+           // DLog("Result Dict: \(resultdict)")
             
                     let friendArr : [AnyObject] = (resultdict.objectForKey("invitable_friends")!).objectForKey("data")! as! [AnyObject]
             
@@ -80,7 +80,7 @@ class FBRequest: NSObject {
                     {
                         let valueDict : NSDictionary = friendArr[i] as! NSDictionary
                         let id = valueDict.objectForKey("id") as! String
-                        PlayerTemplate.buildWithFB(valueDict.objectForKey("name") as! String, id: id, photo: ((valueDict.objectForKey("picture"))?.objectForKey("data"))?.objectForKey("url") as! String)
+                       // PlayerTemplate.buildWithFB(valueDict.objectForKey("name") as! String, id: id, photo: ((valueDict.objectForKey("picture"))?.objectForKey("data"))?.objectForKey("url") as! String)
             
                     }
 
@@ -129,7 +129,7 @@ class FBRequest: NSObject {
                 {
                     let valueDict : NSDictionary = frndArr[i] as! NSDictionary
                     let id = valueDict.objectForKey("id") as! String
-                    PlayerTemplate.buildWithFB(valueDict.objectForKey("name") as! String, id: id, photo: ((valueDict.objectForKey("picture"))?.objectForKey("data"))?.objectForKey("url") as! String)
+                   // PlayerTemplate.buildWithFB(valueDict.objectForKey("name") as! String, id: id, photo: ((valueDict.objectForKey("picture"))?.objectForKey("data"))?.objectForKey("url") as! String)
                     
                 }
                 
@@ -149,7 +149,7 @@ class FBRequest: NSObject {
                              // success ...
             } catch let error as NSError {
                 // failure
-                DLog("Fetch failed: \(error.localizedDescription)")
+                //DLog("Fetch failed: \(error.localizedDescription)")
                 
                 return;
             }

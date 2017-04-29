@@ -117,6 +117,8 @@
 		F18839331DD8D26400362B1B /* LeftViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18839321DD8D26400362B1B /* LeftViewController.swift */; };
 		F1A1D13C1E2BA1C2004A4E8E /* FeedsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A1D13B1E2BA1C1004A4E8E /* FeedsTableViewCell.swift */; };
 		F1ACAD781E217DDC004AECAB /* SpamFavBlockViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1ACAD771E217DDC004AECAB /* SpamFavBlockViewController.swift */; };
+		F1B95F4B1EB279E500AA16C6 /* FBRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1B95F481EB279E500AA16C6 /* FBRequest.swift */; };
+		F1B95F4C1EB279E500AA16C6 /* GoogleLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1B95F4A1EB279E500AA16C6 /* GoogleLogin.swift */; };
 		F1C9A81F1E3DE0CD003354B6 /* NewProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1C9A81E1E3DE0CD003354B6 /* NewProfileViewController.swift */; };
 		F1D1F7E61DEE05D20046DBB2 /* Pods_ShoutAboutApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17F0E7E11A503618876EE71A /* Pods_ShoutAboutApp.framework */; };
 		F1DD72031DEAADF800DE0A12 /* ChannelListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1DD72001DEAADF800DE0A12 /* ChannelListViewController.swift */; };
@@ -258,6 +260,8 @@
 		F18839321DD8D26400362B1B /* LeftViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeftViewController.swift; sourceTree = "<group>"; };
 		F1A1D13B1E2BA1C1004A4E8E /* FeedsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedsTableViewCell.swift; sourceTree = "<group>"; };
 		F1ACAD771E217DDC004AECAB /* SpamFavBlockViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpamFavBlockViewController.swift; sourceTree = "<group>"; };
+		F1B95F481EB279E500AA16C6 /* FBRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBRequest.swift; sourceTree = "<group>"; };
+		F1B95F4A1EB279E500AA16C6 /* GoogleLogin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleLogin.swift; sourceTree = "<group>"; };
 		F1C9A81E1E3DE0CD003354B6 /* NewProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewProfileViewController.swift; sourceTree = "<group>"; };
 		F1DD71F91DE8B81700DE0A12 /* TitilliumWeb-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "TitilliumWeb-Bold.ttf"; sourceTree = "<group>"; };
 		F1DD71FA1DE8B81700DE0A12 /* TitilliumWeb-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "TitilliumWeb-Italic.ttf"; sourceTree = "<group>"; };
@@ -475,6 +479,8 @@
 		F1707EDB1EACDFEF0004F14F /* SmallTalk */ = {
 			isa = PBXGroup;
 			children = (
+				F1B95F471EB279E500AA16C6 /* FBLogin */,
+				F1B95F491EB279E500AA16C6 /* GoogleLogin */,
 				F1707EDC1EACDFEF0004F14F /* Extensions */,
 				F1707EE21EACDFEF0004F14F /* Models */,
 				F1707EEC1EACDFEF0004F14F /* Utils */,
@@ -624,6 +630,22 @@
 				F12C27701DCEFDE100AEE0A3 /* JoinViewController.swift */,
 			);
 			name = LoginAndOTP;
+			sourceTree = "<group>";
+		};
+		F1B95F471EB279E500AA16C6 /* FBLogin */ = {
+			isa = PBXGroup;
+			children = (
+				F1B95F481EB279E500AA16C6 /* FBRequest.swift */,
+			);
+			path = FBLogin;
+			sourceTree = "<group>";
+		};
+		F1B95F491EB279E500AA16C6 /* GoogleLogin */ = {
+			isa = PBXGroup;
+			children = (
+				F1B95F4A1EB279E500AA16C6 /* GoogleLogin.swift */,
+			);
+			path = GoogleLogin;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -780,6 +802,7 @@
 				F1707F401EACDFEF0004F14F /* STGameMediaItem.swift in Sources */,
 				F1707F231EACDFEF0004F14F /* STMessage.swift in Sources */,
 				F17E08621E0FF16500FDBF0B /* AKImageCropperTouchView.swift in Sources */,
+				F1B95F4B1EB279E500AA16C6 /* FBRequest.swift in Sources */,
 				F11B75FC1DE17B520075DDCB /* ChatImageTableViewCell.swift in Sources */,
 				F1707F371EACDFEF0004F14F /* ConversationViewModel.swift in Sources */,
 				F1707F2F1EACDFEF0004F14F /* ConversationsListViewController.swift in Sources */,
@@ -864,6 +887,7 @@
 				F12C27691DCE66D900AEE0A3 /* URLPath.swift in Sources */,
 				F12C276F1DCE77A900AEE0A3 /* OTPViewController.swift in Sources */,
 				F12C277F1DCF763F00AEE0A3 /* ProfileViewController.swift in Sources */,
+				F1B95F4C1EB279E500AA16C6 /* GoogleLogin.swift in Sources */,
 				F18839231DD83BE400362B1B /* ReviewTableViewCell.swift in Sources */,
 				F12C27731DCF079E00AEE0A3 /* InputTableViewCell.swift in Sources */,
 				F1DD72051DEAADF800DE0A12 /* LoginViewController.swift in Sources */,

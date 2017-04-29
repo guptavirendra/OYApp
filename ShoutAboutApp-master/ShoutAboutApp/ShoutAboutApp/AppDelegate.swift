@@ -1,4 +1,4 @@
-//
+  //
 //  AppDelegate.swift
 //  ShoutAboutApp
 //
@@ -85,24 +85,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool
     {
-        if User.isLoggedIn()
-        {
-            crashlytics.setUserIdentifier(User.username)
-            if let displayName = User.displayName
-            {
-                crashlytics.setUserName(displayName)
-            }
-        }
-        Fabric.with([crashlytics, Digits.self()])
-        // Register a class to a route using object subscripting
-        self.router["/messsage/:thread"] = MessageDeeplinkRouteHandler.self
+//        if User.isLoggedIn()
+//        {
+//            crashlytics.setUserIdentifier(User.username)
+//            if let displayName = User.displayName
+//            {
+//                crashlytics.setUserName(displayName)
+//            }
+//        }
+//        Fabric.with([crashlytics, Digits.self()])
+//        // Register a class to a route using object subscripting
+//        self.router["/messsage/:thread"] = MessageDeeplinkRouteHandler.self
         
         let controller: FirstViewController = FirstViewController()
         
         // Show View Controller from Main storyboard
     /* Small talk block*/    //self.window!.rootViewController = UINavigationController(rootViewController: controller)
-        self.window!.backgroundColor = UIColor.whiteColor()
-        self.window!.rootViewController?.navigationController?.navigationBarHidden = true
+        //self.window!.backgroundColor = UIColor.whiteColor()
+        //self.window!.rootViewController?.navigationController?.navigationBarHidden = true
         let darkBlue = UIColor(hexString: "2C3E50")
         let red = UIColor(hexString: "E74C3C")
         let light = UIColor(hexString: "ECF0F1")
@@ -112,19 +112,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate
         self.darkColor = darkBlue
         self.selfColor = UIColor.whiteColor()
         self.highlightColor = red
-        UIBarButtonItem.appearance().tintColor = lightBlue
+        //UIBarButtonItem.appearance().tintColor = lightBlue
         //UIBarButtonItem.my_appearanceWhenContainedIn(UISearchBar.self).tintColor = lightBlue
        // UIBarButtonItem.my_appearanceWhenContainedIn(UINavigationBar.self).tintColor = lightBlue
         //UIBarButtonItem.my_appearanceWhenContainedIn(UIToolbar.self).tintColor = lightBlue
         
        // UINavigationBar.appearance().barTintColor = light
         //UINavigationBar.appearance().tintColor = lightBlue
-        UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: red]
+        //UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: red]
         
-        UITableViewCell.appearance().backgroundColor = light
-        UICollectionView.appearance().backgroundColor = light
-        UIScrollView.appearance().backgroundColor = light
-        UITableView.appearance().backgroundColor = light
+       // UITableViewCell.appearance().backgroundColor = light
+       // UICollectionView.appearance().backgroundColor = light
+       // UIScrollView.appearance().backgroundColor = light
+        //UITableView.appearance().backgroundColor = light
         
         
         
@@ -156,7 +156,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate
             
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-            let tabBarVC = storyboard.instantiateViewControllerWithIdentifier("SWRevealViewController") as? SWRevealViewController
+             let tabBarVC = storyboard.instantiateViewControllerWithIdentifier("tabBarVC") as? MyTabViewController
             
             appDelegate.window?.backgroundColor = UIColor(red: 236.0, green: 238.0, blue: 241.0, alpha: 1.0)
             appDelegate.window?.rootViewController = tabBarVC

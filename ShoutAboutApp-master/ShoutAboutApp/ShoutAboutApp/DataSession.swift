@@ -1552,8 +1552,12 @@ class DataSessionManger: NSObject
                     for dict in reviewCount
                     {
                         let count = ReviewCount()
-                        count.count =   (dict.objectForKey("count") as? String)!
+                        if let countNumber = dict.objectForKey("count") as? NSNumber
+                        {
+                            
+                           count.count = countNumber.stringValue
                         reviewUser.reviewCountArray.append(count)
+                        }
                         
                     }
                     

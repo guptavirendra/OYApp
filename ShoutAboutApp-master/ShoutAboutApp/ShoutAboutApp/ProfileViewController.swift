@@ -617,7 +617,7 @@ public extension UIView
     }
 }
 
-extension SWRevealViewController
+extension MainSearchViewController
 {
     // MARK: GET DATA
     func  getProfileData()

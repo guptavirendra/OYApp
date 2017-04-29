@@ -43,6 +43,14 @@ class MyTabViewController: UITabBarController, UITabBarControllerDelegate
             {
                 profilevc.personalProfile = ProfileManager.sharedInstance.personalProfile
             }
+            
+            if let moreVC = vc.viewControllers.first as? LeftViewController
+            {
+                
+               // moreVC.
+            }
+            
+            
         }
     }
 

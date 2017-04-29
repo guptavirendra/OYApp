@@ -124,11 +124,11 @@ class OTPViewController: UIViewController, UITextFieldDelegate {
                     
                     if deserializedResponse.objectForKey(kapp_user_id) != nil
                     {
-//                         let appUserId = deserializedResponse.objectForKey(kapp_user_id) as? Int
+                         let appUserId = deserializedResponse.objectForKey(kapp_user_id) as? Int
                         
-                         let appUserId = 620
+                        // let appUserId = 620
                         
-                         NSUserDefaults.standardUserDefaults().setInteger(appUserId, forKey: kapp_user_id)
+                         NSUserDefaults.standardUserDefaults().setInteger(appUserId!, forKey: kapp_user_id)
                          NSUserDefaults.standardUserDefaults().synchronize()
                         
                     }

@@ -16,4 +16,9 @@
 #import <DeepLinkKit/DeepLinkKit.h>
 #import <NYTPhotoViewer/NYTPhoto.h>
 #import <NYTPhotoViewer/NYTPhotosViewController.h>
+
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
+#import <FBSDKLoginKit/FBSDKLoginKit.h>
+#import <FBSDKLoginKit/FBSDKLoginManager.h>
+#import <Google/SignIn.h>
  

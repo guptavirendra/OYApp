@@ -18,8 +18,10 @@ class subViewController:  UIViewController, UITableViewDataSource, UITableViewDe
     override func viewDidLoad()
     {
         super.viewDidLoad()
+         self.automaticallyAdjustsScrollViewInsets = false
+        self.navigationController?.navigationBarHidden = false
         
-        choiceArray = ["Faq", "Privacy Policy"]
+        choiceArray = ["Term of Use", "Privacy Policy"]
        
         
     }
@@ -67,17 +69,25 @@ extension subViewController
     {
         let cell = tableView.cellForRowAtIndexPath(indexPath)
         
-                if indexPath.row == 0
-                {
         
-                    self.performSegueWithIdentifier("recent", sender: cell)
-                }
+        let vc = self.storyboard?.instantiateViewControllerWithIdentifier("PrivacyPolicyViewController") as! PrivacyPolicyViewController
+       
+        
+        
+        
+        if indexPath.row == 0
+        {
+            vc.selection = 0
+           // self.performSegueWithIdentifier("recent", sender: cell)
+        }
         if (indexPath.row == 1)
         {
-            self.performSegueWithIdentifier("privacyPolicy", sender: cell)
+            vc.selection = 1
+           // self.performSegueWithIdentifier("privacyPolicy", sender: cell)
             
         }
-            
+        
+         self.navigationController?.pushViewController(vc, animated: true)
         
         
     }
@@ -93,6 +103,7 @@ extension subViewController
 extension subViewController
 {
     
+    /*
     // MARK: - Navigation
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -105,4 +116,5 @@ extension subViewController
             
         }
     }
+    */
 }

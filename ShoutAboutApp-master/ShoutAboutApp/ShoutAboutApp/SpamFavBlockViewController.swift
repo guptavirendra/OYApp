@@ -28,12 +28,15 @@ class SpamFavBlockViewController: UIViewController
         self.navigationController?.navigationBarHidden = false
         self.navigationController?.navigationBar.titleTextAttributes =
             [NSForegroundColorAttributeName: UIColor.whiteColor()]
-        if self.revealViewController() != nil
+        
+        /*if self.revealViewController() != nil
         {
             menuButton!.target = self.revealViewController()
             menuButton!.action = #selector(SWRevealViewController.revealToggle(_:))
             self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         }
+        
+        */
         
         switch favSpamBlock
         {

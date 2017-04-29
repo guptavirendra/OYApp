@@ -21,9 +21,13 @@ class MainSearchViewController: UIViewController, ContactTableViewCellProtocol
     
     override func viewDidLoad(){
         super.viewDidLoad()
+        
+        self.searchButton.layer.cornerRadius = 5.0
+        
+        
        // self.tableView.addBackGroundImageView()
         
-        if self.revealViewController() != nil
+        /*if self.revealViewController() != nil
         {
             self.revealViewController().getProfileData()
 //            menuButton.target = self.revealViewController()
@@ -31,7 +35,7 @@ class MainSearchViewController: UIViewController, ContactTableViewCellProtocol
 //            self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
             
         }
-        
+        */
         self.searchButton.setImage(UIImage(named: "tab_search-h@x")!.imageWithRenderingMode(.AlwaysTemplate), forState: .Normal)
         
         self.searchButton.tintColor = UIColor.grayColor()
@@ -77,7 +81,11 @@ class MainSearchViewController: UIViewController, ContactTableViewCellProtocol
     }
     */
 
-    
+    override func viewDidAppear(animated: Bool)
+    {
+        super.viewDidAppear(animated)
+        self.getProfileData()
+    }
     
    
     

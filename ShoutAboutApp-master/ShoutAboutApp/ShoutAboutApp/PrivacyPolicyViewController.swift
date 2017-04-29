@@ -12,12 +12,22 @@ class PrivacyPolicyViewController: UIViewController {
 
     @IBOutlet weak var myWebView: UIWebView!
     
-    override func viewDidLoad() {
+    var selection:Int = 0
+    
+    override func viewDidLoad()
+    {
         super.viewDidLoad()
+        self.automaticallyAdjustsScrollViewInsets = false
 
         // Do any additional setup after loading the view.
         
-        myWebView.loadRequest(NSURLRequest(URL: NSURL(string: "http://shoutaboutapp.com/privacy-policy")!))
+        var urlString:String = "http://oyapp.in/terms-of-use"
+        if selection == 1
+        {
+            urlString = "http://oyapp.in/privacy-policy"
+            
+        }
+        myWebView.loadRequest(NSURLRequest(URL: NSURL(string: urlString)!))
         
     }
 

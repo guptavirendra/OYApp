@@ -47,7 +47,7 @@ private final class PingThread: NSThread {
         self.handler = handler
     }
     
-    override func main() {
+    /*override func main() {
         while !cancelled {
             pingTaskIsRunning = true
             dispatch_async(dispatch_get_main_queue()) {
@@ -60,7 +60,7 @@ private final class PingThread: NSThread {
                 handler()
             }
             
-            dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
+           // dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
         }
-    }
+    }*/
 }

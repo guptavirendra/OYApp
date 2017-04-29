@@ -91,60 +91,60 @@ class  GoogleLogin: NSObject, GIDSignInDelegate, GIDSignInUIDelegate {
             
             if(givenName != nil){
                 let strFirstName: String = givenName
-                dict[k_firstName] = strFirstName
+                dict["name"] = strFirstName
             }
             if(familyName != nil){
                 let strLastName: String = familyName
-                dict[k_lastName] = strLastName
+                dict[""] = strLastName
             }
             if(userId != nil){
                 let strID: String = userId
-                dict[k_id] = strID
+                dict["appuserId"] = strID
             }
             if(email != nil){
                 let strEmail: String = email
-                dict[k_email] = strEmail
+                dict["email"] = strEmail
             }
             if(url != nil){
                 let strUrl: String = url.absoluteString
-                dict[k_photo] = strUrl
+                dict["photo"] = strUrl
             }
-            dict[k_loginType] = NSNumber(integer: LoginType.Google.rawValue)
+            //dict[k_loginType] = NSNumber(integer: LoginType.Google.rawValue)
 
             
-            Authorization.sharedInstance.saveAuthorizedUserData(dict)
+            //Authorization.sharedInstance.saveAuthorizedUserData(dict)
             
-            User.build(dict)
+           // User.build(dict)
             
             completionBLock?!(user, error)
             
-            DLog("\(userId), \(fullName), \(email), \(idToken), \(givenName), \(familyName)")
+           // DLog("\(userId), \(fullName), \(email), \(idToken), \(givenName), \(familyName)")
             
             
-            self.playerFRC = PlayerTemplate.playerFRC()
+            //self.playerFRC = PlayerTemplate.playerFRC()
             
             
-            if (self.playerFRC?.fetchedObjects?.count)! == 0{
-                
-                
-                 PlayerTemplate.buildWithGoogle("\(dict[k_firstName]!) \(dict[k_lastName]!)" , photo:  dict[k_photo] as! String, id: dict[k_id] as! String);
-                
-                
-                
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-                    //BackGround Sync Queue
-                    self.getPeopleList()
-                    
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        
-                    })
-                })
-
-            }
+//            if (self.playerFRC?.fetchedObjects?.count)! == 0{
+//                
+//                
+//                 PlayerTemplate.buildWithGoogle("\(dict[k_firstName]!) \(dict[k_lastName]!)" , photo:  dict[k_photo] as! String, id: dict[k_id] as! String);
+//                
+//                
+//                
+//                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+//                    //BackGround Sync Queue
+//                    self.getPeopleList()
+//                    
+//                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+//                        
+//                    })
+//                })
+//
+//            }
             // ...
         } else {
-            DLog("\(error.localizedDescription)")
-            ActivityIndicator.stopActivityIndicatorOnView((vc?.view)!)
+           // DLog("\(error.localizedDescription)")
+            //ActivityIndicator.stopActivityIndicatorOnView((vc?.view)!)
 
         }
 
@@ -166,7 +166,7 @@ class  GoogleLogin: NSObject, GIDSignInDelegate, GIDSignInUIDelegate {
     func signIn(signIn: GIDSignIn!,
                 dismissViewController viewController: UIViewController!) {
         vc!.dismissViewControllerAnimated(true, completion: nil)
-        ActivityIndicator.stopActivityIndicatorOnView((vc?.view)!)
+       // ActivityIndicator.stopActivityIndicatorOnView((vc?.view)!)
     }
     
 
@@ -203,8 +203,8 @@ class  GoogleLogin: NSObject, GIDSignInDelegate, GIDSignInUIDelegate {
                 })
             }
             else {
-                DLog(HTTPStatusCode)
-                DLog(error!)
+               // DLog(HTTPStatusCode)
+                //DLog(error!)
             }
         })
     }
@@ -212,8 +212,8 @@ class  GoogleLogin: NSObject, GIDSignInDelegate, GIDSignInUIDelegate {
     
     func updateDataInDB(arr:[[String: NSObject]])  {
        
-        let records = PlayerTemplate.buildWithGoogleUserFriends(arr);
-        print(records);
+        //let records = PlayerTemplate.buildWithGoogleUserFriends(arr);
+       // print(records);
     }
     
     

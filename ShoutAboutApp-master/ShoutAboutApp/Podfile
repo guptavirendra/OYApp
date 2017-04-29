@@ -40,6 +40,8 @@ pod 'JSQMessagesViewController'
     pod 'CocoaLumberjack', '~> 2.4.0'
     pod 'FBSDKCoreKit'
     pod 'FBSDKLoginKit'
+    pod 'Google/SignIn'
+
 
 end
 
