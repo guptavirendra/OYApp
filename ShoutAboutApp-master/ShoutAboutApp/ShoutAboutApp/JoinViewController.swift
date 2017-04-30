@@ -54,6 +54,15 @@ class JoinViewController: UIViewController, UITableViewDataSource, UITableViewDe
     var dob:String = ""
     var notify_token:String = " "
     var gender:String = ""
+    
+    
+    
+    let k_firstName = "firstName"
+    let k_lastName = "lastName"
+    let k_id = "id"
+    let k_email = "email"
+    let k_loginType = "loginType"
+    let k_photo = "photo"
 
     var completionHandler: (Float)->Void =
         {
@@ -235,11 +244,20 @@ extension JoinViewController
             cell.contentView.addConstraint(centerx)
         }*/
         
+            
+            if indexPath.row == 7
+            {
+                let  cell = tableView.dequeueReusableCellWithIdentifier("FaceBookGoogleTableViewCell", forIndexPath: indexPath) as! FaceBookGoogleTableViewCell
+                cell.delegate = self
+                 
+                
+            }
         
         return cell
         }
         
         let cell = tableView.dequeueReusableCellWithIdentifier("FaceBookGoogleTableViewCell", forIndexPath: indexPath) as! FaceBookGoogleTableViewCell
+        cell.delegate = self
                 //cell.button.setTitle("Skip", forState: .Normal)
         return cell
         
@@ -315,8 +333,6 @@ extension JoinViewController
     {
         //getFireBaseAuth()
         
-        
-        
         if cell.button.titleLabel?.text == "Skip"
         {
             print("Skip")
@@ -364,7 +380,108 @@ extension JoinViewController
         }
         
         
+        if cell.button.tag == 0
+        {
+            faceBookLogin()
+        }
+        
+        
     }
+    
+    
+    
+    func faceBookLogin()
+    {
+        
+        let fbRequest = FBRequest()
+        fbRequest.loginWithFacebook({ (result, error) in
+            
+            var dict = [String : String]()
+            let appUserId = NSUserDefaults.standardUserDefaults().objectForKey(kapp_user_id) as! Int
+            let appUserToken = NSUserDefaults.standardUserDefaults().objectForKey(kapp_user_token) as! String
+             dict = [ kapp_user_id:String(appUserId), kapp_user_token :appUserToken, "notify_token":"text"]
+            
+            if(result!.objectForKey("name") != nil)
+            {
+                let  strFirstName: String = (result!.objectForKey("name") as? String)!
+                dict["name"] = strFirstName
+                
+                
+                
+            }
+            
+            if(result!.objectForKey("id") != nil)
+            {
+                
+                let strID: String = (result!.objectForKey("id") as? String)!
+                dict[self.k_id] = strID
+                
+            }
+            
+            // if((result!.objectForKey("picture")!.objectForKey("data")!.objectForKey("url")! as! String) != nil){
+            let strUrl: String = result!.objectForKey("picture")!.objectForKey("data")!.objectForKey("url")! as! String
+            dict[self.k_photo] = strUrl
+            //}
+            
+            
+            if(result!.objectForKey("email") != nil)
+            {
+                
+                let strEmail: String = (result!.objectForKey("email") as? String)!
+                dict["email"] = strEmail
+                
+            }
+            if(result!.objectForKey("birthday") != nil)
+            {
+               " MM/DD/YYYY"
+                let strEmail: String = (result!.objectForKey("birthday") as? String)!
+                let dateFormatter = NSDateFormatter()
+                dateFormatter.dateFormat = "MM/dd/yyyy"
+               let date = dateFormatter.dateFromString(strEmail)
+                dateFormatter.dateFormat = "yyyy-MM-dd"
+                let dob = dateFormatter.stringFromDate(date!)
+                dict["dob"] = dob
+                
+            }
+            if(result!.objectForKey("location") != nil)
+            {
+                
+                let strEmail: String = (result!.objectForKey("location") as? String)!
+                dict["address"] = strEmail
+                
+            }
+            
+            if(result!.objectForKey("website") != nil)
+            {
+                
+                let strEmail: String = (result!.objectForKey("website") as? String)!
+                dict["address"] = strEmail
+                
+            }
+            if(result!.objectForKey("gender") != nil)
+            {
+                
+                let strEmail: String = (result!.objectForKey("gender") as? String)!
+                dict["gender"] = strEmail.lowercaseString
+                
+            }
+            
+             self.postData(dict)
+            
+            if (error == nil)
+            {
+                
+                
+            }
+            else
+            {
+                
+            }
+            
+            },
+        vc: self)
+    }
+    
     
     
     override func displayAlert(userMessage: String, handler: ((UIAlertAction) -> Void)?)

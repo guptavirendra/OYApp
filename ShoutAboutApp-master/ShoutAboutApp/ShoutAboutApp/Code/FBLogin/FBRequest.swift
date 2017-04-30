@@ -10,63 +10,62 @@ import UIKit
 import FBSDKCoreKit
 import FBSDKLoginKit
 
-
 typealias CompletionHandler = ((AnyObject?,NSError?)-> Void)?
 
-class FBRequest: NSObject {
-    
+class FBRequest: NSObject
+{
     let fbLoginManager : FBSDKLoginManager = FBSDKLoginManager()
     
-    func loginWithFacebook(successBlock:CompletionHandler ,vc:UIViewController) {
-        
+    func loginWithFacebook(successBlock:CompletionHandler ,vc:UIViewController)
+    {
         let facebookReadPermissions = ["public_profile", "email", "user_friends"]
         fbLoginManager.logInWithReadPermissions(facebookReadPermissions, fromViewController: vc,handler: { (result, error) -> Void in
-            if (error == nil){
-                
-                
+            if (error == nil)
+            {
                 let fbloginresult : FBSDKLoginManagerLoginResult = result
-                if fbloginresult.grantedPermissions != nil{
-                if(fbloginresult.grantedPermissions.contains("email"))
+                if fbloginresult.grantedPermissions != nil
                 {
-                    if(successBlock != nil) {
-                        
-                        self.getFBUserData(successBlock);
+                    if(fbloginresult.grantedPermissions.contains("email"))
+                    {
+                        if(successBlock != nil)
+                        {
+                            self.getFBUserData(successBlock);
                        
+                        }
                     }
                 }
-                }
-                else{
-                //ActivityIndicator.stopActivityIndicatorOnView(vc.view)
+                else
+                {
+                    //ActivityIndicator.stopActivityIndicatorOnView(vc.view)
                 }
             }
         })
 
     }
     
-    func logoutFacebook() {
+    func logoutFacebook()
+    {
         fbLoginManager.logOut()
     }
     
-    func getFBUserData(success: CompletionHandler){
-        if((FBSDKAccessToken.currentAccessToken()) != nil){
-            FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, name, first_name, last_name, picture.type(large), email"]).startWithCompletionHandler({ (connection, result, error) -> Void in
-                if (error == nil){
-                    if(success != nil) {
-                    
-                     success!(result, error);
-                        
-                        
-                        
+    func getFBUserData(success: CompletionHandler)
+    {
+        if((FBSDKAccessToken.currentAccessToken()) != nil)
+        {
+            FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, name, first_name, last_name, picture.type(large), email,  birthday, gender, location, website"]).startWithCompletionHandler({ (connection, result, error) -> Void in
+                if (error == nil)
+                {
+                    if(success != nil)
+                    {
+                        success!(result, error);
                     }
-                                        
                 }
             })
         }
     }
     
-    
-    
-    func fetchFacebookFriendList(){
+    func fetchFacebookFriendList()
+    {
         
     
         let request = FBSDKGraphRequest(graphPath:"/me?fields=invitable_friends", parameters: nil);

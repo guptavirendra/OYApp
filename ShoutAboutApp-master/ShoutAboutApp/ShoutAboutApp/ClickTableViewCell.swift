@@ -48,6 +48,10 @@ class FaceBookGoogleTableViewCell:ClickTableViewCell
         baseTitleView.makeImageRounded()
         
     }
+    @IBAction override func buttonClicked(button:UIButton)
+    {
+        self.delegate?.buttonClicked(self)
+    }
     
     
 }
