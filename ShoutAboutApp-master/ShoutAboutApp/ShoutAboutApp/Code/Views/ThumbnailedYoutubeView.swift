@@ -94,7 +94,7 @@ class ThumbnailedYoutubeView: UIView, YTPlayerViewDelegate, UIGestureRecognizerD
 			frame.size = self.videoViewSize
 			cachedPlaceholderView?.frame = frame
 			//If we have screenshot we use that until the user taps it
-			let recognizer = UITapGestureRecognizer(target: self, action:Selector("handleTap:"))
+			let recognizer = UITapGestureRecognizer(target: self, action:#selector(ThumbnailedYoutubeView.handleTap(_:)))
 			self.addGestureRecognizer(recognizer)
 		} else {
 			cachedPlaceholderView = spinnerPlaceholderView()

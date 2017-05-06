@@ -11,7 +11,7 @@ import UIKit
 class RateANdReviewViewController: UIViewController,UITableViewDataSource, UITableViewDelegate, UITextViewDelegate, ClickTableViewCellProtocol
 {
     @IBOutlet weak var tableView: UITableView!
-     
+    
     var activeTextView:UITextView?
     
     var person:SearchPerson = SearchPerson()
@@ -24,7 +24,7 @@ class RateANdReviewViewController: UIViewController,UITableViewDataSource, UITab
     var name:String = ""
     var photo:String = ""
     var subtractCount:Int = 0
-
+    
     override func viewDidLoad()
     {
         super.viewDidLoad()
@@ -40,8 +40,8 @@ class RateANdReviewViewController: UIViewController,UITableViewDataSource, UITab
         //self.tableView.addBackGroundImageView()
         //self.tableView.backgroundColor = bgColor
         self.automaticallyAdjustsScrollViewInsets = false
-
-         self.navigationController?.navigationBar.hidden = false
+        
+        self.navigationController?.navigationBar.hidden = false
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.showKeyBoard(_:)), name: UIKeyboardDidShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.hideKeyBoard(_:)), name: UIKeyboardWillHideNotification, object: nil)
         let tapGesture = UITapGestureRecognizer()
@@ -51,12 +51,20 @@ class RateANdReviewViewController: UIViewController,UITableViewDataSource, UITab
         self.title = "Rate & Review"
         self.navigationController?.navigationBar.titleTextAttributes =
             [NSForegroundColorAttributeName: UIColor.whiteColor()
-             ]
+        ]
         
         
+        
+    }
+    
+    override func viewWillAppear(animated: Bool)
+    {
+        super.viewWillAppear(animated)
+        self.navigationController?.navigationBarHidden = false
+        self.navigationController?.navigationBar.tintColor = appColor
         getReview()
     }
-
+    
     override func didReceiveMemoryWarning()
     {
         super.didReceiveMemoryWarning()
@@ -96,9 +104,9 @@ extension RateANdReviewViewController
                 cell.profileImageView.image = UIImage(named: "profile")
             }
             
-          rating = String(cell.ratingView.rating)
-        
-        
+            rating = String(cell.ratingView.rating)
+            
+            
             return cell
         }
         if indexPath.row == (1-subtractCount)
@@ -111,7 +119,7 @@ extension RateANdReviewViewController
         
         if indexPath.row == (2-subtractCount)
         {
-             let cell = tableView.dequeueReusableCellWithIdentifier("button", forIndexPath: indexPath) as! ClickTableViewCell
+            let cell = tableView.dequeueReusableCellWithIdentifier("button", forIndexPath: indexPath) as! ClickTableViewCell
             //cell.contentView.backgroundColor = bgColor
             cell.button.layer.borderWidth = 1.0
             cell.button.layer.borderColor = appColor.CGColor
@@ -123,8 +131,7 @@ extension RateANdReviewViewController
         if indexPath.row == (3-subtractCount)
         {
             
-        let cell = tableView.dequeueReusableCellWithIdentifier("ReviewTableViewCell", forIndexPath: indexPath) as! ReviewTableViewCell
-            
+            let cell = tableView.dequeueReusableCellWithIdentifier("ReviewTableViewCell", forIndexPath: indexPath) as! ReviewTableViewCell
             
             let urlString       = photo
             if urlString.characters.count != 0
@@ -136,56 +143,108 @@ extension RateANdReviewViewController
             {
                 cell.profileImageView.image = UIImage(named: "profile")
             }
-             
+            
+            
+            var message:String = ""
             cell.name.text = name
-            var total:CGFloat = 0.0
-            if let _ = reviewUser.reviewCountArray.first{
+            var total:Float = 0.0
+            
+            if reviewUser.rateGraphArray.count >= 1
+            {
                 
-                cell.reviewCount.text = (reviewUser.reviewCountArray.first?.count)! + " total"
-                if let count = reviewUser.reviewCountArray.first?.count{
+                let  rating = reviewUser.rateGraphArray[0].count
+                let  ratingFloat =  CGFloat(Float(rating)!)
+                
+                if ratingFloat > 0 && ratingFloat <= 1
+                {
                     
-                   total =  CGFloat(Float(count)!)
+                    message.appendContentsOf(rating)
+                    message.appendContentsOf(" rating")
+                }else
+                {
+                    message.appendContentsOf(rating)
+                    message.appendContentsOf(" ratings")
+                    
                 }
             }
-            if let ratingAverage = reviewUser.ratingAverageArray.first?.average{
+            
+            
+            if let _ = reviewUser.reviewCountArray.first
+            {
+                cell.reviewCount.text = (reviewUser.reviewCountArray.first?.count)! + " total"
+                if let count = reviewUser.reviewCountArray.first?.count
+                {
+                    total =   Float(count)!
+                }
                 
+                
+                
+                if reviewUser.rateGraphArray.count >= 1
+                {
+                    
+                    let  rating = reviewUser.rateGraphArray[0].count
+                    let  ratingFloat =  CGFloat(Float(rating)!)
+                    
+                    if ratingFloat > 0 && ratingFloat <= 1
+                    {
+                        message.appendContentsOf(", ")
+                    }
+                }
+                
+                if total > 0 && total <= 1
+                {
+                    message.appendContentsOf(String(Int(total)))
+                    message.appendContentsOf(" review")
+                    
+                }else
+                {
+                    message.appendContentsOf(String(Int(total)))
+                    message.appendContentsOf(" reviews")
+                    
+                }
+            }
+            
+            //cell.reviewMessage?.text = message
+            cell.reviewCount.text = message
+            
+            if let ratingAverage = reviewUser.ratingAverageArray.first?.average
+            {
                 cell.ratingView.rating = Int(Float(ratingAverage)!)
                 cell.ratingOutOfFive.text   =  String(cell.ratingView.rating) + "/5"
             }
-            
             let fixConstraints:CGFloat = cell.graphbaseView5.frame.size.width
-            var fiveCount:CGFloat = 0
-            var fourCount:CGFloat = 0
-            var threeCount:CGFloat = 0
-            var twoCount:CGFloat = 0
-            var oneCount:CGFloat = 0
+            var fiveCount:Float = 0
+            var fourCount:Float = 0
+            var threeCount:Float = 0
+            var twoCount:Float = 0
+            var oneCount:Float = 0
             for rateGraph in reviewUser.rateGraphArray
             {
                 switch rateGraph.rate
                 {
                 case "5":
                     
-                     fiveCount =  CGFloat(Int(rateGraph.count)!)
+                    fiveCount =  Float(Int(rateGraph.count)!)
                     
                     break
                 case "4":
                     
-                      fourCount =  CGFloat(Int(rateGraph.count)!)
+                    fourCount =  Float(Int(rateGraph.count)!)
                     
                     break
                 case "3":
                     
-                     threeCount =  CGFloat(Int(rateGraph.count)!)
-                   
+                    threeCount =  Float(Int(rateGraph.count)!)
+                    
                     break
                 case "2":
                     
-                      twoCount =  CGFloat(Int(rateGraph.count)!)
+                    twoCount =  Float(Int(rateGraph.count)!)
                     
                     break
                 case "1":
-                   
-                      oneCount =  CGFloat(Int(rateGraph.count)!)
+                    
+                    oneCount =  Float(Int(rateGraph.count)!)
                     
                     break
                 default:
@@ -193,70 +252,83 @@ extension RateANdReviewViewController
                 }
                 
             }
-            if fiveCount > 0
+            if fiveCount > 0 && total > 0
             {
-                cell.fiveConstraints.constant  = (fiveCount/total)*fixConstraints
+                //cell.fiveConstraints.constant  = (fiveCount/total)*fixConstraints
+                cell.progressView5?.progress = fiveCount/total
+                
             }else
             {
-                cell.fiveConstraints.constant  = 0.0
+                //cell.fiveConstraints.constant  = 0.0
+                cell.progressView5?.progress = 0.0
             }
-                cell.countLabel5.text          = String(Int(fiveCount))
-            if fourCount > 0
+            cell.countLabel5.text          = String(Int(fiveCount))
+            if fourCount > 0 && total > 0
             {
-                cell.fourConstraints.constant  = (fourCount/total)*fixConstraints
+                //cell.fourConstraints.constant  = (fourCount/total)*fixConstraints
+                cell.progressView4?.progress = fourCount/total
             }else
             {
-                cell.fourConstraints.constant  = 0.0
+                //cell.fourConstraints.constant  = 0.0
+                 cell.progressView4?.progress  = 0.0
             }
             cell.countLabel4.text          = String(Int(fourCount))
-            if threeCount > 0
+            if threeCount > 0 && total > 0
             {
-                cell.threeConstraints.constant = (threeCount/total)*fixConstraints
+                //cell.threeConstraints.constant = (threeCount/total)*fixConstraints
+                cell.progressView3?.progress = threeCount/total
             }else
             {
-                cell.threeConstraints.constant = 0.0
+                //cell.threeConstraints.constant = 0.0
+                cell.progressView3?.progress  = 0.0
             }
             cell.countLabel3.text          = String(Int(threeCount))
-            if twoCount > 0
+            if twoCount > 0 && total > 0
             {
-                cell.twoConstraints.constant   = (twoCount/total)*fixConstraints
+                //cell.twoConstraints.constant   = (twoCount/total)*fixConstraints
+                cell.progressView2?.progress = twoCount/total
             }else
             {
-                cell.twoConstraints.constant   = 0.0
+                //cell.twoConstraints.constant   = 0.0
+                cell.progressView2?.progress   = 0.0
             }
             cell.countLabel2.text          = String(Int(twoCount))
-            if oneCount > 0
+            if oneCount > 0 && total > 0
             {
-                cell.oneConstraints.constant   = (oneCount/total)*fixConstraints
+               // cell.oneConstraints.constant   = (oneCount/total)*fixConstraints
+                cell.progressView1?.progress = oneCount/total
             }else
             {
-                cell.oneConstraints.constant   =  0.0
+                //cell.oneConstraints.constant   =  0.0
+                cell.progressView1?.progress   =  0.0
             }
             cell.countLabel1.text          = String(Int(oneCount))
             
-        
-        return cell
+            
+            return cell
         }
         
         if reviewUser.rateReviewList.count > (indexPath.row-4)-subtractCount
         {
-        
+            
             let rateReviewer = reviewUser.rateReviewList[(indexPath.row-4)-subtractCount]
             
             let cell = tableView.dequeueReusableCellWithIdentifier("UesrReviewTableViewCell", forIndexPath: indexPath) as! UesrReviewTableViewCell
-            
             cell.nameLabel.text    = rateReviewer.appUser.name
             cell.commentLabel.text = rateReviewer.review
-//            cell.rateView.rating   = Int(rateReviewer.rate)!
+            
+            if rateReviewer.rate.characters.count > 0
+            {
+                cell.rateView.rating   = Int(rateReviewer.rate)!
+            }
             cell.timeLabel.text    = rateReviewer.created_at
-            
             let urlString       = rateReviewer.appUser.photo
-            
-            if urlString.characters.count != 0{
-                
+            if urlString.characters.count != 0
+            {
                 cell.profileImageView.setImageWithURL(NSURL(string:urlString ), placeholderImage: UIImage(named: "profile"))
                 
-            }else{
+            }else
+            {
                 cell.profileImageView.image = UIImage(named: "profile")
             }
             
@@ -277,7 +349,7 @@ extension RateANdReviewViewController
         
         if indexPath.row == 1-subtractCount
         {
-                return 140
+            return 140
         }
         if indexPath.row == 2-subtractCount
         {
@@ -289,7 +361,7 @@ extension RateANdReviewViewController
             return 210
         }
         
-       return UITableViewAutomaticDimension
+        return UITableViewAutomaticDimension
         
     }
     
@@ -322,56 +394,56 @@ extension RateANdReviewViewController
     
     
     /*
-    - (void)textViewDidBeginEditing:(UITextView *)textView
-    {
-    // save the text view that is being edited
-    
-    if ([textView.text isEqualToString:NSLocalizedString(@"Add question", nil)] ||[textView.text isEqualToString:NSLocalizedString(@"Add answer", nil)] )
-    {
-    textView.text = @"";
-    textView.textColor = [UIColor colorWithRed:39./255. green:39./255. blue:39./255. alpha:1.]; //optional
-    }
-    mActiveView = textView;
-    [textView becomeFirstResponder];
-    
-    
-    }*/
+     - (void)textViewDidBeginEditing:(UITextView *)textView
+     {
+     // save the text view that is being edited
+     
+     if ([textView.text isEqualToString:NSLocalizedString(@"Add question", nil)] ||[textView.text isEqualToString:NSLocalizedString(@"Add answer", nil)] )
+     {
+     textView.text = @"";
+     textView.textColor = [UIColor colorWithRed:39./255. green:39./255. blue:39./255. alpha:1.]; //optional
+     }
+     mActiveView = textView;
+     [textView becomeFirstResponder];
+     
+     
+     }*/
     
     
     func textViewDidEndEditing(textView: UITextView)
     {
         review = textView.text
-       // textView.text = nil
+        // textView.text = nil
         //textView.resignFirstResponder()
     }
     /*
-    - (void)textViewDidEndEditing:(UITextView *)textView
-    {
-    
-    if ([textView.text isEqualToString:@"Add question"] ||[textView.text isEqualToString:@"Add answer"] )
-    {
-    textView.text = @"";
-    textView.textColor = [UIColor lightGrayColor]; //optional
-    
-    [textView resignFirstResponder];
-    }
-    else
-    {
-    if (textView.tag == 1)
-    {
-    mQuestion = textView.text;
-    }
-    else if (textView.tag == 2)
-    {
-    mAnswer = textView.text;
-    }
-    
-    }
-    // release the selected text view as we don't need it anymore
-    mActiveView = nil;
-    }
-    
-    */
+     - (void)textViewDidEndEditing:(UITextView *)textView
+     {
+     
+     if ([textView.text isEqualToString:@"Add question"] ||[textView.text isEqualToString:@"Add answer"] )
+     {
+     textView.text = @"";
+     textView.textColor = [UIColor lightGrayColor]; //optional
+     
+     [textView resignFirstResponder];
+     }
+     else
+     {
+     if (textView.tag == 1)
+     {
+     mQuestion = textView.text;
+     }
+     else if (textView.tag == 2)
+     {
+     mAnswer = textView.text;
+     }
+     
+     }
+     // release the selected text view as we don't need it anymore
+     mActiveView = nil;
+     }
+     
+     */
     
     func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool
     {
@@ -383,21 +455,21 @@ extension RateANdReviewViewController
         }
         return true
     }
-   
-
-
+    
+    
+    
     func showKeyBoard(notification: NSNotification)
     {
         if ((activeTextView?.superview?.superview?.superview?.isKindOfClass(WriteReviewTableViewCell)) != nil)
         {
             if let cell = activeTextView?.superview?.superview?.superview as? WriteReviewTableViewCell
             {
-               // let dictInfo: NSDictionary = notification.userInfo!
+                // let dictInfo: NSDictionary = notification.userInfo!
                 //let kbSize :CGSize = (dictInfo.objectForKey(UIKeyboardFrameBeginUserInfoKey)?.CGRectValue().size)!
                 //let contentInsets:UIEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: kbSize.height, right: 0)
-               // self.tableView.contentInset = contentInsets
-               // self.tableView.scrollIndicatorInsets = contentInsets
-               
+                // self.tableView.contentInset = contentInsets
+                // self.tableView.scrollIndicatorInsets = contentInsets
+                
                 
                 if let indexPath = self.tableView.indexPathForCell(cell)
                 {
@@ -420,7 +492,7 @@ extension RateANdReviewViewController
             self.tableView.scrollToNearestSelectedRowAtScrollPosition(.Bottom, animated: true)
         }
     }
-
+    
 }
 
 extension RateANdReviewViewController:RatingControlDelegate
@@ -442,9 +514,9 @@ extension RateANdReviewViewController:RatingControlDelegate
             
             if idString != nil
             {
-            
+                
                 let dict = ["by_user_id":String(appUserId),"for_user_id":idString!, "rate":rating, "review":review,kapp_user_id:String(appUserId), kapp_user_token :appUserToken ]
-            
+                
                 postReview(dict)
             }
             
@@ -458,7 +530,7 @@ extension RateANdReviewViewController:RatingControlDelegate
     
     func ratingSelected(ratingInt: Int)
     {
-         rating = String(ratingInt)
+        rating = String(ratingInt)
     }
     
     
@@ -474,14 +546,14 @@ extension RateANdReviewViewController:RatingControlDelegate
                 self.getReview()
             })
             
-            }) { (error) in
-                
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    // self.tableView.reloadData()
-                     self.view.removeSpinner()
-                    self.getReview()
-                })
-                 
+        }) { (error) in
+            
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                // self.tableView.reloadData()
+                self.view.removeSpinner()
+                self.getReview()
+            })
+            
         }
     }
     
@@ -496,22 +568,22 @@ extension RateANdReviewViewController:RatingControlDelegate
         {
             
             let dict = ["for_user_id":idString!,kapp_user_id:String(appUserId), kapp_user_token :appUserToken ]
-       
-            DataSessionManger.sharedInstance.getContactReviewList(dict, onFinish: { (response, reviewUser) in
-        
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
             
+            DataSessionManger.sharedInstance.getContactReviewList(dict, onFinish: { (response, reviewUser) in
+                
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    
                     self.reviewUser = reviewUser
                     self.tableView.reloadData()
                     self.view.removeSpinner()
-        })
-        
-        }) { (error) in
-            
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                // self.tableView.reloadData()
-                self.view.removeSpinner()
-            })
+                })
+                
+            }) { (error) in
+                
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    // self.tableView.reloadData()
+                    self.view.removeSpinner()
+                })
             }
         }
         

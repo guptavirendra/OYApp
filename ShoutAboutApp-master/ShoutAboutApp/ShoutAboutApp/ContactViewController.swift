@@ -250,7 +250,7 @@ extension ContactViewController
                 rateANdReviewViewController?.name = personContact.name
                 if let _ = personContact.photo
                 {
-                 rateANdReviewViewController?.photo = personContact.photo!
+                    rateANdReviewViewController?.photo = personContact.photo!
                 }
                  self.navigationController!.pushViewController(rateANdReviewViewController!, animated: true)
                 

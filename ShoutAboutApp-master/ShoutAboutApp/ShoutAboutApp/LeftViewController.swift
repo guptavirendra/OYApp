@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import FBSDKCoreKit
+import FBSDKLoginKit
 
 class LeftViewController: UIViewController, UITableViewDataSource, UITableViewDelegate
 {
@@ -14,6 +16,7 @@ class LeftViewController: UIViewController, UITableViewDataSource, UITableViewDe
     @IBOutlet weak var tableView:UITableView!
     @IBOutlet weak var profileImageView:UIImageView!
     @IBOutlet weak var nameLabel:UILabel!
+    @IBOutlet weak var mobileLabel:UILabel!
     
     var choiceArray = [String]()
     override func viewDidLoad()
@@ -36,12 +39,15 @@ class LeftViewController: UIViewController, UITableViewDataSource, UITableViewDe
         super.viewWillAppear(animated)
         self.navigationController?.navigationBarHidden = true
         self.nameLabel.text = ProfileManager.sharedInstance.personalProfile.name
+         self.mobileLabel.text = ProfileManager.sharedInstance.personalProfile.mobileNumber
         // else need to update
-        if ProfileManager.sharedInstance.localStoredImage != nil{
+        if ProfileManager.sharedInstance.localStoredImage != nil
+        {
             
             self.profileImageView.image = ProfileManager.sharedInstance.localStoredImage
             
-        }else{
+        }else
+        {
             if let photo  = ProfileManager.sharedInstance.personalProfile.photo{
                 setProfileImgeForURL(photo)
             }
@@ -49,7 +55,8 @@ class LeftViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
     }
     
-    func setProfileImgeForURL(urlString:String){
+    func setProfileImgeForURL(urlString:String)
+    {
         self.profileImageView.setImageWithURL(NSURL(string:urlString ), placeholderImage: UIImage(named: "profile_pic"))
     }
 }
@@ -136,6 +143,10 @@ extension LeftViewController
         
         else if indexPath.row == 5
         {
+            let fbRequest = FBRequest()
+            fbRequest.logoutFacebook()
+            
+             
             NSUserDefaults.standardUserDefaults().removeObjectForKey(kapp_user_id)
             NSUserDefaults.standardUserDefaults().removeObjectForKey(kapp_user_token)
             NSUserDefaults.standardUserDefaults().removeObjectForKey(contactStored)

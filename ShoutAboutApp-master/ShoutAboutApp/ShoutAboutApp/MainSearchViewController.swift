@@ -23,6 +23,7 @@ class MainSearchViewController: UIViewController, ContactTableViewCellProtocol
         super.viewDidLoad()
         
         self.searchButton.layer.cornerRadius = 5.0
+        self.navigationController?.navigationBarHidden = true
         
         
        // self.tableView.addBackGroundImageView()
@@ -48,9 +49,10 @@ class MainSearchViewController: UIViewController, ContactTableViewCellProtocol
         // Dispose of any resources that can be recreated.
     }
     
-    override func viewWillAppear(animated: Bool){
+    override func viewWillAppear(animated: Bool)
+    {
         super.viewWillAppear(animated)
-        
+         self.navigationController?.navigationBarHidden = true
         if let historydata = self.retrievePearson()
         {
             
@@ -181,13 +183,16 @@ extension MainSearchViewController
                 {
                     rateANdReviewViewController?.photo = personContact.photo!
                 }
+                self.navigationController?.navigationBar.tintColor = appColor
+                self.navigationController?.navigationBar.hidden = false
                 self.navigationController!.pushViewController(rateANdReviewViewController!, animated: true)
                 
                 
-            }else{
+            }else
+            {
                 let profileViewController = self.storyboard?.instantiateViewControllerWithIdentifier("NewProfileViewController") as? NewProfileViewController
                 profileViewController?.personalProfile = personContact
-                
+                self.navigationController?.navigationBar.tintColor = appColor
                 self.navigationController!.pushViewController(profileViewController!, animated: true)
             }
         }
@@ -196,17 +201,13 @@ extension MainSearchViewController
 
 extension MainSearchViewController
 {
-    
-    
-    
     @IBAction func Clicked(sender:AnyObject)
     {
         
         let chatVc = self.storyboard?.instantiateViewControllerWithIdentifier("AlertViewController") as? AlertViewController
         self.navigationController!.pushViewController(chatVc!, animated: true)
         
-        
-    }
+}
     
     
      func clearSearchHistory(){
@@ -236,13 +237,12 @@ extension MainSearchViewController
         }
     }
     
-    
-   
-    
-   @IBAction func displayClearAlert(){
+    @IBAction func displayClearAlert()
+   {
     
         let alert = UIAlertController(title: "Clear Recent Searchs", message: "Are you sure?", preferredStyle: UIAlertControllerStyle.Alert)
-        let okAction = UIAlertAction(title: "Yes", style: .Default) { (action) in
+        let okAction = UIAlertAction(title: "Yes", style: .Default)
+        { (action) in
             self.clearSearchHistory()
         }
     
@@ -250,8 +250,5 @@ extension MainSearchViewController
         alert.addAction(cancelAction)
         alert.addAction(okAction)
         self.presentViewController(alert, animated: true, completion: nil)
-        
-        
     }
-    
 }

@@ -42,18 +42,18 @@ extension UITableView
 
 
 
-class JoinViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, InputTableViewCellProtocol, ClickTableViewCellProtocol, UIPickerViewDataSource, UIPickerViewDelegate
+class JoinViewController: ProfileViewController/*, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate,*/, InputTableViewCellProtocol, ClickTableViewCellProtocol /*,UIPickerViewDataSource, UIPickerViewDelegate*/
 {
     var objects = [CNContact]()
     var allValidContacts = [SearchPerson]()
-    @IBOutlet weak var tableView: UITableView!
-    var activeTextField:UITextField?
-    var name:String = ""
-    var email:String = ""
-    var address:String = ""
+    //@IBOutlet weak var tableView: UITableView!
+   // var activeTextField:UITextField?
+   // var name:String = ""
+   // var email:String = ""
+    //var address:String = ""
     var dob:String = ""
     var notify_token:String = " "
-    var gender:String = ""
+  //  var gender:String = ""
     
     
     
@@ -75,10 +75,11 @@ class JoinViewController: UIViewController, UITableViewDataSource, UITableViewDe
             print("do something");
     }
     
-    var pickOption = ["Male", "Female"]
+    //var pickOption = ["Male", "Female"]
     override func viewDidLoad()
     {
         super.viewDidLoad()
+        self.imageView?.makeImageRounded()
         self.automaticallyAdjustsScrollViewInsets = false
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.showKeyBoard(_:)), name: UIKeyboardDidShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.hideKeyBoard(_:)), name: UIKeyboardWillHideNotification, object: nil)
@@ -103,13 +104,13 @@ class JoinViewController: UIViewController, UITableViewDataSource, UITableViewDe
 
 extension JoinViewController
 {
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
+    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
         return 7
     }
     
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
     {
         if indexPath.row == 0 || indexPath.row == 1 || indexPath.row == 2 || indexPath.row == 3 || indexPath.row == 4
 
@@ -264,7 +265,7 @@ extension JoinViewController
       }
     
     
-    func handleDatePicker(sender: UIDatePicker)
+    override func handleDatePicker(sender: UIDatePicker)
     {
         let dateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
@@ -275,7 +276,7 @@ extension JoinViewController
     }
     
     
-    func dissMissKeyBoard(sender:UIBarButtonItem)
+    override func dissMissKeyBoard(sender:UIBarButtonItem)
     {
         if let datePicker =  self.activeTextField?.inputView as? UIDatePicker
         {
@@ -298,25 +299,25 @@ extension JoinViewController
     
     
     
-    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+    override func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
         return 1
     }
     
-    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+    override func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         return pickOption.count
     }
     
-    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+    override func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return pickOption[row]
     }
     
-    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int)
+    override func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int)
     {
         self.activeTextField?.text = pickOption[row]
     }
     
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat
     {
         if indexPath.row == 6
         {
@@ -380,12 +381,18 @@ extension JoinViewController
         }
         
         
-        if cell.button.tag == 0
+        if cell.isKindOfClass(FaceBookGoogleTableViewCell)
         {
-            faceBookLogin()
+            
+            if cell.button.tag == 0
+            {
+                faceBookLogin()
+            }else
+            {
+                googleLogin()
+            }
+            
         }
-        
-        
     }
     
     
@@ -483,7 +490,23 @@ extension JoinViewController
     }
     
     
-    
+    func googleLogin()
+    {
+        GoogleLogin.sharedInstance.vc = self;
+        GoogleLogin.sharedInstance.loginWithGoogle { (result, error) in
+            if (error == nil)
+            {
+                    
+                    
+            }
+            else
+            {
+                    
+                    
+            }
+                
+        }
+    }
     override func displayAlert(userMessage: String, handler: ((UIAlertAction) -> Void)?)
     {
         let alert = UIAlertController(title: "Alert", message: userMessage, preferredStyle: UIAlertControllerStyle.Alert)
@@ -507,7 +530,7 @@ extension JoinViewController
         
     }
     
-    func postData(dict:[String:String])
+    override func postData(dict:[String:String])
     {
          activeTextField?.resignFirstResponder()
         self.view.showSpinner()
@@ -539,7 +562,7 @@ extension JoinViewController
     }
     
     
-    func getTextForCell(text: String, cell: InputTableViewCell)
+    func getTextsForCell(text: String, cell: InputTableViewCell)
     {
         if cell.inputTextField.tag == 0
         {
@@ -566,28 +589,28 @@ extension JoinViewController
         }
     }
     
-    func textFieldShouldBeginEditing(textField: UITextField) -> Bool
+    override func textFieldShouldBeginEditing(textField: UITextField) -> Bool
     {
         return true
     }
     
-    func textFieldDidBeginEditing(textField: UITextField)
+    override func textFieldDidBeginEditing(textField: UITextField)
     {
         self.activeTextField = textField
     }
-    func textFieldDidEndEditing(textField: UITextField)
+    override func textFieldDidEndEditing(textField: UITextField)
     {
         
         
     }
     
-     func textFieldShouldReturn(textField: UITextField) -> Bool
+     override func textFieldShouldReturn(textField: UITextField) -> Bool
     {
         textField.resignFirstResponder()
             return true
     }
     
-    func showKeyBoard(notification: NSNotification)
+    override func showKeyBoard(notification: NSNotification)
     {
         if ((activeTextField?.superview?.superview?.superview!.isKindOfClass(InputTableViewCell)) != nil)
         {
@@ -596,21 +619,21 @@ extension JoinViewController
                 let dictInfo: NSDictionary = notification.userInfo!
                 let kbSize :CGSize = (dictInfo.objectForKey(UIKeyboardFrameBeginUserInfoKey)?.CGRectValue().size)!
                 let contentInsets:UIEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: kbSize.height, right: 0)
-                self.tableView.contentInset = contentInsets
-                self.tableView.scrollIndicatorInsets = contentInsets
-              self.tableView.scrollToRowAtIndexPath(self.tableView.indexPathForCell(cell)!, atScrollPosition: .Top, animated: true)
+                self.tableView!.contentInset = contentInsets
+                self.tableView!.scrollIndicatorInsets = contentInsets
+              self.tableView!.scrollToRowAtIndexPath(self.tableView!.indexPathForCell(cell)!, atScrollPosition: .Top, animated: true)
             }
         }
     }
     
     
-    func hideKeyBoard(notification: NSNotification)
+    override func hideKeyBoard(notification: NSNotification)
     {
        if  activeTextField != nil
         {
             let contentInsets:UIEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-            self.tableView.contentInset = contentInsets
-            self.tableView.scrollIndicatorInsets = contentInsets
+            self.tableView!.contentInset = contentInsets
+            self.tableView!.scrollIndicatorInsets = contentInsets
         }
     }
 }

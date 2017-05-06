@@ -10,9 +10,8 @@ import UIKit
 import CoreData
 
 
-class  GoogleLogin: NSObject, GIDSignInDelegate, GIDSignInUIDelegate {
-    
-    
+class  GoogleLogin: NSObject, GIDSignInDelegate, GIDSignInUIDelegate
+{
     var completionBLock: CompletionHandler?
     var vc: UIViewController?
     var peopleDataArray: Array<Dictionary<NSObject, AnyObject>> = []
@@ -21,8 +20,10 @@ class  GoogleLogin: NSObject, GIDSignInDelegate, GIDSignInUIDelegate {
     /*
      * Creates a Singleton Instance
      */
-    class var sharedInstance: GoogleLogin {
-        struct Static {
+    class var sharedInstance: GoogleLogin
+    {
+        struct Static
+        {
             static var instance: GoogleLogin?
             static var token: dispatch_once_t = 0
         }
@@ -43,53 +44,55 @@ class  GoogleLogin: NSObject, GIDSignInDelegate, GIDSignInUIDelegate {
     
     
     
-    func loginWithGoogle(completion: CompletionHandler)  {
+    func loginWithGoogle(completion: CompletionHandler)
+    {
         self.completionBLock = completion;
         
-        if GIDSignIn.sharedInstance().hasAuthInKeychain() {
+        if GIDSignIn.sharedInstance().hasAuthInKeychain()
+        {
             //logoutGoogle()
-            
             print("alredy login");
-            
             return;
         }
         
         GIDSignIn.sharedInstance().delegate = self;
         GIDSignIn.sharedInstance().uiDelegate = self
-        GIDSignIn.sharedInstance().signIn();
+        
         GIDSignIn.sharedInstance().scopes.append("https://www.googleapis.com/auth/plus.login")
         GIDSignIn.sharedInstance().scopes.append("https://www.googleapis.com/auth/plus.me")
+        GIDSignIn.sharedInstance().signIn();
         //GIDSignIn.sharedInstance().signInSilently()
-
-    
     }
     
     
     //MARK: - GIDSignInDelegate
     
    
-    func signIn(signIn: GIDSignIn!, didDisconnectWithUser user: GIDGoogleUser!, withError error: NSError!) {
+    func signIn(signIn: GIDSignIn!, didDisconnectWithUser user: GIDGoogleUser!, withError error: NSError!)
+    {
         
     }
 
     
-    func signIn(signIn: GIDSignIn!, didSignInForUser user: GIDGoogleUser!, withError error: NSError!) {
+    func signIn(signIn: GIDSignIn!, didSignInForUser user: GIDGoogleUser!, withError error: NSError!)
+    
+    {
         
-        if (error == nil) {
+        if (error == nil)
+        {
             // Perform any operations on signed in user here.
-            let userId = user.userID                  // For client-side use only!
-            let idToken = user.authentication.idToken // Safe to send to the server
-            let fullName = user.profile.name
-            let givenName = user.profile.givenName
+            let userId     = user.userID                  // For client-side use only!
+            let idToken    = user.authentication.idToken // Safe to send to the server
+            let fullName   = user.profile.name
+            let givenName  = user.profile.givenName
             let familyName = user.profile.familyName
-            let email = user.profile.email
-            let url = user.profile.imageURLWithDimension(200)
-            
-            
+            let email      = user.profile.email
+            let url        = user.profile.imageURLWithDimension(200)
             
             var dict = [String : AnyObject]()
             
-            if(givenName != nil){
+            if(givenName != nil)
+            {
                 let strFirstName: String = givenName
                 dict["name"] = strFirstName
             }
@@ -187,7 +190,8 @@ class  GoogleLogin: NSObject, GIDSignInDelegate, GIDSignInUIDelegate {
 
     
     
-    func getPeopleList() {
+    func getPeopleList()
+    {
         let urlString = ("https://www.googleapis.com/plus/v1/people/me/people/visible?access_token=\(GIDSignIn.sharedInstance().currentUser.authentication.accessToken)")
         let url = NSURL(string: urlString)
         
@@ -210,14 +214,10 @@ class  GoogleLogin: NSObject, GIDSignInDelegate, GIDSignInUIDelegate {
     }
     
     
-    func updateDataInDB(arr:[[String: NSObject]])  {
+    func updateDataInDB(arr:[[String: NSObject]])
+    {
        
         //let records = PlayerTemplate.buildWithGoogleUserFriends(arr);
        // print(records);
     }
-    
-    
-    
-    
-    
 }

@@ -647,12 +647,12 @@ class RatingControl: UIView
     
     var color:UIColor = UIColor.whiteColor()
         {
-            didSet {
-                for button in self.subviews
-                {
-                    button.tintColor = color
-                }
+        didSet {
+            for button in self.subviews
+            {
+                button.tintColor = color
             }
+        }
     }
     
     // MARK: Initialization
@@ -666,21 +666,20 @@ class RatingControl: UIView
         let filledStarImage = UIImage(named: "green_star_s")
         let emptyStarImage = UIImage(named: "star")?.imageWithRenderingMode(.AlwaysTemplate)
         
-        for  i in 0..<5
+        for  _ in 0..<5
         {
             let button = UIButton()
             
             button.setImage(emptyStarImage, forState: .Normal)
             button.tintColor = UIColor.whiteColor()
-
+            
+            
             button.setImage(filledStarImage, forState: .Selected)
             button.setImage(filledStarImage, forState: [.Highlighted, .Selected])
             
             button.adjustsImageWhenHighlighted = false
-//            button.tag = i
-//            updateButtonSelectionStates()
-//            button.addTarget(self, action: #selector(RatingControl.ratingButtonTapped(_:)), forControlEvents: .TouchDown)
             
+            button.addTarget(self, action: #selector(RatingControl.ratingButtonTapped(_:)), forControlEvents: .TouchDown)
             ratingButtons += [button]
             addSubview(button)
         }
@@ -688,22 +687,15 @@ class RatingControl: UIView
     
     override func layoutSubviews() {
         // Set the button's width and height to a square the size of the frame's height.
-        
         let buttonSize = Int(frame.size.height)
         var buttonFrame = CGRect(x: 0, y: 0, width: buttonSize, height: buttonSize)
         
         // Offset each button's origin by the length of the button plus spacing.
-        
         for (index, button) in ratingButtons.enumerate() {
-            
             buttonFrame.origin.x = CGFloat(index * (buttonSize + spacing))
             button.frame = buttonFrame
-            
         }
-      self.delegate?.ratingSelected(rating)
-      updateButtonSelectionStates()
-        
-
+        updateButtonSelectionStates()
     }
     
     override func intrinsicContentSize() -> CGSize {
@@ -722,40 +714,35 @@ class RatingControl: UIView
         updateButtonSelectionStates()
     }
     
-    
-
-    
-    
-    
     func updateButtonSelectionStates()
     {
         for (index, button) in ratingButtons.enumerate()
+        {
+            // If the index of a button is less than the rating, that button should be selected.
+            
+            if rating > 3 && rating<=5
             {
-                // If the index of a button is less than the rating, that button should be selected.
+                let filledStarImage = UIImage(named: "green_star_s")
+                button.setImage(filledStarImage, forState: .Selected)
+                button.setImage(filledStarImage, forState: [.Highlighted, .Selected])
+                button.selected = index < rating
+            }else if rating > 1 && rating<=3
+            {
+                let filledStarImage = UIImage(named: "orange_star_s")
                 
-                if rating > 3 && rating<=5
-                {
-                    let filledStarImage = UIImage(named: "green_star_s")
-                    button.setImage(filledStarImage, forState: .Selected)
-                    button.setImage(filledStarImage, forState: [.Highlighted, .Selected])
-                    button.selected = index < rating
-                }
-                else if rating > 1 && rating<=3{
-                    
-                    let filledStarImage = UIImage(named: "orange_star_s")
-                    button.setImage(filledStarImage, forState: .Selected)
-                    button.setImage(filledStarImage, forState: [.Highlighted, .Selected])
-                    button.selected = index < rating
-                    
-                }
-                else{
-                    
-                    let filledStarImage = UIImage(named: "red_star_s")
-                    button.setImage(filledStarImage, forState: .Selected)
-                    button.setImage(filledStarImage, forState: [.Highlighted, .Selected])
-                    button.selected = index < rating
-                    
-                }
+                button.setImage(filledStarImage, forState: .Selected)
+                button.setImage(filledStarImage, forState: [.Highlighted, .Selected])
+                button.selected = index < rating
+                
+            }else
+            {
+                let filledStarImage = UIImage(named: "red_star_s")
+                
+                button.setImage(filledStarImage, forState: .Selected)
+                button.setImage(filledStarImage, forState: [.Highlighted, .Selected])
+                button.selected = index < rating
+                
+            }
         }
     }
 }

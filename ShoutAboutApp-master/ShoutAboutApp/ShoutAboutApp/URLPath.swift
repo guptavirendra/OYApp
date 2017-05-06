@@ -116,6 +116,8 @@ class SearchPerson:PersonContact, NSCoding
     var dob: String?
     var address: String?
     var website: String?
+    var birthday:String?
+    var gender:String?
     var photo: String?
     var gcm_token: String?
     var last_online_time: String?

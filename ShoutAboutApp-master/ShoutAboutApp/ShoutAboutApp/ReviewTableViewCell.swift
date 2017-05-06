@@ -41,6 +41,19 @@ class ReviewTableViewCell: UITableViewCell
     @IBOutlet weak var twoConstraints:NSLayoutConstraint!
     @IBOutlet weak var oneConstraints:NSLayoutConstraint!
     @IBOutlet weak var graphbaseView5: UIView!
+    @IBOutlet weak var graphbaseView4: UIView!
+    @IBOutlet weak var graphbaseView3: UIView!
+    @IBOutlet weak var graphbaseView2: UIView!
+    @IBOutlet weak var graphbaseView1: UIView!
+    
+    
+    @IBOutlet weak var progressView5:UIProgressView?
+    @IBOutlet weak var progressView4:UIProgressView?
+    @IBOutlet weak var progressView3:UIProgressView?
+    @IBOutlet weak var progressView2:UIProgressView?
+    @IBOutlet weak var progressView1:UIProgressView?
+    
+    @IBOutlet weak var reviewMessage:UILabel?
     
     
     override func awakeFromNib()

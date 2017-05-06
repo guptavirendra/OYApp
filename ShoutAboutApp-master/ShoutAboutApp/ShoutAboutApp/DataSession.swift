@@ -551,6 +551,8 @@ class DataSessionManger: NSObject
                     personalProfileData.updated_at = dataDict?.objectForKey(updated_at) as? String
                     personalProfileData.address = dataDict?.objectForKey(address) as? String
                     personalProfileData.website = dataDict?.objectForKey(website) as? String
+                    personalProfileData.birthday = dataDict?.objectForKey("dob") as? String
+                    personalProfileData.gender = dataDict?.objectForKey("gender") as? String
                     if let _ = dataDict?.objectForKey(photo) as? String
                     {
                         personalProfileData.photo = dataDict?.objectForKey(photo) as? String
@@ -749,11 +751,15 @@ class DataSessionManger: NSObject
                         
                         if let  likesList = dict.objectForKey("likes_count") as? [NSDictionary]{
                             
-                            for dict in likesList{
+                            for dict in likesList
+                            {
                                 
                                 let LikeDislikevalue = AlertCountCommonModel()
                                 
-                                LikeDislikevalue.post_id =   (dict.objectForKey("post_id") as? String)!
+                                if let _ = dict.objectForKey("post_id") as? String
+                                {
+                                    LikeDislikevalue.post_id =   (dict.objectForKey("post_id") as? String)!
+                                }
 //                                LikeDislikevalue.likeDislikecount =   (dict.objectForKey("dislikes") as? String)!
                                 
                                 datavalue.likes_count = LikeDislikevalue
@@ -1041,25 +1047,55 @@ class DataSessionManger: NSObject
             
             print(deserializedResponse)
             
-            if deserializedResponse is NSDictionary{
+            if deserializedResponse is NSDictionary
+            {
                 
-                AlertUser.total = (deserializedResponse.objectForKey("total") as? Int)!
-                AlertUser.per_page = (deserializedResponse.objectForKey("per_page") as? Int)!
-                AlertUser.current_page = (deserializedResponse.objectForKey("current_page") as? Int)!
+                if let _ = deserializedResponse.objectForKey("total") as? Int
+                {
+                    AlertUser.total = (deserializedResponse.objectForKey("total") as? Int)!
+                }
+                
+                if let _ = deserializedResponse.objectForKey("per_page") as? Int
+                {
+                    AlertUser.per_page = (deserializedResponse.objectForKey("per_page") as? Int)!
+                }
+                
+                if let _ = deserializedResponse.objectForKey("current_page") as? Int
+                {
+                    AlertUser.current_page = (deserializedResponse.objectForKey("current_page") as? Int)!
+                }
+                
+                if let _ = deserializedResponse.objectForKey("last_page") as? Int
+                {
                 AlertUser.last_page = (deserializedResponse.objectForKey("last_page") as? Int)!
-                AlertUser.next_page_url = (deserializedResponse.objectForKey("next_page_url") as? String)!
+                }
+                
+                if let _ = deserializedResponse.objectForKey("next_page_url") as? String
+                {
+                    AlertUser.next_page_url = (deserializedResponse.objectForKey("next_page_url") as? String)!
+                }
                 
 //                AlertUser.prev_page_url = (deserializedResponse.objectForKey("prev_page_url") as? String)!
                 
-                AlertUser.from = (deserializedResponse.objectForKey("from") as? Int)!
-                AlertUser.to = (deserializedResponse.objectForKey("to") as? Int)!
                 
                 
                 
                 
-                if let  dataList = deserializedResponse.objectForKey("data") as? [NSDictionary]{
+                if let _ = deserializedResponse.objectForKey("from") as? Int
+                {
+                    AlertUser.from = (deserializedResponse.objectForKey("from") as? Int)!
+                }
+                
+                if let _ = deserializedResponse.objectForKey("to") as? Int
+                {
+                    AlertUser.to = (deserializedResponse.objectForKey("to") as? Int)!
+                }
+                
+                if let  dataList = deserializedResponse.objectForKey("data") as? [NSDictionary]
+                {
                     
-                    for dict in dataList{
+                    for dict in dataList
+                    {
                         
                         let datavalue = dataModel()
                         
@@ -1067,9 +1103,13 @@ class DataSessionManger: NSObject
                         
                         datavalue.action =   (dict.objectForKey("action") as? String)!
                         
-                        datavalue.created_at =   (dict.objectForKey("created_at") as? String)!
+                        if let _ = dict.objectForKey("created_at") as? String
+                        {
+                            datavalue.created_at =   (dict.objectForKey("created_at") as? String)!
+                        }
 
-                        if let innerDict = dict.objectForKey("action_by"){
+                        if let innerDict = dict.objectForKey("action_by")
+                        {
                             
                             let action_bydatavalue = commonModel()
                             action_bydatavalue.id =   (innerDict.objectForKey("id") as? Int)!
@@ -1087,15 +1127,10 @@ class DataSessionManger: NSObject
                         
                             datavalue.action_by = action_bydatavalue
                             
-                            
-                            
-                            print(innerDict)
-                            
-                            
-                            
                         }
                         
-                        if let postDict = dict.objectForKey("post"){
+                        if let postDict = dict.objectForKey("post")
+                        {
                             
                             let postdatavalue = postModel()
                             postdatavalue.id =   (postDict.objectForKey("id") as? Int)!
@@ -1111,12 +1146,14 @@ class DataSessionManger: NSObject
                             postdatavalue.created_at =   (postDict.objectForKey("created_at") as? String)!
                            
                             
-                           if let performedDict = postDict.objectForKey("performed"){
+                           if let performedDict = postDict.objectForKey("performed")
+                           {
                                 
                                 let performedatavalue = commonModel()
                                 performedatavalue.id =   (performedDict.objectForKey("id") as? Int)!
                             
-                            if (performedDict.objectForKey("name") as? String) != nil{
+                            if (performedDict.objectForKey("name") as? String) != nil
+                            {
                                 performedatavalue.name =   (performedDict.objectForKey("name") as? String)!
                             }
                                 performedatavalue.mobile_number =   (performedDict.objectForKey("mobile_number") as? String)!
@@ -1321,7 +1358,11 @@ class DataSessionManger: NSObject
                              person.idString = id
                         }
                        
-                        person.mobileNumber = (dict.objectForKey("mobile_number") as? String)!
+                        
+                        if let _ = dict.objectForKey("mobile_number") as? String
+                        {
+                            person.mobileNumber = (dict.objectForKey("mobile_number") as? String)!
+                        }
                         
                         
                          //person.ratingAverage = (dict.objectForKey("rating_average") as? [AnyObject])!
@@ -1470,14 +1511,22 @@ class DataSessionManger: NSObject
                         
                         let rateReviewr = RateReviewer()
                         rateReviewr.rate =   (dict.objectForKey("rate") as? String)!
-                        rateReviewr.review =  (dict.objectForKey("review") as? String)!
+                        
+                        if let _ = dict.objectForKey("review") as? String
+                        {
+                            rateReviewr.review =  (dict.objectForKey("review") as? String)!
+                        }
                         rateReviewr.created_at =  (dict.objectForKey("created_at") as? String)!
                         
                         if let appuserDict =  dict.objectForKey("app_user") as? NSDictionary
                         {
                             
                             rateReviewr.appUser.idInt =   (appuserDict.objectForKey("id") as? Int)!
-//                            rateReviewr.appUser.name =      (appuserDict.objectForKey("name") as? String)!
+                            
+                            if let name = appuserDict.objectForKey("name") as? String
+                            {
+                                rateReviewr.appUser.name =  name
+                            }
                             if let email = appuserDict.objectForKey("email") as? String
                             {
                                 rateReviewr.appUser.email = email
@@ -1556,7 +1605,7 @@ class DataSessionManger: NSObject
                         {
                             
                            count.count = countNumber.stringValue
-                        reviewUser.reviewCountArray.append(count)
+                           reviewUser.reviewCountArray.append(count)
                         }
                         
                     }
@@ -1569,7 +1618,11 @@ class DataSessionManger: NSObject
                     {
                         let ratGraph   = RateGraph()
                         ratGraph.rate  =   (dict.objectForKey("rate") as? String)!
-                        ratGraph.count =   (dict.objectForKey("count") as? String)!
+                        if let countNumber = dict.objectForKey("count") as? NSNumber
+                        {
+                            ratGraph.count = countNumber.stringValue
+                        }
+                          
                         reviewUser.rateGraphArray.append(ratGraph)
                     }
                 }

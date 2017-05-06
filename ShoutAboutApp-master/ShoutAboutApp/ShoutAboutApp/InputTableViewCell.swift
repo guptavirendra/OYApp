@@ -9,7 +9,7 @@
 
 
 protocol InputTableViewCellProtocol {
-    func getTextForCell(text:String, cell:InputTableViewCell)
+    func getTextsForCell(text:String, cell:InputTableViewCell)
 }
 import UIKit
 
@@ -38,7 +38,7 @@ class InputTableViewCell: UITableViewCell
     {
         print("Edited \(inputTextField.text)")
         inputText = inputTextField.text!
-        self.delegate?.getTextForCell(inputText, cell: self)
+        self.delegate?.getTextsForCell(inputText, cell: self)
         
     }
 }

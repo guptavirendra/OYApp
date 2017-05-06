@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SearchViewController: UIViewController, UISearchBarDelegate,UISearchControllerDelegate, ContactTableViewCellProtocol, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate
+class SearchViewController: UIViewController, UISearchBarDelegate,UISearchControllerDelegate, ContactTableViewCellProtocol, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UINavigationBarDelegate
 {
 
     @IBOutlet weak var tableView: UITableView!
@@ -24,6 +24,8 @@ class SearchViewController: UIViewController, UISearchBarDelegate,UISearchContro
     override func viewDidLoad()
     {
         super.viewDidLoad()
+       // self.setStatusBarStyle(<#T##statusBarStyle: UIStatusBarStyle##UIStatusBarStyle#>)
+        searchController.prefersStatusBarHidden()
         setHistoryArray()
         self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "message")
         self.view.backgroundColor = appColor
@@ -41,6 +43,11 @@ class SearchViewController: UIViewController, UISearchBarDelegate,UISearchContro
        // searchController.searchBar.translucent = true
         //self.extendedLayoutIncludesOpaqueBars = true
         
+    }
+    
+    override func prefersStatusBarHidden() -> Bool
+    {
+        return true
     }
 
     override func didReceiveMemoryWarning()
@@ -351,7 +358,9 @@ extension SearchViewController
             self.isSeaechingLocal = false
             dispatch_async(dispatch_get_main_queue(),
                 {
-                    self.allValidContacts = deserializedResponse
+                    self.allValidContacts.appendContentsOf(self.localContactArray)
+                    self.allValidContacts.appendContentsOf(deserializedResponse)
+                    //self.allValidContacts = deserializedResponse
                     
                     // NSUserDefaults.standardUserDefaults().setObject(searchArray, forKey: searchHistory)
                     self.view.removeSpinner()
@@ -437,10 +446,12 @@ extension SearchViewController
         isSearching = true
         tableView.allowsSelection = !isSearching
         //let namePredicate  = NSPredicate(format: "(name BEGINSWITH[c] %@)", searchString)
-        let phonePredicate = NSPredicate(format: "(mobileNumber BEGINSWITH[c] %@) OR (name BEGINSWITH[c] %@)", searchString, searchString)
+        
         
        // let predicateArray = [namePredicate, phonePredicate]
        // let compoundPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicateArray)
+        
+     let phonePredicate = NSPredicate(format: "(mobileNumber BEGINSWITH[c] %@) OR (name BEGINSWITH[c] %@)", searchString, searchString)
         
     localContactArray  =  ProfileManager.sharedInstance.syncedContactArray.filter
             { phonePredicate.evaluateWithObject($0)

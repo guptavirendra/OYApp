@@ -46,7 +46,8 @@ import UIKit
 import MobileCoreServices
 import AVFoundation
 
-class ProfileViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CropperViewControllerDelegate, UITextFieldDelegate, EditProfileTableViewCellProtocol{
+class ProfileViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CropperViewControllerDelegate, UITextFieldDelegate, EditProfileTableViewCellProtocol , UIPickerViewDataSource, UIPickerViewDelegate
+{
     
     var selectedImages:UIImage?
     var personalProfile:SearchPerson = SearchPerson()
@@ -76,12 +77,16 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     @IBOutlet weak var locationButton:UIButton?
     @IBOutlet weak var editButton:UIButton?
     
+    var pickOption = ["Male", "Female"]
+    
     
     var activeTextField:UITextField?
     var name:String = ""
     var email:String = ""
     var address:String = ""
-    var website:String = ""
+    //var website:String = ""
+    var birthday:String = ""
+    var gender:String = ""
     
     override func viewDidLoad(){
         
@@ -111,10 +116,15 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         {
             self.address  = personalProfile.address!
         }
-        if let _ = personalProfile.website
+        if let _ = personalProfile.birthday
         {
-            self.website  = personalProfile.website!
+            self.birthday  = personalProfile.birthday!
         }
+        if let _ = personalProfile.gender
+        {
+            self.gender  = personalProfile.gender!
+        }
+
         if let photo  = personalProfile.photo
         {
             setProfileImgeForURL(photo)
@@ -239,7 +249,7 @@ extension ProfileViewController
 {
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
-        return 5
+        return 6
     }
     
     
@@ -263,26 +273,28 @@ extension ProfileViewController
             
         }
         
-        
         if indexPath.row == 1
+        {
+            cell.titleLabel.text =  "Mobile"
+            cell.dataTextField.text  = personalProfile.mobileNumber
+            cell.dataTextField.tag   = 1
+            cell.inputImage.image = UIImage(named: "mobile")
+            cell.userInteractionEnabled = false
+        }
+        
+        
+        if indexPath.row == 2
         {
             cell.titleLabel.text = "Email"
             cell.dataTextField.text  = personalProfile.email
             //self.email =  cell.dataTextField.text!
-            cell.dataTextField.tag = 1
+            cell.dataTextField.tag = 2
             cell.inputImage.image = UIImage(named: kEmail)
             
             
         }
         
-        if indexPath.row == 2
-        {
-            cell.titleLabel.text = "Mobile"
-            cell.dataTextField.text  = personalProfile.mobileNumber
-            cell.dataTextField.tag   = 2
-            cell.inputImage.image = UIImage(named: "mobile")
-            cell.userInteractionEnabled = false
-        }
+        
         
         if indexPath.row == 3
         {
@@ -295,11 +307,64 @@ extension ProfileViewController
         }
         if indexPath.row == 4
         {
-            cell.titleLabel.text = "Website"
-            cell.dataTextField.text  = personalProfile.website
+            cell.titleLabel.text = kBirthDay
+            cell.dataTextField.text  = personalProfile.birthday
             //self.website = cell.dataTextField.text!
             cell.dataTextField.tag   = 4
-            cell.inputImage.image = UIImage(named: kWebsite)
+            cell.inputImage.image = UIImage(named: kBirthDay)
+            
+            
+            let toolBar = UIToolbar(frame: CGRectMake(0, 0, cell.dataTextField.frame.size.width, 44))
+            
+            var items = [UIBarButtonItem]()
+            
+            let  flexibleSpaceLeft = UIBarButtonItem(barButtonSystemItem: .FlexibleSpace, target: self, action: nil)
+            
+            let doneButton =     UIBarButtonItem(title: "Done", style: .Done, target: self, action: #selector(JoinViewController.dissMissKeyBoard(_:)))
+            
+            items.append(flexibleSpaceLeft)
+            items.append(doneButton)
+            toolBar.items = items
+            
+            
+            
+            let datePicker = UIDatePicker()
+            datePicker.maximumDate = NSDate()
+            datePicker.addTarget(self, action: #selector(JoinViewController.handleDatePicker(_:)), forControlEvents: .ValueChanged)
+            datePicker.datePickerMode = .Date
+            cell.dataTextField.inputView = datePicker
+            cell.dataTextField.inputAccessoryView = toolBar
+            
+            
+        }
+        if indexPath.row == 5
+        {
+            cell.titleLabel.text = kGender
+            cell.dataTextField.text  = personalProfile.gender
+            cell.dataTextField.tag   = 5
+            cell.inputImage.image = UIImage(named: kGender)
+            
+            let toolBar = UIToolbar(frame: CGRectMake(0, 0, cell.dataTextField.frame.size.width, 44))
+            
+            var items = [UIBarButtonItem]()
+            
+            let  flexibleSpaceLeft = UIBarButtonItem(barButtonSystemItem: .FlexibleSpace, target: self, action: nil)
+            
+            let doneButton =     UIBarButtonItem(title: "Done", style: .Done, target: self, action: #selector(JoinViewController.dissMissKeyBoard(_:)))
+            
+            items.append(flexibleSpaceLeft)
+            items.append(doneButton)
+            toolBar.items = items
+            
+            
+            
+            let pickerView = UIPickerView()
+            pickerView.delegate = self
+            
+            
+            cell.dataTextField.inputView = pickerView
+            cell.dataTextField.inputAccessoryView = toolBar
+            
         }
         
         return cell
@@ -309,6 +374,59 @@ extension ProfileViewController
     {
         return 60
     }
+    
+    
+    
+    func handleDatePicker(sender: UIDatePicker)
+    {
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        
+        self.activeTextField?.text = dateFormatter.stringFromDate(sender.date)
+        self.birthday = (self.activeTextField?.text)!
+        
+    }
+    
+    
+    
+    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return pickOption.count
+    }
+    
+    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return pickOption[row]
+    }
+    
+    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int)
+    {
+        self.activeTextField?.text = pickOption[row]
+    }
+    
+    func dissMissKeyBoard(sender:UIBarButtonItem)
+    {
+        if let datePicker =  self.activeTextField?.inputView as? UIDatePicker
+        {
+            let dateFormatter = NSDateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd"
+            self.activeTextField?.text = dateFormatter.stringFromDate(datePicker.date)
+            self.birthday = (self.activeTextField?.text)!
+        }
+        
+        if let picker = self.activeTextField?.inputView as? UIPickerView
+        {
+            
+            self.activeTextField?.text = pickOption[ picker.selectedRowInComponent(0)]
+            self.gender = (self.activeTextField?.text)!
+            
+        }
+        self.activeTextField?.resignFirstResponder()
+        
+    }
+
     
     func getTextForCell(text: String, cell: EditProfileTableViewCell)
     {
@@ -329,9 +447,13 @@ extension ProfileViewController
             self.address = text
             
         }
-        if cell.dataTextField.tag == 4
+        if cell.dataTextField.tag == 5
         {
-            self.website = text
+            self.birthday = text
+        }
+        if cell.dataTextField.tag == 6
+        {
+            self.gender = text
         }
     }
     func editButtonClickedForCell(cell:EditProfileTableViewCell)
@@ -398,38 +520,27 @@ extension ProfileViewController
             {
                 if deserializedResponse.objectForKey("success") != nil
                 {
-                    dispatch_async(dispatch_get_main_queue(), {
+                    dispatch_async(dispatch_get_main_queue(),
+                        {
                         self.view.removeSpinner()
                         
                         self.getProfileData()
                         
                         //self.displayAlertMessage("Success")
-                        
                     });
                 }
             }
-            
-            
         }) { (error) in
             dispatch_async(dispatch_get_main_queue(), {
                 self.view.removeSpinner()
                 self.displayAlertMessage(error as! String)
-                
             });
-            
-            
         }
-        
-        
     }
-
-    
 }
 
 extension ProfileViewController
 {
-    
-    
     @IBAction func cameraButtonClicked(sender:UIButton)
     {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet) // 1
@@ -709,10 +820,18 @@ extension ProfileViewController
                 {
                     self.setProfileImgeForURL(photo)
                 }
-                self.dismissViewControllerAnimated(true)
+                
+                if self.isKindOfClass(JoinViewController)
                 {
-                    
                     self.delegate?.profileDismissied()
+
+                }else
+                {
+                    self.dismissViewControllerAnimated(true)
+                    {
+                        
+                        self.delegate?.profileDismissied()
+                    }
                 }
                 
                 
@@ -837,13 +956,15 @@ extension ProfileViewController
     
     @IBAction func submitButtonClicked(sender:UIButton)
     {
-        print(" email:\(self.email), name:\(self.name),  web:\(self.website ), address:f \(self.address) ")
+        print(" email:\(self.email), name:\(self.name),  web:\(self.birthday ), address:f \(self.address) ")
             
             if self.name.characters.count == 0
             {
                 self.displayAlertMessage("Please enter name")
                 
-            }else if self.email.characters.count == 0
+            }
+            /*
+            else if self.email.characters.count == 0
             {
                 self.displayAlertMessage("Please enter email")
             }
@@ -851,16 +972,22 @@ extension ProfileViewController
             {
                 self.displayAlertMessage("Please enter address")
                 
-            }else if self.website.characters.count == 0
+            }else if self.birthday.characters.count == 0
             {
-                self.displayAlertMessage("Please enter website")
+                self.displayAlertMessage("Please enter birthday")
                 
-            }else
+            }*/
+            else if self.gender.characters.count == 0
+            {
+                self.displayAlertMessage("Please enter gender")
+                
+            }
+            else
             {
                 let appUserId = NSUserDefaults.standardUserDefaults().objectForKey(kapp_user_id) as! Int
                 let appUserToken = NSUserDefaults.standardUserDefaults().objectForKey(kapp_user_token) as! String
                 
-                let dict = ["name":self.name, "email":self.email, "website":self.website, "address":self.address, kapp_user_id:String(appUserId), kapp_user_token :appUserToken, "notify_token":"text"]
+                let dict = ["name":self.name, "email":self.email, "dob":self.birthday, "gender":self.gender, "address":self.address, kapp_user_id:String(appUserId), kapp_user_token :appUserToken, "notify_token":"text"]
                 postData(dict)
             }
         }

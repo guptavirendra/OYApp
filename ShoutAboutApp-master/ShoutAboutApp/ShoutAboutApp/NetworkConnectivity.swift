@@ -10,8 +10,11 @@
 
 import Foundation
 import SystemConfiguration
+import Reachability
+import CoreTelephony
 
-public class NetworkConnectivity {
+public class NetworkConnectivity
+{
     
     class func isConnectedToNetwork() -> Bool
     {
@@ -30,9 +33,52 @@ public class NetworkConnectivity {
         }
         
         let isReachable = flags == .Reachable
+
         let needsConnection = flags == .ConnectionRequired
         
-        return isReachable && !needsConnection
+        //return isReachable && !needsConnection
         
+        
+        return getNetworkType()
+    }
+    
+    
+    
+   class func getNetworkType()->Bool
+    {
+        do{
+            let reachability:Reachability = try Reachability.reachabilityForInternetConnection()
+            do{
+                try reachability.startNotifier()
+                let status = reachability.currentReachabilityStatus()
+                if(status == .NotReachable)
+                {
+                    return false
+                }else if (status == .ReachableViaWiFi)
+                {
+                    return  true ///"Wifi"
+                }else if (status == .ReachableViaWWAN)
+                {
+                    let networkInfo = CTTelephonyNetworkInfo()
+                    let carrierType = networkInfo.currentRadioAccessTechnology
+                    switch carrierType{
+                    case CTRadioAccessTechnologyGPRS?,CTRadioAccessTechnologyEdge?,CTRadioAccessTechnologyCDMA1x?: return true //"2G"
+                    case CTRadioAccessTechnologyWCDMA?,CTRadioAccessTechnologyHSDPA?,CTRadioAccessTechnologyHSUPA?,CTRadioAccessTechnologyCDMAEVDORev0?,CTRadioAccessTechnologyCDMAEVDORevA?,CTRadioAccessTechnologyCDMAEVDORevB?,CTRadioAccessTechnologyeHRPD?: return  true//"3G"
+                    case CTRadioAccessTechnologyLTE?: return true //"4G"
+                    default: return false//""
+                    }
+                }else
+                {
+                    return false//""
+                }
+            }catch
+            {
+                return false//""
+            }
+            
+        }catch
+        {
+            return false//""
+        }
     }
 }

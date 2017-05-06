@@ -9,7 +9,7 @@
 import UIKit
 import Firebase
 import FirebaseMessaging
-
+ 
 
 /*
  Small Talk Header
@@ -35,8 +35,7 @@ import Watchdog
 @UIApplicationMain
 
 
-
-class AppDelegate: UIResponder, UIApplicationDelegate
+class AppDelegate: UIResponder, UIApplicationDelegate/*, GIDSignInDelegate*/
 {
 
     var window: UIWindow?
@@ -56,10 +55,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate
     let crashlytics = Crashlytics.sharedInstance()
     
     /*****************************/
-    
-    
-    
-    
     //MARK:// GET CONTACT
     func retrieveContacts() -> [SearchPerson]?
     {
@@ -118,26 +113,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate
         //UIBarButtonItem.my_appearanceWhenContainedIn(UIToolbar.self).tintColor = lightBlue
         
        // UINavigationBar.appearance().barTintColor = light
-        //UINavigationBar.appearance().tintColor = lightBlue
-        //UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: red]
+       // UINavigationBar.appearance().tintColor = appColor
+       // UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
         
        // UITableViewCell.appearance().backgroundColor = light
        // UICollectionView.appearance().backgroundColor = light
        // UIScrollView.appearance().backgroundColor = light
         //UITableView.appearance().backgroundColor = light
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
- 
         NSNotificationCenter.defaultCenter().addObserver(self,
                                                          selector: #selector(tokenRefreshNotification(_:)),
                                                          name: kFIRInstanceIDTokenRefreshNotification,
@@ -246,11 +229,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate
         }
         else if(GIDSignIn.sharedInstance().handleURL(url,
             sourceApplication: sourceApplication,
-            annotation: annotation)){
+            annotation: annotation))
+        {
             
             return true;
         }
-        else{
+        else
+        {
             return false;
         }
         

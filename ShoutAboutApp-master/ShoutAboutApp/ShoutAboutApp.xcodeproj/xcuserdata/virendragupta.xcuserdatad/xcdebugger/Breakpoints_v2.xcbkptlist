@@ -86,7 +86,7 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ShoutAboutApp/ContactViewController.swift"
@@ -97,22 +97,6 @@
             endingLineNumber = "299"
             landmarkName = "ContactViewController"
             landmarkType = "3">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ShoutAboutApp/ViewController.swift"
-            timestampString = "514883381.46255"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "737"
-            endingLineNumber = "737"
-            landmarkName = "updateButtonSelectionStates()"
-            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -186,11 +170,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ShoutAboutApp/SearchViewController.swift"
-            timestampString = "505168639.857934"
+            timestampString = "515258260.070568"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "335"
-            endingLineNumber = "335"
+            startingLineNumber = "342"
+            endingLineNumber = "342"
             landmarkName = "searchBar(_:selectedScopeButtonIndexDidChange:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -202,11 +186,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ShoutAboutApp/SearchViewController.swift"
-            timestampString = "505168639.857934"
+            timestampString = "515258260.070568"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "358"
-            endingLineNumber = "358"
+            startingLineNumber = "367"
+            endingLineNumber = "367"
             landmarkName = "getSearchForText(_:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -218,11 +202,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ShoutAboutApp/DataSession.swift"
-            timestampString = "508492385.040916"
+            timestampString = "515239877.566819"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "581"
-            endingLineNumber = "581"
+            startingLineNumber = "583"
+            endingLineNumber = "583"
             landmarkName = "getProfileData(_:onError:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -234,11 +218,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ShoutAboutApp/DataSession.swift"
-            timestampString = "508492385.040916"
+            timestampString = "515239877.566819"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "599"
-            endingLineNumber = "599"
+            startingLineNumber = "601"
+            endingLineNumber = "601"
             landmarkName = "DataSessionManger"
             landmarkType = "3">
             <Locations>
@@ -282,11 +266,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ShoutAboutApp/DataSession.swift"
-            timestampString = "508492385.040916"
+            timestampString = "515239877.566819"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "656"
-            endingLineNumber = "656"
+            startingLineNumber = "658"
+            endingLineNumber = "658"
             landmarkName = "feedisLikeUser(_:onFinish:onError:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -298,11 +282,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ShoutAboutApp/DataSession.swift"
-            timestampString = "508492385.040916"
+            timestampString = "515239877.566819"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "730"
-            endingLineNumber = "730"
+            startingLineNumber = "732"
+            endingLineNumber = "732"
             landmarkName = "getfeedslist(_:onError:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -330,11 +314,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ShoutAboutApp/RateANdReviewViewController.swift"
-            timestampString = "505567789.163052"
+            timestampString = "515619860.465183"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "389"
-            endingLineNumber = "389"
+            startingLineNumber = "461"
+            endingLineNumber = "461"
             landmarkName = "showKeyBoard(_:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -346,11 +330,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ShoutAboutApp/RateANdReviewViewController.swift"
-            timestampString = "505567789.163052"
+            timestampString = "515619860.465183"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "377"
-            endingLineNumber = "377"
+            startingLineNumber = "449"
+            endingLineNumber = "449"
             landmarkName = "textView(_:shouldChangeTextInRange:replacementText:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -362,11 +346,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ShoutAboutApp/RateANdReviewViewController.swift"
-            timestampString = "505567789.163052"
+            timestampString = "515619860.465183"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "392"
-            endingLineNumber = "392"
+            startingLineNumber = "464"
+            endingLineNumber = "464"
             landmarkName = "showKeyBoard(_:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -378,11 +362,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ShoutAboutApp/SearchViewController.swift"
-            timestampString = "505168639.857934"
+            timestampString = "515258260.070568"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "55"
-            endingLineNumber = "55"
+            startingLineNumber = "62"
+            endingLineNumber = "62"
             landmarkName = "viewWillAppear(_:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -394,11 +378,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ShoutAboutApp/SearchViewController.swift"
-            timestampString = "505168639.857934"
+            timestampString = "515258260.070568"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "49"
-            endingLineNumber = "49"
+            startingLineNumber = "56"
+            endingLineNumber = "56"
             landmarkName = "didReceiveMemoryWarning()"
             landmarkType = "5">
          </BreakpointContent>
@@ -410,11 +394,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ShoutAboutApp/SearchViewController.swift"
-            timestampString = "505168639.857934"
+            timestampString = "515258260.070568"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "31"
-            endingLineNumber = "31"
+            startingLineNumber = "33"
+            endingLineNumber = "33"
             landmarkName = "viewDidLoad()"
             landmarkType = "5">
          </BreakpointContent>
@@ -538,11 +522,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ShoutAboutApp/ProfileViewController.swift"
-            timestampString = "508504593.709459"
+            timestampString = "515748198.011795"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "509"
-            endingLineNumber = "509"
+            startingLineNumber = "620"
+            endingLineNumber = "620"
             landmarkName = "imageFileSelected(_:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -570,7 +554,7 @@
                   moduleName = "ShoutAboutApp"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/virendragupta/OYApp/ShoutAboutApp-master/ShoutAboutApp/ShoutAboutApp/DataSession.swift"
-                  timestampString = "515157365.471294"
+                  timestampString = "515748200.786754"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "434"
@@ -585,7 +569,7 @@
                   moduleName = "ShoutAboutApp"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/virendragupta/OYApp/ShoutAboutApp-master/ShoutAboutApp/ShoutAboutApp/DataSession.swift"
-                  timestampString = "515157365.471462"
+                  timestampString = "515748200.7869"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "435"
@@ -650,11 +634,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ShoutAboutApp/ProfileViewController.swift"
-            timestampString = "508504593.709459"
+            timestampString = "515748198.011795"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "485"
-            endingLineNumber = "485"
+            startingLineNumber = "596"
+            endingLineNumber = "596"
             landmarkName = "ProfileViewController"
             landmarkType = "3">
          </BreakpointContent>
@@ -678,7 +662,7 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ShoutAboutApp/BaseNSURLSession.swift"
@@ -694,7 +678,7 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ShoutAboutApp/BaseNSURLSession.swift"
@@ -710,7 +694,7 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ShoutAboutApp/BaseNSURLSession.swift"
@@ -746,11 +730,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ShoutAboutApp/ProfileViewController.swift"
-            timestampString = "508504593.709459"
+            timestampString = "515748198.011795"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "602"
-            endingLineNumber = "602"
+            startingLineNumber = "713"
+            endingLineNumber = "713"
             landmarkName = "makeImageRoundedWithWidth(_:color:)"
             landmarkType = "5">
             <Locations>
@@ -810,11 +794,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ShoutAboutApp/MainSearchViewController.swift"
-            timestampString = "515153392.595275"
+            timestampString = "515253959.872386"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "28"
-            endingLineNumber = "28"
+            startingLineNumber = "29"
+            endingLineNumber = "29"
             landmarkName = "viewDidLoad()"
             landmarkType = "5">
          </BreakpointContent>
@@ -826,29 +810,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ShoutAboutApp/MainSearchViewController.swift"
-            timestampString = "515153392.595275"
+            timestampString = "515253959.872386"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "32"
-            endingLineNumber = "32"
+            startingLineNumber = "33"
+            endingLineNumber = "33"
             landmarkName = "viewDidLoad()"
             landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ShoutAboutApp/ContactViewController.swift"
-            timestampString = "505470913.359475"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "495"
-            endingLineNumber = "495"
-            landmarkName = "ContactViewController"
-            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -902,7 +870,7 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ShoutAboutApp/ContactViewController.swift"
@@ -943,7 +911,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "154"
             endingLineNumber = "154"
-            landmarkName = "getChatPerosn()"
+            landmarkName = "buttonClicked(_:button:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1046,15 +1014,15 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "No"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ShoutAboutApp/SearchViewController.swift"
-            timestampString = "505168639.857934"
+            timestampString = "515258260.070568"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "353"
-            endingLineNumber = "353"
+            startingLineNumber = "361"
+            endingLineNumber = "361"
             landmarkName = "getSearchForText(_:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -1066,11 +1034,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ShoutAboutApp/MainSearchViewController.swift"
-            timestampString = "515153750.610907"
+            timestampString = "515254892.622297"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "108"
-            endingLineNumber = "108"
+            startingLineNumber = "110"
+            endingLineNumber = "110"
             landmarkName = "MainSearchViewController"
             landmarkType = "3">
          </BreakpointContent>
@@ -1082,91 +1050,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ShoutAboutApp/MainSearchViewController.swift"
-            timestampString = "515153392.595275"
+            timestampString = "515254892.622297"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "52"
-            endingLineNumber = "52"
+            startingLineNumber = "54"
+            endingLineNumber = "54"
             landmarkName = "viewWillAppear(_:)"
             landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ShoutAboutApp/ProfileViewController.swift"
-            timestampString = "504375590.922651"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "70"
-            endingLineNumber = "70"
-            landmarkName = "ProfileViewController"
-            landmarkType = "3">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "ShoutAboutApp.ProfileViewController.tableView.getter : weak Swift.Optional&lt;__ObjC.UITableView&gt;"
-                  moduleName = "ShoutAboutApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/virendragupta/OYApp/ShoutAboutApp-master/ShoutAboutApp/ShoutAboutApp/ProfileViewController.swift"
-                  timestampString = "515157365.478905"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "71"
-                  endingLineNumber = "71"
-                  offsetFromSymbolStart = "40">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "ShoutAboutApp.ProfileViewController.tableView.setter : weak Swift.Optional&lt;__ObjC.UITableView&gt;"
-                  moduleName = "ShoutAboutApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/virendragupta/OYApp/ShoutAboutApp-master/ShoutAboutApp/ShoutAboutApp/ProfileViewController.swift"
-                  timestampString = "515157365.479065"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "71"
-                  endingLineNumber = "71"
-                  offsetFromSymbolStart = "52">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "ShoutAboutApp.ProfileViewController.init (nibName : Swift.Optional&lt;Swift.String&gt;, bundle : Swift.Optional&lt;__ObjC.NSBundle&gt;) -&gt; ShoutAboutApp.ProfileViewController"
-                  moduleName = "ShoutAboutApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/virendragupta/OYApp/ShoutAboutApp-master/ShoutAboutApp/ShoutAboutApp/ProfileViewController.swift"
-                  timestampString = "515157365.479217"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "71"
-                  endingLineNumber = "71"
-                  offsetFromSymbolStart = "540">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "ShoutAboutApp.ProfileViewController.init (coder : __ObjC.NSCoder) -&gt; Swift.Optional&lt;ShoutAboutApp.ProfileViewController&gt;"
-                  moduleName = "ShoutAboutApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/virendragupta/OYApp/ShoutAboutApp-master/ShoutAboutApp/ShoutAboutApp/ProfileViewController.swift"
-                  timestampString = "515157365.479374"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "71"
-                  endingLineNumber = "71"
-                  offsetFromSymbolStart = "484">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1208,7 +1098,7 @@
                   moduleName = "ShoutAboutApp"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/virendragupta/OYApp/ShoutAboutApp-master/ShoutAboutApp/ShoutAboutApp/DataSession.swift"
-                  timestampString = "515157365.48078"
+                  timestampString = "515748200.791408"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "146"
@@ -1223,7 +1113,7 @@
                   moduleName = "ShoutAboutApp"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/virendragupta/OYApp/ShoutAboutApp-master/ShoutAboutApp/ShoutAboutApp/DataSession.swift"
-                  timestampString = "515157365.480948"
+                  timestampString = "515748200.79156"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "147"
@@ -1272,11 +1162,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ShoutAboutApp/DataSession.swift"
-            timestampString = "508492385.040916"
+            timestampString = "515531206.285175"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "866"
-            endingLineNumber = "866"
+            startingLineNumber = "872"
+            endingLineNumber = "872"
             landmarkName = "getMyfeedslist(_:onError:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -1368,11 +1258,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ShoutAboutApp/ProfileViewController.swift"
-            timestampString = "508500203.495724"
+            timestampString = "515239877.566819"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "163"
-            endingLineNumber = "163"
+            startingLineNumber = "173"
+            endingLineNumber = "173"
             landmarkName = "viewWillAppear(_:)"
             landmarkType = "5">
             <Locations>
@@ -1384,11 +1274,11 @@
                   moduleName = "ShoutAboutApp"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/virendragupta/OYApp/ShoutAboutApp-master/ShoutAboutApp/ShoutAboutApp/ProfileViewController.swift"
-                  timestampString = "515157365.483002"
+                  timestampString = "515748200.793741"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "174"
-                  endingLineNumber = "174"
+                  startingLineNumber = "184"
+                  endingLineNumber = "184"
                   offsetFromSymbolStart = "124">
                </Location>
                <Location
@@ -1399,11 +1289,11 @@
                   moduleName = "ShoutAboutApp"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/virendragupta/OYApp/ShoutAboutApp-master/ShoutAboutApp/ShoutAboutApp/ProfileViewController.swift"
-                  timestampString = "515157365.483159"
+                  timestampString = "515748200.793899"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "174"
-                  endingLineNumber = "174"
+                  startingLineNumber = "184"
+                  endingLineNumber = "184"
                   offsetFromSymbolStart = "276">
                </Location>
             </Locations>
@@ -1412,76 +1302,76 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ShoutAboutApp/ProfileViewController.swift"
-            timestampString = "504375590.922651"
+            timestampString = "515239877.566819"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "71"
-            endingLineNumber = "71"
+            startingLineNumber = "72"
+            endingLineNumber = "72"
             landmarkName = "ProfileViewController"
             landmarkType = "3">
             <Locations>
                <Location
-                  shouldBeEnabled = "Yes"
+                  shouldBeEnabled = "No"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
                   symbolName = "ShoutAboutApp.ProfileViewController.tableView.getter : weak Swift.Optional&lt;__ObjC.UITableView&gt;"
                   moduleName = "ShoutAboutApp"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/virendragupta/OYApp/ShoutAboutApp-master/ShoutAboutApp/ShoutAboutApp/ProfileViewController.swift"
-                  timestampString = "515157365.484055"
+                  timestampString = "515747009.993633"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "71"
-                  endingLineNumber = "71"
+                  startingLineNumber = "72"
+                  endingLineNumber = "72"
                   offsetFromSymbolStart = "40">
                </Location>
                <Location
-                  shouldBeEnabled = "Yes"
+                  shouldBeEnabled = "No"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
                   symbolName = "ShoutAboutApp.ProfileViewController.tableView.setter : weak Swift.Optional&lt;__ObjC.UITableView&gt;"
                   moduleName = "ShoutAboutApp"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/virendragupta/OYApp/ShoutAboutApp-master/ShoutAboutApp/ShoutAboutApp/ProfileViewController.swift"
-                  timestampString = "515157365.484213"
+                  timestampString = "515747009.993809"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "71"
-                  endingLineNumber = "71"
+                  startingLineNumber = "72"
+                  endingLineNumber = "72"
                   offsetFromSymbolStart = "52">
                </Location>
                <Location
-                  shouldBeEnabled = "Yes"
+                  shouldBeEnabled = "No"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
                   symbolName = "ShoutAboutApp.ProfileViewController.init (nibName : Swift.Optional&lt;Swift.String&gt;, bundle : Swift.Optional&lt;__ObjC.NSBundle&gt;) -&gt; ShoutAboutApp.ProfileViewController"
                   moduleName = "ShoutAboutApp"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/virendragupta/OYApp/ShoutAboutApp-master/ShoutAboutApp/ShoutAboutApp/ProfileViewController.swift"
-                  timestampString = "515157365.484363"
+                  timestampString = "515747009.993987"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "71"
-                  endingLineNumber = "71"
+                  startingLineNumber = "72"
+                  endingLineNumber = "72"
                   offsetFromSymbolStart = "540">
                </Location>
                <Location
-                  shouldBeEnabled = "Yes"
+                  shouldBeEnabled = "No"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
                   symbolName = "ShoutAboutApp.ProfileViewController.init (coder : __ObjC.NSCoder) -&gt; Swift.Optional&lt;ShoutAboutApp.ProfileViewController&gt;"
                   moduleName = "ShoutAboutApp"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/virendragupta/OYApp/ShoutAboutApp-master/ShoutAboutApp/ShoutAboutApp/ProfileViewController.swift"
-                  timestampString = "515157365.484511"
+                  timestampString = "515747009.994137"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "71"
-                  endingLineNumber = "71"
+                  startingLineNumber = "72"
+                  endingLineNumber = "72"
                   offsetFromSymbolStart = "484">
                </Location>
             </Locations>
@@ -1494,11 +1384,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ShoutAboutApp/ProfileViewController.swift"
-            timestampString = "508500203.495724"
+            timestampString = "515239877.566819"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "146"
-            endingLineNumber = "146"
+            startingLineNumber = "156"
+            endingLineNumber = "156"
             landmarkName = "didReceiveMemoryWarning()"
             landmarkType = "5">
          </BreakpointContent>
@@ -1510,11 +1400,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ShoutAboutApp/ProfileViewController.swift"
-            timestampString = "508500203.495724"
+            timestampString = "515239877.566819"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "177"
-            endingLineNumber = "177"
+            startingLineNumber = "187"
+            endingLineNumber = "187"
             landmarkName = "viewWillAppear(_:)"
             landmarkType = "5">
          </BreakpointContent>

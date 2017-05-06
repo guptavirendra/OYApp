@@ -46,6 +46,7 @@ class NewProfileViewController: ProfileViewController, UIPopoverPresentationCont
     override func viewDidLoad()
     {
         super.viewDidLoad()
+       
         
         if self.isBeingPresented()
         {
@@ -73,6 +74,8 @@ class NewProfileViewController: ProfileViewController, UIPopoverPresentationCont
     override func viewWillAppear(animated: Bool)
     {
         super.viewWillAppear(animated)
+        self.navigationController?.navigationBarHidden = false
+        self.navigationController?.navigationBar.tintColor = appColor
         nameLabel?.text     = personalProfile.name
         locationLabel?.text = personalProfile.address
         if personalProfile.idString == ProfileManager.sharedInstance.personalProfile.idString
