@@ -1908,6 +1908,16 @@ class DataSessionManger: NSObject
     
     func unblockUserID(userID:String, onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
     {
+        
+        let dataSession = DataSession()
+        dataSession.blockUserID(userID, onFinish: { (response, deserializedResponse) in
+            onFinish(response: response, deserializedResponse: deserializedResponse)
+        }) { (error) in
+            onError(error: error)
+        }
+
+        
+        /*
         let dataSession = DataSession()
         dataSession.unblockUserID(userID, onFinish: { (response, deserializedResponse) in
             onFinish(response: response, deserializedResponse: deserializedResponse)
@@ -1915,6 +1925,10 @@ class DataSessionManger: NSObject
             onError(error: error)
         }
         
+   */
+    
+    
+    
     }
     
     
@@ -2049,11 +2063,21 @@ class DataSessionManger: NSObject
     func unspamUserID(userID:String, onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
     {
         let dataSession = DataSession()
+        dataSession.spamUserID(userID, onFinish: { (response, deserializedResponse) in
+            onFinish(response: response, deserializedResponse: deserializedResponse)
+        }) { (error) in
+            onError(error: error)
+        }
+
+        /*
+        let dataSession = DataSession()
         dataSession.unspamUserID(userID, onFinish: { (response, deserializedResponse) in
             onFinish(response: response, deserializedResponse: deserializedResponse)
         }) { (error) in
             onError(error: error)
         }
+        
+        */
     }
     
     func getUserSpamList(onFinish:(response:AnyObject,spamUserArray:[SearchPerson])->(), onError:(error:AnyObject)->())
@@ -2088,11 +2112,19 @@ class DataSessionManger: NSObject
     func unfavouriteUserID(userID:String, onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
     {
         let dataSession = DataSession()
+        dataSession.favouriteUserID(userID, onFinish: { (response, deserializedResponse) in
+            onFinish(response: response, deserializedResponse: deserializedResponse)
+        }) { (error) in
+            onError(error: error)
+        }
+        /*
+        let dataSession = DataSession()
         dataSession.unfavouriteUserID(userID, onFinish: { (response, deserializedResponse) in
             onFinish(response: response, deserializedResponse: deserializedResponse)
         }) { (error) in
             onError(error: error)
         }
+        */
         
     }
     
