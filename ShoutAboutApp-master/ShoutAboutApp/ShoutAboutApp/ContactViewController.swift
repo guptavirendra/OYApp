@@ -686,11 +686,15 @@ extension ContactViewController
         addNewContactVC.delegate = self
         addNewContactVC.allowsActions = false
         let nav = UINavigationController(rootViewController: addNewContactVC)
+        nav.navigationBar.tintColor =  appColor
+        nav.navigationBar.barTintColor = UIColor.whiteColor()
+        
+        
         self.presentViewController(nav, animated: true, completion: nil)
     
     }
     
-      func contactViewController(viewController: CNContactViewController, didCompleteWithContact contact: CNContact?)
+    func contactViewController(viewController: CNContactViewController, didCompleteWithContact contact: CNContact?)
     {
          viewController.dismissViewControllerAnimated(true, completion: nil)
         
