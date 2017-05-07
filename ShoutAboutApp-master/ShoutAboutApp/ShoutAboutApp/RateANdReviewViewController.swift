@@ -148,14 +148,15 @@ extension RateANdReviewViewController
             var message:String = ""
             cell.name.text = name
             var total:Float = 0.0
+            var totalRating:Float  = 0.0
             
             if reviewUser.rateGraphArray.count >= 1
             {
                 
                 let  rating = reviewUser.rateGraphArray[0].count
-                let  ratingFloat =  CGFloat(Float(rating)!)
+                totalRating =   Float(rating)!
                 
-                if ratingFloat > 0 && ratingFloat <= 1
+                if totalRating > 0 && totalRating <= 1
                 {
                     
                     message.appendContentsOf(rating)
@@ -252,10 +253,10 @@ extension RateANdReviewViewController
                 }
                 
             }
-            if fiveCount > 0 && total > 0
+            if fiveCount > 0 && totalRating > 0
             {
                 //cell.fiveConstraints.constant  = (fiveCount/total)*fixConstraints
-                cell.progressView5?.progress = fiveCount/total
+                cell.progressView5?.progress = fiveCount/totalRating
                 
             }else
             {
@@ -263,40 +264,40 @@ extension RateANdReviewViewController
                 cell.progressView5?.progress = 0.0
             }
             cell.countLabel5.text          = String(Int(fiveCount))
-            if fourCount > 0 && total > 0
+            if fourCount > 0 && totalRating > 0
             {
                 //cell.fourConstraints.constant  = (fourCount/total)*fixConstraints
-                cell.progressView4?.progress = fourCount/total
+                cell.progressView4?.progress = fourCount/totalRating
             }else
             {
                 //cell.fourConstraints.constant  = 0.0
                  cell.progressView4?.progress  = 0.0
             }
             cell.countLabel4.text          = String(Int(fourCount))
-            if threeCount > 0 && total > 0
+            if threeCount > 0 && totalRating > 0
             {
                 //cell.threeConstraints.constant = (threeCount/total)*fixConstraints
-                cell.progressView3?.progress = threeCount/total
+                cell.progressView3?.progress = threeCount/totalRating
             }else
             {
                 //cell.threeConstraints.constant = 0.0
                 cell.progressView3?.progress  = 0.0
             }
             cell.countLabel3.text          = String(Int(threeCount))
-            if twoCount > 0 && total > 0
+            if twoCount > 0 && totalRating > 0
             {
                 //cell.twoConstraints.constant   = (twoCount/total)*fixConstraints
-                cell.progressView2?.progress = twoCount/total
+                cell.progressView2?.progress = twoCount/totalRating
             }else
             {
                 //cell.twoConstraints.constant   = 0.0
                 cell.progressView2?.progress   = 0.0
             }
             cell.countLabel2.text          = String(Int(twoCount))
-            if oneCount > 0 && total > 0
+            if oneCount > 0 && totalRating > 0
             {
                // cell.oneConstraints.constant   = (oneCount/total)*fixConstraints
-                cell.progressView1?.progress = oneCount/total
+                cell.progressView1?.progress = oneCount/totalRating
             }else
             {
                 //cell.oneConstraints.constant   =  0.0
@@ -499,27 +500,32 @@ extension RateANdReviewViewController:RatingControlDelegate
 {
     func buttonClicked(cell:ClickTableViewCell)
     {
-        if  activeTextView != nil
+        let ratingInt = Int(rating)
+        if ratingInt == 0 || ratingInt > 5
         {
-            review.appendContentsOf((activeTextView?.text)!)
+            return
             
-            activeTextView?.resignFirstResponder()
-        }
-        
-        
-        if self.tableView.indexPathForCell(cell) != nil
+            
+        }else
         {
-            let appUserId = NSUserDefaults.standardUserDefaults().objectForKey(kapp_user_id) as! Int
-            let appUserToken = NSUserDefaults.standardUserDefaults().objectForKey(kapp_user_token) as! String
-            
-            if idString != nil
+            if  activeTextView != nil
             {
-                
-                let dict = ["by_user_id":String(appUserId),"for_user_id":idString!, "rate":rating, "review":review,kapp_user_id:String(appUserId), kapp_user_token :appUserToken ]
-                
-                postReview(dict)
+                review.appendContentsOf((activeTextView?.text)!)
+                activeTextView?.resignFirstResponder()
             }
-            
+            if self.tableView.indexPathForCell(cell) != nil
+            {
+                let appUserId = NSUserDefaults.standardUserDefaults().objectForKey(kapp_user_id) as! Int
+                let appUserToken = NSUserDefaults.standardUserDefaults().objectForKey(kapp_user_token) as! String
+                
+                if idString != nil
+                {
+                    
+                    let dict = ["by_user_id":String(appUserId),"for_user_id":idString!, "rate":rating, "review":review,kapp_user_id:String(appUserId), kapp_user_token :appUserToken ]
+                    
+                    postReview(dict)
+                }
+            }
         }
     }
     
