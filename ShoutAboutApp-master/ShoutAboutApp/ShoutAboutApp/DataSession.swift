@@ -942,9 +942,17 @@ class DataSessionManger: NSObject
                                 for dict in likesList{
                                     
                                     let LikeDislikevalue = AlertCountCommonModel()
+                                    if let _ = dict.objectForKey("post_id") as? String
+                                    {
+                                        LikeDislikevalue.post_id = (dict.objectForKey("post_id") as? String)!
+                                    }
                                     
-                                    LikeDislikevalue.post_id =   (dict.objectForKey("post_id") as? String)!
+                                    if let _ =  dict.objectForKey("likes") as? String
+                                    {
+                                    
+                                    
                                     LikeDislikevalue.likeDislikecount =   (dict.objectForKey("likes") as? String)!
+                                    }
                                     
                                     datavalue.likes_count = LikeDislikevalue
                                 }
@@ -977,7 +985,8 @@ class DataSessionManger: NSObject
 //                                    likesUserdatavalue.name =   (dict.objectForKey("name") as? String)!
                                     likesUserdatavalue.mobile_number =   (dict.objectForKey("mobile_number") as? String)!
                 
-                                    if (dict.objectForKey("photo") as? String) != nil{
+                                    if (dict.objectForKey("photo") as? String) != nil
+                                    {
                                        likesUserdatavalue.photo =   (dict.objectForKey("photo") as? String)!
                                     }
                  
@@ -2228,7 +2237,8 @@ class postModel: NSObject {
 }
 
 
-class dataModel: NSObject {
+class dataModel: NSObject
+{
     
     var id:Int = 12
     var action     = String()
@@ -2239,8 +2249,8 @@ class dataModel: NSObject {
 }
 
 
-class AlertModel: NSObject {
-    
+class AlertModel: NSObject
+{
     var total:Int = 12
     var per_page:Int = 12
     var current_page:Int = 12
@@ -2253,12 +2263,10 @@ class AlertModel: NSObject {
     
 }
 
-
-
 // Feed & MyFeed Model
 
-class FeedMyfeed: NSObject {
-    
+class FeedMyfeed: NSObject
+{
     var total:Int = 12
     var per_page:Int = 12
     var current_page:Int = 12
@@ -2270,20 +2278,18 @@ class FeedMyfeed: NSObject {
     var data = [dataFeedMyfeedModel]()
 }
 
-
-class dataFeedMyfeedModel: NSObject {
-    
-    var id:Int = 12
-    var action     = String()
+class dataFeedMyfeedModel: NSObject
+{
+    var id:Int         = 12
+    var action         = String()
     var action_val     = String()
-    var review     = String()
-    var recent_action     = String()
+    var review         = String()
+    var recent_action  = String()
     var created_at     = String()
-    var performed     = commonModel()
-    var effected      =  commonModel()
-    var likes_count     = AlertCountCommonModel()
-    var dislikes_count     = AlertCountCommonModel()
+    var performed      = commonModel()
+    var effected       = commonModel()
+    var likes_count    = AlertCountCommonModel()
+    var dislikes_count = AlertCountCommonModel()
     var likes_user     = commonModel()
-    var dislikes_user     = commonModel()
-    
+    var dislikes_user  = commonModel()
 }
