@@ -79,6 +79,7 @@ class JoinViewController: ProfileViewController/*, UITableViewDataSource, UITabl
     override func viewDidLoad()
     {
         super.viewDidLoad()
+        self.getProfileData()
         self.imageView?.makeImageRounded()
         self.automaticallyAdjustsScrollViewInsets = false
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.showKeyBoard(_:)), name: UIKeyboardDidShowNotification, object: nil)
@@ -399,7 +400,8 @@ extension JoinViewController
     
     func faceBookLogin()
     {
-        
+        if ((FBSDKAccessToken.currentAccessToken()) == nil)
+        {
         let fbRequest = FBRequest()
         fbRequest.loginWithFacebook({ (result, error) in
             
@@ -430,6 +432,14 @@ extension JoinViewController
             dict[self.k_photo] = strUrl
             //}
             
+            
+            if strUrl.characters.count > 0
+            {
+                let url = NSURL(string: strUrl)
+                let data = NSData(contentsOfURL: url!)
+                let image = UIImage(data: data!)
+                self.imageFileSelected(image!)
+            }
             
             if(result!.objectForKey("email") != nil)
             {
@@ -487,6 +497,7 @@ extension JoinViewController
             
             },
         vc: self)
+        }
     }
     
     
