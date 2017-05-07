@@ -553,6 +553,7 @@ class DataSessionManger: NSObject
                     personalProfileData.website = dataDict?.objectForKey(website) as? String
                     personalProfileData.birthday = dataDict?.objectForKey("dob") as? String
                     personalProfileData.gender = dataDict?.objectForKey("gender") as? String
+                    personalProfileData.status = dataDict?.objectForKey("status") as? String
                     if let _ = dataDict?.objectForKey(photo) as? String
                     {
                         personalProfileData.photo = dataDict?.objectForKey(photo) as? String
@@ -571,21 +572,33 @@ class DataSessionManger: NSObject
                         
                     }
                     
-                    /*
-                   
-                    if let _ = (dataDict?.objectForKey("rating_average") as? [AnyObject])
+                    
+                    if let  ratingAverage = dataDict?.objectForKey("rating_average") as? [NSDictionary]
                     {
-                        personalProfileData.ratingAverage = (dataDict?.objectForKey("rating_average") as? [AnyObject])!
+                        for dict in ratingAverage
+                        {
+                            let average = RatingAverage()
+                            if let avg = dict.objectForKey("average") as? String
+                            {
+                                average.average =   avg
+                            }
+                            personalProfileData.ratingAverage.append(average)
+                            
+                        }
+                        
                     }
                     
-                    if let _ = dataDict?.objectForKey("review_count") as? [AnyObject]
+                    if let  reviewCount = dataDict?.objectForKey("review_count") as? [NSDictionary]
                     {
-                        personalProfileData.reviewCount = dataDict?.objectForKey("review_count") as! [AnyObject]
+                        for dict in reviewCount
+                        {
+                            let count = ReviewCount()
+                            count.count =   String(dict.objectForKey("count") as! Int)
+                            personalProfileData.reviewCount.append(count)
+                            
+                        }
                     }
-                    */
-                    
                 }
-                
             }
             
             onFinish(response: response, personalProfile: personalProfileData)

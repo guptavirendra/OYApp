@@ -82,7 +82,7 @@ extension RateANdReviewViewController
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
-        return 4 - subtractCount + reviewUser.rateReviewList.count //allValidContacts.count //objects.count
+        return (4 - subtractCount) + reviewUser.rateReviewList.count //allValidContacts.count //objects.count
     }
     
     
@@ -309,10 +309,11 @@ extension RateANdReviewViewController
             return cell
         }
         
-        if reviewUser.rateReviewList.count > (indexPath.row-4)-subtractCount
+        (4 - subtractCount)
+        if reviewUser.rateReviewList.count >= 1// (indexPath.row+(4-subtractCount))
         {
             
-            let rateReviewer = reviewUser.rateReviewList[(indexPath.row-4)-subtractCount]
+            let rateReviewer = reviewUser.rateReviewList[(indexPath.row-(4-subtractCount))]
             
             let cell = tableView.dequeueReusableCellWithIdentifier("UesrReviewTableViewCell", forIndexPath: indexPath) as! UesrReviewTableViewCell
             cell.nameLabel.text    = rateReviewer.appUser.name
@@ -320,7 +321,7 @@ extension RateANdReviewViewController
             
             if rateReviewer.rate.characters.count > 0
             {
-                cell.rateView.rating   = Int(rateReviewer.rate)!
+                cell.rateView.rating   = Int(Float(rateReviewer.rate)!)
             }
             cell.timeLabel.text    = rateReviewer.created_at
             let urlString       = rateReviewer.appUser.photo

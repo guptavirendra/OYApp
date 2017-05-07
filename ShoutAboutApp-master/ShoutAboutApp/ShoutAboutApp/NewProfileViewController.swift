@@ -30,6 +30,21 @@ class NewProfileViewController: ProfileViewController, UIPopoverPresentationCont
      @IBOutlet weak var spamLabel:UILabel?
      @IBOutlet weak var favoriteLabel:UILabel?
     
+    @IBOutlet weak var ratReviewBaseScreen:UIView?
+    @IBOutlet weak var rateView: RatingControl?
+    @IBOutlet weak var ratingLabel: UILabel?
+    @IBOutlet weak var totalReviewButton:UIButton?
+    
+
+    
+    
+    @IBOutlet weak var callButtonLeading:NSLayoutConstraint?
+    @IBOutlet weak var callLabelLeading:NSLayoutConstraint?
+    @IBOutlet weak var chatButtonWidth:NSLayoutConstraint?
+    @IBOutlet weak var detailButtonTrailing:NSLayoutConstraint?
+    @IBOutlet weak var detailLabelTrailing:NSLayoutConstraint?
+    
+    
     
     var shouldDisabledUserInteraction:Bool = true
     
@@ -52,7 +67,7 @@ class NewProfileViewController: ProfileViewController, UIPopoverPresentationCont
     {
         super.viewDidLoad()
         
-        
+        ratReviewBaseScreen?.layer.cornerRadius = 5.0
         if self.isBeingPresented()
         {
             doneButton?.title = "Done"
@@ -104,12 +119,42 @@ class NewProfileViewController: ProfileViewController, UIPopoverPresentationCont
         self.navigationController?.navigationBar.tintColor = appColor
         nameLabel?.text     = personalProfile.name
         locationLabel?.text = personalProfile.address
+       
+        if let _ = personalProfile.ratingAverage.first?.average
+        {
+            rateView?.rating    = Int(Float(personalProfile.ratingAverage.first!.average)!)
+            ratingLabel!.text    = "Avearge Rating:" + String(personalProfile.ratingAverage.first!.average)
+        }else
+        {
+            ratingLabel!.text    = "Avearge Rating:0"
+        }
+        var  totalreviewString = ""
+        if let _ = personalProfile.reviewCount.first?.count
+        {
+              totalreviewString = "Total Review:"+String(personalProfile.reviewCount.first!.count)
+            
+        }else
+        {
+            totalreviewString = "Total Review: 0"
+        }
+        
+        totalReviewButton?.setTitle(totalreviewString, forState: .Normal)
+
+        
+        
         if personalProfile.idString == ProfileManager.sharedInstance.personalProfile.idString
         {
             self.spamBlockBaseView?.hidden = true
             self.cameraButton!.hidden      = false
             callLabel?.text                = "Status"
+            chatLabel?.hidden              = true
             chatLabel?.text                = "Review"
+            callButtonLeading?.constant    = 40.0
+            callLabelLeading?.constant     = 40.0
+            chatButtonWidth?.constant      = 0.0
+            detailButtonTrailing?.constant = 40.0
+            detailLabelTrailing?.constant  = 40.0
+            callButton?.setImage(UIImage(named: "message"), forState: .Normal)
              
         }else
         {
@@ -136,6 +181,14 @@ class NewProfileViewController: ProfileViewController, UIPopoverPresentationCont
        if chatLabel?.text  == "Review"
        {
             let rateANdReviewViewController = self.storyboard?.instantiateViewControllerWithIdentifier("RateANdReviewViewController") as? RateANdReviewViewController
+        
+        rateANdReviewViewController?.idString = String(personalProfile.idString)
+        rateANdReviewViewController?.name = personalProfile.name
+        if let _ = personalProfile.photo
+        {
+            rateANdReviewViewController?.photo = personalProfile.photo!
+        }
+        
             self.navigationController!.pushViewController(rateANdReviewViewController!, animated: true)
        }else
        {
@@ -157,12 +210,50 @@ class NewProfileViewController: ProfileViewController, UIPopoverPresentationCont
             passwordPrompt.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: { (action) -> Void in
                 // Now do whatever you want with inputTextField (remember to unwrap the optional)
                 
+                let appUserId = NSUserDefaults.standardUserDefaults().objectForKey(kapp_user_id) as! Int
+                let appUserToken = NSUserDefaults.standardUserDefaults().objectForKey(kapp_user_token) as! String
+                
+                var  email = ""
+                if let _ = self.personalProfile.email
+                {
+                    email = self.personalProfile.email!
+                    
+                }
+                
+                var birthday = ""
+                
+                if let _ = self.personalProfile.birthday
+                {
+                    birthday = self.personalProfile.birthday!
+                    
+                }
+                var gender = ""
+                if let _ = self.personalProfile.gender
+                {
+                    gender = self.personalProfile.gender!
+                    
+                }
+                
+                
+                var  address = ""
+                if let _ = self.personalProfile.address
+                {
+                    address = self.personalProfile.address!
+                    
+                }
+                
+                
+                let dict = ["status":inputTextField!.text!, "name":self.personalProfile.name, "email":email, "dob":birthday, "gender":gender, "address":address, kapp_user_id:String(appUserId), kapp_user_token :appUserToken, "notify_token":"text"]
+                
+                   self.postData(dict)
                 print(" sta\(inputTextField!.text)")
             }))
             passwordPrompt.addTextFieldWithConfigurationHandler({(textField: UITextField!) in
+                textField.text        = self.personalProfile.status
                 textField.placeholder = "Status"
                 textField.borderStyle = .None
                 inputTextField = textField
+                
             })
             
             presentViewController(passwordPrompt, animated: true, completion: nil)
@@ -231,8 +322,8 @@ class NewProfileViewController: ProfileViewController, UIPopoverPresentationCont
     
     @IBAction override func favoriteButtonClicked(sender:UIButton)
     {
-        sender.setImage(nil, forState: .Normal)
-        sender.setTitle("+", forState: .Normal)
+        //sender.setImage(nil, forState: .Normal)
+        //sender.setTitle("+", forState: .Normal)
         if favoriteLabel?.text == "Add to Contact"
         {
             

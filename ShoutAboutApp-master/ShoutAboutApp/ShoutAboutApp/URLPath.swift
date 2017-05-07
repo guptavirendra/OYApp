@@ -121,6 +121,7 @@ class SearchPerson:PersonContact, NSCoding
     var photo: String?
     var gcm_token: String?
     var last_online_time: String?
+    var status:String?
     var ratingAverage  = [RatingAverage]()
     var reviewCount    = [ReviewCount]()
     

@@ -12,16 +12,16 @@ class PersonalProfile:NSObject
 {
     var  idInt : Int = 0
     var  name : String = ""
-    var email: String = ""
-    var mobile_number: String = ""
-    var created_at: String = ""
-    var updated_at: String = ""
-    var dob : String = ""
-    var address: String = ""
-    var website: String = ""
-    var photo: String = ""
-    var gcm_token: String = ""
-    var last_online_time: String = ""
+    var  email: String = ""
+    var  mobile_number: String = ""
+    var  created_at: String = ""
+    var  updated_at: String = ""
+    var  dob : String = ""
+    var  address: String = ""
+    var  website: String = ""
+    var  photo: String = ""
+    var  gcm_token: String = ""
+    var  last_online_time: String = ""
     var  rating_average  = [AnyObject]()
     var  review_count = [AnyObject]()
 }
@@ -260,11 +260,15 @@ extension ProfileViewController
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
     {
         let cell = tableView.dequeueReusableCellWithIdentifier("EditProfileTableViewCell", forIndexPath: indexPath) as! EditProfileTableViewCell
+        
         cell.delegate = self
         cell.dataTextField.delegate = self
+        
         if personalProfile.idString != ProfileManager.sharedInstance.personalProfile.idString
         {
-           cell.editButton.hidden = true
+           //cell.editButton.hidden = true
+            cell.userInteractionEnabled = false
+            
         }
         if indexPath.row == 0
         {
@@ -825,12 +829,13 @@ extension ProfileViewController
                     self.setProfileImgeForURL(photo)
                 }
                 
-                if self.isKindOfClass(JoinViewController)
+                if self.isKindOfClass(JoinViewController) || self.isKindOfClass(NewProfileViewController)
                 {
                     self.personalProfile = ProfileManager.sharedInstance.personalProfile
                     self.delegate?.profileDismissied()
 
-                }else
+                }
+                else
                 {
                     self.dismissViewControllerAnimated(true)
                     {
@@ -894,9 +899,6 @@ extension ProfileViewController
     
     @IBAction func favoriteButtonClicked(sender:UIButton)
     {
-        
-        
-        
         self.view.showSpinner()
         DataSessionManger.sharedInstance.favouriteUserID(String(personalProfile.idString), onFinish: { (response, deserializedResponse) in
             dispatch_async(dispatch_get_main_queue(), {
