@@ -7,8 +7,10 @@
 //
 
 import UIKit
+import ContactsUI
 
-class NewProfileViewController: ProfileViewController, UIPopoverPresentationControllerDelegate, ProfileViewControllerDelegate
+
+class NewProfileViewController: ProfileViewController, UIPopoverPresentationControllerDelegate, ProfileViewControllerDelegate, CNContactViewControllerDelegate
 {
 
      @IBOutlet weak var spamBlockBaseView:UIView?
@@ -29,6 +31,9 @@ class NewProfileViewController: ProfileViewController, UIPopoverPresentationCont
      @IBOutlet weak var favoriteLabel:UILabel?
     
     
+    var shouldDisabledUserInteraction:Bool = true
+    
+    
     @IBOutlet weak var doneButton:UIBarButtonItem?
 
      var popOver : UIPopoverPresentationController!
@@ -46,7 +51,7 @@ class NewProfileViewController: ProfileViewController, UIPopoverPresentationCont
     override func viewDidLoad()
     {
         super.viewDidLoad()
-       
+        
         
         if self.isBeingPresented()
         {
@@ -71,9 +76,30 @@ class NewProfileViewController: ProfileViewController, UIPopoverPresentationCont
         // Dispose of any resources that can be recreated.
     }
     
+    override func viewDidAppear(animated: Bool)
+    {
+        super.viewDidAppear(animated)
+        
+    }
     override func viewWillAppear(animated: Bool)
     {
         super.viewWillAppear(animated)
+        
+        let isExisingContact  = ProfileManager.sharedInstance.syncedContactArray.contains
+            { (person) -> Bool in
+                return person.mobileNumber == personalProfile.mobileNumber
+        }
+        if isExisingContact == false
+        {
+            favoriteLabel?.text = "Add to Contact"
+            favoriteButton!.setImage(nil, forState: .Normal)
+            favoriteButton!.setTitle("+", forState: .Normal)
+            
+        }
+        
+        
+        
+    self.view.userInteractionEnabled = self.shouldDisabledUserInteraction
         self.navigationController?.navigationBarHidden = false
         self.navigationController?.navigationBar.tintColor = appColor
         nameLabel?.text     = personalProfile.name
@@ -201,6 +227,46 @@ class NewProfileViewController: ProfileViewController, UIPopoverPresentationCont
         self.navigationController!.pushViewController(alertVc!, animated: true)
         
         
+    }
+    
+    @IBAction override func favoriteButtonClicked(sender:UIButton)
+    {
+        sender.setImage(nil, forState: .Normal)
+        sender.setTitle("+", forState: .Normal)
+        if favoriteLabel?.text == "Add to Contact"
+        {
+            
+            let con = CNMutableContact()
+            con.givenName  = personalProfile.name
+
+           // con.familyName = "Appleseed"
+            con.phoneNumbers.append(CNLabeledValue(
+                label: "Mobile Number", value: CNPhoneNumber(stringValue:             personalProfile.mobileNumber
+          )))
+            
+            let addNewContactVC = CNContactViewController(forNewContact: con)
+            addNewContactVC.contactStore = CNContactStore()
+            addNewContactVC.delegate      = self
+            addNewContactVC.allowsActions = false
+            let nav = UINavigationController(rootViewController: addNewContactVC)
+            let lightBlue = UIColor(hexString: "1F8DC8")
+            let medBlue = UIColor(hexString: "FFFFFF")
+            nav.navigationBar.tintColor =  appColor
+            nav.navigationBar.barTintColor = UIColor.whiteColor()
+            
+             self.presentViewController(nav, animated: true, completion: nil)
+            
+        }else
+        {
+            super.favoriteButtonClicked(sender)
+        }
+        
+        
+    }
+    
+    func contactViewController(viewController: CNContactViewController, didCompleteWithContact contact: CNContact?)
+    {
+        viewController.dismissViewControllerAnimated(true, completion: nil)
     }
     
 }
