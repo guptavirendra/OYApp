@@ -143,8 +143,11 @@ extension LeftViewController
         
         else if indexPath.row == 5
         {
-            let fbRequest = FBRequest()
-            fbRequest.logoutFacebook()
+            if ((FBSDKAccessToken.currentAccessToken()) != nil)
+            {
+                let fbRequest = FBRequest()
+                fbRequest.logoutFacebook()
+            }
             
              
             NSUserDefaults.standardUserDefaults().removeObjectForKey(kapp_user_id)
