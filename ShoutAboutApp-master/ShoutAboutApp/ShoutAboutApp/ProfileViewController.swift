@@ -88,7 +88,8 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     var birthday:String = ""
     var gender:String = ""
     
-    override func viewDidLoad(){
+    override func viewDidLoad()
+    {
         
         super.viewDidLoad()
         self.navigationController?.navigationBar.hidden = false
@@ -213,7 +214,10 @@ extension ProfileViewController
             {
                 self.imageView!.image = ProfileManager.sharedInstance.localStoredImage
             }
-            self.imageView!.setImageWithURL(NSURL(string:urlString ), placeholderImage: self.imageView!.image)
+            
+             self.imageView?.sd_setImageWithURL(NSURL(string:urlString ), placeholderImage: self.imageView!.image)
+            
+        
         }
             /*SDWebImageDownloader.sharedDownloader().downloadImageWithURL(NSURL(string:urlString ), options: .ProgressiveDownload, progress: { (recievedSize, expectedSize) in
             
@@ -823,6 +827,7 @@ extension ProfileViewController
                 
                 if self.isKindOfClass(JoinViewController)
                 {
+                    self.personalProfile = ProfileManager.sharedInstance.personalProfile
                     self.delegate?.profileDismissied()
 
                 }else
@@ -889,6 +894,9 @@ extension ProfileViewController
     
     @IBAction func favoriteButtonClicked(sender:UIButton)
     {
+        
+        
+        
         self.view.showSpinner()
         DataSessionManger.sharedInstance.favouriteUserID(String(personalProfile.idString), onFinish: { (response, deserializedResponse) in
             dispatch_async(dispatch_get_main_queue(), {
@@ -900,8 +908,7 @@ extension ProfileViewController
                 dispatch_async(dispatch_get_main_queue(), {
                     self.view.removeSpinner()
                     
-                    
-                });
+            });
         }
     }
     
