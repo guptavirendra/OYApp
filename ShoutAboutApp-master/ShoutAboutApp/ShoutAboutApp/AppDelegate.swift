@@ -30,8 +30,6 @@ import Watchdog
 
 /***** cloase******/
 
-
-
 @UIApplicationMain
 
 
@@ -80,6 +78,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate/*, GIDSignInDelegate*/
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool
     {
+        FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
+        
+        
+        // Initialize google sign-in
+        var configureError: NSError?
+        GGLContext.sharedInstance().configureWithError(&configureError)
+        assert(configureError == nil, "Error configuring Google services: \(configureError)")
+        
+        
 //        if User.isLoggedIn()
 //        {
 //            crashlytics.setUserIdentifier(User.username)
@@ -101,8 +108,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate/*, GIDSignInDelegate*/
         let darkBlue = UIColor(hexString: "2C3E50")
         let red = UIColor(hexString: "E74C3C")
         let light = UIColor(hexString: "ECF0F1")
-        let lightBlue = UIColor(hexString: "3498DB")
-        let medBlue = UIColor(hexString: "2980B9")
+        let lightBlue = UIColor(hexString: "1F8DC8")
+        let medBlue = UIColor(hexString: "FFFFFF")
         self.backgroundColor = light
         self.darkColor = darkBlue
         self.selfColor = UIColor.whiteColor()
@@ -112,9 +119,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate/*, GIDSignInDelegate*/
        // UIBarButtonItem.my_appearanceWhenContainedIn(UINavigationBar.self).tintColor = lightBlue
         //UIBarButtonItem.my_appearanceWhenContainedIn(UIToolbar.self).tintColor = lightBlue
         
-       // UINavigationBar.appearance().barTintColor = light
-       // UINavigationBar.appearance().tintColor = appColor
-       // UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
+         UINavigationBar.appearance().barTintColor = lightBlue //UIColor.whiteColor()
+           UINavigationBar.appearance().tintColor =  medBlue//appColor
+          UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
         
        // UITableViewCell.appearance().backgroundColor = light
        // UICollectionView.appearance().backgroundColor = light
