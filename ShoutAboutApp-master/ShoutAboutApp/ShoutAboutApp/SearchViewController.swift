@@ -45,6 +45,13 @@ class SearchViewController: UIViewController, UISearchBarDelegate,UISearchContro
         
     }
     
+    
+    
+    func positionForBar(bar: UIBarPositioning) -> UIBarPosition
+    {
+         return .Top
+    }
+    
     override func prefersStatusBarHidden() -> Bool
     {
         return true
@@ -116,6 +123,41 @@ extension SearchViewController
         cell.delegate = self
         
         let personContact = dataArray[indexPath.row]
+        
+        
+        
+        let isExisingContact = ProfileManager.sharedInstance.syncedContactArray.contains
+        { (person) -> Bool in
+           return person.mobileNumber == personContact.mobileNumber
+        }
+        /*if ProfileManager.sharedInstance.syncedContactArray.contains(personContact)
+        {*/
+        if isExisingContact
+        {
+            cell.callButton.userInteractionEnabled = true
+            cell.chaBbutton.userInteractionEnabled = true
+            cell.revieBbutton?.userInteractionEnabled = true
+            
+           //cell.userInteractionEnabled = true
+            
+            
+        }else
+        {
+            if personContact.mobileNumber.characters.count == 0
+            {
+                cell.callButton.userInteractionEnabled = false
+                cell.chaBbutton.userInteractionEnabled = false
+                cell.revieBbutton?.userInteractionEnabled = false
+                //cell.userInteractionEnabled = false
+            }else
+            {
+                //cell.userInteractionEnabled = true
+                cell.callButton.userInteractionEnabled = true
+                cell.chaBbutton.userInteractionEnabled = true
+                cell.revieBbutton?.userInteractionEnabled = true
+            }
+            
+        }
         cell.nameLabel?.text = personContact.name
         cell.mobileLabel?.text = personContact.mobileNumber
         if let urlString = personContact.photo
@@ -271,7 +313,11 @@ extension SearchViewController
                 }
 
                 self.savePerson(searchArray!)
+                
+                
                 let profileViewController = self.storyboard?.instantiateViewControllerWithIdentifier("NewProfileViewController") as? NewProfileViewController
+                
+                profileViewController?.shouldDisabledUserInteraction = cell.chaBbutton.userInteractionEnabled
                 profileViewController?.personalProfile = personContact
                 
                 self.navigationController!.pushViewController(profileViewController!, animated: true)
@@ -358,8 +404,13 @@ extension SearchViewController
             self.isSeaechingLocal = false
             dispatch_async(dispatch_get_main_queue(),
                 {
-                    self.allValidContacts.appendContentsOf(self.localContactArray)
-                    self.allValidContacts.appendContentsOf(deserializedResponse)
+                    //self.allValidContacts.appendContentsOf(self.localContactArray)
+                    
+                  let localSet =   Set(self.localContactArray)
+                let apiSet  = Set(deserializedResponse)
+                    self.allValidContacts.appendContentsOf(                    localSet.union(apiSet)
+)
+                    //self.allValidContacts.appendContentsOf(deserializedResponse)
                     //self.allValidContacts = deserializedResponse
                     
                     // NSUserDefaults.standardUserDefaults().setObject(searchArray, forKey: searchHistory)
