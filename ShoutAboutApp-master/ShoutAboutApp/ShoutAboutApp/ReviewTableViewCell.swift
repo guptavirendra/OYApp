@@ -68,6 +68,30 @@ class ReviewTableViewCell: UITableViewCell
          nameView.tintColor = UIColor.whiteColor()
          nameView.image = UIImage(named: "Name")?.imageWithRenderingMode(.AlwaysTemplate)
         
+        
+        progressView1!.transform = CGAffineTransformScale(progressView1!.transform, 1, 4)
+        progressView1?.progressTintColor =  UIColor.redColor()//UIColor(red: 255, green: 12, blue: 20, alpha: 1.0)
+        progressView1?.trackTintColor   = UIColor.whiteColor()
+        
+        progressView2!.transform = CGAffineTransformScale(progressView2!.transform, 1, 4)
+        progressView2?.progressTintColor = /* UIColor.greenColor()*/UIColor(red: 109.0/255.0, green: 255.0/255.0, blue: 86.0/255.0, alpha: 1.0)
+       progressView2?.trackTintColor   = UIColor.whiteColor()
+        
+        progressView3!.transform = CGAffineTransformScale(progressView3!.transform, 1, 4)
+        
+        progressView3?.progressTintColor =  /*UIColor.blueColor()*/UIColor(red: 84.0/255.0, green: 194/255.0, blue: 254/255.0, alpha: 1.0)
+        progressView3?.trackTintColor   = UIColor.whiteColor()
+        
+        progressView4!.transform = CGAffineTransformScale(progressView4!.transform, 1, 4)
+        
+        progressView4?.progressTintColor = /*UIColor.flatPinkColor()*/UIColor(red: 255.0/255.0, green: 91.0/255.0, blue: 218.0/255.0, alpha: 1.0)
+        progressView4?.trackTintColor   = UIColor.whiteColor()
+        
+        progressView5!.transform = CGAffineTransformScale(progressView5!.transform, 1, 4)
+        
+        progressView5?.progressTintColor = /*UIColor.purpleColor()*/UIColor(red: 255.0/255.0, green: 97.0/255.0, blue: 37.0/255.0, alpha: 1.0)
+        progressView5?.trackTintColor   = UIColor.whiteColor()
+        
     }
 
     override func setSelected(selected: Bool, animated: Bool) {
