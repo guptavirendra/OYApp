@@ -11,6 +11,27 @@ import UIKit
 class DataSession: BaseNSURLSession
 {
     
+    
+    //MARK: get post Detail
+    func getPostDetail(post_id:String, alert_id:String, onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    {
+        
+        let dict = NSObject.getAppUserIdAndToken()
+        var paramaDict = dict
+        paramaDict["post_id"] = post_id
+        paramaDict["alert_id"] = alert_id
+        
+        super.getWithOnFinish(mCHWebServiceMethod.post_detail, parameters: paramaDict, onFinish: { (response, deserializedResponse) in
+            onFinish(response: response, deserializedResponse: deserializedResponse)
+
+            
+        }) { (error) in
+            
+            onError(error: error)
+        }
+    }
+    
+    
     // Mohit
     /*******************  Feed Screen ********************/
     //MARK: GET Feeds
@@ -1094,6 +1115,218 @@ class DataSessionManger: NSObject
         }
         
     }
+    
+    func getPostDetail(post_id:String, alert_id:String, onFinish:(response:AnyObject,dataFeedsArray:[dataFeedMyfeedModel])->(), onError:(error:AnyObject)->())
+    {
+        
+        let dataSession = DataSession()
+        dataSession.getPostDetail(post_id, alert_id: alert_id, onFinish: { (response, deserializedResponse) in
+        var dataFeedsArray:[dataFeedMyfeedModel] = [dataFeedMyfeedModel]()
+            if let _ = deserializedResponse as? NSArray
+            {
+            
+            for dict in (deserializedResponse as? NSArray)!
+            {
+                let datavalue = dataFeedMyfeedModel()
+                datavalue.id =   (dict.objectForKey("id") as? Int)!
+                
+                if let action = dict.objectForKey("action") as? String
+                {
+                    datavalue.action = action
+                }
+                
+                if dict.objectForKey("action_val") != nil
+                {
+                    
+                    if let _ = dict.objectForKey("action_val") as? String
+                    {
+                        datavalue.action_val = (dict.objectForKey("action_val") as? String)!
+                    }
+                    
+                }
+                
+                if let review =  dict.objectForKey("review") as? String
+                {
+                    datavalue.review = review
+                    
+                }
+                
+                if (dict.objectForKey("recent_action") as? String) != nil
+                {
+                    
+                    datavalue.recent_action =   (dict.objectForKey("recent_action") as? String)!
+                }
+                
+                datavalue.created_at =   (dict.objectForKey("created_at") as? String)!
+                
+                if let innerDict = dict.objectForKey("performed")
+                {
+                    
+                    let performedatavalue = commonModel()
+                    performedatavalue.id =   (innerDict.objectForKey("id") as? Int)!
+                    
+                    if innerDict.objectForKey("name") != nil
+                    {
+                        performedatavalue.name =   (innerDict.objectForKey("name") as? String)!
+                    }
+                    
+                    performedatavalue.mobile_number =  (innerDict.objectForKey("mobile_number") as? String)!
+                    
+                    if let photo = innerDict.objectForKey("photo") as? String
+                    {
+                        performedatavalue.photo =   photo
+                    }
+                    
+                    datavalue.performed = performedatavalue
+                }
+                
+                
+                if (self.nullToNil(dict.objectForKey("effected")) != nil)
+                {
+                    if let effectedDict = dict.objectForKey("effected")
+                    {
+                        
+                        print(effectedDict)
+                        print(dict.objectForKey("effected"))
+                        let effectedatavalue = commonModel()
+                        effectedatavalue.id =   (effectedDict.objectForKey("id") as? Int)!
+                        
+                        
+                        
+                        if effectedDict.objectForKey("name") != nil
+                        {
+                            effectedatavalue.name =   (effectedDict.objectForKey("name") as? String)!
+                        }
+                        
+                        effectedatavalue.mobile_number =  (effectedDict.objectForKey("mobile_number") as? String)!
+                        
+                        if let photo = effectedDict.objectForKey("photo") as? String
+                        {
+                            effectedatavalue.photo =   photo
+                        }
+                        
+                        datavalue.effected = effectedatavalue
+                        
+                        
+                    }
+                }
+                
+                
+                if let  likesList = dict.objectForKey("likes_count") as? [NSDictionary]
+                {
+                    
+                    for dict in likesList
+                    {
+                        
+                        let LikeDislikevalue = AlertCountCommonModel()
+                        if let _ = dict.objectForKey("post_id") as? String
+                        {
+                            LikeDislikevalue.post_id = (dict.objectForKey("post_id") as? NSNumber)!
+                        }
+                        
+                        if let _ =  dict.objectForKey("likes") as? NSNumber
+                        {
+                            
+                            
+                            LikeDislikevalue.likeDislikecount =   (dict.objectForKey("likes") as? NSNumber)!
+                        }
+                        
+                        datavalue.likes_count = LikeDislikevalue
+                    }
+                    
+                    print(likesList)
+                }
+                
+                if let  dislikesList = dict.objectForKey("dislikes_count") as? [NSDictionary]
+                {
+                    
+                    for dict in dislikesList
+                    {
+                        
+                        let LikeDislikevalue = AlertCountCommonModel()
+                        
+                        LikeDislikevalue.post_id =   (dict.objectForKey("post_id") as? NSNumber)!
+                        LikeDislikevalue.likeDislikecount =   (dict.objectForKey("dislikes") as? NSNumber)!
+                        
+                        datavalue.dislikes_count = LikeDislikevalue
+                    }
+                    print(dislikesList)
+                }
+                
+                
+                
+                if let  likesUserList = dict.objectForKey("likes_user") as? [NSDictionary]{
+                    
+                    for dict in likesUserList
+                    {
+                        
+                        let likesUserdatavalue = commonModel()
+                        likesUserdatavalue.id =   (dict.objectForKey("id") as? Int)!
+                        if let name = dict.objectForKey("name") as? String
+                        {
+                            likesUserdatavalue.name = name
+                        }
+                        likesUserdatavalue.mobile_number =   (dict.objectForKey("mobile_number") as? String)!
+                        
+                        if (dict.objectForKey("photo") as? String) != nil
+                        {
+                            likesUserdatavalue.photo =   (dict.objectForKey("photo") as? String)!
+                        }
+                        
+                        datavalue.likes_user.append(likesUserdatavalue)
+                    }
+                }
+                
+                
+                if let  dislikesUserList = dict.objectForKey("dislikes_user") as? [NSDictionary]{
+                    
+                    for dict in dislikesUserList
+                    {
+                        
+                        let dislikesUserdatavalue = commonModel()
+                        dislikesUserdatavalue.id =   (dict.objectForKey("id") as? Int)!
+                        if let name = dict.objectForKey("name") as? String
+                        {
+                            dislikesUserdatavalue.name = name
+                        }
+                        //                                    dislikesUserdatavalue.name =   (dict.objectForKey("name") as? String)!
+                        //
+                        dislikesUserdatavalue.mobile_number =   (dict.objectForKey("mobile_number") as? String)!
+                        
+                        if let photo = dict.objectForKey("photo") as? String
+                        {
+                            dislikesUserdatavalue.photo =   photo
+                        }
+                        //
+                        
+                        datavalue.dislikes_user.append (dislikesUserdatavalue)
+                        
+                    }
+                    
+                    print(dislikesUserList)
+                }
+                // AlertUser.datavalue = datavalue
+                
+                
+                //feedMyfeedUser.data.append(datavalue)
+                dataFeedsArray.append(datavalue)
+                
+            }
+            }
+            
+            
+            onFinish(response: response, dataFeedsArray: dataFeedsArray)
+            
+            
+            
+            }) { (error) in
+                
+        }
+    }
+    
+    
+    
+    
     
      //Feedslist
     func getfeedslist(onFinish:(response:AnyObject,deserializedResponse:FeedMyfeed)->(), onError:(error:AnyObject)->()){
@@ -2863,7 +3096,7 @@ class postModel: NSObject {
 class dataModel: NSObject
 {
     
-    var id:Int = 12
+    var id:Int = 0
     var action     = String()
     var created_at     = String()
     var action_by     = commonModel()

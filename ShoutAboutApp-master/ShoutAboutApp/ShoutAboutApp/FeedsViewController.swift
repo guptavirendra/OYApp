@@ -9,6 +9,7 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
     @IBOutlet weak var nameLabel:UILabel?
     @IBOutlet weak var locationLabel:UILabel?
     @IBOutlet weak var segment:UISegmentedControl?
+    var dataFeedsArray:[dataFeedMyfeedModel] = [dataFeedMyfeedModel]()
     
     
     var responseData    = FeedMyfeed()
@@ -37,7 +38,7 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
         
         let appUserToken = NSUserDefaults.standardUserDefaults().objectForKey(kapp_user_token) as! String
         
-        dict = [kapp_user_id:String(appUserId), user_report_spam_post:"1",kapp_user_token :appUserToken]
+        dict = [kapp_user_id:String(appUserId),kapp_user_token :appUserToken]
         
 //        self.dislikeData(dict)
         
@@ -58,13 +59,13 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
-        return self.responseData.data.count
+         return dataFeedsArray.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
     {
         
-        let dataFeedMyfeed = responseData.data[indexPath.row]
+        let dataFeedMyfeed = dataFeedsArray[indexPath.row]
         if dataFeedMyfeed.action != profile_picture
         {
             
@@ -192,7 +193,7 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat{
 
-        dataFeedMyfeed = responseData.data[indexPath.row]
+        dataFeedMyfeed = dataFeedsArray[indexPath.row]
        
         if dataFeedMyfeed.action != profile_picture
         {
@@ -216,7 +217,7 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
     
     func likeDislikeScreenClicked(index: Int){
 
-        dataFeedMyfeed = responseData.data[index]
+        dataFeedMyfeed = dataFeedsArray[index]
         
 
 //        let likedislikeVc = self.storyboard?.instantiateViewControllerWithIdentifier("LikeDislikeViewController")
@@ -235,7 +236,7 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
         {
             if let indexPath = self.tableView.indexPathForCell(cell)
             {
-               let  dataFeedMyfeed = responseData.data[indexPath.row]
+               let  dataFeedMyfeed = dataFeedsArray[indexPath.row]
                 
                 print(dataFeedMyfeed)
                 
@@ -303,25 +304,16 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
     func picbuttonClicked(cell:FeedsTableViewCell, button:UIButton){
         //reportTospamUser(dict)
         
-        
-        
-        if self.tableView.indexPathForCell(cell) != nil
+    if self.tableView.indexPathForCell(cell) != nil
         {
             if let indexPath = self.tableView.indexPathForCell(cell)
             {
-                
                 let chatVc = self.storyboard?.instantiateViewControllerWithIdentifier("photopreviewViewController") as? photopreviewViewController
-                dataFeedMyfeed = responseData.data[indexPath.row]
+                dataFeedMyfeed = dataFeedsArray[indexPath.row]
                 chatVc!.picname = dataFeedMyfeed.performed.photo
                 self.navigationController!.pushViewController(chatVc!, animated: true)
             }
         }
-        
-        
-        
-        
-        
-        
     }
     
     
@@ -339,7 +331,7 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
         
         let profileViewController = self.storyboard?.instantiateViewControllerWithIdentifier("NewProfileViewController") as? NewProfileViewController
         
-//      profileViewController?.personalProfile = responseData.data[index]
+//      profileViewController?.personalProfile = dataFeedsArray[index]
         self.navigationController!.pushViewController(profileViewController!, animated: true)
     }
     
@@ -381,15 +373,10 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
                     
                     print(self.responseData.data.count)
                     
-                    
+                    self.dataFeedsArray = self.responseData.data
                     self.tableView.reloadData()
                     
                     self.view.removeSpinner()
-                    
-//                    let indexPath = NSIndexPath(forRow: 3, inSection: 0)
-//                    self.tableView.scrollToRowAtIndexPath(indexPath,
-//                        atScrollPosition: UITableViewScrollPosition.Middle, animated: true)
-                    
                     
                 })
                 
@@ -407,7 +394,8 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
     
     
     
-    func loadmyfeedAPICall()  {
+    func loadmyfeedAPICall()
+    {
         
         if NetworkConnectivity.isConnectedToNetwork() != true{
             
@@ -425,7 +413,7 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
                     
                     self.responseData = deserializedResponse
                     print(self.responseData.data.count)
-                    
+                    self.dataFeedsArray = self.responseData.data
                     self.tableView.reloadData()
                     self.view.removeSpinner()
                     
@@ -446,25 +434,19 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
     
     func likeData( dict:[String:String], cell:FeedsTableViewCell)
     {
-         let indexPath = self.tableView.indexPathForCell(cell)
-         let dataFeedMyfeed = self.responseData.data[indexPath!.row]
-         var newDict = dict
-         newDict[user_report_spam_post] = String(dataFeedMyfeed.id)
+        let indexPath = self.tableView.indexPathForCell(cell)
+        let dataFeedMyfeed = self.dataFeedsArray[indexPath!.row]
+        var newDict = dict
+        newDict[user_report_spam_post] = String(dataFeedMyfeed.id)
         self.view.showSpinner()
         DataSessionManger.sharedInstance.feedLikeUser(newDict, onFinish: { (response, deserializedResponse) in
-            dispatch_async(dispatch_get_main_queue(), {
-                
-                
-                print(deserializedResponse)
-               // self.msgresponseData = deserializedResponse
-                
+            dispatch_async(dispatch_get_main_queue(),
+                {
                 deserializedResponse.performed = dataFeedMyfeed.performed
                 deserializedResponse.effected  = dataFeedMyfeed.effected
-                self.responseData.data[indexPath!.row] = deserializedResponse
+                self.dataFeedsArray[indexPath!.row] = deserializedResponse
                 self.tableView.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: .None)
-                //self.setLikeDislikeCountCell(cell, dataFeedMyfeed: deserializedResponse)
-                //self.segmentChanged(self.segment!)
-                //self.displayAlertMessage(self.msgresponseData.likeDislikecount.stringValue)
+               
                 self.view.removeSpinner()
                 
             });
@@ -478,26 +460,21 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
         }
  
     }
-    
-
-    
-    
     func dislikeData(dict:[String:String], cell:FeedsTableViewCell){
         let indexPath = self.tableView.indexPathForCell(cell)
-        let dataFeedMyfeed = self.responseData.data[indexPath!.row]
+        let dataFeedMyfeed = self.dataFeedsArray[indexPath!.row]
         var newDict = dict
         newDict[user_report_spam_post] = String(dataFeedMyfeed.id)
         self.view.showSpinner()
         DataSessionManger.sharedInstance.feedisLikeUser(newDict, onFinish: { (response, deserializedResponse) in
             dispatch_async(dispatch_get_main_queue(),
                 {
-               // self.msgresponseData = deserializedResponse
+                    
                 deserializedResponse.performed = dataFeedMyfeed.performed
-                 deserializedResponse.effected = dataFeedMyfeed.effected
-                self.responseData.data[indexPath!.row] = deserializedResponse
+                deserializedResponse.effected = dataFeedMyfeed.effected
+                self.dataFeedsArray[indexPath!.row] = deserializedResponse
                 self.tableView.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: .None)
-               // self.segmentChanged(self.segment!)
-               //self.displayAlertMessage(self.msgresponseData.likeDislikecount.stringValue)
+             
                 print(deserializedResponse)
                 self.view.removeSpinner()
                 
@@ -511,11 +488,13 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
         }
     }
     
-    func reportTospamUser(dict:[String:String]){
+    func reportTospamUser(dict:[String:String])
+    {
         
         self.view.showSpinner()
         DataSessionManger.sharedInstance.reportTospamUser(dict, onFinish: {(response, deserializedResponse) in
-            dispatch_async(dispatch_get_main_queue(), {
+            dispatch_async(dispatch_get_main_queue(),
+                {
                 
                 self.view.removeSpinner()
                 
@@ -530,9 +509,4 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
             });
         }
     }
-    
-    
-    
-
-    
 }

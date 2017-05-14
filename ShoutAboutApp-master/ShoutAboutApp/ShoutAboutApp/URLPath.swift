@@ -78,7 +78,8 @@ struct WebServicePath
     let favourite_mobile_number   = "favourite_mobile_number"
     let unfavourite_mobile_number = "unfavourite_mobile_number"
     let user_favourite_list       = "user_favourite_list"
-    
+    let post_detail  = "post_detail"
+
     
     // Mohit
     

@@ -2,58 +2,56 @@
 
 import UIKit
 
-class AlertViewController: UIViewController,AlertTableViewCellProtocol {
-    
+class AlertViewController: UIViewController,AlertTableViewCellProtocol
+{
     @IBOutlet weak var tableView:UITableView!
     
     var responseData = AlertModel()
     
-    override func viewDidLoad(){
+    override func viewDidLoad()
+    {
         super.viewDidLoad()
-//        self.loadAlertAPICall()
-        // Do any additional setup after loading the view.
-        
         self.navigationController!.navigationBar.tintColor = UIColor.whiteColor();
     }
     
     
-    override func viewWillAppear(animated: Bool) {
-//        self.loadAlertAPICall()
+    override func viewWillAppear(animated: Bool)
+    {
+        super.viewWillAppear(animated)
         self.ConfigureVariable()
     }
     
-    func ConfigureVariable() {
+    func ConfigureVariable()
+    {
         
         let appUserId = NSUserDefaults.standardUserDefaults().objectForKey(kapp_user_id) as! Int
         
         let appUserToken = NSUserDefaults.standardUserDefaults().objectForKey(kapp_user_token) as! String
         
-        _ = [kapp_user_id:String(appUserId), user_report_spam_post:"1",kapp_user_token :appUserToken]
-        
-        
+        _ = [kapp_user_id:String(appUserId), kapp_user_token :appUserToken]
         loadAlertAPICall()
-//        self.reportTospamUser(dict)
-        
     }
     
     
-    override func didReceiveMemoryWarning(){
+    override func didReceiveMemoryWarning()
+    {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
+    {
         return self.responseData.data.count
     }
     
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell{
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
+    {
         
-
         let dataList = responseData.data[indexPath.row]
         let comModel = dataList.post
 
-        if comModel.action != profile_picture {
+        if comModel.action != profile_picture
+        {
             
         }
 
@@ -81,70 +79,60 @@ class AlertViewController: UIViewController,AlertTableViewCellProtocol {
         
         cell?.nameLabel.attributedText = attributedString
         
-        
-//      cell?.nameLabel.text =  " \(dataList.action_by.name) \(dataList.action) \(dataList.post.action) of \(dataList.post.performed.name)"
-//      cell?.ratingView.rating = 4
-//      cell?.descriptionLabel.text =  "\(comModel.performed.name) \(dataList.action)"
-        
         print(comModel.action_val)
         
         cell?.dateLabel.text = dataList.created_at
         cell?.UserImageView.makeImageRounded()
-        ///cell?.UserImageView.setImageWithURL(NSURL(string:comModel.performed.photo), placeholderImage: UIImage(named: "profile"))
         cell?.contentView.setGraphicEffects()
         return cell!
-        
-        
     }
     
     
     
-     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath){
+     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath)
+     {
+        let dataList = responseData.data[indexPath.row]
+        let alert_id =  String(dataList.id)
+        let post_id  =  String(dataList.post.id)
+        
+        let alertsPostViewController = self.storyboard?.instantiateViewControllerWithIdentifier("AlertsPostViewController") as! AlertsPostViewController
+        
+       alertsPostViewController.alert_id = alert_id
+       alertsPostViewController.post_id  = post_id
+        self.navigationController?.pushViewController(alertsPostViewController, animated: true)
         
         
-//        [self.navigationController pushViewController:YourView animated:YES];
-//        [self.tabBarController setSelectedIndex:index];
-        
-        
-        self.tabBarController?.selectedIndex = 1
-        
-        
-//        if indexPath.section == Section.currentChannelsSection.rawValue {
-//            let channel = channels[(indexPath as NSIndexPath).row]
-//            self.performSegueWithIdentifier( "ShowChannel", sender: channel)
-//        }
-        
-    }
+     }
     
 
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat{
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat
+    {
        
             return 110
     }
     
-    
-    
-    
-    
+
     // Mohit
     
-    @IBAction func reportAtspam(sender: UIButton) {
+    @IBAction func reportAtspam(sender: UIButton)
+    {
+        
         
     }
     
-    
-    func loadAlertAPICall()  {
-        
-        if NetworkConnectivity.isConnectedToNetwork() != true{
+    func loadAlertAPICall()
+    {
+        if NetworkConnectivity.isConnectedToNetwork() != true
+        {
             
             displayAlertMessage("No Internet Connection")
             
         }
-        else{
+        else
+        {
             
             self.view.showSpinner()
-            
             DataSessionManger.sharedInstance.getAlertlist( { (response, deserializedResponse) in
                 print("deserializedResponse \(deserializedResponse)")
                 
@@ -152,7 +140,8 @@ class AlertViewController: UIViewController,AlertTableViewCellProtocol {
                     
                 self.responseData = deserializedResponse
                 
-                    for dict in self.responseData.data{
+                    for dict in self.responseData.data
+                    {
                         print(dict.created_at)
                     }
                     self.tableView.reloadData()
@@ -172,14 +161,12 @@ class AlertViewController: UIViewController,AlertTableViewCellProtocol {
     
     
     
-    func picbuttonClicked(cell:AlertTableViewCell, button:UIButton){
-        //reportTospamUser(dict)
-
+    func picbuttonClicked(cell:AlertTableViewCell, button:UIButton)
+    {
         if self.tableView.indexPathForCell(cell) != nil
         {
             if let indexPath = self.tableView.indexPathForCell(cell)
             {
-                
                 let dataList = responseData.data[indexPath.row]
                 let comModel = dataList.post
                 
@@ -188,8 +175,6 @@ class AlertViewController: UIViewController,AlertTableViewCellProtocol {
                 self.navigationController!.pushViewController(chatVc!, animated: true)
             }
         }
-
-        
     }
     
 }
