@@ -9,6 +9,8 @@
 import UIKit
 import Firebase
 import FirebaseMessaging
+import xmpp_messenger_ios
+
  
 
 /*
@@ -78,7 +80,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate/*, GIDSignInDelegate*/
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool
     {
-        FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
+        
+        OneChat.start(true, delegate: nil) { (stream, error) -> Void in
+            print (stream)
+            if let _ = error
+            {
+                //handle start errors here
+                print("errors from appdelegate")
+            } else {
+                print("Yayyyy")
+                //Activate online UI
+            }
+        }
+        
+        
+        
         
         
         // Initialize google sign-in
@@ -196,7 +212,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate/*, GIDSignInDelegate*/
         application.registerUserNotificationSettings(pushNotificationSettings)
         application.registerForRemoteNotifications()
          
-        return true
+        return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
 }
 
     func applicationWillResignActive(application: UIApplication) {

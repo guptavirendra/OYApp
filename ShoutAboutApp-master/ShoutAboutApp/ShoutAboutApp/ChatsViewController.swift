@@ -1,473 +1,435 @@
-/*
-* Copyright (c) 2015 Razeware LLC
-*
-* Permission is hereby granted, free of charge, to any person obtaining a copy
-* of this software and associated documentation files (the "Software"), to deal
-* in the Software without restriction, including without limitation the rights
-* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-* copies of the Software, and to permit persons to whom the Software is
-* furnished to do so, subject to the following conditions:
-*
-* The above copyright notice and this permission notice shall be included in
-* all copies or substantial portions of the Software.
-*
-* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-* THE SOFTWARE.
-*/
+//
+//  ChatViewController.swift
+//  OneChat
+//
+//  Created by Paul on 20/02/2015.
+//  Copyright (c) 2015 ProcessOne. All rights reserved.
+//
 
 import UIKit
-
-import Firebase
+import xmpp_messenger_ios
 import JSQMessagesViewController
-import Photos
+import XMPPFramework
+import MobileCoreServices
 
-final class ChatsViewController: JSQMessagesViewController
-{
-    @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var profileImageView: UIImageView!
-    private var updatedMessageRefHandle:  FIRDatabaseHandle?
-    private let imageURLNotSetKey = "NOTSET"
-    var photoMessageMap = [String: JSQPhotoMediaItem]()
-    // MARK: Properties
-    private lazy var messageRef: FIRDatabaseReference = self.channelRef!.child("messages")
-    private var newMessageRefHandle: FIRDatabaseHandle?
-    lazy var outgoingBubbleImageView: JSQMessagesBubbleImage = self.setupOutgoingBubble()
-    lazy var incomingBubbleImageView: JSQMessagesBubbleImage = self.setupIncomingBubble()
-    var messages = [JSQMessage]()
-    var chatPerson:ChatPerson = ChatPerson()
-        {
-        didSet
-        {
-            title = chatPerson.name
-        }
-    }
+
+class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate  {
     
-    /*var channel: Channel?
-        {
-        didSet
-        {
-            title = channel?.name
-        }
-    }*/
-    var channelRef: FIRDatabaseReference?
+    let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate
+    var messages = NSMutableArray()
+    var recipient: XMPPUserCoreDataStorageObject?
+    var firstTime = true
+    var userDetails = UIView?()
+    var reciepientPerson:SearchPerson?
     
-    lazy var storageRef: FIRStorageReference = FIRStorage.storage().referenceForURL(" gs://shoutaboutapp-53d1c.appspot.com")
-     //self.channelRef
-   // lazy var usersTypingQuery: FIRDatabaseQuery = self.ch
     
-    private lazy var usersTypingQuery: FIRDatabaseQuery =
-        self.channelRef!.child("typingIndicator").queryOrderedByValue().queryEqualToValue(true)
+    @IBOutlet weak var titleLabel:UILabel?
     
-    private lazy var userIsTypingRef: FIRDatabaseReference =
-        self.channelRef!.child("typingIndicator").child(self.senderId) // 1
-    private var localTyping = false // 2
-    var isTyping: Bool {
-        get {
-            return localTyping
-        }
-        set {
-            // 3
-            localTyping = newValue
-            userIsTypingRef.setValue(newValue)
-        }
-    }
+    // Mark: Life Cycle
     
-   
     
-    deinit
+    override func didPressAccessoryButton(sender: UIButton!)
     {
-        if let refHandle = newMessageRefHandle
-        {
-            messageRef.removeObserverWithHandle(refHandle)
-        }
-        
-        if let refHandle = updatedMessageRefHandle
-        {
-           messageRef.removeObserverWithHandle(refHandle)
-        }
-    }
-    
-    private func observeTyping() {
-        let typingIndicatorRef = channelRef!.child("typingIndicator")
-        userIsTypingRef = typingIndicatorRef.child(senderId)
-        userIsTypingRef.onDisconnectRemoveValue()
-        // 1
-        
-        
-        usersTypingQuery.observeEventType(.Value) { (data: FIRDataSnapshot) in
-        
-            // 2 You're the only one typing, don't show the indicator
-            if data.childrenCount == 1 && self.isTyping {
-                return
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet) // 1
+        let firstAction = UIAlertAction(title: "Take Photo", style: .Default) { (alert: UIAlertAction!) -> Void in
+            NSLog("You pressed button one")
+            
+            if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera)
+            {
+                let imagePicker = UIImagePickerController()
+                imagePicker.delegate = self
+                imagePicker.sourceType = UIImagePickerControllerSourceType.Camera;
+                imagePicker.allowsEditing = false
+                self.presentViewController(imagePicker, animated: true, completion: nil)
             }
             
-            // 3 Are there others typing?
-            self.showTypingIndicator = data.childrenCount > 0
-            self.scrollToBottomAnimated(true)
-        }
+        } // 2
+        
+        let secondAction = UIAlertAction(title: "Choose Photo", style: .Default) { (alert: UIAlertAction!) -> Void in
+            NSLog("You pressed button two")
+            let imagePicker = UIImagePickerController()
+            imagePicker.delegate = self
+            imagePicker.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
+            imagePicker.mediaTypes = [kUTTypeImage as String]
+            imagePicker.allowsEditing = false
+            self.presentViewController(imagePicker, animated: true,
+                                       completion: nil)
+        } // 3
+        
+        let thirdAction = UIAlertAction(title: "Cancel", style: .Cancel) { (alert: UIAlertAction!) -> Void in
+            NSLog("You pressed button two")
+        } // 3
+        
+        alert.addAction(firstAction) // 4
+        alert.addAction(secondAction) // 5
+        alert.addAction(thirdAction) // 5
+        presentViewController(alert, animated: true, completion:nil) // 6
     }
-    
-    func sendPhotoMessage() -> String? {
-        let itemRef = messageRef.childByAutoId()
-        
-        let messageItem = [
-            "photoURL": imageURLNotSetKey,
-            "senderId": senderId!,
-            ]
-        
-        itemRef.setValue(messageItem)
-        
-        JSQSystemSoundPlayer.jsq_playMessageSentSound()
-        
-        finishSendingMessage()
-        return itemRef.key
-    }
-    func setImageURL(url: String, forPhotoMessageWithKey key: String) {
-        let itemRef = messageRef.child(key)
-        itemRef.updateChildValues(["photoURL": url])
-    }
-  
-  // MARK: View Lifecycle
-  
-  override func viewDidLoad()
-  {
-    super.viewDidLoad()
-    
-    self.profileImageView.makeImageRounded()
-    self.senderId =  FIRAuth.auth()?.currentUser?.uid
-    
-    collectionView!.collectionViewLayout.incomingAvatarViewSize = CGSize.zero
-    collectionView!.collectionViewLayout.outgoingAvatarViewSize = CGSize.zero
-    observeMessages()
-
-  }
-    override func viewDidAppear(animated: Bool)
+    override func viewDidLoad()
     {
-        super.viewDidAppear(animated)
-        observeTyping()
+        super.viewDidLoad()
         
+        //recipient = OneRoster.userFromRosterForJID(jid: "\(reciepientPerson)@localhost" )
+        
+        //recipient = XMPPUserCoreDataStorageObject(entity: <#T##NSEntityDescription#>, insertIntoManagedObjectContext: <#T##NSManagedObjectContext?#>)
+        
+        //recipient?.jidStr =
+        
+        OneMessage.sharedInstance.delegate = self
+        
+        if OneChat.sharedInstance.isConnected()
+        {
+            self.senderId = OneChat.sharedInstance.xmppStream?.myJID.bare()
+            self.senderDisplayName = OneChat.sharedInstance.xmppStream?.myJID.bare()
+        }
+        
+        self.collectionView!.collectionViewLayout.springinessEnabled = false
+        self.inputToolbar!.contentView!.leftBarButtonItem!.hidden = false
     }
+    
+    
     
     override func viewWillAppear(animated: Bool)
     {
-        super.viewWillAppear(animated)
-        if let photo  = chatPerson.photo
+        if let recipient = recipient
         {
-            setProfileImgeForURL(photo)
-        }
-        self.nameLabel.text = chatPerson.name
-    }
-  
-    
-    override func didPressSendButton(button: UIButton!, withMessageText text: String!, senderId: String!, senderDisplayName: String!, date: NSDate!)
-    {
-        let itemRef = messageRef.childByAutoId() // 1
-        let messageItem = [ // 2
-            "senderId": senderId!,
-            "senderName": senderDisplayName!,
-            "text": text!,
-            "recipient_id":String(chatPerson.idString)
-            ]
-        
-        itemRef.setValue(messageItem) // 3
-        
-        JSQSystemSoundPlayer.jsq_playMessageSentSound() // 4
-        
-        finishSendingMessage() // 5
-        isTyping = false
-        
-    }
-  // MARK: Collection view data source (and related) methods
-    override func collectionView(collectionView: JSQMessagesCollectionView!, messageDataForItemAtIndexPath indexPath: NSIndexPath!) -> JSQMessageData!
-    {
-        return messages[indexPath.item]
-    }
-    
-    override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return messages.count
-    }
-    override func collectionView(collectionView: JSQMessagesCollectionView!, messageBubbleImageDataForItemAtIndexPath indexPath: NSIndexPath!) -> JSQMessageBubbleImageDataSource! {
-        let message = messages[indexPath.item] // 1
-        if message.senderId == senderId { // 2
-            return outgoingBubbleImageView
-        } else { // 3
-            return incomingBubbleImageView
+            self.navigationItem.rightBarButtonItems = []
+            
+            navigationItem.title = recipient.displayName
+            self.titleLabel?.text = reciepientPerson?.name  //recipient.nickname
+            
+            
+            dispatch_async(dispatch_get_main_queue(),
+                           { () -> Void in
+                            self.messages = OneMessage.sharedInstance.loadArchivedMessagesFrom(jid: recipient.jidStr)
+                            self.finishReceivingMessageAnimated(true)
+            })
+        } else
+        {
+            if userDetails == nil
+            {
+                self.titleLabel?.text = "New message"
+            }
+            
+            self.inputToolbar!.contentView!.rightBarButtonItem!.enabled = false
+            
+            if firstTime
+            {
+                firstTime = false
+            }
         }
     }
     
-    
-    
-    override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = super.collectionView(collectionView, cellForItemAtIndexPath: indexPath)  as! JSQMessagesCollectionViewCell
-        let message = messages[indexPath.item]
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
         
-        if message.senderId == senderId {
-            cell.textView?.textColor = UIColor.whiteColor()
+        self.scrollToBottomAnimated(true)
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        userDetails?.removeFromSuperview()
+    }
+    
+    // Mark: Private methods
+    
+    
+    
+    func didSelectContact(recipient: XMPPUserCoreDataStorageObject) {
+        self.recipient = recipient
+        if userDetails == nil {
+            navigationItem.title = recipient.displayName
+        }
+        
+        if !OneChats.knownUserForJid(jidStr: recipient.jidStr) {
+            OneChats.addUserToChatList(jidStr: recipient.jidStr)
         } else {
-            cell.textView?.textColor = UIColor.blackColor()
+            messages = OneMessage.sharedInstance.loadArchivedMessagesFrom(jid: recipient.jidStr)
+            finishReceivingMessageAnimated(true)
         }
-        return cell
     }
+    
+    // Mark: JSQMessagesViewController method overrides
+    
+    var isComposing = false
+    var timer: NSTimer?
+    
+    override func textViewDidChange(textView: UITextView) {
+        super.textViewDidChange(textView)
+        
+        if textView.text.characters.count == 0 {
+            if isComposing {
+                hideTypingIndicator()
+            }
+        } else {
+            timer?.invalidate()
+            if !isComposing
+            {
+                self.isComposing = true
+                
+                if recipient != nil
+                {
+                    OneMessage.sendIsComposingMessage((recipient?.jidStr)!, completionHandler: { (stream, message) -> Void in
+                        self.timer = NSTimer.scheduledTimerWithTimeInterval(4.0, target: self, selector: #selector(ChatsViewController.hideTypingIndicator), userInfo: nil, repeats: false)
+                    })
+                }
+            } else {
+                self.timer = NSTimer.scheduledTimerWithTimeInterval(4.0, target: self, selector: #selector(ChatsViewController.hideTypingIndicator), userInfo: nil, repeats: false)
+            }
+        }
+    }
+    
+    func hideTypingIndicator() {
+        if let recipient = recipient {
+            self.isComposing = false
+            OneMessage.sendIsComposingMessage((recipient.jidStr)!, completionHandler: { (stream, message) -> Void in
+                
+            })
+        }
+    }
+    
+    override func didPressSendButton(button: UIButton!, withMessageText text: String!, senderId: String!, senderDisplayName: String!, date: NSDate!) {
+        let fullMessage = JSQMessage(senderId: senderId+"@localhost"/*OneChat.sharedInstance.xmppStream?.myJID.bare()*/, senderDisplayName: senderDisplayName, date: NSDate(), text: text)
+        messages.addObject(fullMessage)
+        
+       /* if let recipient = recipient
+        {*/
+            OneMessage.sendMessage(text, to: String(reciepientPerson!.idString)+"@localhost" /*recipient.jidStr*/, completionHandler: { (stream, message) -> Void in
+                JSQSystemSoundPlayer.jsq_playMessageSentSound()
+                self.finishSendingMessageAnimated(true)
+            })
+        //}
+    }
+    
+    // Mark: JSQMessages CollectionView DataSource
+    
+    override func collectionView(collectionView: JSQMessagesCollectionView!, messageDataForItemAtIndexPath indexPath: NSIndexPath!) -> JSQMessageData! {
+        let message: JSQMessage = self.messages[indexPath.item] as! JSQMessage
+        
+        return message
+    }
+    
+    override func collectionView(collectionView: JSQMessagesCollectionView!, messageBubbleImageDataForItemAtIndexPath indexPath: NSIndexPath!) -> JSQMessageBubbleImageDataSource! {
+        let message: JSQMessage = self.messages[indexPath.item] as! JSQMessage
+        
+        let bubbleFactory = JSQMessagesBubbleImageFactory()
+        
+        let outgoingBubbleImageData = bubbleFactory.outgoingMessagesBubbleImageWithColor(UIColor.jsq_messageBubbleLightGrayColor())
+        let incomingBubbleImageData = bubbleFactory.incomingMessagesBubbleImageWithColor(UIColor.jsq_messageBubbleGreenColor())
+        
+        if message.senderId == self.senderId {
+            return outgoingBubbleImageData
+        }
+        
+        return incomingBubbleImageData
+    }
+    
     override func collectionView(collectionView: JSQMessagesCollectionView!, avatarImageDataForItemAtIndexPath indexPath: NSIndexPath!) -> JSQMessageAvatarImageDataSource! {
+        let message: JSQMessage = self.messages[indexPath.item] as! JSQMessage
+        
+        if message.senderId == self.senderId {
+            if let photoData = OneChat.sharedInstance.xmppvCardAvatarModule?.photoDataForJID(OneChat.sharedInstance.xmppStream?.myJID) {
+                let senderAvatar = JSQMessagesAvatarImageFactory.avatarImageWithImage(UIImage(data: photoData), diameter: 30)
+                return senderAvatar
+            } else {
+                let senderAvatar = JSQMessagesAvatarImageFactory.avatarImageWithUserInitials("SR", backgroundColor: UIColor(white: 0.85, alpha: 1.0), textColor: UIColor(white: 0.60, alpha: 1.0), font: UIFont(name: "Helvetica Neue", size: 14.0), diameter: 30)
+                return senderAvatar
+            }
+        } else {
+            if let photoData = OneChat.sharedInstance.xmppvCardAvatarModule?.photoDataForJID(recipient!.jid!) {
+                let recipientAvatar = JSQMessagesAvatarImageFactory.avatarImageWithImage(UIImage(data: photoData), diameter: 30)
+                return recipientAvatar
+            } else {
+                let recipientAvatar = JSQMessagesAvatarImageFactory.avatarImageWithUserInitials("SR", backgroundColor: UIColor(white: 0.85, alpha: 1.0), textColor: UIColor(white: 0.60, alpha: 1.0), font: UIFont(name: "Helvetica Neue", size: 14.0)!, diameter: 30)
+                return recipientAvatar
+            }
+        }
+    }
+    
+    override func collectionView(collectionView: JSQMessagesCollectionView!, attributedTextForCellTopLabelAtIndexPath indexPath: NSIndexPath!) -> NSAttributedString! {
+        if indexPath.item % 3 == 0 {
+            let message: JSQMessage = self.messages[indexPath.item] as! JSQMessage
+            return JSQMessagesTimestampFormatter.sharedFormatter().attributedTimestampForDate(message.date)
+        }
+        
+        return nil;
+    }
+    
+    override func collectionView(collectionView: JSQMessagesCollectionView!, attributedTextForMessageBubbleTopLabelAtIndexPath indexPath: NSIndexPath!) -> NSAttributedString! {
+        let message: JSQMessage = self.messages[indexPath.item] as! JSQMessage
+        
+        if message.senderId == self.senderId {
+            return nil
+        }
+        
+        if indexPath.item - 1 > 0 {
+            let previousMessage: JSQMessage = self.messages[indexPath.item - 1] as! JSQMessage
+            if previousMessage.senderId == message.senderId {
+                return nil
+            }
+        }
+        
         return nil
     }
-    private func addMessage(withId id: String, name: String, text: String) {
-        if let message = JSQMessage(senderId: id, displayName: name, text: text) {
-            messages.append(message)
-        }
-    }
-  
-  // MARK: Firebase related methods
-  
-  
-  // MARK: UI and User Interaction
     
-    private func setupOutgoingBubble() -> JSQMessagesBubbleImage
-    {
-        let bubbleImageFactory = JSQMessagesBubbleImageFactory()
-        return bubbleImageFactory.outgoingMessagesBubbleImageWithColor(appColor/*jsq_messageBubbleBlue()*/)
-        
-        
+    override func collectionView(collectionView: JSQMessagesCollectionView!, attributedTextForCellBottomLabelAtIndexPath indexPath: NSIndexPath!) -> NSAttributedString! {
+        return nil
     }
     
-    private func setupIncomingBubble() -> JSQMessagesBubbleImage
-    {
-        let bubbleImageFactory = JSQMessagesBubbleImageFactory()
-        return bubbleImageFactory.incomingMessagesBubbleImageWithColor(UIColor.grayColor())
-        
-       // return bubbleImageFactory!.incomingMessagesBubbleImage(with: UIColor.jsq_messageBubbleLightGray())
+    // Mark: UICollectionView DataSource
+    
+    override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return self.messages.count
     }
     
-    private func observeMessages() {
-        messageRef = channelRef!.child("messages")
-        // 1.
-        let messageQuery = messageRef.queryLimitedToLast(25)
+    override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+        let cell: JSQMessagesCollectionViewCell = super.collectionView(collectionView, cellForItemAtIndexPath: indexPath) as! JSQMessagesCollectionViewCell
+        let msg: JSQMessage = self.messages[indexPath.item] as! JSQMessage
         
-        // 2. We can use the observe method to listen for new
-        // messages being written to the Firebase DB
-        
-        newMessageRefHandle  = messageQuery.observeEventType(.ChildAdded, withBlock: { (snapshot) in
-            // 3
-            let messageData = snapshot.value as! Dictionary<String, String>
-            
-            if let id = messageData["senderId"] as String!, let name = messageData["senderName"] as String!, let text = messageData["text"] as String! where text.characters.count > 0 {
-                // 4
-                self.addMessage(withId: id, name: name, text: text)
-                
-                // 5
-                self.finishReceivingMessage()
+        if !msg.isMediaMessage {
+            if msg.senderId == self.senderId {
+                cell.textView!.textColor = UIColor.blackColor()
+                cell.textView!.linkTextAttributes = [NSForegroundColorAttributeName:UIColor.blackColor(), NSUnderlineStyleAttributeName: NSUnderlineStyle.StyleSingle.rawValue]
+            } else {
+                cell.textView!.textColor = UIColor.whiteColor()
+                cell.textView!.linkTextAttributes = [NSForegroundColorAttributeName:UIColor.whiteColor(), NSUnderlineStyleAttributeName: NSUnderlineStyle.StyleSingle.rawValue]
             }
-            else if let id = messageData["senderId"] as String!,
-                let photoURL = messageData["photoURL"] as String! { // 1
-                // 2
-                if let mediaItem = JSQPhotoMediaItem(maskAsOutgoing: id == self.senderId) {
-                    // 3
-                    self.addPhotoMessage(withId: id, key: snapshot.key, mediaItem: mediaItem)
-                    // 4
-                    if photoURL.hasPrefix("gs://") {
-                        self.fetchImageDataAtURL(photoURL, forMediaItem: mediaItem, clearsPhotoMessageMapOnSuccessForKey: nil)
+        }
+        
+        return cell
+    }
+    
+    // Mark: JSQMessages collection view flow layout delegate
+    
+    override func collectionView(collectionView: JSQMessagesCollectionView!, layout collectionViewLayout: JSQMessagesCollectionViewFlowLayout!, heightForCellTopLabelAtIndexPath indexPath: NSIndexPath!) -> CGFloat {
+        if indexPath.item % 3 == 0 {
+            return kJSQMessagesCollectionViewCellLabelHeightDefault
+        }
+        
+        return 0.0
+    }
+    
+    override func collectionView(collectionView: JSQMessagesCollectionView!, layout collectionViewLayout: JSQMessagesCollectionViewFlowLayout!, heightForMessageBubbleTopLabelAtIndexPath indexPath: NSIndexPath!) -> CGFloat {
+        let currentMessage: JSQMessage = self.messages[indexPath.item] as! JSQMessage
+        if currentMessage.senderId == self.senderId {
+            return 0.0
+        }
+        
+        if indexPath.item - 1 > 0 {
+            let previousMessage: JSQMessage = self.messages[indexPath.item - 1] as! JSQMessage
+            if previousMessage.senderId == currentMessage.senderId {
+                return 0.0
+            }
+        }
+        
+        return kJSQMessagesCollectionViewCellLabelHeightDefault
+    }
+    
+    override func collectionView(collectionView: JSQMessagesCollectionView!, layout collectionViewLayout: JSQMessagesCollectionViewFlowLayout!, heightForCellBottomLabelAtIndexPath indexPath: NSIndexPath!) -> CGFloat {
+        return 0.0
+    }
+    
+    
+    // Mark: Chat message Delegates
+    
+    
+    func oneStream(sender: XMPPStream, didReceiveMessage message: XMPPMessage, from user: XMPPUserCoreDataStorageObject){
+        
+        
+        if message.isChatMessageWithBody()
+        {
+            //let displayName = user.displayName
+            
+            JSQSystemSoundPlayer.jsq_playMessageReceivedSound()
+            
+            if let msg = message.elementForName("body")?.stringValue!
+            {
+                if let  messageDict = self.convertStringToDictionary(msg)
+                {
+                    
+                    
+                    if let from = message.attributeForName("from")?.stringValue
+                    {
+                        if let msgText = messageDict["msg"] as? String
+                        {
+                            let message = JSQMessage(senderId: from, senderDisplayName: from , date: NSDate(), text: msgText)
+                            messages.addObject(message)
+                            
+                            self.finishReceivingMessageAnimated(true)
+                        }
+                    }
+                }else
+                {
+                    if let from = message.attributeForName("from")?.stringValue!
+                    {
+                        let message = JSQMessage(senderId: from, senderDisplayName: from , date: NSDate(), text: msg)
+                        messages.addObject(message)
+                        
+                        self.finishReceivingMessageAnimated(true)
                     }
                 }
             }
-            else {
-                print("Error! Could not decode message data")
-            }
-
-              
-                
-        })
-        
-        updatedMessageRefHandle = messageRef.observeEventType(.ChildChanged, withBlock: { (snapshot) in
-            let key = snapshot.key
-            let messageData = snapshot.value as! Dictionary<String, String> // 1
-            
-            if let photoURL = messageData["photoURL"] as String! { // 2
-                // The photo has been updated.
-                if let mediaItem = self.photoMessageMap[key] { // 3
-                    self.fetchImageDataAtURL(photoURL, forMediaItem: mediaItem, clearsPhotoMessageMapOnSuccessForKey: key) // 4
-                }
-            }
-        })
-        
-        
-        
-    }
-
-  
-  // MARK: UITextViewDelegate methods
-    
-    override func textViewDidChange(textView: UITextView)
-    {
-        super.textViewDidChange(textView)
-        // If the text is not empty, the user is typing
-       isTyping = textView.text != ""
-    }
-    
-    override func didPressAccessoryButton(sender: UIButton)
-    {
-        let picker = UIImagePickerController()
-        picker.delegate = self
-        
-        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera)
-        {
-            picker.sourceType = UIImagePickerControllerSourceType.Camera
-        } else
-        {
-            picker.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
         }
-        presentViewController(picker, animated: true, completion: nil)
+        
+        
         
     }
     
     
-  
-}
-
-// MARK: Image Picker Delegate
-extension ChatsViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate
-{
+    func convertStringToDictionary(text: String) -> [String:AnyObject]?
+    {
+        if let data = text.dataUsingEncoding(NSUTF8StringEncoding) {
+            do {
+                return try NSJSONSerialization.JSONObjectWithData(data, options: []) as? [String:AnyObject]
+            } catch let error as NSError {
+                print(error)
+            }
+        }
+        return nil
+    }
+    
+    func oneStream(sender: XMPPStream, userIsComposing user: XMPPUserCoreDataStorageObject) {
+        self.showTypingIndicator = !self.showTypingIndicator
+        self.scrollToBottomAnimated(true)
+    }
+    
+    // Mark: Memory Management
+    
+    override func didReceiveMemoryWarning() {
+        
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject])
     {
-        picker.dismissViewControllerAnimated(true, completion: nil)
         
-        // 1
-        if let photoReferenceUrl = info[UIImagePickerControllerReferenceURL] as? NSURL {
-            // Handle picking a Photo from the Photo Library
-            // 2
-            let assets = PHAsset.fetchAssetsWithALAssetURLs([photoReferenceUrl], options: nil)
-            let asset = assets.firstObject
+        if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage
+        {
+            let data =  JSQPhotoMediaItem(image: pickedImage)
             
-            // 3
-            if let key = sendPhotoMessage()
+            //JSQMessage(senderId: <#T##String!#>, senderDisplayName: <#T##String!#>, date: <#T##NSDate!#>, media: JSQMessageMediaData!)
+            let fullMessage = JSQMessage(senderId:senderId+"@localhost" /*OneChat.sharedInstance.xmppStream?.myJID.bare()*/, senderDisplayName:senderDisplayName, date: NSDate(), media: data)
+            messages.addObject(fullMessage)
+            
+            if let recipient = recipient
             {
-                // 4
-                asset?.requestContentEditingInputWithOptions(nil, completionHandler: { (contentEditingInput, info) in
+                OneMessage.sendMessageImage(pickedImage, to: recipient.jidStr, completionHandler: { (stream, message) -> Void in
                     
-                
-                    let imageFileURL = contentEditingInput?.fullSizeImageURL
-                    
-                  let path = "\(FIRAuth.auth()?.currentUser?.uid)/\(Int(NSDate.timeIntervalSinceReferenceDate()))/\(photoReferenceUrl.lastPathComponent)"
-                    // 5
-                    
-                    
-                    // 6
-                    self.storageRef.child(path).putFile(imageFileURL!, metadata: nil) { (metadata, error) in
-                        if let error = error {
-                            print("Error uploading photo: \(error.localizedDescription)")
-                            return
-                        }
-                        // 7
-                        self.setImageURL(self.storageRef.child((metadata?.path)!).description, forPhotoMessageWithKey: key)
-                    }
+                    JSQSystemSoundPlayer.jsq_playMessageSentSound()
+                    self.finishSendingMessageAnimated(true)
                 })
             }
-        } else {
-            // 1
-            let image = info[UIImagePickerControllerOriginalImage] as! UIImage
-            // 2
-            if let key = sendPhotoMessage() {
-                // 3
-                let imageData = UIImageJPEGRepresentation(image, 1.0)
-                // 4
-                let imagePath = FIRAuth.auth()!.currentUser!.uid + "/\(Int(NSDate.timeIntervalSinceReferenceDate()*1000)).jpg"
-                // 5
-                let metadata = FIRStorageMetadata()
-                metadata.contentType = "image/jpeg"
-                // 6
-                
-                
-                storageRef.child(imagePath).putData(imageData!, metadata: metadata)
-                { (metadata, error) in
-                    if let error = error {
-                        print("Error uploading photo: \(error)")
-                        return
-                    }
-                    /*
-                storageRef.child(imagePath).put(imageData!, metadata: metadata) { (metadata, error) in
-                    if let error = error {
-                        print("Error uploading photo: \(error)")
-                        return
-                    }*/
-                    // 7
-                    self.setImageURL(self.storageRef.child((metadata?.path)!).description, forPhotoMessageWithKey: key)
-                }
-            }
         }
+        picker.dismissViewControllerAnimated(true, completion: nil)
     }
     
     func imagePickerControllerDidCancel(picker: UIImagePickerController)
     {
         picker.dismissViewControllerAnimated(true, completion: nil)
-        
     }
     
     
     
-     func addPhotoMessage(withId id: String, key: String, mediaItem: JSQPhotoMediaItem)
-     {
-        if let message = JSQMessage(senderId: id, displayName: "", media: mediaItem)
-        {
-            messages.append(message)
-            
-            if (mediaItem.image == nil) {
-                photoMessageMap[key] = mediaItem
-            }
-            
-            collectionView.reloadData()
-        }
-    }
-     func fetchImageDataAtURL(photoURL: String, forMediaItem mediaItem: JSQPhotoMediaItem, clearsPhotoMessageMapOnSuccessForKey key: String?) {
-        // 1
-        let storageRef = FIRStorage.storage().referenceForURL(photoURL)
-        
-        // 2
-        storageRef.dataWithMaxSize(INT64_MAX) { (data, error) in
-         
-            if let error = error
-            {
-                print("Error downloading image data: \(error)")
-                return
-            }
-            
-            // 3
-            storageRef.metadataWithCompletion({ (metadata, metadataErr) in
-                
-            
-                if let error = metadataErr {
-                    print("Error downloading metadata: \(error)")
-                    return
-                }
-                
-                // 4
-                if (metadata?.contentType == "image/gif")
-                {
-                   //// mediaItem.image = UIImage.gifWithData(data!)
-                } else {
-                    mediaItem.image = UIImage.init(data: data!)
-                }
-                self.collectionView.reloadData()
-                
-                // 5
-                guard key != nil else
-                {
-                    return
-                }
-                self.photoMessageMap.removeValueForKey(key!)
-                
-            })
-        }
-    }
-}
-extension ChatsViewController
-{
-    func setProfileImgeForURL(urlString:String)
-    {
-        self.profileImageView.setImageWithURL(NSURL(string:urlString ), placeholderImage: UIImage(named: "profile"))
-    }
+    
 }

@@ -9,8 +9,10 @@ class FirstViewController: UIViewController  {
 	let launch = LaunchScreen()
 	var launchAnimated = MutableProperty<Bool>(false)
 
-    override func viewDidLoad() {
+    override func viewDidLoad()
+    {
         super.viewDidLoad()
+        self.loginXMPP()
 		self.navigationController?.navigationBarHidden = true
 		self.view.addSubview(launch)
 		/* wait a beat before animating in */
@@ -30,10 +32,14 @@ class FirstViewController: UIViewController  {
         // Dispose of any resources that can be recreated.
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(animated: Bool)
+    {
         super.viewDidAppear(animated)
         self.loginXMPP()
         self.presentConversationListViewController()
+        
+        
+        
 		/*
 		//Do a login only if we have animated ready
 		self.launchAnimated.producer
@@ -107,7 +113,8 @@ class FirstViewController: UIViewController  {
         self.navigationController!.pushViewController(controller, animated: false)
     }
 	
-	func enablePushes() {
+	func enablePushes()
+    {
 		let notificationSettings: UIUserNotificationSettings = UIUserNotificationSettings(forTypes: [.Alert, .Badge, .Sound], categories: nil)
 		UIApplication.sharedApplication().registerUserNotificationSettings(notificationSettings)
 		UIApplication.sharedApplication().registerForRemoteNotifications()

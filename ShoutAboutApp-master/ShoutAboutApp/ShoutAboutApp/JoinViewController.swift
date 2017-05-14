@@ -9,6 +9,10 @@
 import UIKit
 import Firebase
 import Contacts
+import TSMessages
+import ReactiveCocoa
+
+
 
 class ContactManager: NSObject
 {
@@ -44,6 +48,7 @@ extension UITableView
 
 class JoinViewController: ProfileViewController/*, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate,*/, InputTableViewCellProtocol, ClickTableViewCellProtocol /*,UIPickerViewDataSource, UIPickerViewDelegate*/
 {
+    var xmppClient: STXMPPClient?
     var objects = [CNContact]()
     var allValidContacts = [SearchPerson]()
     //@IBOutlet weak var tableView: UITableView!
@@ -79,7 +84,7 @@ class JoinViewController: ProfileViewController/*, UITableViewDataSource, UITabl
     override func viewDidLoad()
     {
         super.viewDidLoad()
-        self.getProfileData()
+        //self.getProfileData()
         self.imageView?.makeImageRounded()
         self.automaticallyAdjustsScrollViewInsets = false
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.showKeyBoard(_:)), name: UIKeyboardDidShowNotification, object: nil)
@@ -970,5 +975,36 @@ extension JoinViewController
             
         }
         return errorinString
+    }
+}
+
+extension MainSearchViewController
+{
+    
+    func loginXMPP()
+    {
+        xmppClient = STXMPPClient.clientForHost(Configuration.chatServer, port: 5222, user: User.username, password: User.token)
+        ProfileManager.sharedInstance.xmppClient = xmppClient
+        self.xmppClient!.connectionStatus!.observeOn(UIScheduler()).observe {
+            event in
+            switch event {
+            case let .Failed(error):
+                NSLog("FirstViewController: Connection error \(error)")
+                TSMessage.showNotificationInViewController(self, title: "XMPP connection error", subtitle: error.localizedDescription , type: TSMessageNotificationType.Error)
+                if let xmppError = STXMPPStream.XMPPError(rawValue: error.code) {
+                    if xmppError == STXMPPStream.XMPPError.AuthFailed {
+                        User.logOut()
+                        self.navigationController!.popToRootViewControllerAnimated(true)
+                    }
+                }
+            case let .Next(event):
+                let (connected, _) = event
+                if !connected {
+                    //TODO Could not connect, inform
+                }
+            default:
+                break
+            }
+        }
     }
 }

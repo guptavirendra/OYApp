@@ -41,6 +41,7 @@ pod 'JSQMessagesViewController'
     pod 'FBSDKCoreKit'
     pod 'FBSDKLoginKit'
     pod 'Google/SignIn'
+    pod 'xmpp-messenger-ios'
 
 
 end

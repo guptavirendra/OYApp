@@ -146,8 +146,8 @@ extension ChatViewController
             chatVc?.senderId          = String(ProfileManager.sharedInstance.personalProfile.idString)
            // chatVc.channel = channel
             
-            chatVc?.chatPerson = chatPerson
-            chatVc!.channelRef = channelRef.child(String(chatPerson.idString))
+            //chatVc?.chatPerson = chatPerson
+           // chatVc!.channelRef = channelRef.child(String(chatPerson.idString))
             self.navigationController!.pushViewController(chatVc!, animated: true)
         
        // self.navigationController!.pushViewController(chattingViewController!, animated: true)

@@ -319,7 +319,7 @@ extension SearchViewController
                 
                 profileViewController?.shouldDisabledUserInteraction = cell.chaBbutton.userInteractionEnabled
                 profileViewController?.personalProfile = personContact
-                
+                 self.navigationController?.navigationBar.hidden = false
                 self.navigationController!.pushViewController(profileViewController!, animated: true)
             }
         }

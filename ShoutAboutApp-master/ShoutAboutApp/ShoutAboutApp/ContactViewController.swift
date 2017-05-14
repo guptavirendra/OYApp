@@ -31,10 +31,14 @@ import UIKit
 
 import Contacts
 import ContactsUI
+import XMPPFramework
+import xmpp_messenger_ios
+import CoreData
 
 class ContactViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ContactTableViewCellProtocol, UISearchBarDelegate,UISearchControllerDelegate, CNContactViewControllerDelegate
 {
     @IBOutlet weak var tableView: UITableView!
+    var xmppClient: STXMPPClient?
     var objects = [CNContact]()
     var allValidContacts = [PersonContact]()
     var syncContactArray = [SearchPerson]()
@@ -137,7 +141,8 @@ extension ContactViewController
     }
     
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
+    {
         
         
         let cell = tableView.dequeueReusableCellWithIdentifier("contact", forIndexPath: indexPath) as! ContactTableViewCell
@@ -238,8 +243,21 @@ extension ContactViewController
             }
             else if button.titleLabel?.text == " Chat"
             {
-                let chattingViewController = self.storyboard?.instantiateViewControllerWithIdentifier("ChattingViewController") as? ChattingViewController
-                self.navigationController!.pushViewController(chattingViewController!, animated: true)
+                let stringID = String(personContact.idString)
+                let ejabberID = stringID+"@localhost"
+                let user =  OneRoster.userFromRosterForJID(jid: ejabberID)
+                print("\(OneRoster.buddyList.sections)")
+                //let chattingViewController = self.storyboard?.instantiateViewControllerWithIdentifier("ChattingViewController") as? ChattingViewController
+                
+                //let user =   OneRoster.userFromRosterAtIndexPath(indexPath: indexPath!)
+                
+                let chatVc = self.storyboard?.instantiateViewControllerWithIdentifier("ChatsViewController") as? ChatsViewController
+                
+                chatVc!.senderDisplayName = ProfileManager.sharedInstance.personalProfile.name
+                chatVc?.senderId          = String(ProfileManager.sharedInstance.personalProfile.idString)
+                chatVc?.reciepientPerson         = personContact
+                chatVc?.recipient = user
+                self.navigationController!.pushViewController(chatVc!, animated: true)
                 
             }
             else if button.titleLabel?.text?.containsString("reviews") == true

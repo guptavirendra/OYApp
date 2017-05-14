@@ -40,6 +40,7 @@ class FeedsTableViewCell: UITableViewCell
     @IBOutlet weak var picButton:UIButton!
     @IBOutlet weak var picButton1:UIButton!
     @IBOutlet weak var picButton2:UIButton!
+    @IBOutlet weak var performedActionLabel:UILabel?
     
     var delegate:FeedsTableViewCellProtocol?
     

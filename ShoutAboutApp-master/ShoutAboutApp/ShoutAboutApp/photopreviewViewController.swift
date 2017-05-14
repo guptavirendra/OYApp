@@ -42,7 +42,8 @@ class photopreviewViewController: UIViewController {
     }
     
 
-    @IBAction func btnPreviewClose(sender: AnyObject) {
+    @IBAction func btnPreviewClose(sender: AnyObject)
+    {
         self.navigationController?.popViewControllerAnimated(true)
     }
     

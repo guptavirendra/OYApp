@@ -7,9 +7,12 @@
 //
 
 import UIKit
+import TSMessages
+import ReactiveCocoa
 
 class MainSearchViewController: UIViewController, ContactTableViewCellProtocol
 {
+    var xmppClient: STXMPPClient?
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var menuButton: UIBarButtonItem!
     @IBOutlet weak var searchButton:UIButton!
@@ -19,24 +22,17 @@ class MainSearchViewController: UIViewController, ContactTableViewCellProtocol
     var allValidContacts = [SearchPerson]()
     
     
-    override func viewDidLoad(){
+    override func viewDidLoad()
+    {
         super.viewDidLoad()
+        //loginXMPP()
+        
         
         self.searchButton.layer.cornerRadius = 5.0
         self.navigationController?.navigationBarHidden = true
         
         
-       // self.tableView.addBackGroundImageView()
-        
-        /*if self.revealViewController() != nil
-        {
-            self.revealViewController().getProfileData()
-//            menuButton.target = self.revealViewController()
-//            menuButton.action = #selector(SWRevealViewController.revealToggle(_:))
-//            self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
-            
-        }
-        */
+      
         self.searchButton.setImage(UIImage(named: "tab_search-h@x")!.imageWithRenderingMode(.AlwaysTemplate), forState: .Normal)
         
         self.searchButton.tintColor = UIColor.grayColor()
@@ -121,25 +117,63 @@ extension MainSearchViewController
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
     {
         
-            let cell = tableView.dequeueReusableCellWithIdentifier("contact", forIndexPath: indexPath) as! ContactTableViewCell
-            cell.delegate = self
+        
+        let cell = tableView.dequeueReusableCellWithIdentifier("contact", forIndexPath: indexPath) as! ContactTableViewCell
+        cell.delegate = self
+        
+        let personContact = self.allValidContacts[indexPath.row]
+        cell.nameLabel?.text = personContact.name
+        cell.mobileLabel?.text = personContact.mobileNumber
+        
+        //cell.rateView!.rating =  personContact.reviewCount.count
+        //cell.ratingLabel.text = String(personContact.reviewCount.count) + "/5"
+        
+        // if personContact.app_user_token != nil
+        // {
+        cell.revieBbutton!.hidden = false
+        cell.rateView?.hidden    = false
+        cell.ratingLabel!.hidden  = false
+        
+        if let count = personContact.reviewCount.first?.count
+        {
             
-            let personContact = allValidContacts[indexPath.row]
-            cell.nameLabel?.text = personContact.name
-            cell.mobileLabel?.text = personContact.mobileNumber
+            let title:String = String(count) + " reviews"
+            cell.revieBbutton!.setTitle(title, forState: .Normal)
+        }else
+        {
+            let title:String = String(0) + " reviews"
+            cell.revieBbutton!.setTitle(title, forState: .Normal)
+        }
+        if let ratingAverage = personContact.ratingAverage.first?.average
+        {
+            cell.rateView!.rating = Int(Float(ratingAverage)!)
+            cell.ratingLabel!.text   =  String(cell.rateView!.rating) + "/5"
+        }else
+        {
+            cell.rateView!.rating =  0
+            cell.ratingLabel!.text   =  String(cell.rateView!.rating) + "/5"
+        }
+        
+        //}else
+        //{
+        //cell.revieBbutton.hidden = true
+        //cell.rateView?.hidden    = true
+        //cell.ratingLabel.hidden  = true
+        
+        //}
+        
+        
+        
         if let urlString = personContact.photo
         {
             
-            ///cell.profileImageView.setImageWithURL(NSURL(string:urlString ), placeholderImage: UIImage(named: "profile"))
+            cell.profileImageView.sd_setImageWithURL(NSURL(string:urlString ), placeholderImage: UIImage(named: "profile"))
             
         }else
         {
             cell.profileImageView.image = UIImage(named: "profile")
         }
-        
         return cell
-         
-        
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat
@@ -192,7 +226,7 @@ extension MainSearchViewController
             {
                 let profileViewController = self.storyboard?.instantiateViewControllerWithIdentifier("NewProfileViewController") as? NewProfileViewController
                 profileViewController?.personalProfile = personContact
-                self.navigationController?.navigationBar.tintColor = appColor
+               // self.navigationController?.navigationBar.tintColor = appColor
                 self.navigationController!.pushViewController(profileViewController!, animated: true)
             }
         }

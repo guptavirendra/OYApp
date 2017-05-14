@@ -60,13 +60,16 @@ class NewProfileViewController: ProfileViewController, UIPopoverPresentationCont
             nameLabel?.text     = personalProfile.name
             locationLabel?.text = personalProfile.address
             
+            self.updateData()
+            
         }
     }
     
     override func viewDidLoad()
     {
         super.viewDidLoad()
-        
+        self.navigationController?.navigationBar.tintColor = UIColor.whiteColor();
+        self.navigationController?.navigationBar.hidden    = false
         ratReviewBaseScreen?.layer.cornerRadius = 5.0
         if self.isBeingPresented()
         {
@@ -74,15 +77,7 @@ class NewProfileViewController: ProfileViewController, UIPopoverPresentationCont
             
         }
          
-        /*
-        //self.view.addBackGroundImageView()
-        callButton?.makeImageRoundedWithGray()
-        chatButton?.makeImageRoundedWithGray()
-        detailButton?.makeImageRoundedWithGray()
-        blockButton?.makeImageRoundedWithGray()
-        spamButton?.makeImageRoundedWithGray()
-        favoriteButton?.makeImageRoundedWithGray()
-        */
+        
     }
 
     override func didReceiveMemoryWarning()
@@ -94,12 +89,13 @@ class NewProfileViewController: ProfileViewController, UIPopoverPresentationCont
     override func viewDidAppear(animated: Bool)
     {
         super.viewDidAppear(animated)
+        //self.getProfileData()
         
     }
-    override func viewWillAppear(animated: Bool)
+    
+    
+    func updateData()
     {
-        super.viewWillAppear(animated)
-        
         let isExisingContact  = ProfileManager.sharedInstance.syncedContactArray.contains
             { (person) -> Bool in
                 return person.mobileNumber == personalProfile.mobileNumber
@@ -107,19 +103,19 @@ class NewProfileViewController: ProfileViewController, UIPopoverPresentationCont
         if isExisingContact == false
         {
             favoriteLabel?.text = "Add to Contact"
-            favoriteButton!.setImage(nil, forState: .Normal)
-            favoriteButton!.setTitle("+", forState: .Normal)
+            favoriteButton?.setImage(nil, forState: .Normal)
+            favoriteButton?.setTitle("+", forState: .Normal)
             
         }
         
         
         
-    self.view.userInteractionEnabled = self.shouldDisabledUserInteraction
+        self.view.userInteractionEnabled = self.shouldDisabledUserInteraction
         self.navigationController?.navigationBarHidden = false
         self.navigationController?.navigationBar.tintColor = appColor
         nameLabel?.text     = personalProfile.name
         locationLabel?.text = personalProfile.address
-       
+        
         if let _ = personalProfile.ratingAverage.first?.average
         {
             rateView?.rating    = Int(Float(personalProfile.ratingAverage.first!.average)!)
@@ -131,7 +127,7 @@ class NewProfileViewController: ProfileViewController, UIPopoverPresentationCont
         var  totalreviewString = ""
         if let _ = personalProfile.reviewCount.first?.count
         {
-              totalreviewString = "Total Review:"+String(personalProfile.reviewCount.first!.count)
+            totalreviewString = "Total Review:"+String(personalProfile.reviewCount.first!.count)
             
         }else
         {
@@ -139,7 +135,7 @@ class NewProfileViewController: ProfileViewController, UIPopoverPresentationCont
         }
         
         totalReviewButton?.setTitle(totalreviewString, forState: .Normal)
-
+        
         
         
         if personalProfile.idString == ProfileManager.sharedInstance.personalProfile.idString
@@ -155,46 +151,46 @@ class NewProfileViewController: ProfileViewController, UIPopoverPresentationCont
             detailButtonTrailing?.constant = 40.0
             detailLabelTrailing?.constant  = 40.0
             callButton?.setImage(UIImage(named: "message"), forState: .Normal)
-             
+            
         }else
         {
             self.spamBlockBaseView?.hidden = false
             self.cameraButton!.hidden      = true
             
         }
+
+        
+    }
+    override func viewWillAppear(animated: Bool)
+    {
+        super.viewWillAppear(animated)
+        self.updateData()
+        
     }
     
 
-    /*
-    // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
-
-    @IBAction override func goToReviewScreen()
+    @IBAction override func goToReviewScreen(sender:UIButton)
     {
-       if chatLabel?.text  == "Review"
-       {
-            let rateANdReviewViewController = self.storyboard?.instantiateViewControllerWithIdentifier("RateANdReviewViewController") as? RateANdReviewViewController
-        
-        rateANdReviewViewController?.idString = String(personalProfile.idString)
-        rateANdReviewViewController?.name = personalProfile.name
-        if let _ = personalProfile.photo
+        if sender.tag == 7
         {
-            rateANdReviewViewController?.photo = personalProfile.photo!
-        }
-        
+            
+            let rateANdReviewViewController = self.storyboard?.instantiateViewControllerWithIdentifier("RateANdReviewViewController") as? RateANdReviewViewController
+            
+            rateANdReviewViewController?.idString = String(personalProfile.idString)
+            rateANdReviewViewController?.name = personalProfile.name
+            if let _ = personalProfile.photo
+            {
+                rateANdReviewViewController?.photo = personalProfile.photo!
+            }
+            
             self.navigationController!.pushViewController(rateANdReviewViewController!, animated: true)
-       }else
-       {
+            
+        }else
+        {
             let chattingViewController = self.storyboard?.instantiateViewControllerWithIdentifier("ChattingViewController") as? ChattingViewController
             self.navigationController!.pushViewController(chattingViewController!, animated: true)
-        
+            
         }
     }
     

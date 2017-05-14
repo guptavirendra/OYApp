@@ -33,6 +33,7 @@ class ProfileManager:NSObject
     var personalProfile:SearchPerson = SearchPerson()
     var localStoredImage:UIImage?
     var syncedContactArray = [SearchPerson]()
+    var xmppClient: STXMPPClient?
 }
 
 
@@ -160,6 +161,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     override func viewWillAppear(animated: Bool)
     {
         super.viewWillAppear(animated)
+        
         /*
         if personalProfile.idString == ProfileManager.sharedInstance.personalProfile.idString
         {
@@ -195,7 +197,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
 
 extension ProfileViewController
 {
-    @IBAction func goToReviewScreen()
+    @IBAction func goToReviewScreen(sender:UIButton)
     {
         let rateANdReviewViewController = self.storyboard?.instantiateViewControllerWithIdentifier("RateANdReviewViewController") as? RateANdReviewViewController
         self.navigationController!.pushViewController(rateANdReviewViewController!, animated: true)
@@ -524,19 +526,32 @@ extension ProfileViewController
         activeTextField?.resignFirstResponder()
         self.view.showSpinner()
         DataSessionManger.sharedInstance.updateProfile(dict, onFinish: { (response, deserializedResponse) in
+            
+            dispatch_async(dispatch_get_main_queue(),
+                {
+                    self.view.removeSpinner()
+                })
             if deserializedResponse is NSDictionary
             {
                 if deserializedResponse.objectForKey("success") != nil
                 {
                     dispatch_async(dispatch_get_main_queue(),
                         {
-                        self.view.removeSpinner()
+                        //self.view.removeSpinner()
                         
                         self.getProfileData()
                         
                         //self.displayAlertMessage("Success")
                     });
                 }
+                 if  let dict = deserializedResponse.objectForKey("validation_error") as? NSDictionary
+                {
+                    let keys = dict.allKeys
+                    let errorMessage = dict.objectForKey(keys.first!)
+                    self.displayAlertMessage(errorMessage as! String)
+                    
+                }
+                
             }
         }) { (error) in
             dispatch_async(dispatch_get_main_queue(), {
@@ -742,7 +757,7 @@ extension MainSearchViewController
     func  getProfileData()
     {
         self.view.showSpinner()
-        DataSessionManger.sharedInstance.getProfileData({ (response, personalProfile) in
+        DataSessionManger.sharedInstance.getProfileData("",onFinish: { (response, personalProfile) in
             
             dispatch_async(dispatch_get_main_queue(), {
                 self.view.removeSpinner()
@@ -817,13 +832,20 @@ extension ProfileViewController
     func  getProfileData()
     {
         self.view.showSpinner()
-        DataSessionManger.sharedInstance.getProfileData({ (response, personalProfile) in
+        DataSessionManger.sharedInstance.getProfileData(String(personalProfile.idString),onFinish: { (response, personalProfile) in
             
             dispatch_async(dispatch_get_main_queue(), {
                 self.view.removeSpinner()
                 
-                ProfileManager.sharedInstance.personalProfile = personalProfile
-                self.personalProfile = ProfileManager.sharedInstance.personalProfile
+                if personalProfile.idString == ProfileManager.sharedInstance.personalProfile
+                {
+                    ProfileManager.sharedInstance.personalProfile = personalProfile
+                    self.personalProfile = ProfileManager.sharedInstance.personalProfile
+                }else
+                {
+                    self.personalProfile = personalProfile
+                    
+                }
                 if let photo  = personalProfile.photo
                 {
                     self.setProfileImgeForURL(photo)
@@ -831,7 +853,7 @@ extension ProfileViewController
                 
                 if self.isKindOfClass(JoinViewController) || self.isKindOfClass(NewProfileViewController)
                 {
-                    self.personalProfile = ProfileManager.sharedInstance.personalProfile
+                    self.personalProfile = personalProfile
                     self.delegate?.profileDismissied()
 
                 }
@@ -839,7 +861,6 @@ extension ProfileViewController
                 {
                     self.dismissViewControllerAnimated(true)
                     {
-                        
                         self.delegate?.profileDismissied()
                     }
                 }

@@ -8,21 +8,20 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
     @IBOutlet weak var tableView:UITableView!
     @IBOutlet weak var nameLabel:UILabel?
     @IBOutlet weak var locationLabel:UILabel?
+    @IBOutlet weak var segment:UISegmentedControl?
     
     
-    var responseData = FeedMyfeed()
-    var dataFeedMyfeed = dataFeedMyfeedModel()
+    var responseData    = FeedMyfeed()
+    var dataFeedMyfeed  = dataFeedMyfeedModel()
     var msgresponseData = AlertCountCommonModel()
     var dict = [String:String]()
     var segmentIndex: Int!
-
-    
-    override func viewDidLoad(){
-        
+    var appUserId:Int = 0
+    override func viewDidLoad()
+    {
         super.viewDidLoad()
         self.ConfigureVariable()
         self.loadfeedAPICall()
-        
         segmentIndex = 0
        
         
@@ -31,9 +30,10 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
     }
     
     
-    func ConfigureVariable() {
+    func ConfigureVariable()
+    {
         
-        let appUserId = NSUserDefaults.standardUserDefaults().objectForKey(kapp_user_id) as! Int
+         appUserId = NSUserDefaults.standardUserDefaults().objectForKey(kapp_user_id) as! Int
         
         let appUserToken = NSUserDefaults.standardUserDefaults().objectForKey(kapp_user_token) as! String
         
@@ -44,117 +44,158 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
     }
     
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(animated: Bool)
+    {
+        super.viewWillAppear(animated)
        
     }
 
-    override func didReceiveMemoryWarning(){
-        
-        
+    override func didReceiveMemoryWarning()
+    {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
-        
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
+    {
         return self.responseData.data.count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell{
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
+    {
         
-        dataFeedMyfeed = responseData.data[indexPath.row]
-        
-//        if segmentIndex==0 {
-        
-        
-        if dataFeedMyfeed.action != profile_picture   {
+        let dataFeedMyfeed = responseData.data[indexPath.row]
+        if dataFeedMyfeed.action != profile_picture
+        {
             
             let cell = tableView.dequeueReusableCellWithIdentifier("MyFeedsTableViewCell", forIndexPath: indexPath) as? FeedsTableViewCell
-            
-            cell?.contentView.setGraphicEffects()
-            
-            let main_string = "\(dataFeedMyfeed.performed.name) \(dataFeedMyfeed.recent_action) \(dataFeedMyfeed.action)"
-            
-            let string_to_color = "\(dataFeedMyfeed.recent_action) \(dataFeedMyfeed.action)"
-            
-            let range = (main_string as NSString).rangeOfString(string_to_color)
-            
-            let attributedString = NSMutableAttributedString(string:main_string)
-            
-            attributedString.addAttribute(NSForegroundColorAttributeName, value: UIColor.blackColor(), range: range)
-            
             cell?.delegate = self
-            
-            cell?.nameLabel.attributedText = attributedString
-            cell?.descriptionLabel.attributedText = attributedString
-            cell?.RdescriptionLabel.attributedText = attributedString
-            
-            
-            cell?.UserImageView.makeImageRounded()
-            cell?.UserImageView.setImageWithURL(NSURL(string:dataFeedMyfeed.performed.photo), placeholderImage: UIImage(named: "profile"))
-        
-            cell?.RUserImageView.setImageWithURL(NSURL(string:dataFeedMyfeed.effected.photo), placeholderImage: UIImage(named: "profile"))
-            
-
-//            if String(dataFeedMyfeed.action_val) != nil {
-//                 cell?.ratingView.rating = Int(Float(dataFeedMyfeed.action_val)!)
-//            }
-//            else{
-//                 cell?.ratingView.rating = 0
-//            }
-//
-
-            cell?.dateLabel.text = dataFeedMyfeed.created_at
-            cell?.ratingLabel.text = dataFeedMyfeed.action_val + "/5"
-            
-            cell?.likeCountButton!.setTitle(String(dataFeedMyfeed.likes_count.likeDislikecount), forState: UIControlState.Normal)
-            cell?.dislikeCountButton!.setTitle(String(dataFeedMyfeed.dislikes_count.likeDislikecount), forState: UIControlState.Normal)
-      
-            
-            cell?.picButton?.tag =  indexPath.row
-            cell?.picButton1?.tag =  indexPath.row
-            
-            return cell!
+            cell?.contentView.setGraphicEffects()
+            self.configureReviewCellData(cell!, dataFeedMyfeed: dataFeedMyfeed)
+          return cell!
         }
         
 
         let cell = tableView.dequeueReusableCellWithIdentifier("MyFeedsTableViewCell1", forIndexPath: indexPath) as? FeedsTableViewCell
-        
-        let main_string = "\(dataFeedMyfeed.performed.name) \(dataFeedMyfeed.recent_action) \(dataFeedMyfeed.action)"
-        
-        let string_to_color = "\(dataFeedMyfeed.recent_action) \(dataFeedMyfeed.action)"
-        
-        let range = (main_string as NSString).rangeOfString(string_to_color)
-        
-        let attributedString = NSMutableAttributedString(string:main_string)
-        
-        attributedString.addAttribute(NSForegroundColorAttributeName, value: UIColor.blackColor(), range: range)
-        
-        cell?.nameLabel.attributedText = attributedString
-//        cell?.descriptionLabel.attributedText = attributedString
-        
-        
-        cell?.UserImageView.setImageWithURL(NSURL(string:dataFeedMyfeed.action_val), placeholderImage: UIImage(named: "profile"))
-        cell?.UserImageView.makeImageRounded()
-        cell?.RUserImageView.setImageWithURL(NSURL(string:dataFeedMyfeed.performed.photo), placeholderImage: UIImage(named: "another"))
-        
-        cell?.picButton2?.tag =  indexPath.row
-        cell?.likeCountButton!.setTitle(String(dataFeedMyfeed.likes_count.likeDislikecount), forState: UIControlState.Normal)
-        cell?.dislikeCountButton!.setTitle(String(dataFeedMyfeed.dislikes_count.likeDislikecount), forState: UIControlState.Normal)
-        
         cell?.contentView.setGraphicEffects()
         cell?.delegate = self
+        
+        self.configureProfileCellData(cell!, dataFeedMyfeed: dataFeedMyfeed)
+        
+        
         return cell!
             
         
         
     }
     
+    func configureReviewCellData(cell:FeedsTableViewCell,dataFeedMyfeed: dataFeedMyfeedModel)
+    {
+       
+        // by performed person
+        cell.RUserImageView.sd_setImageWithURL(NSURL(string:dataFeedMyfeed.performed.photo), placeholderImage: UIImage(named: "profile"))
+        cell.RUserImageView.makeImageRounded()
+        
+        if dataFeedMyfeed.action == "reviewed"
+        {
+            
+            let reviewAttributeString = NSMutableAttributedString(string: (appUserId == dataFeedMyfeed.performed.id ? "You":dataFeedMyfeed.performed.name))
+            reviewAttributeString.addAttribute(NSForegroundColorAttributeName, value: UIColor.blueColor(), range: NSRange(location: 0, length:reviewAttributeString.length ))
+            
+            let reviewAttributeStrings = NSMutableAttributedString(string:" reviewed")
+            reviewAttributeStrings.addAttribute(NSForegroundColorAttributeName, value: UIColor.blackColor(), range: NSRange(location: 0, length:reviewAttributeStrings.length ))
+            reviewAttributeString.appendAttributedString(reviewAttributeStrings)
+            
+            // name of performed person
+            cell.RdescriptionLabel.attributedText  = reviewAttributeString
+            
+            if  dataFeedMyfeed.action_val.characters.count > 0
+            {
+                cell.ratingView.rating = Int(Float(dataFeedMyfeed.action_val)!)
+                
+            }else
+            {
+                cell.ratingView.rating = 0
+                
+            }
+        }
+        
+        // effected person profile picture
+        cell.UserImageView.sd_setImageWithURL(NSURL(string:dataFeedMyfeed.effected.photo), placeholderImage: UIImage(named: "profile"))
+        cell.UserImageView.makeImageRounded()
+        
+        let reviewAttributeString = NSMutableAttributedString(string:            dataFeedMyfeed.effected.name)
+        reviewAttributeString.addAttribute(NSForegroundColorAttributeName, value: UIColor.blueColor(), range: NSRange(location: 0, length:reviewAttributeString.length ))
+        
+        // effected person name
+        cell.nameLabel.attributedText = reviewAttributeString
+        // effected date
+        cell.dateLabel.text =   dataFeedMyfeed.created_at
+        // effected person dating
+        
+        cell.ratingLabel.text = dataFeedMyfeed.action_val + "/5"
+        //
+        
+        cell.descriptionLabel.attributedText = NSMutableAttributedString(string:            dataFeedMyfeed.review)
+        
+        setLikeDislikeCountCell(cell, dataFeedMyfeed: dataFeedMyfeed)
+        
+        
+        //cell?.picButton?.tag =  indexPath.row
+        //cell?.picButton1?.tag =  indexPath.row
+        
+        
+    }
+    
+    
+    func setLikeDislikeCountCell(cell:FeedsTableViewCell, dataFeedMyfeed: dataFeedMyfeedModel)
+    {
+        if dataFeedMyfeed.likes_count.likeDislikecount.stringValue.characters.count > 0
+        {
+            cell.likeCountButton!.setTitle(String(dataFeedMyfeed.likes_count.likeDislikecount.stringValue), forState: UIControlState.Normal)
+        }else
+        {
+            cell.likeCountButton!.setTitle("0", forState: UIControlState.Normal)
+        }
+        if  dataFeedMyfeed.dislikes_count.likeDislikecount.stringValue.characters.count > 0
+        {
+            cell.dislikeCountButton!.setTitle(String(dataFeedMyfeed.dislikes_count.likeDislikecount.stringValue), forState: UIControlState.Normal)
+        }else
+        {
+            cell.dislikeCountButton!.setTitle("0", forState: UIControlState.Normal)
+        }
+        
+    }
+    
+    
+    func configureProfileCellData(cell:FeedsTableViewCell, dataFeedMyfeed: dataFeedMyfeedModel)
+    {
+        // you
+        
+        let reviewAttributeString = NSMutableAttributedString(string: (appUserId == dataFeedMyfeed.performed.id ? "You":dataFeedMyfeed.performed.name))
+        reviewAttributeString.addAttribute(NSForegroundColorAttributeName, value: UIColor.blueColor(), range: NSRange(location: 0, length:reviewAttributeString.length ))
+        
+        // perforemed Action
+        cell.nameLabel.attributedText = reviewAttributeString
+        cell.performedActionLabel?.text = "changed " + dataFeedMyfeed.action
+        
+        cell.UserImageView.sd_setImageWithURL(NSURL(string:dataFeedMyfeed.action_val), placeholderImage: UIImage(named: "profile"))
+        cell.UserImageView.makeImageRounded()
+        cell.RUserImageView.sd_setImageWithURL(NSURL(string:dataFeedMyfeed.performed.photo), placeholderImage: UIImage(named: "another"))
+        
+        //cell?.picButton2?.tag =  indexPath.row
+        
+       setLikeDislikeCountCell(cell, dataFeedMyfeed: dataFeedMyfeed)
+}
+    
+    
+    
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat{
 
         dataFeedMyfeed = responseData.data[indexPath.row]
        
-        if dataFeedMyfeed.action != profile_picture{
+        if dataFeedMyfeed.action != profile_picture
+        {
             
             return 245
         }
@@ -184,43 +225,53 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
         
     }
     
-    
-    
-    /*
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
         
         print(segue.identifier)
         
-        
         let btn = sender as! UIButton!
-        dataFeedMyfeed = responseData.data[btn.tag]
         
-        print(dataFeedMyfeed)
+        if let cell =  btn.superview?.superview?.superview?.superview as? FeedsTableViewCell
+        {
+            if let indexPath = self.tableView.indexPathForCell(cell)
+            {
+               let  dataFeedMyfeed = responseData.data[indexPath.row]
+                
+                print(dataFeedMyfeed)
+                
+                if (segue.identifier == "LikeDislikeViewController")
+                {
+                    //get a reference to the destination view controller
+                    let destinationVC:likeDislikeViewController = segue.destinationViewController as! likeDislikeViewController
+                    
+                    //set properties on the destination view controller
+                    destinationVC.isSelectedDislike = btn.tag
+                    destinationVC.dataFeedMyfeed = dataFeedMyfeed
+                    
+                    //etc...
+                }
+                
+                
+                if (segue.identifier == "photopreviewViewController")
+                {
+                    //get a reference to the destination view controller
+                    let destinationVC:photopreviewViewController = segue.destinationViewController as! photopreviewViewController
+                    
+                    print(dataFeedMyfeed.performed.photo)
+                    destinationVC.picname = dataFeedMyfeed.performed.photo
+                    //set properties on the destination view controller
+                    print(destinationVC.picname)
+                    //etc...
+                }
+            }
         
-        if (segue.identifier == "LikeDislikeViewController") {
-            //get a reference to the destination view controller
-            let destinationVC:likeDislikeViewController = segue.destinationViewController as! likeDislikeViewController
-            
-            //set properties on the destination view controller
-            destinationVC.dataFeedMyfeed = dataFeedMyfeed
-            //etc...
         }
         
-        if (segue.identifier == "photopreviewViewController") {
-            //get a reference to the destination view controller
-            let destinationVC:photopreviewViewController = segue.destinationViewController as! photopreviewViewController
-            
-            print(dataFeedMyfeed.performed.photo)
-            
-            
-          
-            destinationVC.picname = dataFeedMyfeed.performed.photo
-            //set properties on the destination view controller
-              print(destinationVC.picname)
-            //etc...
-        }
+        
+        
+        
     }
-    */
+    
     
     
     
@@ -236,12 +287,17 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
     }
     
     
-    func likebuttonClicked(cell:FeedsTableViewCell, button:UIButton){
-        likeData(dict)
+    func likebuttonClicked(cell:FeedsTableViewCell, button:UIButton)
+    {
+        
+       
+        likeData( dict, cell: cell)
     }
     
-    func dislikebuttonClicked(cell:FeedsTableViewCell, button:UIButton){
-        dislikeData(dict)
+    func dislikebuttonClicked(cell:FeedsTableViewCell, button:UIButton)
+    {
+        
+        dislikeData(dict, cell: cell)
     }
     
     func picbuttonClicked(cell:FeedsTableViewCell, button:UIButton){
@@ -388,16 +444,27 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
 
     
     
-    func likeData(dict:[String:String]){
-        
+    func likeData( dict:[String:String], cell:FeedsTableViewCell)
+    {
+         let indexPath = self.tableView.indexPathForCell(cell)
+         let dataFeedMyfeed = self.responseData.data[indexPath!.row]
+         var newDict = dict
+         newDict[user_report_spam_post] = String(dataFeedMyfeed.id)
         self.view.showSpinner()
-        DataSessionManger.sharedInstance.feedLikeUser(dict, onFinish: { (response, deserializedResponse) in
+        DataSessionManger.sharedInstance.feedLikeUser(newDict, onFinish: { (response, deserializedResponse) in
             dispatch_async(dispatch_get_main_queue(), {
                 
                 
                 print(deserializedResponse)
-                self.msgresponseData = deserializedResponse
-                self.displayAlertMessage(self.msgresponseData.likeDislikecount)
+               // self.msgresponseData = deserializedResponse
+                
+                deserializedResponse.performed = dataFeedMyfeed.performed
+                deserializedResponse.effected  = dataFeedMyfeed.effected
+                self.responseData.data[indexPath!.row] = deserializedResponse
+                self.tableView.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: .None)
+                //self.setLikeDislikeCountCell(cell, dataFeedMyfeed: deserializedResponse)
+                //self.segmentChanged(self.segment!)
+                //self.displayAlertMessage(self.msgresponseData.likeDislikecount.stringValue)
                 self.view.removeSpinner()
                 
             });
@@ -415,13 +482,22 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
 
     
     
-    func dislikeData(dict:[String:String]){
-        
+    func dislikeData(dict:[String:String], cell:FeedsTableViewCell){
+        let indexPath = self.tableView.indexPathForCell(cell)
+        let dataFeedMyfeed = self.responseData.data[indexPath!.row]
+        var newDict = dict
+        newDict[user_report_spam_post] = String(dataFeedMyfeed.id)
         self.view.showSpinner()
-        DataSessionManger.sharedInstance.feedisLikeUser(dict, onFinish: { (response, deserializedResponse) in
-            dispatch_async(dispatch_get_main_queue(), {
-                self.msgresponseData = deserializedResponse
-                self.displayAlertMessage(self.msgresponseData.likeDislikecount)
+        DataSessionManger.sharedInstance.feedisLikeUser(newDict, onFinish: { (response, deserializedResponse) in
+            dispatch_async(dispatch_get_main_queue(),
+                {
+               // self.msgresponseData = deserializedResponse
+                deserializedResponse.performed = dataFeedMyfeed.performed
+                 deserializedResponse.effected = dataFeedMyfeed.effected
+                self.responseData.data[indexPath!.row] = deserializedResponse
+                self.tableView.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: .None)
+               // self.segmentChanged(self.segment!)
+               //self.displayAlertMessage(self.msgresponseData.likeDislikecount.stringValue)
                 print(deserializedResponse)
                 self.view.removeSpinner()
                 

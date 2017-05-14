@@ -65,6 +65,7 @@ PODS:
     - FirebaseAnalytics (~> 3.7)
     - GTMSessionFetcher/Core (~> 1.1)
   - FLAnimatedImage (1.0.12)
+  - FMDB (1.5.1)
   - Google/Core (3.0.3):
     - FirebaseAnalytics (~> 3.2)
   - Google/SignIn (3.0.3):
@@ -113,7 +114,7 @@ PODS:
   - PhoneNumberKit/PhoneNumberKitCore (0.8.5)
   - PhoneNumberKit/UIKit (0.8.5):
     - PhoneNumberKit/PhoneNumberKitCore
-  - Protobuf (3.2.1)
+  - Protobuf (3.3.0)
   - Reachability (3.2)
   - ReactiveCocoa (4.0.0-alpha-3):
     - ReactiveCocoa/UI (= 4.0.0-alpha-3)
@@ -139,6 +140,11 @@ PODS:
   - TwitterCore (2.8.0):
     - Fabric
   - Watchdog (2.1)
+  - xmpp-messenger-ios (1.0.1):
+    - FMDB (~> 1.0)
+    - JSQMessagesViewController
+    - JSQSystemSoundPlayer (~> 2.0)
+    - XMPPFramework
   - XMPPFramework (3.7.0):
     - CocoaAsyncSocket (~> 7.6.0)
     - CocoaLumberjack
@@ -174,6 +180,7 @@ DEPENDENCIES:
   - TSMessages (from `https://github.com/KrauseFx/TSMessages.git`)
   - TwitterCore
   - Watchdog (= 2.1)
+  - xmpp-messenger-ios
   - XMPPFramework
   - youtube-ios-player-helper (= 0.1.4)
 
@@ -206,6 +213,7 @@ SPEC CHECKSUMS:
   FirebaseMessaging: 753d05a925e9eb8eadd09a0ffc9b808578b72fac
   FirebaseStorage: a5c55b23741a49a72af8f30f95b3bb5ddbeda12d
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
+  FMDB: 0c3eed7342fdf9dc03b8fe3d8de8e7a9f08bfacc
   Google: 813c467362eabc11385f5a5cc9ad0cb651a58f4e
   GoogleSignIn: d7ad83f13480e1f30453471d00d19b5293ac46af
   GoogleToolboxForMac: 8e329f1b599f2512c6b10676d45736bcc2cbbeb0
@@ -218,7 +226,7 @@ SPEC CHECKSUMS:
   NYTPhotoViewer: 323217e4590a1586eb3c9674b3fefb0fb8b57896
   OpenUDID: e7cb6984c7304906ad20f3a36bf087b025896b6b
   PhoneNumberKit: 5668a7af19d2e566d92831a632ee80f5047eff75
-  Protobuf: 2ccbaf193f6c65adc67745453ca0c13234c32796
+  Protobuf: d582fecf68201eac3d79ed61369ef45734394b9c
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   ReactiveCocoa: f03dcfd385b0e4ee5b7a323f5e0b146a498e12d3
   Result: dc390d0b58f9ec43fcd536f1ebdd130803cc6cbc
@@ -230,9 +238,10 @@ SPEC CHECKSUMS:
   TSMessages: eb3cf27b6900684a21bad4fe9ea426e287b8c839
   TwitterCore: e959987be23c767004d29eb7fab8d85d8585a2e5
   Watchdog: a891d7ed53b6620aa70c698b39ee2f9eac4d0419
+  xmpp-messenger-ios: e1a81270a0d62f1307c86b493209f01853e82e6b
   XMPPFramework: 6f99ad1afcdb0cdbec7192a8e4c542c3fc3de6f8
   youtube-ios-player-helper: 84b1485ebb4b7c6b619c6e05edcb55186723a7c6
 
-PODFILE CHECKSUM: d8d8b33525dd743e186e835db68ef159d7fac0cb
+PODFILE CHECKSUM: 50a1cf71fe5546a673922a7cd5972e5214651984
 
 COCOAPODS: 1.2.1

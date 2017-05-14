@@ -37,6 +37,8 @@ class MyTabViewController: UITabBarController, UITabBarControllerDelegate
     func tabBarController(tabBarController: UITabBarController, didSelectViewController viewController: UIViewController)
     {
         
+        
+        
         if let vc = viewController as? UINavigationController
         {
             if let profilevc = vc.viewControllers.first as? NewProfileViewController
@@ -48,6 +50,11 @@ class MyTabViewController: UITabBarController, UITabBarControllerDelegate
             {
                 
                // moreVC.
+            }
+            
+            if let profilevc = vc.viewControllers.first as? ContactViewController
+            {
+                profilevc 
             }
             
             

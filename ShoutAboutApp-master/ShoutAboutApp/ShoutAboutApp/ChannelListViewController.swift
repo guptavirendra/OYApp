@@ -147,7 +147,7 @@ class ChannelListViewController: UITableViewController
             
             chatVc.senderDisplayName = senderDisplayName
             //chatVc.channel = channel
-            chatVc.channelRef = channelRef.child(channel.id)
+            //chatVc.channelRef = channelRef.child(channel.id)
         }
     }
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath)
