@@ -9,6 +9,8 @@
 import UIKit
 import TSMessages
 import ReactiveCocoa
+import XMPPFramework
+import xmpp_messenger_ios
 
 class MainSearchViewController: UIViewController, ContactTableViewCellProtocol
 {
@@ -36,6 +38,28 @@ class MainSearchViewController: UIViewController, ContactTableViewCellProtocol
         self.searchButton.setImage(UIImage(named: "tab_search-h@x")!.imageWithRenderingMode(.AlwaysTemplate), forState: .Normal)
         
         self.searchButton.tintColor = UIColor.grayColor()
+        
+        
+        
+        let appUserId = NSUserDefaults.standardUserDefaults().objectForKey(kapp_user_id)
+        let stringID = String(appUserId!)
+        let ejabberID = stringID+"@localhost"
+        
+        
+        OneChat.sharedInstance.connect(username: ejabberID, password: "12345") { (stream, error) -> Void in
+            if let _ = error
+            {
+                let alertController = UIAlertController(title: "Sorry", message: "An error occured: \(error)", preferredStyle: UIAlertControllerStyle.Alert)
+                alertController.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: { (UIAlertAction) -> Void in
+                    //do something
+                }))
+                self.presentViewController(alertController, animated: true, completion: nil)
+            } else
+            {
+                
+            }
+        }
+
 
         
     }
@@ -202,8 +226,22 @@ extension MainSearchViewController
             }
             else if button.titleLabel?.text == " Chat"
             {
-                let chattingViewController = self.storyboard?.instantiateViewControllerWithIdentifier("ChattingViewController") as? ChattingViewController
-                self.navigationController!.pushViewController(chattingViewController!, animated: true)
+                let stringID = String(personContact.idString)
+                let ejabberID = stringID+"@localhost"
+                let user =  OneRoster.userFromRosterForJID(jid: ejabberID)
+                print("\(OneRoster.buddyList.sections)")
+                //let chattingViewController = self.storyboard?.instantiateViewControllerWithIdentifier("ChattingViewController") as? ChattingViewController
+                
+                //let user =   OneRoster.userFromRosterAtIndexPath(indexPath: indexPath!)
+                
+                let chatVc = self.storyboard?.instantiateViewControllerWithIdentifier("ChatsViewController") as? ChatsViewController
+                
+                chatVc!.senderDisplayName = ProfileManager.sharedInstance.personalProfile.name
+                chatVc?.senderId          = String(ProfileManager.sharedInstance.personalProfile.idString)
+                chatVc?.reciepientPerson         = personContact
+                chatVc?.recipient = user
+                self.navigationController?.navigationBarHidden = false
+                self.navigationController!.pushViewController(chatVc!, animated: true)
                 
             }
             else if button.titleLabel?.text == "reviews"

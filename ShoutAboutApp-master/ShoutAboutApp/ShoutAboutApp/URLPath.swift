@@ -94,11 +94,11 @@ struct WebServicePath
     let nextPage              = "page"
 }
 
-class ChatPerson:NSObject
+class ChatPerson:SearchPerson
 {
-    var idString:Int = 0
-    var name:String?
-    var photo:String?
+   // var idString:Int = 0
+    //var name:String?
+   // var photo:String?
     var last_message:String?
     var last_message_time:String?
     var unread_message:Int = 0

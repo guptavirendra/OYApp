@@ -8,6 +8,8 @@
 
 import UIKit
 import ContactsUI
+import XMPPFramework
+import xmpp_messenger_ios
 
 
 class NewProfileViewController: ProfileViewController, UIPopoverPresentationControllerDelegate, ProfileViewControllerDelegate, CNContactViewControllerDelegate
@@ -188,8 +190,21 @@ class NewProfileViewController: ProfileViewController, UIPopoverPresentationCont
             
         }else
         {
-            let chattingViewController = self.storyboard?.instantiateViewControllerWithIdentifier("ChattingViewController") as? ChattingViewController
-            self.navigationController!.pushViewController(chattingViewController!, animated: true)
+            let stringID = String(personalProfile.idString)
+            let ejabberID = stringID+"@localhost"
+            let user =  OneRoster.userFromRosterForJID(jid: ejabberID)
+            print("\(OneRoster.buddyList.sections)")
+            //let chattingViewController = self.storyboard?.instantiateViewControllerWithIdentifier("ChattingViewController") as? ChattingViewController
+            
+            //let user =   OneRoster.userFromRosterAtIndexPath(indexPath: indexPath!)
+            
+            let chatVc = self.storyboard?.instantiateViewControllerWithIdentifier("ChatsViewController") as? ChatsViewController
+            
+            chatVc!.senderDisplayName = ProfileManager.sharedInstance.personalProfile.name
+            chatVc?.senderId          = String(ProfileManager.sharedInstance.personalProfile.idString)
+            chatVc?.reciepientPerson         =  personalProfile
+            chatVc?.recipient = user
+            self.navigationController!.pushViewController(chatVc!, animated: true)
             
         }
     }

@@ -8,6 +8,8 @@
 
 import UIKit
 import Firebase
+import XMPPFramework
+import xmpp_messenger_ios
 
 class ChatViewController: UIViewController, ChatPersionTableViewCellProtocol
 {
@@ -136,21 +138,24 @@ extension ChatViewController
         {
             let indexPath = self.tableView.indexPathForCell(cell)
             let chatPerson = chatPersons[indexPath!.row]
-           let chattingViewController = self.storyboard?.instantiateViewControllerWithIdentifier("ChattingViewController") as? ChattingViewController
-            chattingViewController?.chatPerson = chatPerson
             
+                    let stringID = String(chatPerson.idString)
+                    let ejabberID = stringID+"@localhost"
+                    let user =  OneRoster.userFromRosterForJID(jid: ejabberID)
+                    print("\(OneRoster.buddyList.sections)")
+                    //let chattingViewController = self.storyboard?.instantiateViewControllerWithIdentifier("ChattingViewController") as? ChattingViewController
+                    
+                    //let user =   OneRoster.userFromRosterAtIndexPath(indexPath: indexPath!)
+                    
+                    let chatVc = self.storyboard?.instantiateViewControllerWithIdentifier("ChatsViewController") as? ChatsViewController
+                    
+                    chatVc!.senderDisplayName = ProfileManager.sharedInstance.personalProfile.name
+                    chatVc?.senderId          = String(ProfileManager.sharedInstance.personalProfile.idString)
+                    chatVc?.reciepientPerson         = chatPerson
+                    chatVc?.recipient = user
+                    self.navigationController!.pushViewController(chatVc!, animated: true)
+                    
             
-            let chatVc = self.storyboard?.instantiateViewControllerWithIdentifier("ChatsViewController") as? ChatsViewController
-            
-            chatVc!.senderDisplayName = ProfileManager.sharedInstance.personalProfile.name
-            chatVc?.senderId          = String(ProfileManager.sharedInstance.personalProfile.idString)
-           // chatVc.channel = channel
-            
-            //chatVc?.chatPerson = chatPerson
-           // chatVc!.channelRef = channelRef.child(String(chatPerson.idString))
-            self.navigationController!.pushViewController(chatVc!, animated: true)
-        
-       // self.navigationController!.pushViewController(chattingViewController!, animated: true)
         }
     }
     

@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import XMPPFramework
+import xmpp_messenger_ios
 
 class SearchViewController: UIViewController, UISearchBarDelegate,UISearchControllerDelegate, ContactTableViewCellProtocol, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UINavigationBarDelegate
 {
@@ -275,8 +277,22 @@ extension SearchViewController
             }
             else if button.titleLabel?.text == " Chat"
             {
-                let chattingViewController = self.storyboard?.instantiateViewControllerWithIdentifier("ChattingViewController") as? ChattingViewController
-                self.navigationController!.pushViewController(chattingViewController!, animated: true)
+                let stringID = String(personContact.idString)
+                let ejabberID = stringID+"@localhost"
+                let user =  OneRoster.userFromRosterForJID(jid: ejabberID)
+                print("\(OneRoster.buddyList.sections)")
+                //let chattingViewController = self.storyboard?.instantiateViewControllerWithIdentifier("ChattingViewController") as? ChattingViewController
+                
+                //let user =   OneRoster.userFromRosterAtIndexPath(indexPath: indexPath!)
+                
+                let chatVc = self.storyboard?.instantiateViewControllerWithIdentifier("ChatsViewController") as? ChatsViewController
+                
+                chatVc!.senderDisplayName = ProfileManager.sharedInstance.personalProfile.name
+                chatVc?.senderId          = String(ProfileManager.sharedInstance.personalProfile.idString)
+                chatVc?.reciepientPerson         = personContact
+                chatVc?.recipient = user
+                self.navigationController?.navigationBarHidden = false
+                self.navigationController!.pushViewController(chatVc!, animated: true)
                 
             }
             else if button.titleLabel?.text == "reviews"

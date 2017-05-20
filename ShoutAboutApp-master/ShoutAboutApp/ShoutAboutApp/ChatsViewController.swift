@@ -91,6 +91,7 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
     
     override func viewWillAppear(animated: Bool)
     {
+        self.navigationController?.navigationBarHidden = false
         if let recipient = recipient
         {
             self.navigationItem.rightBarButtonItems = []
@@ -188,16 +189,16 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
     }
     
     override func didPressSendButton(button: UIButton!, withMessageText text: String!, senderId: String!, senderDisplayName: String!, date: NSDate!) {
-        let fullMessage = JSQMessage(senderId: senderId+"@localhost"/*OneChat.sharedInstance.xmppStream?.myJID.bare()*/, senderDisplayName: senderDisplayName, date: NSDate(), text: text)
+        let fullMessage = JSQMessage(senderId: OneChat.sharedInstance.xmppStream?.myJID.bare(), senderDisplayName: OneChat.sharedInstance.xmppStream?.myJID.bare(), date: NSDate(), text: text)
         messages.addObject(fullMessage)
         
-       /* if let recipient = recipient
-        {*/
-            OneMessage.sendMessage(text, to: String(reciepientPerson!.idString)+"@localhost" /*recipient.jidStr*/, completionHandler: { (stream, message) -> Void in
+        if let recipient = recipient
+        {
+            OneMessage.sendMessage(text, to: recipient.jidStr, completionHandler: { (stream, message) -> Void in
                 JSQSystemSoundPlayer.jsq_playMessageSentSound()
                 self.finishSendingMessageAnimated(true)
             })
-        //}
+        }
     }
     
     // Mark: JSQMessages CollectionView DataSource
@@ -205,6 +206,37 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
     override func collectionView(collectionView: JSQMessagesCollectionView!, messageDataForItemAtIndexPath indexPath: NSIndexPath!) -> JSQMessageData! {
         let message: JSQMessage = self.messages[indexPath.item] as! JSQMessage
         
+//        if let  messageDict = self.convertStringToDictionary(message.text)
+//        {
+//            
+//                if let msgText = messageDict["msg"] as? String
+//                {
+//                     message = JSQMessage(senderId: message.senderId, senderDisplayName: message.senderDisplayName , date: message.date, text: msgText)
+//                    
+//                    
+//                }
+//                if let serverUrl = messageDict["attachment"] as? NSDictionary
+//                {
+//                    dispatch_async(dispatch_get_main_queue(),
+//                                   {
+//                                    if let  serverUrl = serverUrl.objectForKey("serverUrl")
+//                                    {
+//                                        if let url = NSURL(string: serverUrl as! String)
+//                                        {
+//                                            let imageData =  NSData(contentsOfURL: url)
+//                                            let image  =  UIImage(data: imageData!)
+//                                            let data  =  JSQPhotoMediaItem(image: image)
+//                                           message  =  JSQMessage(senderId: message.senderId, senderDisplayName: message.senderDisplayName, date:  message.date, media: data)
+//                                            
+//                                            
+//                                        }
+//                                    }
+//                    })
+//                    
+//                    
+//                }
+//                
+//        }
         return message
     }
     
@@ -332,9 +364,8 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
     // Mark: Chat message Delegates
     
     
-    func oneStream(sender: XMPPStream, didReceiveMessage message: XMPPMessage, from user: XMPPUserCoreDataStorageObject){
-        
-        
+    func oneStream(sender: XMPPStream, didReceiveMessage message: XMPPMessage, from user: XMPPUserCoreDataStorageObject)
+    {
         if message.isChatMessageWithBody()
         {
             //let displayName = user.displayName
@@ -343,19 +374,39 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
             
             if let msg = message.elementForName("body")?.stringValue!
             {
-                if let  messageDict = self.convertStringToDictionary(msg)
+                if let  messageDict = NSObject.convertStringToDictionary(msg)
                 {
-                    
-                    
                     if let from = message.attributeForName("from")?.stringValue
                     {
                         if let msgText = messageDict["msg"] as? String
                         {
                             let message = JSQMessage(senderId: from, senderDisplayName: from , date: NSDate(), text: msgText)
                             messages.addObject(message)
-                            
                             self.finishReceivingMessageAnimated(true)
                         }
+                        if let serverUrl = messageDict["attachment"] as? NSDictionary
+                        {
+                            dispatch_async(dispatch_get_main_queue(),
+                                           {
+                            if let  serverUrl = serverUrl.objectForKey("serverUrl")
+                            {
+                                if let url = NSURL(string: serverUrl as! String)
+                                {
+                                   let imageData =  NSData(contentsOfURL: url)
+                                   let image  =  UIImage(data: imageData!)
+                                    let data  =  JSQPhotoMediaItem(image: image)
+                                    let fullMessage =   JSQMessage(senderId: from, senderDisplayName: from, date:  NSDate(), media: data)
+                                    self.messages.addObject(fullMessage)
+                                    self.finishReceivingMessageAnimated(true)
+                                    
+                                }
+                            }
+                            })
+                            
+                            
+                        }
+                        
+                        
                     }
                 }else
                 {
@@ -369,23 +420,9 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
                 }
             }
         }
-        
-        
-        
     }
     
     
-    func convertStringToDictionary(text: String) -> [String:AnyObject]?
-    {
-        if let data = text.dataUsingEncoding(NSUTF8StringEncoding) {
-            do {
-                return try NSJSONSerialization.JSONObjectWithData(data, options: []) as? [String:AnyObject]
-            } catch let error as NSError {
-                print(error)
-            }
-        }
-        return nil
-    }
     
     func oneStream(sender: XMPPStream, userIsComposing user: XMPPUserCoreDataStorageObject) {
         self.showTypingIndicator = !self.showTypingIndicator
@@ -409,8 +446,22 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
             let data =  JSQPhotoMediaItem(image: pickedImage)
             
             //JSQMessage(senderId: <#T##String!#>, senderDisplayName: <#T##String!#>, date: <#T##NSDate!#>, media: JSQMessageMediaData!)
-            let fullMessage = JSQMessage(senderId:senderId+"@localhost" /*OneChat.sharedInstance.xmppStream?.myJID.bare()*/, senderDisplayName:senderDisplayName, date: NSDate(), media: data)
+            
+            
+        
+            
+            let fullMessage =   JSQMessage(senderId: OneChat.sharedInstance.xmppStream?.myJID.bare(), senderDisplayName: OneChat.sharedInstance.xmppStream?.myJID.bare(), date:  NSDate(), media: data)
+            
+            
+        
+            
+            
+            //let fullMessage = JSQMessage(senderId: OneChat.sharedInstance.xmppStream?.myJID.bare(), senderDisplayName: OneChat.sharedInstance.xmppStream?.myJID.bare(), date: NSDate(), media: data)
             messages.addObject(fullMessage)
+            
+           // DataSessionManger.sharedInstance.
+            
+        //hit webservice =
             
             if let recipient = recipient
             {
@@ -420,6 +471,17 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
                     self.finishSendingMessageAnimated(true)
                 })
             }
+            
+            /*
+             
+             if let recipient = recipient
+             {
+             OneMessage.sendMessage("", to: recipient.jidStr, completionHandler: { (stream, message) -> Void in
+             JSQSystemSoundPlayer.jsq_playMessageSentSound()
+             self.finishSendingMessageAnimated(true)
+             })
+             }
+             */
         }
         picker.dismissViewControllerAnimated(true, completion: nil)
     }
@@ -429,7 +491,21 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
         picker.dismissViewControllerAnimated(true, completion: nil)
     }
     
-    
-    
-    
 }
+
+extension NSObject
+{
+
+   class func convertStringToDictionary(text: String) -> [String:AnyObject]?
+    {
+        if let data = text.dataUsingEncoding(NSUTF8StringEncoding) {
+            do {
+                return try NSJSONSerialization.JSONObjectWithData(data, options: []) as? [String:AnyObject]
+            } catch let error as NSError {
+                print(error)
+            }
+        }
+        return nil
+    }
+}
+
