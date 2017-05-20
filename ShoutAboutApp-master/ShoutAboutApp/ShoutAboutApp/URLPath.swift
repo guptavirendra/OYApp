@@ -29,7 +29,7 @@ let kEmail   = "Email"
 let kName    = "Name"
 let kAddress = "Address"
 let kWebsite = "Website"
-let kGender  = "Gender"
+let kGender  = "male"
 
 let bgColor = UIColor(patternImage: UIImage(named: "bg")!)
 let appColor = UIColor(red: 31.0/255.0, green: 141.0/255.0, blue: 200.0/255.0, alpha: 1.0)
@@ -175,11 +175,21 @@ class SearchPerson:PersonContact, NSCoding
             self.photo = photo
         }
         
+        if let ratingAverage = aDecoder.decodeObjectForKey("ratingAverage") as? [RatingAverage]
+        {
+            self.ratingAverage = ratingAverage
+            
+        }
         
-        
-        
+        if let reviewCount = aDecoder.decodeObjectForKey("reviewCount") as? [ReviewCount]
+        {
+            self.reviewCount = reviewCount
+            
+        }
+
         
     }
+    
     
     func encodeWithCoder(aCoder: NSCoder)
     {
@@ -193,6 +203,8 @@ class SearchPerson:PersonContact, NSCoding
         aCoder.encodeObject(address, forKey: "address")
         aCoder.encodeObject(website, forKey: "website")
         aCoder.encodeObject(photo, forKey: "photo")
+        aCoder.encodeObject(ratingAverage, forKey: "ratingAverage")
+        aCoder.encodeObject(reviewCount, forKey: "reviewCount")
     }
     
     class func archivePeople(people:[SearchPerson]) -> NSData

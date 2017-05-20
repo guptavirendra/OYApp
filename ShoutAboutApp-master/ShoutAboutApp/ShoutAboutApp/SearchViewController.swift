@@ -35,7 +35,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate,UISearchContro
         definesPresentationContext = true
 
         searchController.searchBar.barTintColor = appColor
-        searchController.searchBar.tintColor   = UIColor.whiteColor()
+        //searchController.searchBar.tintColor   = UIColor.whiteColor()
         searchController.searchBar.placeholder = "Number Or Name"
         searchController.dimsBackgroundDuringPresentation = false
         

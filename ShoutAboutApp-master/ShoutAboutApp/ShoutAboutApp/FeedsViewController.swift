@@ -21,27 +21,18 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
     override func viewDidLoad()
     {
         super.viewDidLoad()
+        self.automaticallyAdjustsScrollViewInsets = false
         self.ConfigureVariable()
         self.loadfeedAPICall()
         segmentIndex = 0
-       
-        
-//        self.loadmyfeedAPICall()
-        // Do any additional setup after loading the view.
     }
     
     
     func ConfigureVariable()
     {
-        
-         appUserId = NSUserDefaults.standardUserDefaults().objectForKey(kapp_user_id) as! Int
-        
+        appUserId = NSUserDefaults.standardUserDefaults().objectForKey(kapp_user_id) as! Int
         let appUserToken = NSUserDefaults.standardUserDefaults().objectForKey(kapp_user_token) as! String
-        
         dict = [kapp_user_id:String(appUserId),kapp_user_token :appUserToken]
-        
-//        self.dislikeData(dict)
-        
     }
     
     
@@ -82,12 +73,7 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
         cell?.delegate = self
         
         self.configureProfileCellData(cell!, dataFeedMyfeed: dataFeedMyfeed)
-        
-        
         return cell!
-            
-        
-        
     }
     
     func configureReviewCellData(cell:FeedsTableViewCell,dataFeedMyfeed: dataFeedMyfeedModel)
@@ -140,12 +126,6 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
         cell.descriptionLabel.attributedText = NSMutableAttributedString(string:            dataFeedMyfeed.review)
         
         setLikeDislikeCountCell(cell, dataFeedMyfeed: dataFeedMyfeed)
-        
-        
-        //cell?.picButton?.tag =  indexPath.row
-        //cell?.picButton1?.tag =  indexPath.row
-        
-        
     }
     
     

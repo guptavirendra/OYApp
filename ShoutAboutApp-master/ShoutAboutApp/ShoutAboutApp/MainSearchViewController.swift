@@ -27,16 +27,9 @@ class MainSearchViewController: UIViewController, ContactTableViewCellProtocol
     override func viewDidLoad()
     {
         super.viewDidLoad()
-        //loginXMPP()
-        
-        
         self.searchButton.layer.cornerRadius = 5.0
         self.navigationController?.navigationBarHidden = true
-        
-        
-      
         self.searchButton.setImage(UIImage(named: "tab_search-h@x")!.imageWithRenderingMode(.AlwaysTemplate), forState: .Normal)
-        
         self.searchButton.tintColor = UIColor.grayColor()
         
         
@@ -59,9 +52,6 @@ class MainSearchViewController: UIViewController, ContactTableViewCellProtocol
                 
             }
         }
-
-
-        
     }
 
     override func didReceiveMemoryWarning(){
@@ -244,7 +234,7 @@ extension MainSearchViewController
                 self.navigationController!.pushViewController(chatVc!, animated: true)
                 
             }
-            else if button.titleLabel?.text == "reviews"
+            else if ((button.titleLabel?.text?.containsString("reviews")) != nil)
             {
                 
                 let personContact = allValidContacts[(indexPath?.row)!]

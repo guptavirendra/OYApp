@@ -70,7 +70,7 @@ class ContactViewController: UIViewController, UITableViewDataSource, UITableVie
         searchController.searchBar.delegate = self
         definesPresentationContext = true
         searchController.searchBar.barTintColor = appColor
-        searchController.searchBar.tintColor   = UIColor.whiteColor()
+       // searchController.searchBar.tintColor   = UIColor.whiteColor()
         searchController.searchBar.placeholder = "Number Or Name"
         searchController.dimsBackgroundDuringPresentation = false
         
@@ -237,7 +237,6 @@ extension ContactViewController
             let personContact =  isSearching ? searchContactArray[(indexPath?.row)!]: syncContactArray[(indexPath?.row)!]
             if button.titleLabel?.text == " Call"
             {
-                //let personContact = allValidContacts[indexPath!.row]
                 let   phone = "tel://"+personContact.mobileNumber
                 UIApplication.sharedApplication().openURL(NSURL(string: phone)!)
             }
@@ -247,10 +246,6 @@ extension ContactViewController
                 let ejabberID = stringID+"@localhost"
                 let user =  OneRoster.userFromRosterForJID(jid: ejabberID)
                 print("\(OneRoster.buddyList.sections)")
-                //let chattingViewController = self.storyboard?.instantiateViewControllerWithIdentifier("ChattingViewController") as? ChattingViewController
-                
-                //let user =   OneRoster.userFromRosterAtIndexPath(indexPath: indexPath!)
-                
                 let chatVc = self.storyboard?.instantiateViewControllerWithIdentifier("ChatsViewController") as? ChatsViewController
                 
                 chatVc!.senderDisplayName = ProfileManager.sharedInstance.personalProfile.name
@@ -715,10 +710,8 @@ extension ContactViewController
     func contactViewController(viewController: CNContactViewController, didCompleteWithContact contact: CNContact?)
     {
          viewController.dismissViewControllerAnimated(true, completion: nil)
-        
         let joinVC = JoinViewController()
         joinVC.getContacts()
-        
     }
     
       func contactViewController(viewController: CNContactViewController, shouldPerformDefaultActionForContactProperty property: CNContactProperty) -> Bool

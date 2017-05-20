@@ -49,9 +49,7 @@ class NewProfileViewController: ProfileViewController, UIPopoverPresentationCont
     
     
     var shouldDisabledUserInteraction:Bool = true
-    
-    
-    @IBOutlet weak var doneButton:UIBarButtonItem?
+    @IBOutlet weak var doneButton:UIButton?
 
      var popOver : UIPopoverPresentationController!
     
@@ -70,15 +68,9 @@ class NewProfileViewController: ProfileViewController, UIPopoverPresentationCont
     override func viewDidLoad()
     {
         super.viewDidLoad()
-        self.navigationController?.navigationBar.tintColor = UIColor.whiteColor();
+        //self.navigationController?.navigationBar.tintColor = UIColor.whiteColor();
         self.navigationController?.navigationBar.hidden    = false
         ratReviewBaseScreen?.layer.cornerRadius = 5.0
-        if self.isBeingPresented()
-        {
-            doneButton?.title = "Done"
-            
-        }
-         
         
     }
 
@@ -91,7 +83,7 @@ class NewProfileViewController: ProfileViewController, UIPopoverPresentationCont
     override func viewDidAppear(animated: Bool)
     {
         super.viewDidAppear(animated)
-        //self.getProfileData()
+        
         
     }
     
@@ -369,6 +361,9 @@ class NewProfileViewController: ProfileViewController, UIPopoverPresentationCont
     func contactViewController(viewController: CNContactViewController, didCompleteWithContact contact: CNContact?)
     {
         viewController.dismissViewControllerAnimated(true, completion: nil)
+        let joinVC = JoinViewController()
+        joinVC.getContacts()
+         
     }
     
 }

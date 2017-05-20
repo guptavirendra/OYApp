@@ -12,8 +12,6 @@ import Contacts
 import TSMessages
 import ReactiveCocoa
 
-
-
 class ContactManager: NSObject
 {
     static let sharedInstance = ContactManager()
@@ -38,10 +36,7 @@ extension UITableView
         let bottom = NSLayoutConstraint(item: imageView, attribute: .Bottom, relatedBy: .Equal, toItem: self, attribute: .Bottom, multiplier: 1.0, constant: 0.0)
         
         self.addConstraints([top, leading, trailing, bottom])
-        
     }
-    
-    
 }
 
 
@@ -51,17 +46,10 @@ class JoinViewController: ProfileViewController/*, UITableViewDataSource, UITabl
     var xmppClient: STXMPPClient?
     var objects = [CNContact]()
     var allValidContacts = [SearchPerson]()
-    //@IBOutlet weak var tableView: UITableView!
-   // var activeTextField:UITextField?
-   // var name:String = ""
-   // var email:String = ""
-    //var address:String = ""
+  
     var dob:String = ""
     var notify_token:String = " "
-  //  var gender:String = ""
-    
-    
-    
+   
     let k_firstName = "firstName"
     let k_lastName = "lastName"
     let k_id = "id"
@@ -76,7 +64,6 @@ class JoinViewController: ProfileViewController/*, UITableViewDataSource, UITabl
     var handler :(UIAlertAction) -> Void =
         { (arg: UIAlertAction) -> Void in
             
-            
             print("do something");
     }
     
@@ -84,7 +71,7 @@ class JoinViewController: ProfileViewController/*, UITableViewDataSource, UITabl
     override func viewDidLoad()
     {
         super.viewDidLoad()
-        //self.getProfileData()
+        self.getProfileData()
         self.imageView?.makeImageRounded()
         self.automaticallyAdjustsScrollViewInsets = false
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.showKeyBoard(_:)), name: UIKeyboardDidShowNotification, object: nil)
@@ -152,9 +139,6 @@ extension JoinViewController
                 cell.inputImage.image = UIImage(named: kBirthDay)
                 cell.inputTextField.tag = 3
             
-                
-                
-                
                 let toolBar = UIToolbar(frame: CGRectMake(0, 0, cell.inputTextField.frame.size.width, 44))
                 
                 var items = [UIBarButtonItem]()
@@ -183,10 +167,6 @@ extension JoinViewController
                 cell.inputTextField.placeholder = kGender
                 cell.inputImage.image = UIImage(named: kGender)
                 cell.inputTextField.tag = 4
-                
-                
-                
-                
                 let toolBar = UIToolbar(frame: CGRectMake(0, 0, cell.inputTextField.frame.size.width, 44))
                 
                 var items = [UIBarButtonItem]()
@@ -208,11 +188,7 @@ extension JoinViewController
                 cell.inputTextField.inputView = pickerView
                 cell.inputTextField.inputAccessoryView = toolBar
                 
-                
             }
-            
-            
-            
             return cell
         }
         
@@ -419,8 +395,6 @@ extension JoinViewController
             {
                 let  strFirstName: String = (result!.objectForKey("name") as? String)!
                 dict["name"] = strFirstName
-                
-                
                 
             }
             

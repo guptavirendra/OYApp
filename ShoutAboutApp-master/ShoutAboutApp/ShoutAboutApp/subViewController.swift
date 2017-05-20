@@ -58,6 +58,14 @@ extension subViewController
         let text = choiceArray[indexPath.row]
         cell?.nameLabel.textColor = UIColor.darkGrayColor()
         cell?.nameLabel?.text = text
+        if indexPath.row == 0
+        {
+            cell?.iconView.image  =  UIImage(named: "term")
+        }else
+        {
+            cell?.iconView.image  =  UIImage(named: "privacy")
+            
+        }
         cell?.textLabel?.font = UIFont(name: "TitilliumWeb-Regular", size: 18)
         //        cell?.contentView.setGraphicEffects()
         return cell!

@@ -57,7 +57,7 @@ class LeftViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     func setProfileImgeForURL(urlString:String)
     {
-        self.profileImageView.setImageWithURL(NSURL(string:urlString ), placeholderImage: UIImage(named: "profile_pic"))
+        self.profileImageView.sd_setImageWithURL(NSURL(string:urlString ), placeholderImage: UIImage(named: "profile_pic"))
     }
 }
 
@@ -103,19 +103,11 @@ extension LeftViewController
     //MARK: SELECTION
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath)
     {
-       let cell = tableView.cellForRowAtIndexPath(indexPath)
-        
-//        if indexPath.row == 0
-//        {
-//            
-//            self.performSegueWithIdentifier("recent", sender: cell)
-//        }
-        
-         if (indexPath.row == 0 ||  indexPath.row == 1 || indexPath.row == 2)
+       
+        if (indexPath.row == 0 ||  indexPath.row == 1 || indexPath.row == 2)
         {
             
-            
-           let vc = self.storyboard?.instantiateViewControllerWithIdentifier("SpamFavBlockViewController") as! SpamFavBlockViewController
+            let vc = self.storyboard?.instantiateViewControllerWithIdentifier("SpamFavBlockViewController") as! SpamFavBlockViewController
             if indexPath.row == 0
             {
                 vc.favSpamBlock = .block
@@ -137,7 +129,6 @@ extension LeftViewController
         {
             let vc = self.storyboard?.instantiateViewControllerWithIdentifier("subViewController") as! subViewController
             self.navigationController?.pushViewController(vc, animated: true)
-            //self.performSegueWithIdentifier("setting", sender: self)
             
         }
         
@@ -216,10 +207,11 @@ extension LeftViewController
         profileViewController.personalProfile = ProfileManager.sharedInstance.personalProfile
          let navigation = UINavigationController(rootViewController: profileViewController)
         
-        self.presentViewController(navigation, animated: true, completion: nil)
-    
-        
-        
-    
+        self.presentViewController(navigation, animated: true, completion:
+            {
+                profileViewController.doneButton?.setTitle("Done", forState: .Normal)
+                profileViewController.doneButton?.titleLabel?.textColor = UIColor.whiteColor()
+                profileViewController.doneButton?.setImage(nil, forState: .Normal)
+            })
     }
 }

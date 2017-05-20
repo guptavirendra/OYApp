@@ -139,6 +139,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate/*, GIDSignInDelegate*/
            UINavigationBar.appearance().tintColor =  medBlue//appColor
           UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
         
+        
+        let attributes = [
+            NSForegroundColorAttributeName : UIColor.whiteColor(),
+            NSFontAttributeName : UIFont.systemFontOfSize(13)
+        ]
+        UIBarButtonItem.appearanceWhenContainedInInstancesOfClasses([UISearchBar.self]).setTitleTextAttributes(attributes, forState: .Normal)
+        
        // UITableViewCell.appearance().backgroundColor = light
        // UICollectionView.appearance().backgroundColor = light
        // UIScrollView.appearance().backgroundColor = light

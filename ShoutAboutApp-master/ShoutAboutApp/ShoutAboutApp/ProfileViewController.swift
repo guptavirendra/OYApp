@@ -724,7 +724,7 @@ public extension UIView
        self.layer.shadowOffset = CGSizeMake(1.0, 1.0)
         self.layer.masksToBounds = false
  */
-        
+        self.clipsToBounds = true
         self.layer.borderColor =  UIColor.lightGrayColor().CGColor
         self.layer.borderWidth = 1
         self.layer.cornerRadius = self.frame.size.width / 2
@@ -732,7 +732,7 @@ public extension UIView
         self.layer.shadowOpacity = 1.0
         self.layer.shadowRadius  = 3.0
         self.layer.shadowOffset  = CGSizeMake(1.0, 1.0)
-        self.layer.masksToBounds = false
+        self.layer.masksToBounds = true
     }
     
     func makeImageRoundedWithGray()

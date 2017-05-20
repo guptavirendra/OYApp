@@ -583,8 +583,13 @@ class DataSessionManger: NSObject
                     {
                         personalProfileData.mobileNumber = (dataDict?.objectForKey(mobile_number) as? String!)!
                     }
+                    
+                    if let createdAt = dataDict?.objectForKey(created_at) as? String
+                    {
+                        personalProfileData.created_at = createdAt
+                    }
                    
-                    personalProfileData.created_at = (dataDict?.objectForKey(created_at))! as? String
+                     
                     personalProfileData.updated_at = dataDict?.objectForKey(updated_at) as? String
                     personalProfileData.address = dataDict?.objectForKey(address) as? String
                     personalProfileData.website = dataDict?.objectForKey(website) as? String
@@ -2191,11 +2196,7 @@ class DataSessionManger: NSObject
                             person.mobileNumber = (dict.objectForKey("mobile_number") as? String)!
                         }
                         
-                        
-                         //person.ratingAverage = (dict.objectForKey("rating_average") as? [AnyObject])!
-                        // person.reviewCount = (dict.objectForKey("review_count") as? [AnyObject])!
-                        
-                        if let  ratingAverage = deserializedResponse.objectForKey("ratingAverage") as? [NSDictionary]
+                       if let  ratingAverage = deserializedResponse.objectForKey("rating_average") as? [NSDictionary]
                         {
                             for dict in ratingAverage
                             {
@@ -2207,7 +2208,7 @@ class DataSessionManger: NSObject
                             
                         }
                         
-                        if let  reviewCount = deserializedResponse.objectForKey("reviewCount") as? [NSDictionary]
+                        if let  reviewCount = deserializedResponse.objectForKey("review_count") as? [NSDictionary]
                         {
                             for dict in reviewCount
                             {
@@ -2218,16 +2219,12 @@ class DataSessionManger: NSObject
                             }
                             
                         }
-
-                        
-                        
                         personArray.append(person)
                         
                     }
-                    }
-                    
                 }
             }
+        }
             
             onFinish(response: response, deserializedResponse: personArray, errorMessage:errorMessage )
             

@@ -225,16 +225,16 @@ extension SpamFavBlockViewController:ContactTableViewCellProtocol
         {
         case .fav:
             cell.blockButton?.setTitle("UnFavorite", forState: .Normal)
-            cell.blockButton?.setImage(UIImage( named: "Favorites"), forState: .Normal)
+            cell.blockButton?.setImage(UIImage( named: "unfav"), forState: .Normal)
             break
         case .spam:
             cell.blockButton?.setTitle("UnSpam", forState: .Normal)
-            cell.blockButton?.setImage(UIImage( named: "Spam"), forState: .Normal)
+            cell.blockButton?.setImage(UIImage( named: "spamGray"), forState: .Normal)
             
             break
         case .block:
              cell.blockButton?.setTitle("UnBlock", forState: .Normal)
-             cell.blockButton?.setImage(UIImage( named: "Block"), forState: .Normal)
+             cell.blockButton?.setImage(UIImage( named: "unblock"), forState: .Normal)
             break
             
         }

@@ -49,9 +49,9 @@ class RateANdReviewViewController: UIViewController,UITableViewDataSource, UITab
         tapGesture.addTarget(self, action: #selector(self.hideKeyBoard(_:)))
         
         self.title = "Rate & Review"
-        self.navigationController?.navigationBar.titleTextAttributes =
-            [NSForegroundColorAttributeName: UIColor.whiteColor()
-        ]
+//        self.navigationController?.navigationBar.titleTextAttributes =
+//            [NSForegroundColorAttributeName: UIColor.whiteColor()
+//        ]
         
         
         
