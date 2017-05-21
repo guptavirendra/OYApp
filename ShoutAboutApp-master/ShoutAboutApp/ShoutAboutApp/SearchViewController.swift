@@ -164,11 +164,31 @@ extension SearchViewController
         cell.mobileLabel?.text = personContact.mobileNumber
         if let urlString = personContact.photo
         {
-            cell.profileImageView.setImageWithURL(NSURL(string:urlString ), placeholderImage: UIImage(named: "profile"))
+            cell.profileImageView.sd_setImageWithURL(NSURL(string:urlString ), placeholderImage: UIImage(named: "profile"))
             
         }else
         {
             cell.profileImageView.image = UIImage(named: "profile")
+        }
+        
+        if let count = personContact.reviewCount.first?.count
+        {
+            
+            let title:String = String(count) + " reviews"
+            cell.revieBbutton!.setTitle(title, forState: .Normal)
+        }else
+        {
+            let title:String = String(0) + " reviews"
+            cell.revieBbutton!.setTitle(title, forState: .Normal)
+        }
+        if let ratingAverage = personContact.ratingAverage.first?.average
+        {
+            cell.rateView!.rating = Int(Float(ratingAverage)!)
+            cell.ratingLabel!.text   =  String(cell.rateView!.rating) + "/5"
+        }else
+        {
+            cell.rateView!.rating =  0
+            cell.ratingLabel!.text   =  String(cell.rateView!.rating) + "/5"
         }
         
         return cell
@@ -422,7 +442,7 @@ extension SearchViewController
                 {
                     //self.allValidContacts.appendContentsOf(self.localContactArray)
                     
-                  let localSet =   Set(self.localContactArray)
+                let localSet =   Set(self.localContactArray)
                 let apiSet  = Set(deserializedResponse)
                     self.allValidContacts.appendContentsOf(                    localSet.union(apiSet)
 )

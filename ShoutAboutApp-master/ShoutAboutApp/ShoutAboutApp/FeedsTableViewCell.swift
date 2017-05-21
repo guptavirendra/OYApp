@@ -23,7 +23,6 @@ protocol FeedsTableViewCellProtocol {
 
 class FeedsTableViewCell: UITableViewCell
 {
-
     @IBOutlet weak var UserImageView: UIImageView!
     @IBOutlet weak var RUserImageView: UIImageView!
     @IBOutlet weak var descriptionLabel: UILabel!
@@ -44,12 +43,14 @@ class FeedsTableViewCell: UITableViewCell
     
     var delegate:FeedsTableViewCellProtocol?
     
-    override func awakeFromNib(){
+    override func awakeFromNib()
+    {
         super.awakeFromNib()
         // Initialization code
     }
 
-    override func setSelected(selected: Bool, animated: Bool){
+    override func setSelected(selected: Bool, animated: Bool)
+    {
         super.setSelected(selected, animated: animated)
     }
     
@@ -63,11 +64,8 @@ class FeedsTableViewCell: UITableViewCell
         self.delegate?.dislikebuttonClicked(self, button:button)
     }
     
-    @IBAction func picbuttonClicked(button:UIButton){
-        
-        self.picButton?.tag = button.tag
-        self.picButton1?.tag = button.tag
-        self.picButton2?.tag = button.tag
+    @IBAction func picbuttonClicked(button:UIButton)
+    {
         self.delegate?.picbuttonClicked(self, button:button)
         
     }
@@ -85,7 +83,5 @@ class FeedsTableViewCell: UITableViewCell
     @IBAction func screenMoveClicked(button: UIButton){
         self.delegate?.screenMoveClicked(self, button: button)
     }
-    
-    
     
 }

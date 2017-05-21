@@ -205,13 +205,12 @@ extension LeftViewController
     
        let profileViewController = self.storyboard?.instantiateViewControllerWithIdentifier("NewProfileViewController") as! NewProfileViewController
         profileViewController.personalProfile = ProfileManager.sharedInstance.personalProfile
+        profileViewController.isViewPresented = true
          let navigation = UINavigationController(rootViewController: profileViewController)
         
         self.presentViewController(navigation, animated: true, completion:
             {
-                profileViewController.doneButton?.setTitle("Done", forState: .Normal)
-                profileViewController.doneButton?.titleLabel?.textColor = UIColor.whiteColor()
-                profileViewController.doneButton?.setImage(nil, forState: .Normal)
+                
             })
     }
 }

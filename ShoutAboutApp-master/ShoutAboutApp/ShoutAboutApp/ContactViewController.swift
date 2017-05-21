@@ -701,8 +701,6 @@ extension ContactViewController
         let nav = UINavigationController(rootViewController: addNewContactVC)
         nav.navigationBar.tintColor =  appColor
         nav.navigationBar.barTintColor = UIColor.whiteColor()
-        
-        
         self.presentViewController(nav, animated: true, completion: nil)
     
     }

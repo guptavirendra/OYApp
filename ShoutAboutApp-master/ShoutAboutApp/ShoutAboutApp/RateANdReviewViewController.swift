@@ -28,7 +28,7 @@ class RateANdReviewViewController: UIViewController,UITableViewDataSource, UITab
     override func viewDidLoad()
     {
         super.viewDidLoad()
-        setBackIndicatorImage()
+        //setBackIndicatorImage()
         
         let appUserId = NSUserDefaults.standardUserDefaults().objectForKey(kapp_user_id) as! Int
         if String(appUserId) == idString
@@ -61,7 +61,7 @@ class RateANdReviewViewController: UIViewController,UITableViewDataSource, UITab
     {
         super.viewWillAppear(animated)
         self.navigationController?.navigationBarHidden = false
-        self.navigationController?.navigationBar.tintColor = appColor
+        //self.navigationController?.navigationBar.tintColor = appColor
         getReview()
     }
     
@@ -97,7 +97,7 @@ extension RateANdReviewViewController
             if urlString.characters.count != 0
             {
                 
-                cell.profileImageView.setImageWithURL(NSURL(string:urlString ), placeholderImage: UIImage(named: "profile"))
+                cell.profileImageView.sd_setImageWithURL(NSURL(string:urlString ), placeholderImage: UIImage(named: "profile"))
                 
             }else
             {
@@ -113,7 +113,9 @@ extension RateANdReviewViewController
         {
             let cell = tableView.dequeueReusableCellWithIdentifier("WriteReviewTableViewCell", forIndexPath: indexPath) as! WriteReviewTableViewCell
             cell.textView.layer.borderColor = UIColor.blackColor().CGColor
+            cell.textView.text = review
             review = cell.textView.text
+            cell.textView.text = review
             return cell
         }
         
@@ -137,7 +139,7 @@ extension RateANdReviewViewController
             if urlString.characters.count != 0
             {
                 
-                cell.profileImageView.setImageWithURL(NSURL(string:urlString ), placeholderImage: UIImage(named: "profile"))
+                cell.profileImageView.sd_setImageWithURL(NSURL(string:urlString ), placeholderImage: UIImage(named: "profile"))
                 
             }else
             {
@@ -178,9 +180,7 @@ extension RateANdReviewViewController
                     total =   Float(count)!
                 }
                 
-                
-                
-                if reviewUser.rateGraphArray.count >= 1
+               if reviewUser.rateGraphArray.count >= 1
                 {
                     
                     let  rating = reviewUser.rateGraphArray[0].count
@@ -327,7 +327,7 @@ extension RateANdReviewViewController
             let urlString       = rateReviewer.appUser.photo
             if urlString.characters.count != 0
             {
-                cell.profileImageView.setImageWithURL(NSURL(string:urlString ), placeholderImage: UIImage(named: "profile"))
+                cell.profileImageView.sd_setImageWithURL(NSURL(string:urlString ), placeholderImage: UIImage(named: "profile"))
                 
             }else
             {

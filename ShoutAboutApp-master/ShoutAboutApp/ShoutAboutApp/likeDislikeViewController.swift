@@ -46,12 +46,12 @@ class likeDislikeViewController: UIViewController
         
         
         
-        cell?.nameLabel.text = commonmodel.name.characters.count > 0 ? commonmodel.name : commonmodel.mobile_number
+        cell?.nameLabel.text = commonmodel.name.characters.count > 0 ? commonmodel.name : commonmodel.mobileNumber
         //cell?.dateLabel.text = "26-Nov"
         cell?.UserImageView.makeImageRounded()
-        if  commonmodel.photo.characters.count > 0
+        if  commonmodel.photo?.characters.count > 0
         {
-         cell?.UserImageView.sd_setImageWithURL(NSURL(string:(commonmodel.photo)), placeholderImage: UIImage(named: "profile"))
+         cell?.UserImageView.sd_setImageWithURL(NSURL(string:(commonmodel.photo)!), placeholderImage: UIImage(named: "profile"))
         }
         cell?.contentView.setGraphicEffects()
         return cell!
@@ -73,16 +73,14 @@ class likeDislikeViewController: UIViewController
             
                 let commonmodel = isSelectedDislike == 0 ? dataFeedMyfeed.likes_user[indexPath.row] : dataFeedMyfeed.dislikes_user[indexPath.row]
                 
-                if commonmodel.id == 0
+                if commonmodel.idString == 0
                 {
                     self.displayAlertMessage("It is not in your friend list")
                 }else
                 {
-                   let personContact = SearchPerson()
-                    personContact.idString = commonmodel.id
-                    
-                    let profileViewController = self.storyboard?.instantiateViewControllerWithIdentifier("NewProfileViewController") as? NewProfileViewController
-                    profileViewController?.personalProfile = personContact
+                   let profileViewController = self.storyboard?.instantiateViewControllerWithIdentifier("NewProfileViewController") as? NewProfileViewController
+                    profileViewController?.personalProfile = commonmodel
+                    profileViewController?.isToGetPersonData = true
                     self.navigationController?.navigationBar.tintColor = UIColor.whiteColor()
                     self.navigationController!.pushViewController(profileViewController!, animated: true)
                 }

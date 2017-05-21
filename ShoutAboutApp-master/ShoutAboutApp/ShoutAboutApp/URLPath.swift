@@ -29,7 +29,7 @@ let kEmail   = "Email"
 let kName    = "Name"
 let kAddress = "Address"
 let kWebsite = "Website"
-let kGender  = "male"
+let kGender  = "Gender"
 
 let bgColor = UIColor(patternImage: UIImage(named: "bg")!)
 let appColor = UIColor(red: 31.0/255.0, green: 141.0/255.0, blue: 200.0/255.0, alpha: 1.0)
@@ -162,6 +162,10 @@ class SearchPerson:PersonContact, NSCoding
         {
             self.dob = dob
         }
+        if let gender = aDecoder.decodeObjectForKey("gender") as? String
+        {
+            self.gender = gender
+        }
         if let address = aDecoder.decodeObjectForKey("address") as? String
         {
             self.address = address
@@ -186,7 +190,7 @@ class SearchPerson:PersonContact, NSCoding
             self.reviewCount = reviewCount
             
         }
-
+        
         
     }
     
@@ -200,6 +204,7 @@ class SearchPerson:PersonContact, NSCoding
         aCoder.encodeObject(created_at, forKey: "created_at")
         aCoder.encodeObject(updated_at, forKey: "updated_at")
         aCoder.encodeObject(dob, forKey: "dob")
+        aCoder.encodeObject(gender, forKey: "gender")
         aCoder.encodeObject(address, forKey: "address")
         aCoder.encodeObject(website, forKey: "website")
         aCoder.encodeObject(photo, forKey: "photo")

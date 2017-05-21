@@ -63,6 +63,15 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     
     } //= SearchPerson()// since profile is vary from user to user
     
+    
+    var isToGetPersonData:Bool?
+        {
+        didSet
+        {
+            self.getProfileData()
+        }
+    }
+    
     var delegate:ProfileViewControllerDelegate?
     
     @IBOutlet weak var callChatBaseView:UIView!
@@ -94,10 +103,10 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         
         super.viewDidLoad()
         self.navigationController?.navigationBar.hidden = false
-        self.navigationController?.navigationBar.tintColor = appColor
+        //self.navigationController?.navigationBar.tintColor = appColor
         
         //imageView!.makeImageRounded()
-        setBackIndicatorImage()
+       // setBackIndicatorImage()
         
         self.automaticallyAdjustsScrollViewInsets = false
         let tapGesture = UITapGestureRecognizer()
@@ -547,8 +556,10 @@ extension ProfileViewController
                  if  let dict = deserializedResponse.objectForKey("validation_error") as? NSDictionary
                 {
                     let keys = dict.allKeys
-                    let errorMessage = dict.objectForKey(keys.first!)
-                    self.displayAlertMessage(errorMessage as! String)
+                    if  let errorMessage = dict.objectForKey(keys.first!) as? String
+                    {
+                        self.displayAlertMessage(errorMessage)
+                    }
                     
                 }
                 

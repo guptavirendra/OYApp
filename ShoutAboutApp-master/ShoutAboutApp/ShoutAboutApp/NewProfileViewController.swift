@@ -48,6 +48,21 @@ class NewProfileViewController: ProfileViewController, UIPopoverPresentationCont
     
     
     
+    
+    var isViewPresented:Bool?
+        {
+        didSet
+        {
+            self.doneButton?.hidden = false
+            self.doneButton?.setTitle("Done", forState: .Normal)
+            self.doneButton?.titleLabel?.textColor = UIColor.whiteColor()
+            self.doneButton?.setImage(nil, forState: .Normal)
+            
+        }
+    }
+    
+    
+    
     var shouldDisabledUserInteraction:Bool = true
     @IBOutlet weak var doneButton:UIButton?
 
@@ -68,6 +83,7 @@ class NewProfileViewController: ProfileViewController, UIPopoverPresentationCont
     override func viewDidLoad()
     {
         super.viewDidLoad()
+        self.doneButton?.hidden = true
         //self.navigationController?.navigationBar.tintColor = UIColor.whiteColor();
         self.navigationController?.navigationBar.hidden    = false
         ratReviewBaseScreen?.layer.cornerRadius = 5.0
