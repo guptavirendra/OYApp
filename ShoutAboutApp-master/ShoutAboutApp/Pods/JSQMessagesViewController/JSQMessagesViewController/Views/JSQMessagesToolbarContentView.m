@@ -141,6 +141,62 @@ const CGFloat kJSQMessagesToolbarContentViewHorizontalSpacingDefault = 8.0f;
     _rightBarButtonItem = rightBarButtonItem;
 }
 
+- (void)setRightBarButtonItem:(UIButton *)rightBarButtonItem andSecondButton :(UIButton *)rightBarButtonItem1
+{
+    if (_rightBarButtonItem) {
+        [_rightBarButtonItem removeFromSuperview];
+    }
+    
+    if (_rightBarButtonItem1)
+    {
+        [_rightBarButtonItem1 removeFromSuperview];
+        
+    }
+    
+    if (!rightBarButtonItem) {
+        _rightBarButtonItem = nil;
+        self.rightHorizontalSpacingConstraint.constant = 0.0f;
+        self.rightBarButtonItemWidth = 0.0f;
+        self.rightBarButtonContainerView.hidden = YES;
+        return;
+    }
+    
+    
+    if (!rightBarButtonItem1) {
+        _rightBarButtonItem1 = nil;
+        self.rightHorizontalSpacingConstraint.constant = 0.0f;
+        self.rightBarButtonItemWidth = 0.0f;
+        self.rightBarButtonContainerView.hidden = YES;
+        return;
+    }
+    
+    
+    
+    
+    if (CGRectEqualToRect(rightBarButtonItem.frame, CGRectZero))
+    {
+        //rightBarButtonItem.frame = self.rightBarButtonContainerView.bounds;
+    }
+    
+    self.rightBarButtonContainerView.hidden = NO;
+    self.rightHorizontalSpacingConstraint.constant = kJSQMessagesToolbarContentViewHorizontalSpacingDefault;
+   // self.rightBarButtonItemWidth = 100;//2 * CGRectGetWidth(rightBarButtonItem.frame);
+    
+    [rightBarButtonItem setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [rightBarButtonItem1 setTranslatesAutoresizingMaskIntoConstraints:NO];
+    
+    
+    [self.rightBarButtonContainerView addSubview:rightBarButtonItem];
+     [self.rightBarButtonContainerView addSubview:rightBarButtonItem1];
+    [self.rightBarButtonContainerView jsq_pinLeftEdgesOfSubview:rightBarButtonItem];
+    [self.rightBarButtonContainerView jsq_pinAllEdgesOfSubview:rightBarButtonItem1];
+    [self.rightBarButtonContainerView jsq_allignSubView:rightBarButtonItem andNextSubView:rightBarButtonItem1];
+    [self setNeedsUpdateConstraints];
+    
+    _rightBarButtonItem = rightBarButtonItem;
+}
+
+
 - (void)setRightBarButtonItemWidth:(CGFloat)rightBarButtonItemWidth
 {
     self.rightBarButtonContainerViewWidthConstraint.constant = rightBarButtonItemWidth;

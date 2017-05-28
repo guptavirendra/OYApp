@@ -34,5 +34,7 @@
  *  @param subview The subview to which the receiver will be pinned.
  */
 - (void)jsq_pinAllEdgesOfSubview:(UIView *)subview;
+- (void)jsq_pinLeftEdgesOfSubview:(UIView *)subview;
+- (void)jsq_allignSubView:(UIView *)subview andNextSubView:(UIView *)subview1;
 
 @end

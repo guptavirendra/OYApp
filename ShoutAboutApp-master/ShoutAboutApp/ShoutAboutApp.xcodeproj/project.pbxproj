@@ -15,6 +15,7 @@
 		8EA72D691E7BEEAF00425AC9 /* settingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA72D681E7BEEAF00425AC9 /* settingCell.swift */; };
 		8EB9B7AA1E77D2E400FA4BCA /* likeDislikeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB9B7A91E77D2E400FA4BCA /* likeDislikeViewController.swift */; };
 		8ECC94E31E659B8B00B12787 /* AlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ECC94E21E659B8B00B12787 /* AlertViewController.swift */; };
+		F11689921ED9A38C00D67E7F /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11689911ED9A38C00D67E7F /* Message.swift */; };
 		F11B75F01DDF844B0075DDCB /* MainSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11B75EF1DDF844B0075DDCB /* MainSearchViewController.swift */; };
 		F11B75F61DE071FB0075DDCB /* ChatPersionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11B75F51DE071FB0075DDCB /* ChatPersionTableViewCell.swift */; };
 		F11B75FA1DE0C70C0075DDCB /* MyTabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11B75F91DE0C70C0075DDCB /* MyTabViewController.swift */; };
@@ -120,6 +121,7 @@
 		F1ACAD781E217DDC004AECAB /* SpamFavBlockViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1ACAD771E217DDC004AECAB /* SpamFavBlockViewController.swift */; };
 		F1B95F4B1EB279E500AA16C6 /* FBRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1B95F481EB279E500AA16C6 /* FBRequest.swift */; };
 		F1B95F4C1EB279E500AA16C6 /* GoogleLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1B95F4A1EB279E500AA16C6 /* GoogleLogin.swift */; };
+		F1BEE4AA1EDAE225004ED700 /* ChatAsyncPhotoMedia.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BEE4A91EDAE225004ED700 /* ChatAsyncPhotoMedia.m */; };
 		F1C9A81F1E3DE0CD003354B6 /* NewProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1C9A81E1E3DE0CD003354B6 /* NewProfileViewController.swift */; };
 		F1D1F7E61DEE05D20046DBB2 /* Pods_ShoutAboutApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17F0E7E11A503618876EE71A /* Pods_ShoutAboutApp.framework */; };
 		F1DD72031DEAADF800DE0A12 /* ChannelListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1DD72001DEAADF800DE0A12 /* ChannelListViewController.swift */; };
@@ -152,6 +154,7 @@
 		8EA72D681E7BEEAF00425AC9 /* settingCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = settingCell.swift; sourceTree = "<group>"; };
 		8EB9B7A91E77D2E400FA4BCA /* likeDislikeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = likeDislikeViewController.swift; sourceTree = "<group>"; };
 		8ECC94E21E659B8B00B12787 /* AlertViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertViewController.swift; sourceTree = "<group>"; };
+		F11689911ED9A38C00D67E7F /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		F11B75EF1DDF844B0075DDCB /* MainSearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainSearchViewController.swift; sourceTree = "<group>"; };
 		F11B75F51DE071FB0075DDCB /* ChatPersionTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatPersionTableViewCell.swift; sourceTree = "<group>"; };
 		F11B75F91DE0C70C0075DDCB /* MyTabViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MyTabViewController.swift; path = ../MyTabViewController.swift; sourceTree = "<group>"; };
@@ -264,6 +267,7 @@
 		F1ACAD771E217DDC004AECAB /* SpamFavBlockViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpamFavBlockViewController.swift; sourceTree = "<group>"; };
 		F1B95F481EB279E500AA16C6 /* FBRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBRequest.swift; sourceTree = "<group>"; };
 		F1B95F4A1EB279E500AA16C6 /* GoogleLogin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleLogin.swift; sourceTree = "<group>"; };
+		F1BEE4A91EDAE225004ED700 /* ChatAsyncPhotoMedia.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = ChatAsyncPhotoMedia.m; path = ShoutAboutApp/ChatAsyncPhotoMedia.m; sourceTree = "<group>"; };
 		F1C9A81E1E3DE0CD003354B6 /* NewProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewProfileViewController.swift; sourceTree = "<group>"; };
 		F1DD71F91DE8B81700DE0A12 /* TitilliumWeb-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "TitilliumWeb-Bold.ttf"; sourceTree = "<group>"; };
 		F1DD71FA1DE8B81700DE0A12 /* TitilliumWeb-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "TitilliumWeb-Italic.ttf"; sourceTree = "<group>"; };
@@ -351,6 +355,7 @@
 				F11B75FB1DE17B520075DDCB /* ChatImageTableViewCell.swift */,
 				F1DD72001DEAADF800DE0A12 /* ChannelListViewController.swift */,
 				F1DD72011DEAADF800DE0A12 /* ChatsViewController.swift */,
+				F11689911ED9A38C00D67E7F /* Message.swift */,
 				F1DD72021DEAADF800DE0A12 /* LoginViewController.swift */,
 				F188392A1DD8A76B00362B1B /* ChattingTableViewCell.swift */,
 				F12C27801DCF765300AEE0A3 /* ChatViewController.swift */,
@@ -398,6 +403,7 @@
 		F12C27441DCE45A800AEE0A3 = {
 			isa = PBXGroup;
 			children = (
+				F1BEE4A91EDAE225004ED700 /* ChatAsyncPhotoMedia.m */,
 				F1707EDB1EACDFEF0004F14F /* SmallTalk */,
 				F12C274F1DCE45A800AEE0A3 /* ShoutAboutApp */,
 				F12C274E1DCE45A800AEE0A3 /* Products */,
@@ -790,8 +796,10 @@
 				F1707F281EACDFEF0004F14F /* CrashlyticsLogger.swift in Sources */,
 				F17E085E1E0FF16500FDBF0B /* CropperViewController.swift in Sources */,
 				F1707F3E1EACDFEF0004F14F /* SearchViewDetailTableViewCell.swift in Sources */,
+				F1BEE4AA1EDAE225004ED700 /* ChatAsyncPhotoMedia.m in Sources */,
 				F1ACAD781E217DDC004AECAB /* SpamFavBlockViewController.swift in Sources */,
 				F17E08651E0FF16500FDBF0B /* ImageViewController.swift in Sources */,
+				F11B75F61DE071FB0075DDCB /* ChatPersionTableViewCell.swift in Sources */,
 				F1707F221EACDFEF0004F14F /* STGameData.swift in Sources */,
 				F1707F391EACDFEF0004F14F /* SubscriptionViewModel.swift in Sources */,
 				8E10820C1E6D718400544467 /* AlertTableViewCell.swift in Sources */,
@@ -827,7 +835,6 @@
 				F1707F1C1EACDFEF0004F14F /* UIAppearance+Swift.m in Sources */,
 				F1707F4A1EACDFEF0004F14F /* XMPPMAMArchivingCoreDataStorage.swift in Sources */,
 				F1707F241EACDFEF0004F14F /* User.swift in Sources */,
-				F11B75F61DE071FB0075DDCB /* ChatPersionTableViewCell.swift in Sources */,
 				F1707F1A1EACDFEF0004F14F /* Array+Ext.swift in Sources */,
 				F1707F201EACDFEF0004F14F /* MAMSync.swift in Sources */,
 				F1707F411EACDFEF0004F14F /* STTappableMedia.swift in Sources */,
@@ -888,6 +895,7 @@
 				F12C277B1DCF75F800AEE0A3 /* SearchViewController.swift in Sources */,
 				F1707F451EACDFEF0004F14F /* WebGameView.swift in Sources */,
 				F11B75FA1DE0C70C0075DDCB /* MyTabViewController.swift in Sources */,
+				F11689921ED9A38C00D67E7F /* Message.swift in Sources */,
 				F12C27691DCE66D900AEE0A3 /* URLPath.swift in Sources */,
 				F12C276F1DCE77A900AEE0A3 /* OTPViewController.swift in Sources */,
 				F12C277F1DCF763F00AEE0A3 /* ProfileViewController.swift in Sources */,

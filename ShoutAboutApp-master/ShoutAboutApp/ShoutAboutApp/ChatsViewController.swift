@@ -24,6 +24,8 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
     
     
     @IBOutlet weak var titleLabel:UILabel?
+    @IBOutlet weak var statusLabel:UILabel?
+    @IBOutlet weak var profilePic:UIImageView?
     
     // Mark: Life Cycle
     
@@ -31,7 +33,7 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
     override func didPressAccessoryButton(sender: UIButton!)
     {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet) // 1
-        let firstAction = UIAlertAction(title: "Take Photo", style: .Default) { (alert: UIAlertAction!) -> Void in
+        let firstAction = UIAlertAction(title: "Camera", style: .Default) { (alert: UIAlertAction!) -> Void in
             NSLog("You pressed button one")
             
             if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera)
@@ -45,29 +47,41 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
             
         } // 2
         
-        let secondAction = UIAlertAction(title: "Choose Photo", style: .Default) { (alert: UIAlertAction!) -> Void in
+        let secondAction = UIAlertAction(title: "Photo & Video Library", style: .Default) { (alert: UIAlertAction!) -> Void in
             NSLog("You pressed button two")
             let imagePicker = UIImagePickerController()
             imagePicker.delegate = self
             imagePicker.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
-            imagePicker.mediaTypes = [kUTTypeImage as String]
+            imagePicker.mediaTypes = [kUTTypeImage as String, kUTTypeVideo as String, kUTTypeAudio as String]
             imagePicker.allowsEditing = false
             self.presentViewController(imagePicker, animated: true,
                                        completion: nil)
         } // 3
         
-        let thirdAction = UIAlertAction(title: "Cancel", style: .Cancel) { (alert: UIAlertAction!) -> Void in
+        let thirdAction = UIAlertAction(title: "Location", style: .Default) { (alert: UIAlertAction!) -> Void in
             NSLog("You pressed button two")
         } // 3
         
+        let fourthAction = UIAlertAction(title: "Contact", style: .Default) { (alert: UIAlertAction!) -> Void in
+            NSLog("You pressed button two")
+        } // 3
+
+        let fifthAction = UIAlertAction(title: "Cancel", style: .Cancel) { (alert: UIAlertAction!) -> Void in
+            NSLog("You pressed button two")
+        } // 3
+
+        
         alert.addAction(firstAction) // 4
         alert.addAction(secondAction) // 5
-        alert.addAction(thirdAction) // 5
+        alert.addAction(thirdAction)
+        alert.addAction(fourthAction)
+        alert.addAction(fifthAction)// 5
         presentViewController(alert, animated: true, completion:nil) // 6
     }
     override func viewDidLoad()
     {
         super.viewDidLoad()
+        self.profilePic?.makeImageRounded()
         
         //recipient = OneRoster.userFromRosterForJID(jid: "\(reciepientPerson)@localhost" )
         
@@ -98,7 +112,7 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
             
             navigationItem.title = recipient.displayName
             self.titleLabel?.text = reciepientPerson?.name  //recipient.nickname
-            
+            self.profilePic?.sd_setImageWithURL(NSURL(string: (reciepientPerson?.photo)!))
             
             dispatch_async(dispatch_get_main_queue(),
                            { () -> Void in
@@ -194,7 +208,16 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
         
         if let recipient = recipient
         {
-            OneMessage.sendMessage(text, to: recipient.jidStr, completionHandler: { (stream, message) -> Void in
+            let message = Message()
+            message._id = (OneChat.sharedInstance.xmppStream?.generateUUID())!
+            message._isRead = false
+            message.msg     = text
+            message.msgType = 1
+            message.senderId = senderId
+            message.receiverId  = recipient.jidStr
+            
+            
+            OneMessage.sendMessage(message.getJson(), to: recipient.jidStr, completionHandler: { (stream, message) -> Void in
                 JSQSystemSoundPlayer.jsq_playMessageSentSound()
                 self.finishSendingMessageAnimated(true)
             })
@@ -203,40 +226,40 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
     
     // Mark: JSQMessages CollectionView DataSource
     
-    override func collectionView(collectionView: JSQMessagesCollectionView!, messageDataForItemAtIndexPath indexPath: NSIndexPath!) -> JSQMessageData! {
-        let message: JSQMessage = self.messages[indexPath.item] as! JSQMessage
-        
-//        if let  messageDict = self.convertStringToDictionary(message.text)
+    override func collectionView(collectionView: JSQMessagesCollectionView!, messageDataForItemAtIndexPath indexPath: NSIndexPath!) -> JSQMessageData!
+    {
+        var message: JSQMessage = self.messages[indexPath.item] as! JSQMessage
+//        if let  messageDict = NSObject.convertStringToDictionary(message.text)
 //        {
-//            
-//                if let msgText = messageDict["msg"] as? String
+//            if let msgText = messageDict["msg"] as? String
+//            {
+//                if msgText.characters.count > 0
 //                {
-//                     message = JSQMessage(senderId: message.senderId, senderDisplayName: message.senderDisplayName , date: message.date, text: msgText)
-//                    
-//                    
+//                    message = JSQMessage(senderId: message.senderId, senderDisplayName: message.senderId , date: message.date, text: msgText)
+//                                        
 //                }
-//                if let serverUrl = messageDict["attachment"] as? NSDictionary
+//            }
+//            if let attachment = messageDict["attachment"] as? NSDictionary
+//            {
+//                if let  localUrl = attachment.objectForKey("serverUrl") as? String
 //                {
-//                    dispatch_async(dispatch_get_main_queue(),
-//                                   {
-//                                    if let  serverUrl = serverUrl.objectForKey("serverUrl")
-//                                    {
-//                                        if let url = NSURL(string: serverUrl as! String)
-//                                        {
-//                                            let imageData =  NSData(contentsOfURL: url)
-//                                            let image  =  UIImage(data: imageData!)
-//                                            let data  =  JSQPhotoMediaItem(image: image)
-//                                           message  =  JSQMessage(senderId: message.senderId, senderDisplayName: message.senderDisplayName, date:  message.date, media: data)
-//                                            
-//                                            
-//                                        }
-//                                    }
-//                    })
-//                    
-//                    
+//                    let attachmentType = attachment.objectForKey("attachmentType") as! Int
+//                    if attachmentType == 4 && localUrl.characters.count > 0
+//                    {
+//                        if let url = NSURL(string: localUrl )
+//                        {
+//                            
+//                            let imageData = ChatAsyncPhotoMedia(URL: url)
+//                            message  =  JSQMessage(senderId: message.senderId, senderDisplayName: message.senderId, date:  message.date, media: imageData)
+//                            
+//                        }
+//                    }
 //                }
-//                
+//            }
 //        }
+
+       
+        
         return message
     }
     
@@ -263,7 +286,7 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
                 let senderAvatar = JSQMessagesAvatarImageFactory.avatarImageWithImage(UIImage(data: photoData), diameter: 30)
                 return senderAvatar
             } else {
-                let senderAvatar = JSQMessagesAvatarImageFactory.avatarImageWithUserInitials("SR", backgroundColor: UIColor(white: 0.85, alpha: 1.0), textColor: UIColor(white: 0.60, alpha: 1.0), font: UIFont(name: "Helvetica Neue", size: 14.0), diameter: 30)
+                let senderAvatar = JSQMessagesAvatarImageFactory.avatarImageWithUserInitials("", backgroundColor: UIColor(white: 0.85, alpha: 1.0), textColor: UIColor(white: 0.60, alpha: 1.0), font: UIFont(name: "Helvetica Neue", size: 14.0), diameter: 30)
                 return senderAvatar
             }
         } else {
@@ -271,14 +294,16 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
                 let recipientAvatar = JSQMessagesAvatarImageFactory.avatarImageWithImage(UIImage(data: photoData), diameter: 30)
                 return recipientAvatar
             } else {
-                let recipientAvatar = JSQMessagesAvatarImageFactory.avatarImageWithUserInitials("SR", backgroundColor: UIColor(white: 0.85, alpha: 1.0), textColor: UIColor(white: 0.60, alpha: 1.0), font: UIFont(name: "Helvetica Neue", size: 14.0)!, diameter: 30)
+                let recipientAvatar = JSQMessagesAvatarImageFactory.avatarImageWithUserInitials("", backgroundColor: UIColor(white: 0.85, alpha: 1.0), textColor: UIColor(white: 0.60, alpha: 1.0), font: UIFont(name: "Helvetica Neue", size: 14.0)!, diameter: 30)
                 return recipientAvatar
             }
         }
     }
     
-    override func collectionView(collectionView: JSQMessagesCollectionView!, attributedTextForCellTopLabelAtIndexPath indexPath: NSIndexPath!) -> NSAttributedString! {
-        if indexPath.item % 3 == 0 {
+    override func collectionView(collectionView: JSQMessagesCollectionView!, attributedTextForCellTopLabelAtIndexPath indexPath: NSIndexPath!) -> NSAttributedString!
+    {
+        if indexPath.item % 3 == 0
+        {
             let message: JSQMessage = self.messages[indexPath.item] as! JSQMessage
             return JSQMessagesTimestampFormatter.sharedFormatter().attributedTimestampForDate(message.date)
         }
@@ -317,14 +342,20 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
         let cell: JSQMessagesCollectionViewCell = super.collectionView(collectionView, cellForItemAtIndexPath: indexPath) as! JSQMessagesCollectionViewCell
         let msg: JSQMessage = self.messages[indexPath.item] as! JSQMessage
         
-        if !msg.isMediaMessage {
-            if msg.senderId == self.senderId {
+        if !msg.isMediaMessage
+        {
+            if msg.senderId == self.senderId
+            {
                 cell.textView!.textColor = UIColor.blackColor()
                 cell.textView!.linkTextAttributes = [NSForegroundColorAttributeName:UIColor.blackColor(), NSUnderlineStyleAttributeName: NSUnderlineStyle.StyleSingle.rawValue]
-            } else {
+            } else
+            {
                 cell.textView!.textColor = UIColor.whiteColor()
                 cell.textView!.linkTextAttributes = [NSForegroundColorAttributeName:UIColor.whiteColor(), NSUnderlineStyleAttributeName: NSUnderlineStyle.StyleSingle.rawValue]
             }
+        }else
+        {
+        
         }
         
         return cell
@@ -384,25 +415,28 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
                             messages.addObject(message)
                             self.finishReceivingMessageAnimated(true)
                         }
-                        if let serverUrl = messageDict["attachment"] as? NSDictionary
+                        if let attachment = messageDict["attachment"] as? NSDictionary
                         {
-                            dispatch_async(dispatch_get_main_queue(),
-                                           {
-                            if let  serverUrl = serverUrl.objectForKey("serverUrl")
+                            
+                            if let  serverUrl = attachment.objectForKey("serverUrl")
                             {
                                 if let url = NSURL(string: serverUrl as! String)
                                 {
-                                   let imageData =  NSData(contentsOfURL: url)
-                                   let image  =  UIImage(data: imageData!)
-                                    let data  =  JSQPhotoMediaItem(image: image)
-                                    let fullMessage =   JSQMessage(senderId: from, senderDisplayName: from, date:  NSDate(), media: data)
-                                    self.messages.addObject(fullMessage)
-                                    self.finishReceivingMessageAnimated(true)
+                                    
+                                   let imageData = ChatAsyncPhotoMedia(URL: url)
+                                    
+                                        
+                                        //let imageData =  NSData(contentsOfURL: url)
+                                        //let image  =  UIImage(data: imageData!)
+                                        //let data  =  JSQPhotoMediaItem(image: image)
+                                        let fullMessage =   JSQMessage(senderId: from, senderDisplayName: from, date:  NSDate(), media: imageData)
+                                        self.messages.addObject(fullMessage)
+                                        self.finishReceivingMessageAnimated(true)
+                                        
+                                    
                                     
                                 }
                             }
-                            })
-                            
                             
                         }
                         
@@ -444,44 +478,60 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
         if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage
         {
             let data =  JSQPhotoMediaItem(image: pickedImage)
-            
-            //JSQMessage(senderId: <#T##String!#>, senderDisplayName: <#T##String!#>, date: <#T##NSDate!#>, media: JSQMessageMediaData!)
-            
-            
-        
-            
             let fullMessage =   JSQMessage(senderId: OneChat.sharedInstance.xmppStream?.myJID.bare(), senderDisplayName: OneChat.sharedInstance.xmppStream?.myJID.bare(), date:  NSDate(), media: data)
-            
+                messages.addObject(fullMessage)
+            self.finishSendingMessageAnimated(true)
+
             
         
             
             
-            //let fullMessage = JSQMessage(senderId: OneChat.sharedInstance.xmppStream?.myJID.bare(), senderDisplayName: OneChat.sharedInstance.xmppStream?.myJID.bare(), date: NSDate(), media: data)
-            messages.addObject(fullMessage)
+            //self.finishSendingMessageAnimated(true)
             
            // DataSessionManger.sharedInstance.
             
         //hit webservice =
             
-            if let recipient = recipient
-            {
-                OneMessage.sendMessageImage(pickedImage, to: recipient.jidStr, completionHandler: { (stream, message) -> Void in
-                    
-                    JSQSystemSoundPlayer.jsq_playMessageSentSound()
-                    self.finishSendingMessageAnimated(true)
-                })
-            }
             
-            /*
-             
-             if let recipient = recipient
-             {
-             OneMessage.sendMessage("", to: recipient.jidStr, completionHandler: { (stream, message) -> Void in
-             JSQSystemSoundPlayer.jsq_playMessageSentSound()
-             self.finishSendingMessageAnimated(true)
-             })
-             }
-             */
+            
+            let currentTime = NSDate().timeIntervalSince1970 as NSTimeInterval
+            let extensionPathStr = "profile\(currentTime).jpg"
+            let documentsDirectory = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true)[0]
+            let fullPathToFile = "\(documentsDirectory)/\(extensionPathStr)"
+            
+            print(fullPathToFile)
+            
+            let imageData: NSData = UIImageJPEGRepresentation(pickedImage, 0.5)!
+            
+            imageData.writeToFile(fullPathToFile, atomically: true)
+            let imagePath =  [ "photo"]
+            let mediaPathArray = [fullPathToFile]
+            DataSessionManger.sharedInstance.sendVideoORImageMessage(recipient!.jidStr.stringByReplacingOccurrencesOfString("@localhost", withString: ""), message_type: "image", mediaPath: mediaPathArray, name: imagePath, onFinish: { (response, deserializedResponse) in
+                
+                
+                if let recipient = self.recipient
+                {
+                    let message = ImageMessage()
+                    message._id = (OneChat.sharedInstance.xmppStream?.generateUUID())!
+                    message._isRead = false
+                    message.msg     = ""
+                    message.msgType = 4
+                    message.senderId = self.senderId
+                    message.receiverId  = recipient.jidStr
+                    message.attachment.localUrl = fullPathToFile
+                    message.attachment.serverUrl =  deserializedResponse.objectForKey("image") as! String
+                    
+                    OneMessage.sendMessage(message.getJson(), to: recipient.jidStr, completionHandler: { (stream, message) -> Void in
+                        JSQSystemSoundPlayer.jsq_playMessageSentSound()
+                        
+                    })
+                }
+                
+                
+                }, onError: { (error) in
+                    
+            })
+            
         }
         picker.dismissViewControllerAnimated(true, completion: nil)
     }
@@ -498,14 +548,18 @@ extension NSObject
 
    class func convertStringToDictionary(text: String) -> [String:AnyObject]?
     {
+        var dict = [String:AnyObject]()
+        print("json to convert \(text)")
+        
         if let data = text.dataUsingEncoding(NSUTF8StringEncoding) {
             do {
-                return try NSJSONSerialization.JSONObjectWithData(data, options: []) as? [String:AnyObject]
+                 dict = try NSJSONSerialization.JSONObjectWithData(data, options: []) as! [String:AnyObject]
             } catch let error as NSError {
                 print(error)
             }
         }
-        return nil
+    
+        return dict
     }
 }
 

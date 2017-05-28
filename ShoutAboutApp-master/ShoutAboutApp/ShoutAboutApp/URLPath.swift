@@ -14,7 +14,7 @@ let searchHistory  = "searchHistory"
 let searchString   = "searchString"
 let search_mobile  = "search_result"
 let message        = "message"
-let Responsedata        = "data"
+let Responsedata   = "data"
 let otpMessage     = "Successfully sent the One Time Password to your Mobile Number"
 let otpExpireMessage = "your otp has been expired, please regenerate new otp."
 let kapp_user_id    = "app_user_id"
@@ -78,7 +78,8 @@ struct WebServicePath
     let favourite_mobile_number   = "favourite_mobile_number"
     let unfavourite_mobile_number = "unfavourite_mobile_number"
     let user_favourite_list       = "user_favourite_list"
-    let post_detail  = "post_detail"
+    let post_detail               = "post_detail"
+    let alert_count               = "alert_count"
 
     
     // Mohit
@@ -92,6 +93,8 @@ struct WebServicePath
     let dislike_user           = "dislike"
     
     let nextPage              = "page"
+    
+    
 }
 
 class ChatPerson:SearchPerson
@@ -138,6 +141,10 @@ class SearchPerson:PersonContact, NSCoding
         {
             idString = id
         }
+        if let status = aDecoder.decodeObjectForKey("status") as? String
+        {
+            self.status = status
+        }
         if let name = aDecoder.decodeObjectForKey("name") as? String
         {
             self.name = name
@@ -161,6 +168,10 @@ class SearchPerson:PersonContact, NSCoding
         if let dob = aDecoder.decodeObjectForKey("dob") as? String
         {
             self.dob = dob
+        }
+        if let birthday = aDecoder.decodeObjectForKey("birthday") as? String
+        {
+            self.birthday = birthday
         }
         if let gender = aDecoder.decodeObjectForKey("gender") as? String
         {
@@ -198,12 +209,14 @@ class SearchPerson:PersonContact, NSCoding
     func encodeWithCoder(aCoder: NSCoder)
     {
         aCoder.encodeObject(idString, forKey: "idString")
+        aCoder.encodeObject(idString, forKey: "status")
         aCoder.encodeObject(name, forKey: "name")
         aCoder.encodeObject(email, forKey: "email")
         aCoder.encodeObject(mobileNumber, forKey: "mobileNumber")
         aCoder.encodeObject(created_at, forKey: "created_at")
         aCoder.encodeObject(updated_at, forKey: "updated_at")
         aCoder.encodeObject(dob, forKey: "dob")
+        aCoder.encodeObject(birthday, forKey: "birthday")
         aCoder.encodeObject(gender, forKey: "gender")
         aCoder.encodeObject(address, forKey: "address")
         aCoder.encodeObject(website, forKey: "website")

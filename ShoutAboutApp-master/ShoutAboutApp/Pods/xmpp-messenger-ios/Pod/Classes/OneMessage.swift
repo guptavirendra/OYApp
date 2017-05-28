@@ -10,6 +10,8 @@ import Foundation
 import JSQMessagesViewController
 import XMPPFramework
 
+
+
 public typealias OneChatMessageCompletionHandler = (stream: XMPPStream, message: XMPPMessage) -> Void
 
 // MARK: Protocols
@@ -53,8 +55,8 @@ public class OneMessage: NSObject {
 		let body = DDXMLElement.elementWithName("body") as! DDXMLElement
 		let messageID = OneChat.sharedInstance.xmppStream?.generateUUID()
 		
-        
-        body.setValue(message, forKey: "message")
+        body.stringValue = message
+        //body.setValue(message, forKey: "message")
 		//body.setStringValue(message)
 		
 		let completeMessage = DDXMLElement.elementWithName("message") as! DDXMLElement
@@ -200,9 +202,52 @@ public class OneMessage: NSObject {
 					sender = jid
 				}
 				
-				let fullMessage = JSQMessage(senderId: sender, senderDisplayName: sender, date: date, text: body)
-				retrievedMessages.addObject(fullMessage)
-			}
+				var fullMessage = JSQMessage(senderId: sender, senderDisplayName: sender, date: date, text: body)
+                
+                
+                
+                    if let  messageDict = NSObject.convertStringToDictionary(body)
+                    {
+                        
+                        if let msgText = messageDict["msg"] as? String
+                        {
+                            if msgText.characters.count > 0
+                            {
+                                fullMessage = JSQMessage(senderId: sender, senderDisplayName: sender , date: date, text: msgText)
+                                retrievedMessages.addObject(fullMessage)
+                            }
+                            
+                            
+                            
+                        }
+                        if let attachment = messageDict["attachment"] as? NSDictionary
+                        {
+                            
+                            if let  localUrl = attachment.objectForKey("localUrl") as? String
+                            {
+                                
+                                let attachmentType = attachment.objectForKey("attachmentType") as! Int
+                                    
+                                    if attachmentType == 4 && localUrl.characters.count > 0
+                                    {
+                                        
+                                        
+                                    
+                                
+                                          print("local image show")
+                                           let image  =  UIImage(contentsOfFile: localUrl as! String)
+                                            let data  =  JSQPhotoMediaItem(image: image)
+                                            fullMessage  =  JSQMessage(senderId: sender, senderDisplayName: sender, date:  date, media: data)
+                                            retrievedMessages.addObject(fullMessage)
+                                            
+                                        
+                                }
+                            }
+                        }
+                    }
+                
+                retrievedMessages.addObject(fullMessage)
+            }
 		} catch _ {
 			//catch fetch error here
 		}
@@ -241,8 +286,28 @@ public class OneMessage: NSObject {
 		}
 	}
 }
+extension NSObject
+{
+    
+    class func convertStringToDictionary(text: String) -> [String:AnyObject]?
+    {
+        var dict = [String:AnyObject]()
+        print("json to convert \(text)")
+        
+        if let data = text.dataUsingEncoding(NSUTF8StringEncoding) {
+            do {
+                dict = try NSJSONSerialization.JSONObjectWithData(data, options: []) as! [String:AnyObject]
+            } catch let error as NSError {
+                print(error)
+            }
+        }
+        
+        return dict
+    }
+}
 
-extension OneMessage: XMPPStreamDelegate {
+extension OneMessage: XMPPStreamDelegate
+{
 	
 	public func xmppStream(sender: XMPPStream, didSendMessage message: XMPPMessage) {
 		if let completion = OneMessage.sharedInstance.didSendMessageCompletionBlock {
@@ -254,13 +319,16 @@ extension OneMessage: XMPPStreamDelegate {
 	public func xmppStream(sender: XMPPStream, didReceiveMessage message: XMPPMessage) {
 		let user = OneChat.sharedInstance.xmppRosterStorage.userForJID(message.from(), xmppStream: OneChat.sharedInstance.xmppStream, managedObjectContext: OneRoster.sharedInstance.managedObjectContext_roster())
 		
-		if !OneChats.knownUserForJid(jidStr: user.jidStr) {
+		if !OneChats.knownUserForJid(jidStr: user.jidStr)
+        {
 			OneChats.addUserToChatList(jidStr: user.jidStr)
 		}
 		
-		if message.isChatMessageWithBody() {
+		if message.isChatMessageWithBody()
+        {
 			OneMessage.sharedInstance.delegate?.oneStream(sender, didReceiveMessage: message, from: user)
-		} else {
+		} else
+        {
 			//was composing
 			if let _ = message.elementForName("composing") {
 				OneMessage.sharedInstance.delegate?.oneStream(sender, userIsComposing: user)

@@ -12,6 +12,10 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
     var dataFeedsArray:[dataFeedMyfeedModel] = [dataFeedMyfeedModel]()
     
     
+    @IBOutlet weak var countLabel:UILabel?
+    @IBOutlet weak var countBackView:UIView?
+    
+    
     var responseData    = FeedMyfeed()
    // var dataFeedMyfeed  = dataFeedMyfeedModel()
     var msgresponseData = AlertCountCommonModel()
@@ -21,6 +25,7 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
     override func viewDidLoad()
     {
         super.viewDidLoad()
+        self.countBackView?.makeImageRoundedWithWidth(1, color: UIColor.redColor())
         self.automaticallyAdjustsScrollViewInsets = false
         self.ConfigureVariable()
         self.loadfeedAPICall()
@@ -39,7 +44,33 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
     override func viewWillAppear(animated: Bool)
     {
         super.viewWillAppear(animated)
-       
+        getAlertCount()
+        
+    }
+    
+    
+    func getAlertCount()
+    {
+        if NetworkConnectivity.isConnectedToNetwork() != true
+        {
+            
+        }else
+        {
+            DataSessionManger.sharedInstance.getAlertCount({ (response, deserializedResponse) in
+                
+                if let alert_count = deserializedResponse.objectForKey("alert_count") as? NSNumber
+                {
+                    ProfileManager.sharedInstance.alert_count = alert_count.integerValue
+                    self.countLabel?.text = alert_count.stringValue
+                    
+                    
+                }
+                
+                }, onError: { (error) in
+                    
+            })
+        }
+        
     }
 
     override func didReceiveMemoryWarning()
@@ -204,7 +235,7 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
     func likeDislikeScreenClicked(index: Int)
     {
 
-       let dataFeedMyfeed = dataFeedsArray[index]
+        
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
@@ -292,8 +323,6 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
     
     func likebuttonClicked(cell:FeedsTableViewCell, button:UIButton)
     {
-        
-       
         likeData( dict, cell: cell)
     }
     
@@ -383,7 +412,8 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
     }
     
     
-    func loadfeedAPICall()  {
+    func loadfeedAPICall()
+    {
         
         if NetworkConnectivity.isConnectedToNetwork() != true{
             
@@ -395,7 +425,10 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
         DataSessionManger.sharedInstance.getfeedslist( { (response, deserializedResponse) in
                 print("deserializedResponse \(deserializedResponse)")
                 
-                dispatch_async(dispatch_get_main_queue(), {
+                dispatch_async(dispatch_get_main_queue(),
+                    {
+                        
+                        self.getAlertCount()
                     
                     self.responseData = deserializedResponse
                     
@@ -444,6 +477,7 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
                     self.dataFeedsArray = self.responseData.data
                     self.tableView.reloadData()
                     self.view.removeSpinner()
+                    self.getAlertCount()
                     
                 })
                 
@@ -475,6 +509,7 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
                 self.tableView.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: .None)
                
                 self.view.removeSpinner()
+                    self.getAlertCount()
                 
             });
 
@@ -505,6 +540,7 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
              
                 print(deserializedResponse)
                 self.view.removeSpinner()
+                    self.getAlertCount()
                 
             });
         }) { (error) in
@@ -523,7 +559,7 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
         DataSessionManger.sharedInstance.reportTospamUser(dict, onFinish: {(response, deserializedResponse) in
             dispatch_async(dispatch_get_main_queue(),
                 {
-                
+                self.getAlertCount()
                 self.view.removeSpinner()
                 
             });

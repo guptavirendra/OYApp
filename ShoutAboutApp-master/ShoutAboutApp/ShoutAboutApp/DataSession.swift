@@ -10,6 +10,16 @@ import UIKit
 
 class DataSession: BaseNSURLSession
 {
+    func  getAlertCount(onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    {
+        let dict = NSObject.getAppUserIdAndToken()
+        super.getWithOnFinish(mCHWebServiceMethod.alert_count, parameters: dict, onFinish: { (response, deserializedResponse) in
+            onFinish(response: response, deserializedResponse: deserializedResponse)
+        }) { (error) in
+            onError(error: error)
+        }
+    }
+    
     
     
     //MARK: get post Detail
@@ -512,6 +522,41 @@ class DataSession: BaseNSURLSession
 class DataSessionManger: NSObject
 {
     static let sharedInstance = DataSessionManger()
+    
+    
+    func downloadImageWithURL(urlString:String, downloadedImageData:(imageData:NSData?, message:String)->())
+    {
+        let dataSession = DataSession()
+        dataSession.downloadImageWithURL(urlString ) { (imageData, message) in
+            downloadedImageData(imageData: imageData, message: message)
+        }
+        
+    }
+    
+    
+    func sendVideoORImageMessage(recipentID:String, message_type: String, mediaPath:[String]?, name:[String]?,onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    {
+        
+         let dataSession = DataSession()
+        dataSession.sendVideoORImageMessage(recipentID, message_type: message_type, mediaPath: mediaPath, name: name, onFinish: { (response, deserializedResponse) in
+            onFinish(response: response, deserializedResponse: deserializedResponse)
+            }) { (error) in
+                 onError(error: error)
+        }
+    }
+    
+    
+    func  getAlertCount(onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    {
+        let dataSession = DataSession()
+        dataSession.getAlertCount({ (response, deserializedResponse) in
+            onFinish(response: response, deserializedResponse: deserializedResponse)
+
+            }) { (error) in
+                onError(error: error)
+        }
+    }
+    
     
     
     func dislikeUserID(ratereviews_id:String, onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->()){

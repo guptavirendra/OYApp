@@ -34,6 +34,7 @@ class ProfileManager:NSObject
     var localStoredImage:UIImage?
     var syncedContactArray = [SearchPerson]()
     var xmppClient: STXMPPClient?
+    var alert_count:Int = 0
 }
 
 

@@ -86,6 +86,7 @@ FOUNDATION_EXPORT const CGFloat kJSQMessagesToolbarContentViewHorizontalSpacingD
  *  Set this value to `nil` to remove the button.
  */
 @property (weak, nonatomic) UIButton *rightBarButtonItem;
+@property (weak, nonatomic) UIButton *rightBarButtonItem1;
 
 /**
  *  Specifies the width of the rightBarButtonItem.
@@ -110,6 +111,7 @@ FOUNDATION_EXPORT const CGFloat kJSQMessagesToolbarContentViewHorizontalSpacingD
  *  in your `JSQMessagesViewController` subclass.
  */
 @property (weak, nonatomic, readonly) UIView *rightBarButtonContainerView;
+- (void)setRightBarButtonItem:(UIButton *)rightBarButtonItem andSecondButton :(UIButton *)rightBarButtonItem1;
 
 #pragma mark - Class methods
 

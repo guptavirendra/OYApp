@@ -64,8 +64,9 @@ static void * kJSQMessagesInputToolbarKeyValueObservingContext = &kJSQMessagesIn
     [self jsq_addObservers];
 
     self.contentView.leftBarButtonItem = [JSQMessagesToolbarButtonFactory defaultAccessoryButtonItem];
-    self.contentView.rightBarButtonItem = [JSQMessagesToolbarButtonFactory defaultSendButtonItem];
+     self.contentView.rightBarButtonItem = [JSQMessagesToolbarButtonFactory defaultSendButtonItem];
 
+    //[self.contentView setRightBarButtonItem:[JSQMessagesToolbarButtonFactory defaultSendButtonItem] andSecondButton:[JSQMessagesToolbarButtonFactory defaultSendButtonItem]];
     [self toggleSendButtonEnabled];
 }
 
