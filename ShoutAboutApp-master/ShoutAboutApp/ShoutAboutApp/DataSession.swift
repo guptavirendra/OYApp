@@ -529,6 +529,7 @@ class DataSessionManger: NSObject
         let dataSession = DataSession()
         dataSession.downloadImageWithURL(urlString ) { (imageData, message) in
             downloadedImageData(imageData, message)
+            dataSession.mNSURLSession.invalidateAndCancel()
         }
         
     }

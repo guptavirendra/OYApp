@@ -82,6 +82,7 @@ open class OneRoster: NSObject, NSFetchedResultsControllerDelegate {
 	
 	open class func userFromRosterForJID(jid: String) -> XMPPUserCoreDataStorageObject? {
 		let userJID =   XMPPJID(string: jid)// XMPPJID.withString(jid)
+        
 		
 		if let user = OneChat.sharedInstance.xmppRosterStorage.user(for: userJID, xmppStream: OneChat.sharedInstance.xmppStream, managedObjectContext: sharedInstance.managedObjectContext_roster()) {
 			return user

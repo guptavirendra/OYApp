@@ -399,7 +399,8 @@ extension OneChat: XMPPStreamDelegate {
 		}
 	}
 	
-	public func xmppStreamDidAuthenticate(_ sender: XMPPStream) {
+	public func xmppStreamDidAuthenticate(_ sender: XMPPStream)
+    {
 		streamDidAuthenticateCompletionBlock!(sender, nil)
 		streamDidConnectCompletionBlock!(sender, nil)
 		OnePresence.goOnline()

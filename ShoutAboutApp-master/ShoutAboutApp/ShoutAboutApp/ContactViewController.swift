@@ -269,7 +269,7 @@ extension ContactViewController
                 let stringID = String(personContact.idString)
                 let ejabberID = stringID+"@localhost"
                 let user =  OneRoster.userFromRosterForJID(jid: ejabberID)
-                print("\(OneRoster.buddyList.sections)")
+                print("\(String(describing: OneRoster.buddyList.sections))")
                 let chatVc = self.storyboard?.instantiateViewController(withIdentifier: "ChatsViewController") as? ChatsViewController
                 
                 chatVc!.senderDisplayName = ProfileManager.sharedInstance.personalProfile.name

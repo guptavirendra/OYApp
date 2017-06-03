@@ -202,10 +202,10 @@ open class OneMessage: NSObject {
 					sender = jid
 				}
 				
-				var fullMessage = JSQMessage(senderId: sender, senderDisplayName: sender, date: date, text: body)
+				let fullMessage = JSQMessage(senderId: sender, senderDisplayName: sender, date: date, text: body)
                 
                 
-                
+                /*
                     if let  messageDict = NSObject.convertStringToDictionary(body)
                     {
                         
@@ -214,7 +214,7 @@ open class OneMessage: NSObject {
                             if msgText.characters.count > 0
                             {
                                 fullMessage = JSQMessage(senderId: sender, senderDisplayName: sender , date: date, text: msgText)
-                                retrievedMessages.add(fullMessage)
+                                retrievedMessages.add(fullMessage!)
                             }
                             
                             
@@ -235,18 +235,18 @@ open class OneMessage: NSObject {
                                     
                                 
                                           print("local image show")
-                                           let image  =  UIImage(contentsOfFile: localUrl as! String)
+                                           let image  =  UIImage(contentsOfFile: localUrl )
                                             let data  =  JSQPhotoMediaItem(image: image)
                                             fullMessage  =  JSQMessage(senderId: sender, senderDisplayName: sender, date:  date, media: data)
-                                            retrievedMessages.add(fullMessage)
+                                            retrievedMessages.add(fullMessage!)
                                             
                                         
                                 }
                             }
                         }
                     }
-                
-                retrievedMessages.add(fullMessage)
+                */
+                retrievedMessages.add(fullMessage!)
             }
 		} catch _ {
 			//catch fetch error here
@@ -319,10 +319,10 @@ extension OneMessage: XMPPStreamDelegate
 	public func xmppStream(_ sender: XMPPStream, didReceive message: XMPPMessage) {
 		let user = OneChat.sharedInstance.xmppRosterStorage.user(for: message.from(), xmppStream: OneChat.sharedInstance.xmppStream, managedObjectContext: OneRoster.sharedInstance.managedObjectContext_roster())
 		
-         
-		if OneChats.knownUserForJid(jidStr: (user?.jidStr))
+        
+		if OneChats.knownUserForJid(jidStr: (user!.jidStr))
         {
-			OneChats.addUserToChatList(jidStr: (user?.jidStr)!)
+			OneChats.addUserToChatList(jidStr: user!.jidStr)
 		}
 		
 		if message.isChatMessageWithBody()
