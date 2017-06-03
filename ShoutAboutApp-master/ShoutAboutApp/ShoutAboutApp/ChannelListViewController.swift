@@ -44,20 +44,20 @@ class ChannelListViewController: UITableViewController
 {
     var senderDisplayName: String? // 1
     var newChannelTextField: UITextField? // 2
-    private var channels: [Channel] = [] // 3
+    fileprivate var channels: [Channel] = [] // 3
     
     
-    private lazy var channelRef: FIRDatabaseReference = FIRDatabase.database().reference().child("channels")
-    private var channelRefHandle: FIRDatabaseHandle?
+    fileprivate lazy var channelRef: FIRDatabaseReference = FIRDatabase.database().reference().child("channels")
+    fileprivate var channelRefHandle: FIRDatabaseHandle?
     
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int
+    override func numberOfSections(in tableView: UITableView) -> Int
     {
          return 2 // 1
     }
     
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int { // 2
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { // 2
         if let currentSection: Section = Section(rawValue: section) {
             switch currentSection
             {
@@ -72,9 +72,9 @@ class ChannelListViewController: UITableViewController
     }
     
     // 3
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let reuseIdentifier = (indexPath as NSIndexPath).section == Section.createNewChannelSection.rawValue ? "NewChannel" : "ExistingChannel"
-        let cell = tableView.dequeueReusableCellWithIdentifier(reuseIdentifier, forIndexPath: indexPath)
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let reuseIdentifier = (indexPath as IndexPath).section == Section.createNewChannelSection.rawValue ? "NewChannel" : "ExistingChannel"
+        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath)
         
         /*
         if (indexPath as NSIndexPath).section == Section.createNewChannelSection.rawValue
@@ -91,14 +91,14 @@ class ChannelListViewController: UITableViewController
     }
     
     // MARK: Firebase related methods
-    private func observeChannels()
+    fileprivate func observeChannels()
     {
         // Use the observe method to listen for new
         // channels being written to the Firebase DB
-        channelRefHandle = channelRef.observeEventType(.ChildAdded, withBlock: { (snapshot) in // 1
+        channelRefHandle = channelRef.observe(.childAdded, with: { (snapshot) in // 1
             let channelData = snapshot.value as! Dictionary<String, AnyObject> // 2
             let id = snapshot.key
-            if let name = channelData["name"] as! String! where name.characters.count > 0 { // 3
+            if let name = channelData["name"] as! String!, name.characters.count > 0 { // 3
                 self.channels.append(Channel(id: id, name: name))
                 self.tableView.reloadData()
             } else {
@@ -118,12 +118,12 @@ class ChannelListViewController: UITableViewController
     {
         if let refHandle = channelRefHandle
         {
-             channelRef.removeObserverWithHandle(refHandle)
+             channelRef.removeObserver(withHandle: refHandle)
             
         }
     }
     
-    @IBAction func createChannel(sender: AnyObject)
+    @IBAction func createChannel(_ sender: AnyObject)
     {
         if let name = newChannelTextField?.text { // 1
             let newChannelRef = channelRef.childByAutoId() // 2
@@ -137,24 +137,24 @@ class ChannelListViewController: UITableViewController
     // MARK: Navigation
     
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?)
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?)
     {
-         super.prepareForSegue(segue, sender: sender)
+         super.prepare(for: segue, sender: sender)
 
         if let channel = sender as? Channel
         {
-            let chatVc = segue.destinationViewController as! ChatsViewController
+            let chatVc = segue.destination as! ChatsViewController
             
             chatVc.senderDisplayName = senderDisplayName
             //chatVc.channel = channel
             //chatVc.channelRef = channelRef.child(channel.id)
         }
     }
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath)
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
     {
         if indexPath.section == Section.currentChannelsSection.rawValue {
-            let channel = channels[(indexPath as NSIndexPath).row]
-            self.performSegueWithIdentifier( "ShowChannel", sender: channel)
+            let channel = channels[(indexPath as IndexPath).row]
+            self.performSegue( withIdentifier: "ShowChannel", sender: channel)
         }
     }
 

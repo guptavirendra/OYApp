@@ -123,7 +123,7 @@ static NSString *const FBSDKAppLinkInboundEvent = @"fb_al_inbound";
 
 #pragma mark - UIApplicationDelegate
 
-#if __IPHONE_OS_VERSION_MAX_ALLOWED > __IPHONE_9_3
+#if __IPHONE_OS_VERSION_MAX_ALLOWED > __IPHONE_9_0
 - (BOOL)application:(UIApplication *)application
             openURL:(NSURL *)url
             options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
@@ -251,7 +251,7 @@ static NSString *const FBSDKAppLinkInboundEvent = @"fb_al_inbound";
     // Dispatch openURL calls to prevent hangs if we're inside the current app delegate's openURL flow already
     NSOperatingSystemVersion iOS10Version = { .majorVersion = 10, .minorVersion = 0, .patchVersion = 0 };
     if ([FBSDKInternalUtility isOSRunTimeVersionAtLeast:iOS10Version]) {
-     // [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:handler];
+      [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:handler];
     } else {
       BOOL opened = [[UIApplication sharedApplication] openURL:url];
 
@@ -415,12 +415,14 @@ static NSString *const FBSDKAppLinkInboundEvent = @"fb_al_inbound";
     return;
   }
 
-  NSDictionary * applinkData = [FBSDKInternalUtility objectForJSONString:applinkDataString error:NULL];
+  NSDictionary *applinkData = [FBSDKInternalUtility objectForJSONString:applinkDataString error:NULL];
   if (!applinkData) {
     return;
   }
 
-  NSURL *targetURL = [NSURL URLWithString:applinkData[@"target_url"]];
+  NSString *targetURLString = applinkData[@"target_url"];
+  NSURL *targetURL = [targetURLString isKindOfClass:[NSString class]] ? [NSURL URLWithString:targetURLString] : nil;
+
   NSMutableDictionary *logData = [[NSMutableDictionary alloc] init];
   [FBSDKInternalUtility dictionary:logData setObject:[targetURL absoluteString] forKey:@"targetURL"];
   [FBSDKInternalUtility dictionary:logData setObject:[targetURL host] forKey:@"targetURLHost"];

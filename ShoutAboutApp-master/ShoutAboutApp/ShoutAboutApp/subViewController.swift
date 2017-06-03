@@ -19,7 +19,7 @@ class subViewController:  UIViewController, UITableViewDataSource, UITableViewDe
     {
         super.viewDidLoad()
          self.automaticallyAdjustsScrollViewInsets = false
-        self.navigationController?.navigationBarHidden = false
+        self.navigationController?.isNavigationBarHidden = false
         
         choiceArray = ["Term of Use", "Privacy Policy"]
        
@@ -32,7 +32,7 @@ class subViewController:  UIViewController, UITableViewDataSource, UITableViewDe
         
     }
     
-    override func viewWillAppear(animated: Bool)
+    override func viewWillAppear(_ animated: Bool)
     {
         super.viewWillAppear(animated)
         
@@ -45,18 +45,18 @@ class subViewController:  UIViewController, UITableViewDataSource, UITableViewDe
 extension subViewController
 {
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
         return choiceArray.count
     }
     
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
-        let cell = tableView.dequeueReusableCellWithIdentifier("settingCell", forIndexPath: indexPath) as? settingCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "settingCell", for: indexPath) as? settingCell
         
         let text = choiceArray[indexPath.row]
-        cell?.nameLabel.textColor = UIColor.darkGrayColor()
+        cell?.nameLabel.textColor = UIColor.darkGray
         cell?.nameLabel?.text = text
         if indexPath.row == 0
         {
@@ -73,12 +73,12 @@ extension subViewController
     }
     
     //MARK: SELECTION
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath)
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
     {
-        let cell = tableView.cellForRowAtIndexPath(indexPath)
+        let cell = tableView.cellForRow(at: indexPath)
         
         
-        let vc = self.storyboard?.instantiateViewControllerWithIdentifier("PrivacyPolicyViewController") as! PrivacyPolicyViewController
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: "PrivacyPolicyViewController") as! PrivacyPolicyViewController
        
         
         
@@ -100,7 +100,7 @@ extension subViewController
         
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
     {
         return 50
         

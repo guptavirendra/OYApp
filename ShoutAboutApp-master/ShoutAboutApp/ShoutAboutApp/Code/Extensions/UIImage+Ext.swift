@@ -10,14 +10,14 @@ import UIKit
 
 extension UIImage {
 	
-	static func imageForView(view: UIView, opaque: Bool = false) -> UIImage? {
+	static func imageForView(_ view: UIView, opaque: Bool = false) -> UIImage? {
 		let bounds = view.bounds
-		assert(CGRectGetWidth(bounds) > 0, "Zero width for view")
-		assert(CGRectGetHeight(bounds) > 0, "Zero height for view")
+		assert(bounds.width > 0, "Zero width for view")
+		assert(bounds.height > 0, "Zero height for view")
 
 		UIGraphicsBeginImageContextWithOptions(bounds.size, opaque, 0)
 		view.layoutIfNeeded()
-		let success = view.drawViewHierarchyInRect(view.bounds, afterScreenUpdates: true)
+		let success = view.drawHierarchy(in: view.bounds, afterScreenUpdates: true)
 		if success {
 			let snapshot = UIGraphicsGetImageFromCurrentImageContext()
 			UIGraphicsEndImageContext()
@@ -27,25 +27,25 @@ extension UIImage {
 		return nil
 	}
 
-	static func imageForLayer(layer: CALayer) -> UIImage {
+	static func imageForLayer(_ layer: CALayer) -> UIImage {
 		let bounds = layer.bounds
-		assert(CGRectGetWidth(bounds) > 0, "Zero width for view")
-		assert(CGRectGetHeight(bounds) > 0, "Zero height for view")
+		assert(bounds.width > 0, "Zero width for view")
+		assert(bounds.height > 0, "Zero height for view")
 		
 		UIGraphicsBeginImageContextWithOptions(bounds.size, false, 0)
 		let context = UIGraphicsGetCurrentContext()
 		assert(context != nil, "Could not generate context for layer")
-		CGContextSaveGState(context)
+		context.saveGState()
 		layer.layoutIfNeeded()
-		layer.renderInContext(context!)
-		CGContextRestoreGState(context)
+		layer.render(in: context!)
+		context.restoreGState()
 		let snapshot = UIGraphicsGetImageFromCurrentImageContext();
 		UIGraphicsEndImageContext();
 		return snapshot;
 	}
 	
-	func getPixelColor(pos: CGPoint) -> UIColor {
-		let pixelData = CGDataProviderCopyData(CGImageGetDataProvider(self.CGImage))
+	func getPixelColor(_ pos: CGPoint) -> UIColor {
+		let pixelData = self.cgImage.dataProvider.data
 		let data: UnsafePointer<UInt8> = CFDataGetBytePtr(pixelData)
 		let pixelInfo: Int = ((Int(self.size.width) * Int(pos.y)) + Int(pos.x)) * 4
 		
@@ -59,7 +59,7 @@ extension UIImage {
 	
 	//Go image pixel by pixel and report if every pixel is the same
 	func isSingleColorImage() -> Bool {
-		let pixelData = CGDataProviderCopyData(CGImageGetDataProvider(self.CGImage))
+		let pixelData = self.cgImage.dataProvider.data
 		let data: UnsafePointer<UInt8> = CFDataGetBytePtr(pixelData)
 		
 		let firstPixel: Int = 0

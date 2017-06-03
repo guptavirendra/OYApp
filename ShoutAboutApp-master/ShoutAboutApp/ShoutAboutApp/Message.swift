@@ -28,21 +28,21 @@ class Message: NSObject
     //MARK: CONVERT TO JSON
     func getJson() -> String
     {
-        classDict["_id"] = self._id
-        classDict["_isRead"] = self._isRead
-        classDict["msg"] = self.msg
-        classDict["msgType"] = self.msgType
-        classDict["receiverId"] = self.receiverId.stringByReplacingOccurrencesOfString("@localhost", withString: "")
+        classDict["_id"] = self._id as AnyObject
+        classDict["_isRead"] = self._isRead as AnyObject
+        classDict["msg"] = self.msg as AnyObject
+        classDict["msgType"] = self.msgType as AnyObject
+        classDict["receiverId"] = self.receiverId.replacingOccurrences(of: "@localhost", with: "") as AnyObject
 
-        classDict["senderId"] = self.senderId.stringByReplacingOccurrencesOfString("@localhost", withString: "")
+        classDict["senderId"] = self.senderId.replacingOccurrences(of: "@localhost", with: "") as AnyObject
         
         var errorinString = ""
         
         do
         {
-            let data = try NSJSONSerialization.dataWithJSONObject(self.classDict, options: NSJSONWritingOptions.PrettyPrinted)
+            let data = try JSONSerialization.data(withJSONObject: self.classDict, options: JSONSerialization.WritingOptions.prettyPrinted)
             
-            let json = NSString(data: data, encoding: NSUTF8StringEncoding)
+            let json = NSString(data: data, encoding: String.Encoding.utf8.rawValue)
             if let json = json
             {
                 errorinString = json as String
@@ -66,7 +66,7 @@ class contactMessage:Message
         {
         didSet
         {
-           classDict["attachment"]=attachment.getJson()
+           classDict["attachment"]=attachment.getJson() as AnyObject
         }
     }
     
@@ -78,13 +78,13 @@ class ImageMessage:Message
         {
         didSet
         {
-            classDict["attachment"]=attachment.getJson()
+            classDict["attachment"]=attachment.getJson() as AnyObject
         }
     }
     
     override func getJson() -> String
     {
-        classDict["attachment"] = attachment.getJson()
+        classDict["attachment"] = attachment.getJson() as AnyObject
         return super.getJson()
     }
 }
@@ -100,9 +100,9 @@ class Attachment:NSObject// contact
     func getJson() -> [String:AnyObject]
     {
         classDict = [
-            "attachmentType":self.attachmentType,
-            "isPlaying":self.isPlaying,
-            "localUrl":self.localUrl,
+            "attachmentType":self.attachmentType as AnyObject,
+            "isPlaying":self.isPlaying as AnyObject,
+            "localUrl":self.localUrl as AnyObject,
           ]
         return classDict
         
@@ -118,14 +118,14 @@ class AttachmentImage:Attachment
         {
         didSet
         {
-            classDict["serverUrl"] = serverUrl
+            classDict["serverUrl"] = serverUrl as AnyObject
         }
     }
     
     override func getJson() -> [String : AnyObject]
     {
           super.getJson()
-          classDict["serverUrl"] = serverUrl
+          classDict["serverUrl"] = serverUrl as AnyObject
          return classDict
     }
     
@@ -138,7 +138,7 @@ class AttachmentVideo:AttachmentImage
         {
         didSet
         {
-            classDict["thumbnail"] = thumbnail
+            classDict["thumbnail"] = thumbnail as AnyObject
         }
     }
     

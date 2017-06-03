@@ -13,16 +13,16 @@ class FirstViewController: UIViewController  {
     {
         super.viewDidLoad()
         self.loginXMPP()
-		self.navigationController?.navigationBarHidden = true
+		self.navigationController?.isNavigationBarHidden = true
 		self.view.addSubview(launch)
 		/* wait a beat before animating in */
-		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.1 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), {
+		DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(0.1 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: {
 			[unowned self] in
 			self.launch.animate {
 				[unowned self] in
 				self.launchAnimated.value = true
-                self.navigationController?.navigationBarHidden = false
-				UIApplication.sharedApplication().statusBarHidden = false
+                self.navigationController?.isNavigationBarHidden = false
+				UIApplication.shared.isStatusBarHidden = false
 			}
 		})
 	}
@@ -32,7 +32,7 @@ class FirstViewController: UIViewController  {
         // Dispose of any resources that can be recreated.
     }
     
-    override func viewDidAppear(animated: Bool)
+    override func viewDidAppear(_ animated: Bool)
     {
         super.viewDidAppear(animated)
         self.loginXMPP()
@@ -85,16 +85,16 @@ class FirstViewController: UIViewController  {
 		self.xmppClient!.connectionStatus!.observeOn(UIScheduler()).observe {
 			event in
 			switch event {
-			case let .Failed(error):
+			case let .failed(error):
 				NSLog("FirstViewController: Connection error \(error)")
-				TSMessage.showNotificationInViewController(self, title: "XMPP connection error", subtitle: error.localizedDescription , type: TSMessageNotificationType.Error)
+				TSMessage.showNotification(in: self, title: "XMPP connection error", subtitle: error.localizedDescription , type: TSMessageNotificationType.error)
 				if let xmppError = STXMPPStream.XMPPError(rawValue: error.code) {
-					if xmppError == STXMPPStream.XMPPError.AuthFailed {
+					if xmppError == STXMPPStream.XMPPError.authFailed {
 						User.logOut()
-						self.navigationController!.popToRootViewControllerAnimated(true)
+						self.navigationController!.popToRootViewController(animated: true)
 					}
 				}
-			case let .Next(event):
+			case let .next(event):
 				let (connected, _) = event
 				if !connected {
 					//TODO Could not connect, inform
@@ -115,9 +115,9 @@ class FirstViewController: UIViewController  {
 	
 	func enablePushes()
     {
-		let notificationSettings: UIUserNotificationSettings = UIUserNotificationSettings(forTypes: [.Alert, .Badge, .Sound], categories: nil)
-		UIApplication.sharedApplication().registerUserNotificationSettings(notificationSettings)
-		UIApplication.sharedApplication().registerForRemoteNotifications()
+		let notificationSettings: UIUserNotificationSettings = UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
+		UIApplication.shared.registerUserNotificationSettings(notificationSettings)
+		UIApplication.shared.registerForRemoteNotifications()
 	}
 }
 

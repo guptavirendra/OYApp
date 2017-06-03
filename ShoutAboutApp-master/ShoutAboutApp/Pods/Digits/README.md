@@ -1,38 +1,7 @@
-Part of [Twitter Fabric](https://www.fabric.io), [Digits](https://get.digits.com) empowers your users to sign up or sign in to your app using their phone numbers -- an identity that they already use everyday -- without the pain of dealing with passwords.
 
-## Setup
+By Google
 
-1. Visit [https://fabric.io/sign_up](https://fabric.io/sign_up) to create your Fabric account and to download Fabric.app.
+**Update 5.17.2017:** Firebase phone authentication is the next evolution of Digits. You can now let your users sign in with their phone numbers, in addition to traditional email/password or identity providers like Google or Facebook. This gives you a comprehensive authentication solution no matter who your users are or how they like to log in. Learn more about [Firebase phone authentication](https://firebase.google.com/docs/auth/).
 
-1. Open Fabric.app, login and select the Digits SDK.
+**If you currently use Digits:** Upgrade to Firebase for an even more powerful and reliable service that gives you faster user growth. The Digits SDK and Digits.com will be retired on September 30, 2017. Learn more on the [Digits blog](http://get.digits.com/blog/introducing-firebase-phone-authentication).
 
-    ![Fabric Plugin](https://docs.fabric.io/ios/cocoapod-readmes/cocoapods-fabric-plugin.png)
-
-1. The Fabric app automatically detects when a project uses CocoaPods and gives you the option to install via the Podfile or Xcode.
-
-	![Fabric Installation Options](https://docs.fabric.io/ios/cocoapod-readmes/cocoapods-pod-installation-option.png)
-
-1. Select the Podfile option and follow the installation instructions to update your Podfile. **Note**: the TwitterCore pod will be automatically pulled in as a dependency for Digits.
-
-	```
-	pod 'Fabric'
-	pod 'Digits'
-	```
-
-1. Run `pod install`
-
-1. Add a Run Script Build Phase and build your app.
-
-	![Fabric Run Script Build Phase](https://docs.fabric.io/ios/cocoapod-readmes/cocoapods-rsbp.png)
-
-1. Initialize the SDK by inserting code outlined in the Fabric.app.
-
-1. Run your app to finish the installation.
-
-## Resources
-
-* [Documentation](https://docs.fabric.io/ios/digits/index.html)
-* [Forums](https://twittercommunity.com/c/fabric/digits)
-* [Website](http://get.digits.com/)
-* Follow us on Twitter: [@fabric](https://twitter.com/fabric) and [@digits](https://twitter.com/digits)
-* Follow us on Periscope: [Fabric](https://periscope.tv/fabric) and [TwitterDev](https://periscope.tv/twitterdev)

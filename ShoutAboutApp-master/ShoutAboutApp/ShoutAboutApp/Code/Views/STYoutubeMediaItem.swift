@@ -45,14 +45,14 @@ class STYoutubeMediaItem: JSQMediaItem {
 		if self.ytMediaView == nil {
 			let (size, videoHeightOfWholeHeight)  = self.displaySize()
 			self.ytMediaView = ThumbnailedYoutubeView(url: url, title: title, channelTitle: channelTitle, outgoing: self.outgoing, size: size, videoHeightOfWholeHeight: videoHeightOfWholeHeight)
-			JSQMessagesMediaViewBubbleImageMasker.applyBubbleImageMaskToMediaView(self.ytMediaView, isOutgoing:self.outgoing)
+			JSQMessagesMediaViewBubbleImageMasker.applyBubbleImageMask(toMediaView: self.ytMediaView, isOutgoing:self.outgoing)
 		}
 		
 		return self.ytMediaView
 	}
 	
-	private func displaySize() -> (CGSize, CGFloat) {
-		let screenRect: CGRect = UIScreen.mainScreen().bounds
+	fileprivate func displaySize() -> (CGSize, CGFloat) {
+		let screenRect: CGRect = UIScreen.main.bounds
 		let width = screenRect.size.width * 0.78
 		let videoHeight = width * (9.0/16.0)
 		var wholeHeight = videoHeight
@@ -61,7 +61,7 @@ class STYoutubeMediaItem: JSQMediaItem {
 			wholeHeight += videoHeight * 0.2 //More room for title
 		}
 		
-		return (CGSizeMake(width, wholeHeight), videoHeight)
+		return (CGSize(width: width, height: wholeHeight), videoHeight)
 	}
 	override func mediaViewDisplaySize() -> CGSize {
 		let (size, _) = self.displaySize()
@@ -111,13 +111,13 @@ class STYoutubeMediaItem: JSQMediaItem {
 		fatalError("Not implemented. See JSQPhotoMediaItem")
 	}
 	
-	override func encodeWithCoder(aCoder: NSCoder) {
+	override func encode(with aCoder: NSCoder) {
 		fatalError("Not implemented. See JSQPhotoMediaItem")
 	}
 	
 	//mark - NSCopying
 	
-	override func copyWithZone(zone: NSZone) -> AnyObject {
+	override func copy(with zone: NSZone?) -> AnyObject {
 		fatalError("CopyWithZone. See JSQPhotoMediaItem")
 	}
 }

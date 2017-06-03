@@ -22,7 +22,7 @@ class STMessageAttachment: NSObject {
 	
 	var jsonRawString: String {
 		get {
-			return json.rawString(NSUTF8StringEncoding, options: NSJSONWritingOptions(rawValue: 0))!
+			return json.rawString(String.Encoding.utf8, options: JSONSerialization.WritingOptions(rawValue: 0))!
 		}
 	}
 	
@@ -32,7 +32,7 @@ class STMessageAttachment: NSObject {
 	}
 	
 	convenience init(contentStr: String, contentType: String) {
-		let json = JSON(data: contentStr.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!)
+		let json = JSON(data: contentStr.data(using: String.Encoding.utf8, allowLossyConversion: false)!)
 		self.init(json: json, contentType: contentType)
 	}
 	
@@ -50,21 +50,21 @@ class STMessage: JSQMessage {
 	let id: String
 	let inConversationWith: STContact //Always the opposing side's contact
 	var attachment: STMessageAttachment? = nil
-	var deliveryStatus: DeliveryStatus = .Sent
+	var deliveryStatus: DeliveryStatus = .sent
     var shortDisplayText: String
     var threadId: String
 	
 	static let imageExt = ".png"
 	
 	enum DeliveryStatus: Int {
-		case Sent = 0
-        case ServerAck = 1
-		case Delivered = 2
-		case Read = 3
+		case sent = 0
+        case serverAck = 1
+		case delivered = 2
+		case read = 3
 	}
 	
 	//When user sends a new message
-    init(id: String, senderId: String, senderDisplayName: String, date: NSDate, text: String, media: UIImage?, threadId: String, inConversationWith: STContact) {
+    init(id: String, senderId: String, senderDisplayName: String, date: Date, text: String, media: UIImage?, threadId: String, inConversationWith: STContact) {
 		self.id = id
         self.threadId = threadId
 		self.inConversationWith = inConversationWith
@@ -74,18 +74,18 @@ class STMessage: JSQMessage {
 			photoItem.appliesMediaViewMaskAsOutgoing = senderId == User.senderId
 			self.attachment = STMessageAttachment(contentWithMediaId:"1492280135.png" /*"\(senderId)-\(NSUUID().UUIDString)\(STMessage.imageExt)"*/, contentType: STMessageAttachment.imageContentType)
             
-            let extensionPathStr = "\(senderId)-\(NSUUID().UUIDString)\(STMessage.imageExt)"
-            let documentsDirectory = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true)[0]
+            let extensionPathStr = "\(senderId)-\(UUID().uuidString)\(STMessage.imageExt)"
+            let documentsDirectory = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true)[0]
             let fullPathToFile = "\(documentsDirectory)/\(extensionPathStr)"
             
             print(fullPathToFile)
             self.attachment?.filePath = fullPathToFile
             
-            let imageData: NSData = UIImageJPEGRepresentation(media!, 0.5)!
+            let imageData: Data = UIImageJPEGRepresentation(media!, 0.5)!
             
             
             
-            imageData.writeToFile(fullPathToFile, atomically: true)
+            try? imageData.write(to: URL(fileURLWithPath: fullPathToFile), options: [.atomic])
             
             
             
@@ -93,12 +93,12 @@ class STMessage: JSQMessage {
 		} else if STMessage.containsYoutubeLink(text) {
 			let outgoing = senderId == User.senderId
 			var youtubeLink: String?
-			let types: NSTextCheckingType = [.Link]
+			let types: NSTextCheckingResult.CheckingType = [.link]
 			let detector = try? NSDataDetector(types: types.rawValue)
 			
 			//Get the actual link
-			detector?.enumerateMatchesInString(text, options: [], range: NSMakeRange(0, text.characters.count)) { (result, flags, _) in
-				let url = (text as NSString).substringWithRange(result!.range)
+			detector?.enumerateMatches(in: text, options: [], range: NSMakeRange(0, text.characters.count)) { (result, flags, _) in
+				let url = (text as NSString).substring(with: result!.range)
 				if STMessage.containsYoutubeLink(url) {
 					youtubeLink = url
 				}
@@ -117,7 +117,7 @@ class STMessage: JSQMessage {
 	}
 	
 	//When message is received or loaded
-    init(id: String, senderId: String, senderDisplayName: String, date: NSDate, text: String, attachment: STMessageAttachment?, threadId: String, inConversationWith: STContact) {
+    init(id: String, senderId: String, senderDisplayName: String, date: Date, text: String, attachment: STMessageAttachment?, threadId: String, inConversationWith: STContact) {
 		self.id = id
         self.threadId = threadId
 		self.inConversationWith = inConversationWith
@@ -150,17 +150,17 @@ class STMessage: JSQMessage {
 	
 	var isGameMediaMessage: Bool {
 		get {
-			return self.isMediaMessage && self.media.isKindOfClass(STGameMediaItem.self)
+			return self.isMediaMessage && self.media.isKind(of: STGameMediaItem.self)
 		}
 	}
 	
 	var isPhotoMediaMessage: Bool {
 		get {
-			return self.isMediaMessage && self.media.isKindOfClass(JSQPhotoMediaItem.self)
+			return self.isMediaMessage && self.media.isKind(of: JSQPhotoMediaItem.self)
 		}
 	}
 	
-	static func fromStoredMessage(archivedMessage: XMPPMAMArchivingMessageCoreDataObject, inConversationWith: STContact) -> STMessage {
+	static func fromStoredMessage(_ archivedMessage: XMPPMAMArchivingMessageCoreDataObject, inConversationWith: STContact) -> STMessage {
 		let userDisplayName = User.displayName != nil ? User.displayName! : "FIXME" //TODO There's a race condition where ConversationsListViewController may be loading messages before the nickname has been given. Don't allow that situation!
 		let ret = STMessage(
 			id: archivedMessage.id,
@@ -172,13 +172,13 @@ class STMessage: JSQMessage {
             threadId: archivedMessage.thread,
 			inConversationWith: inConversationWith
 		)
-		ret.deliveryStatus = DeliveryStatus(rawValue: archivedMessage.deliveryStatus.integerValue)!
+		ret.deliveryStatus = DeliveryStatus(rawValue: archivedMessage.deliveryStatus.intValue)!
 		return ret
 	}
 	
-	static func fromNetworkMessage(xmppMsg: XMPPMessage, inConversationWith: STContact) -> STMessage {
-		let timestamp: NSDate = xmppMsg.date() != nil ? xmppMsg.date()! : NSDate()
-		let sender = xmppMsg.from().bareJID().user
+	static func fromNetworkMessage(_ xmppMsg: XMPPMessage, inConversationWith: STContact) -> STMessage {
+		let timestamp: Date = xmppMsg.date() != nil ? xmppMsg.date()! : Date()
+		let sender = xmppMsg.from().bare().user
 		let ret = STMessage(
 			id: xmppMsg.id(),
 			senderId: sender,
@@ -193,8 +193,8 @@ class STMessage: JSQMessage {
 		return ret
 	}
 	
-	static func containsYoutubeLink(text: String) -> Bool {
-		return text.containsString("www.youtube.com/watch")
+	static func containsYoutubeLink(_ text: String) -> Bool {
+		return text.contains("www.youtube.com/watch")
 	}
 	
 	override var description: String {

@@ -7,6 +7,30 @@
 //
 
 import UIKit
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 class likeDislikeViewController: UIViewController
 {
@@ -18,12 +42,12 @@ class likeDislikeViewController: UIViewController
 
     override func viewDidLoad(){
         super.viewDidLoad()
-        self.navigationController!.navigationBar.tintColor = UIColor.whiteColor();
+        self.navigationController!.navigationBar.tintColor = UIColor.white;
         
     }
     
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         print(dataFeedMyfeed)
@@ -34,14 +58,14 @@ class likeDislikeViewController: UIViewController
         // Dispose of any resources that can be recreated.
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
         return isSelectedDislike == 0 ? dataFeedMyfeed.likes_user.count : dataFeedMyfeed.dislikes_user.count
     }
     
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell{
+    func tableView(_ tableView: UITableView, cellForRowAtIndexPath indexPath: IndexPath) -> UITableViewCell{
 
-        let cell = tableView.dequeueReusableCellWithIdentifier("AlertTableViewCell", forIndexPath: indexPath) as? AlertTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "AlertTableViewCell", for: indexPath) as? AlertTableViewCell
        let commonmodel = isSelectedDislike == 0 ? dataFeedMyfeed.likes_user[indexPath.row] : dataFeedMyfeed.dislikes_user[indexPath.row]
         
         
@@ -51,7 +75,7 @@ class likeDislikeViewController: UIViewController
         cell?.UserImageView.makeImageRounded()
         if  commonmodel.photo?.characters.count > 0
         {
-         cell?.UserImageView.sd_setImageWithURL(NSURL(string:(commonmodel.photo)!), placeholderImage: UIImage(named: "profile"))
+         //cell?.UserImageView.sd_setImage(with: URL(string:(commonmodel.photo)!), placeholderImage: UIImage(named: "profile"))
         }
         cell?.contentView.setGraphicEffects()
         return cell!
@@ -59,16 +83,16 @@ class likeDislikeViewController: UIViewController
         
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat{
+    func tableView(_ tableView: UITableView, heightForRowAtIndexPath indexPath: IndexPath) -> CGFloat{
         
         return 110
     }
     
-    @IBAction func profileButtonClicked(sender:UIButton)
+    @IBAction func profileButtonClicked(_ sender:UIButton)
     {
         if let cell = sender.superview?.superview?.superview as? AlertTableViewCell
         {
-            if let indexPath = self.tableView.indexPathForCell(cell)
+            if let indexPath = self.tableView.indexPath(for: cell)
             {
             
                 let commonmodel = isSelectedDislike == 0 ? dataFeedMyfeed.likes_user[indexPath.row] : dataFeedMyfeed.dislikes_user[indexPath.row]
@@ -78,10 +102,10 @@ class likeDislikeViewController: UIViewController
                     self.displayAlertMessage("It is not in your friend list")
                 }else
                 {
-                   let profileViewController = self.storyboard?.instantiateViewControllerWithIdentifier("NewProfileViewController") as? NewProfileViewController
+                   let profileViewController = self.storyboard?.instantiateViewController(withIdentifier: "NewProfileViewController") as? NewProfileViewController
                     profileViewController?.personalProfile = commonmodel
                     profileViewController?.isToGetPersonData = true
-                    self.navigationController?.navigationBar.tintColor = UIColor.whiteColor()
+                    self.navigationController?.navigationBar.tintColor = UIColor.white
                     self.navigationController!.pushViewController(profileViewController!, animated: true)
                 }
             }

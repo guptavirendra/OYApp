@@ -10,7 +10,7 @@ import UIKit
 
 protocol ClickTableViewCellProtocol
 {
-    func buttonClicked(cell:ClickTableViewCell)
+    func buttonClicked(_ cell:ClickTableViewCell)
 }
 
 class ClickTableViewCell: UITableViewCell
@@ -24,14 +24,14 @@ class ClickTableViewCell: UITableViewCell
         
     }
 
-    override func setSelected(selected: Bool, animated: Bool)
+    override func setSelected(_ selected: Bool, animated: Bool)
     {
         super.setSelected(selected, animated: animated)
 
         
     }
     
-    @IBAction func buttonClicked(button:UIButton)
+    @IBAction func buttonClicked(_ button:UIButton)
     {
         self.delegate?.buttonClicked(self)
     }
@@ -48,7 +48,7 @@ class FaceBookGoogleTableViewCell:ClickTableViewCell
         baseTitleView.makeImageRounded()
         
     }
-    @IBAction override func buttonClicked(button:UIButton)
+    @IBAction override func buttonClicked(_ button:UIButton)
     {
         self.delegate?.buttonClicked(self)
     }

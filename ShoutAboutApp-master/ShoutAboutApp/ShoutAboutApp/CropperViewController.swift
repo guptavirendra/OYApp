@@ -12,7 +12,7 @@ import UIKit
 
 protocol CropperViewControllerDelegate
 {
-    func croppedImage(image:UIImage, vc:UIViewController)
+    func croppedImage(_ image:UIImage, vc:UIViewController)
    // func cancelCropping()
 }
 
@@ -43,7 +43,7 @@ class CropperViewController: UIViewController
         cropView.image = _image
         cropView.delegate = self
         showHideFrameBtn(nil)
-        self.navigationController?.navigationBar.hidden = true
+        self.navigationController?.navigationBar.isHidden = true
         
         
         // Uncomment this line to detect all Scrollview events
@@ -101,7 +101,7 @@ class CropperViewController: UIViewController
     // MARK: - Button Actions
     //         _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _    
     
-    @IBAction func showHideFrameBtn(sender: UIButton?) {
+    @IBAction func showHideFrameBtn(_ sender: UIButton?) {
         
         /**
         
@@ -131,35 +131,35 @@ class CropperViewController: UIViewController
                 print("Frame active")
             })
         }
-        cropView.setCropRect(CGRectMake((cropView.imageView.frame.size.width - 150)/2,(cropView.imageView.frame.size.height - 150)/2, 150, 150))
+        cropView.setCropRect(CGRect(x: (cropView.imageView.frame.size.width - 150)/2,y: (cropView.imageView.frame.size.height - 150)/2, width: 150, height: 150))
         cropView.center =  (cropView.superview?.center)!
     }
     
-    @IBAction func cropTestBtn(sender: UIBarButtonItem) {
+    @IBAction func cropTestBtn(_ sender: UIBarButtonItem) {
         
-        cropView.setCropRect(CGRectMake((self.view.frame.origin.x+150)/2, (self.view.frame.origin.x+150)/2, 150, 150))
+        cropView.setCropRect(CGRect(x: (self.view.frame.origin.x+150)/2, y: (self.view.frame.origin.x+150)/2, width: 150, height: 150))
     }
     
     // MARK: - Navigation
     //         _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?)
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?)
     {
         
-        if let vc = segue.destinationViewController as? ImageViewController {
+        if let vc = segue.destination as? ImageViewController {
             
             vc._image = cropView.croppedImage()
         }
     }
     
-    @IBAction func saveButtonClicked(sender:UIButton)
+    @IBAction func saveButtonClicked(_ sender:UIButton)
     {
-        self.delegate?.croppedImage(cropView.croppedImage(),vc:self.parentViewController!)
+        self.delegate?.croppedImage(cropView.croppedImage(),vc:self.parent!)
     }
     
-    @IBAction func cancelButtonClicked(sender:UIButton)
+    @IBAction func cancelButtonClicked(_ sender:UIButton)
     {
-        self.navigationController?.popViewControllerAnimated(true)
+        self.navigationController?.popViewController(animated: true)
         //self.delegate?.cancelCropping()
     }
 }
@@ -173,7 +173,7 @@ class CropperViewController: UIViewController
 extension CropperViewController: AKImageCropperViewDelegate
 {
     
-    func cropRectChanged(rect: CGRect) {
+    func cropRectChanged(_ rect: CGRect) {
         
         print("New crop rectangle: \(rect)")
     }
@@ -186,7 +186,7 @@ extension CropperViewController: AKImageCropperViewDelegate
 
 
 extension CropperViewController: UIScrollViewDelegate {
-    func viewForZoomingInScrollView(scrollView: UIScrollView) -> UIView? {
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         
         return cropView.imageView
     }

@@ -13,28 +13,32 @@ import SystemConfiguration
 import Reachability
 import CoreTelephony
 
-public class NetworkConnectivity
+open class NetworkConnectivity
 {
     
     class func isConnectedToNetwork() -> Bool
     {
         
         var zeroAddress = sockaddr_in(sin_len: 0, sin_family: 0, sin_port: 0, sin_addr: in_addr(s_addr: 0), sin_zero: (0, 0, 0, 0, 0, 0, 0, 0))
-        zeroAddress.sin_len = UInt8(sizeofValue(zeroAddress))
+        
+        
+        zeroAddress.sin_len = UInt8(MemoryLayout.size(ofValue: zeroAddress))
         zeroAddress.sin_family = sa_family_t(AF_INET)
         
-        let defaultRouteReachability = withUnsafePointer(&zeroAddress) {
-            SCNetworkReachabilityCreateWithAddress(kCFAllocatorDefault, UnsafePointer($0))
+        let defaultRouteReachability = withUnsafePointer(to: &zeroAddress) {_ in 
+            
+            
+            //SCNetworkReachabilityCreateWithAddress(kCFAllocatorDefault, UnsafePointer($0))
         }
         
         var flags: SCNetworkReachabilityFlags = SCNetworkReachabilityFlags(rawValue: 0)
-        if SCNetworkReachabilityGetFlags(defaultRouteReachability!, &flags) == false {
+        if SCNetworkReachabilityGetFlags(defaultRouteReachability as! SCNetworkReachability, &flags) == false {
             return false
         }
         
-        let isReachable = flags == .Reachable
+        let isReachable = flags == .reachable
 
-        let needsConnection = flags == .ConnectionRequired
+        let needsConnection = flags == .connectionRequired
         
         //return isReachable && !needsConnection
         
@@ -47,7 +51,7 @@ public class NetworkConnectivity
    class func getNetworkType()->Bool
     {
         do{
-            let reachability:Reachability = try Reachability.reachabilityForInternetConnection()
+            let reachability:Reachability = try Reachability.forInternetConnection()
             do{
                 try reachability.startNotifier()
                 let status = reachability.currentReachabilityStatus()

@@ -21,7 +21,7 @@ class ConversationListViewCell: UITableViewCell {
 	override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
 		super.init(style: style, reuseIdentifier: reuseIdentifier)
 		let diameter = 60.0
-		self.avatar = UIImageView(frame: CGRectZero)
+		self.avatar = UIImageView(frame: CGRect.zero)
 		self.addSubview(avatar)
 		self.avatar!.snp_makeConstraints { make in
 			make.centerY.equalTo(self)
@@ -29,14 +29,14 @@ class ConversationListViewCell: UITableViewCell {
 			make.size.equalTo(diameter)
 		}
 		
-		self.dateText = UILabel(frame: CGRectZero)
+		self.dateText = UILabel(frame: CGRect.zero)
 		self.addSubview(self.dateText)
 		self.dateText!.snp_makeConstraints { make in
 			make.top.equalTo(self.avatar.snp_top).offset(12)
 			make.right.equalTo(self).offset(-10)
 		}
 	
-		self.inConversationWith = UILabel(frame: CGRectZero)
+		self.inConversationWith = UILabel(frame: CGRect.zero)
 		self.addSubview(self.inConversationWith)
 		self.inConversationWith!.snp_makeConstraints { make in
 			make.top.equalTo(self.avatar.snp_top).offset(10)
@@ -44,7 +44,7 @@ class ConversationListViewCell: UITableViewCell {
 			make.right.equalTo(self).offset(-30)
 		}
 		
-		self.messageText = UILabel(frame: CGRectZero)
+		self.messageText = UILabel(frame: CGRect.zero)
 		self.messageText.numberOfLines = 1
 		self.addSubview(self.messageText)
 		self.messageText!.snp_makeConstraints { make in
@@ -54,8 +54,8 @@ class ConversationListViewCell: UITableViewCell {
 		}
 		
 		//Bottom hairline
-		let hairline = UIView(frame: CGRectZero)
-		hairline.backgroundColor = UIColor.lightGrayColor().lightenByPercentage(0.1)
+		let hairline = UIView(frame: CGRect.zero)
+		hairline.backgroundColor = UIColor.lightGray.lighten(byPercentage: 0.1)
 		self.addSubview(hairline)
 		hairline.snp_makeConstraints { make in
 			make.bottom.equalTo(self.avatar.snp_bottom).offset(7)
@@ -67,14 +67,14 @@ class ConversationListViewCell: UITableViewCell {
 		self.initialFontsAndColors()
 	}
 	
-	private func initialFontsAndColors() {
-		let app = UIApplication.sharedApplication().delegate as! AppDelegate
-		self.dateText.textColor = UIColor.grayColor()
-		self.dateText.font = UIFont.systemFontOfSize(self.inConversationWith.font.pointSize - 2)
-		self.inConversationWith.font = UIFont.systemFontOfSize(self.inConversationWith.font.pointSize)
+	fileprivate func initialFontsAndColors() {
+		let app = UIApplication.shared.delegate as! AppDelegate
+		self.dateText.textColor = UIColor.gray
+		self.dateText.font = UIFont.systemFont(ofSize: self.inConversationWith.font.pointSize - 2)
+		self.inConversationWith.font = UIFont.systemFont(ofSize: self.inConversationWith.font.pointSize)
 		self.inConversationWith.textColor = app.darkColor
-		self.messageText.font = UIFont.systemFontOfSize(self.inConversationWith.font.pointSize - 2)
-		self.messageText.textColor = UIColor.grayColor()
+		self.messageText.font = UIFont.systemFont(ofSize: self.inConversationWith.font.pointSize - 2)
+		self.messageText.textColor = UIColor.gray
 	}
 	
 	required init?(coder aDecoder: NSCoder) {
@@ -86,10 +86,10 @@ class ConversationListViewCell: UITableViewCell {
 		// Initialization code
 	}
 	
-	func setMessage(latestMsg: STMessage) {
+	func setMessage(_ latestMsg: STMessage) {
 		let avatarId = "list-\(latestMsg.senderId)"
 		if AvatarUtils.avatars[avatarId] == nil {
-			AvatarUtils.setupAvatarImage(avatarId, displayName: latestMsg.senderDisplayName, fontSize: UIFont.systemFontSize())
+			AvatarUtils.setupAvatarImage(avatarId, displayName: latestMsg.senderDisplayName, fontSize: UIFont.systemFontSize)
 		}
 		
 		self.avatar.image = AvatarUtils.avatars[avatarId]!.avatarImage
@@ -98,7 +98,7 @@ class ConversationListViewCell: UITableViewCell {
 		if latestMsg.senderId == User.senderId {
 			self.messageText.text = "You: \(self.messageText.text!)"
 		}
-		self.dateText.text = latestMsg.date.toRelativeString(fromDate: NSDate(), abbreviated: true, maxUnits:1)
+		self.dateText.text = latestMsg.date.toRelativeString(fromDate: Date(), abbreviated: true, maxUnits:1)
 		
 		let latestSeenStored = LatestSeenStore.latestSeenInThread(latestMsg.threadId)
 		//latestMsg may have slightly different NSDate (some milliseconds) than latestSeenStoredDate even thought it is the same
@@ -106,10 +106,10 @@ class ConversationListViewCell: UITableViewCell {
 		//ConversationsListViewModel. They may have a bit different timestamp when the User is the sender as the NSDate is generated
 		//in STMessage.fromNetworkMessage (the message itself doesn't have a timestamp in this case as it is User's message)
 		if latestSeenStored == nil || ((latestSeenStored!.id != latestMsg.id) && (latestSeenStored!.date < latestMsg.date)) {
-			self.dateText.font = UIFont.boldSystemFontOfSize(self.dateText.font.pointSize)
-			self.inConversationWith.font = UIFont.boldSystemFontOfSize(self.inConversationWith.font.pointSize)
-			self.messageText.font = UIFont.boldSystemFontOfSize(self.messageText.font.pointSize)
-			let app = UIApplication.sharedApplication().delegate as! AppDelegate
+			self.dateText.font = UIFont.boldSystemFont(ofSize: self.dateText.font.pointSize)
+			self.inConversationWith.font = UIFont.boldSystemFont(ofSize: self.inConversationWith.font.pointSize)
+			self.messageText.font = UIFont.boldSystemFont(ofSize: self.messageText.font.pointSize)
+			let app = UIApplication.shared.delegate as! AppDelegate
 			self.messageText.textColor = app.darkColor
 			self.dateText.textColor = app.highlightColor
 		} else {

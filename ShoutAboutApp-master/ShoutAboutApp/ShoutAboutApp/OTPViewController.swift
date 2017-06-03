@@ -24,12 +24,12 @@ class OTPViewController: UIViewController, UITextFieldDelegate {
     {
         super.viewDidLoad()
         startTimer()
-        otpTextField.addTarget(self, action:#selector(ViewController.edited), forControlEvents:UIControlEvents.EditingChanged)
-        verifyButton.userInteractionEnabled = false
+        otpTextField.addTarget(self, action:#selector(ViewController.edited), for:UIControlEvents.editingChanged)
+        verifyButton.isUserInteractionEnabled = false
         verifyButton.alpha = 0.5
         textFieldBaseView.makeBorder()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.hideKeyBoard(_:)), name: UIKeyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.hideKeyBoard(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         let tapGesture = UITapGestureRecognizer()
         self.view.addGestureRecognizer(tapGesture)
         tapGesture.addTarget(self, action: #selector(self.hideKeyBoard(_:)))
@@ -54,10 +54,10 @@ class OTPViewController: UIViewController, UITextFieldDelegate {
     }
     */
     
-    override func viewDidAppear(animated: Bool){
+    override func viewDidAppear(_ animated: Bool){
         
         super.viewDidAppear(animated)
-        dispatch_async(dispatch_get_main_queue(),{
+        DispatchQueue.main.async(execute: {
            //self.otpTextField.becomeFirstResponder()
         })
         
@@ -65,10 +65,10 @@ class OTPViewController: UIViewController, UITextFieldDelegate {
     
     
     deinit{
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
 
-    @IBAction func otpButtonClicked(sender: UIButton)
+    @IBAction func otpButtonClicked(_ sender: UIButton)
     {
         otpTextField.resignFirstResponder()
         
@@ -94,14 +94,14 @@ class OTPViewController: UIViewController, UITextFieldDelegate {
                 
                 if deserializedResponse is NSDictionary
                 {
-                     if deserializedResponse.objectForKey(message) != nil
+                     if deserializedResponse.object(forKey: message) != nil
                      {
-                        let messageString = deserializedResponse.objectForKey(message) as? String
+                        let messageString = deserializedResponse.object(forKey: message) as? String
                         if messageString == otpExpireMessage
                         {
-                            dispatch_async(dispatch_get_main_queue(), {
+                            DispatchQueue.main.async(execute: {
                                 self.view.removeSpinner()
-                                self.verifyButton.userInteractionEnabled = false
+                                self.verifyButton.isUserInteractionEnabled = false
                                 self.verifyButton.alpha = 0.5
                                 self.displayAlertMessage(otpExpireMessage)
                             })
@@ -110,9 +110,9 @@ class OTPViewController: UIViewController, UITextFieldDelegate {
                         
                         if messageString == inavalidOTP
                         {
-                            dispatch_async(dispatch_get_main_queue(), {
+                            DispatchQueue.main.async(execute: {
                                 self.view.removeSpinner()
-                                self.verifyButton.userInteractionEnabled = false
+                                self.verifyButton.isUserInteractionEnabled = false
                                 self.verifyButton.alpha = 0.5
                                 self.displayAlertMessage(inavalidOTP)
                             })
@@ -122,41 +122,41 @@ class OTPViewController: UIViewController, UITextFieldDelegate {
                     }
                     
                     
-                    if deserializedResponse.objectForKey(kapp_user_id) != nil
+                    if deserializedResponse.object(forKey: kapp_user_id) != nil
                     {
-                         let appUserId = deserializedResponse.objectForKey(kapp_user_id) as? Int
+                         let appUserId = deserializedResponse.object(forKey: kapp_user_id) as? Int
                         
                         // let appUserId = 620
                         
-                         NSUserDefaults.standardUserDefaults().setInteger(appUserId!, forKey: kapp_user_id)
-                         NSUserDefaults.standardUserDefaults().synchronize()
+                         UserDefaults.standard.set(appUserId!, forKey: kapp_user_id)
+                         UserDefaults.standard.synchronize()
                         
                     }
                     
-                    if deserializedResponse.objectForKey(kapp_user_token) != nil
+                    if deserializedResponse.object(forKey: kapp_user_token) != nil
                     {
-                        let appUserToken = deserializedResponse.objectForKey(kapp_user_token) as? String
+                        let appUserToken = deserializedResponse.object(forKey: kapp_user_token) as? String
                         
                         
 //                         let appUserToken = "$2y$10$RU86wqBxp1Vt8BY5ld60kOjbkefd1VfaN.TxnKvVntGYMV5KA/UTm"
                         
                         
-                        NSUserDefaults.standardUserDefaults().setObject(appUserToken, forKey: kapp_user_token)
-                         NSUserDefaults.standardUserDefaults().synchronize()
+                        UserDefaults.standard.set(appUserToken, forKey: kapp_user_token)
+                         UserDefaults.standard.synchronize()
                         
                     }
                     
                     
-                    let appUserId = NSUserDefaults.standardUserDefaults().objectForKey(kapp_user_id)
-                    let appUserToken = NSUserDefaults.standardUserDefaults().objectForKey(kapp_user_token)
+                    let appUserId = UserDefaults.standard.object(forKey: kapp_user_id)
+                    let appUserToken = UserDefaults.standard.object(forKey: kapp_user_token)
                     
                     if appUserId != nil && appUserToken != nil
                     {
-                        dispatch_async(dispatch_get_main_queue(), {
+                        DispatchQueue.main.async(execute: {
                             self.view.removeSpinner()
-                            let joinViewController = self.storyboard?.instantiateViewControllerWithIdentifier("JoinViewController") as? JoinViewController
+                            let joinViewController = self.storyboard?.instantiateViewController(withIdentifier: "JoinViewController") as? JoinViewController
                             //otpViewController?.mobileNumberString = self.mobileNumberString
-                            self.presentViewController(joinViewController!, animated: true, completion: nil)
+                            self.present(joinViewController!, animated: true, completion: nil)
                             
                         });
                         
@@ -167,9 +167,8 @@ class OTPViewController: UIViewController, UITextFieldDelegate {
                 }, onError: { (error) in
                     
                     print("error \(error)")
-                    dispatch_async(dispatch_get_main_queue(),
-                        {
-                            self.verifyButton.userInteractionEnabled = false
+                    DispatchQueue.main.async(execute: {
+                            self.verifyButton.isUserInteractionEnabled = false
                             self.verifyButton.alpha = 0.5
                             self.view.removeSpinner()
                     })
@@ -181,7 +180,7 @@ class OTPViewController: UIViewController, UITextFieldDelegate {
         
     }
     
-    @IBAction func resendButtonClicked(sender: UIButton)
+    @IBAction func resendButtonClicked(_ sender: UIButton)
     {
         
         if NetworkConnectivity.isConnectedToNetwork() != true{
@@ -198,9 +197,9 @@ class OTPViewController: UIViewController, UITextFieldDelegate {
                 print(" response :\(response) , deserializedResponse \(deserializedResponse) ")
                 if deserializedResponse is NSDictionary
                 {
-                    if deserializedResponse.objectForKey(message) != nil
+                    if deserializedResponse.object(forKey: message) != nil
                     {
-                        let messageString = deserializedResponse.objectForKey(message) as? String
+                        let messageString = deserializedResponse.object(forKey: message) as? String
                         if messageString == otpMessage
                         {
                             
@@ -222,19 +221,19 @@ class OTPViewController: UIViewController, UITextFieldDelegate {
 
 extension OTPViewController
 {
-    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool
     {
-        var text:NSString =  textField.text ?? ""
-        text =  text.stringByReplacingCharactersInRange(range, withString: string)
+        var text:NSString =  textField.text as! NSString ?? ""
+        text =  text.replacingCharacters(in: range, with: string) as NSString
         
         
         if text.length == 6
         {
-            verifyButton.userInteractionEnabled = true
+            verifyButton.isUserInteractionEnabled = true
             verifyButton.alpha = 1.0
         }else
         {
-            verifyButton.userInteractionEnabled = false
+            verifyButton.isUserInteractionEnabled = false
             verifyButton.alpha = 0.5
         }
         
@@ -251,11 +250,11 @@ extension OTPViewController
         otpString = otpTextField.text!
         if otpString.characters.count == 6
         {
-            verifyButton.userInteractionEnabled = true
+            verifyButton.isUserInteractionEnabled = true
             verifyButton.alpha = 1.0
         }else
         {
-            verifyButton.userInteractionEnabled = false
+            verifyButton.isUserInteractionEnabled = false
             verifyButton.alpha = 0.5
         }
     }
@@ -269,10 +268,10 @@ extension OTPViewController
     {
         count = 120
         countDownLabel.text = nil
-        countDownLabel.hidden = false
-        resetButton.userInteractionEnabled = false
+        countDownLabel.isHidden = false
+        resetButton.isUserInteractionEnabled = false
         resetButton.alpha = 0.5
-        _ = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: #selector(OTPViewController.update), userInfo: nil, repeats: true)
+        _ = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(OTPViewController.update), userInfo: nil, repeats: true)
     }
     
     func update() {
@@ -284,8 +283,8 @@ extension OTPViewController
             countDownLabel.text = minutes + " Min" + " : " + seconds+" Sec"
             count -= 1
         }else{
-            countDownLabel.hidden = true
-            resetButton.userInteractionEnabled = true
+            countDownLabel.isHidden = true
+            resetButton.isUserInteractionEnabled = true
             resetButton.alpha = 1.0
 
             
@@ -296,7 +295,7 @@ extension OTPViewController
 
 extension OTPViewController
 {
-    func hideKeyBoard(notification: NSNotification)
+    func hideKeyBoard(_ notification: Notification)
     {
         otpTextField.resignFirstResponder()
         

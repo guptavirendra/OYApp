@@ -16,7 +16,7 @@ class TCViewController: UIViewController
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.navigationController?.navigationBarHidden = true
+        self.navigationController?.isNavigationBarHidden = true
         
         //NSMutableAttributedString * str = [[NSMutableAttributedString alloc] initWithString:@"Google"];
         //[str addAttribute: NSLinkAttributeName value: @"http://www.google.com" range: NSMakeRange(0, str.length)];
@@ -24,7 +24,7 @@ class TCViewController: UIViewController
         
         let fontTitilliumRegular =  "TitilliumWeb-Regular"
        
-        let fontTitle               =  UIFont.systemFontOfSize(17)//UIFont(name:fontTitilliumRegular, size:17)!
+        let fontTitle               =  UIFont.systemFont(ofSize: 17)//UIFont(name:fontTitilliumRegular, size:17)!
         let myAttribute = [ NSFontAttributeName: fontTitle ]
         let intitiaString = NSMutableAttributedString(string: "Tap \"Agree & Continue \" to accept the OYAPP ", attributes:myAttribute )
         
@@ -34,13 +34,13 @@ class TCViewController: UIViewController
         let mutableString1 = NSMutableAttributedString(string: "Privacy policy")
         mutableString1.addAttribute(NSLinkAttributeName, value: "http://oyapp.in/privacy-policy", range: NSMakeRange(0, mutableString1.length))
        
-        intitiaString.appendAttributedString(mutableString)
-        intitiaString.appendAttributedString(mutableString1)
+        intitiaString.append(mutableString)
+        intitiaString.append(mutableString1)
         intitiaString.addAttribute(NSFontAttributeName, value: fontTitle, range: NSMakeRange(0, intitiaString.length))
         
         tcTextView.attributedText = intitiaString
         tcTextView.backgroundColor = self.view.backgroundColor
-        tcTextView.textAlignment = NSTextAlignment.Center
+        tcTextView.textAlignment = NSTextAlignment.center
          
         // Do any additional setup after loading the view.
     }
@@ -63,9 +63,9 @@ class TCViewController: UIViewController
     */
     
     
-    @IBAction func tcButtonClicked(sender:UIButton)
+    @IBAction func tcButtonClicked(_ sender:UIButton)
     {
-        let mainvc = self.storyboard?.instantiateViewControllerWithIdentifier("ViewController")
+        let mainvc = self.storyboard?.instantiateViewController(withIdentifier: "ViewController")
         self.navigationController?.pushViewController(mainvc!, animated: true)
         
     }

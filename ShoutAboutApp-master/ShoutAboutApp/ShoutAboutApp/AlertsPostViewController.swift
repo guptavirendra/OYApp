@@ -17,7 +17,7 @@ class AlertsPostViewController: FeedsViewController
     override func viewDidLoad()
     {
         super.viewDidLoad()
-        segment?.hidden = true
+        segment?.isHidden = true
 
         // Do any additional setup after loading the view.
     }

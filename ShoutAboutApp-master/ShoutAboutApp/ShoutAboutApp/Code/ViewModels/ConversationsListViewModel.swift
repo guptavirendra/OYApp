@@ -12,15 +12,39 @@ import XMPPFramework
 import JSQMessagesViewController
 import Result
 import SwiftyJSON
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 class ConversationsListViewModel {
 	let disposer = CompositeDisposable()
 	var messages = MutableProperty<Array<STMessage!>>([]) //Includes the latest message from each conversation
 	var unreadMessagesCount = MutableProperty<Int>(0)
-	private var currentlyOpenThread: String? //Does the user have one thread opened
-	private var unreadMessages: Dictionary<String, Set<String>> = [:]
-	private var combinedSentAndReceivedMessages = MutableProperty<XMPPMessage>(XMPPMessage())
-	private unowned var xmppClient: STXMPPClient
+	fileprivate var currentlyOpenThread: String? //Does the user have one thread opened
+	fileprivate var unreadMessages: Dictionary<String, Set<String>> = [:]
+	fileprivate var combinedSentAndReceivedMessages = MutableProperty<XMPPMessage>(XMPPMessage())
+	fileprivate unowned var xmppClient: STXMPPClient
 	
 	init(xmpp: STXMPPClient) {
 		self.xmppClient = xmpp
@@ -32,12 +56,12 @@ class ConversationsListViewModel {
 		disposer.dispose()
 	}
 	
-	private func setupBindings() {
+	fileprivate func setupBindings() {
 		self.setupLatestMessageBindings()
 		self.setupUnreadMessagesCountBindings()
 	}
 	
-	private func setupLatestMessageBindings() {
+	fileprivate func setupLatestMessageBindings() {
 		//Monitor for incoming and sent messages
 		self.combinedSentAndReceivedMessages <~ self.xmppClient.stream.incomingMessages.toSignalProducer().observeOn(UIScheduler())
 		self.combinedSentAndReceivedMessages <~ self.xmppClient.stream.sentMessages.toSignalProducer().observeOn(UIScheduler())
@@ -57,7 +81,7 @@ class ConversationsListViewModel {
 				.start {
 					[unowned self] event in
 					switch event {
-					case let .Next(incomingMsg):
+					case let .next(incomingMsg):
 						self.insertLatestMsg(incomingMsg)
 					default:
 						break
@@ -66,7 +90,7 @@ class ConversationsListViewModel {
 		)
 	}
 	
-	private func setupUnreadMessagesCountBindings() {
+	fileprivate func setupUnreadMessagesCountBindings() {
 		//Monitor how many unread messages the user has
 		disposer.addDisposable(
 			self.xmppClient.stream.incomingMessages.toSignalProducer()
@@ -78,7 +102,7 @@ class ConversationsListViewModel {
 				.start {
 					[unowned self] event in
 					switch event {
-					case let .Next(incomingMsg):
+					case let .next(incomingMsg):
 						let threadId = incomingMsg.thread()
 						if var msgSet = self.unreadMessages[threadId] {
 							msgSet.insert(incomingMsg.id())
@@ -96,16 +120,16 @@ class ConversationsListViewModel {
 		)
 	}
 	
-	func setOpenedThread(currentlyOpenThread: String?) {
+	func setOpenedThread(_ currentlyOpenThread: String?) {
 		self.currentlyOpenThread = currentlyOpenThread
 		if self.currentlyOpenThread != nil {
-			self.unreadMessages.removeValueForKey(self.currentlyOpenThread!)
+			self.unreadMessages.removeValue(forKey: self.currentlyOpenThread!)
 			self.countUnreadMessages()
 		}
 	}
 	
-	private func countUnreadMessages() {
-		let unreadMessagesCount: Int = self.unreadMessages.values.reduce(0, combine: { (unreadMessages, msgSet) in
+	fileprivate func countUnreadMessages() {
+		let unreadMessagesCount: Int = self.unreadMessages.values.reduce(0, { (unreadMessages, msgSet) in
 			return unreadMessages + msgSet.count
 		})
 		self.unreadMessagesCount.value = unreadMessagesCount
@@ -122,22 +146,22 @@ class ConversationsListViewModel {
 		//}
 	}
 	
-	private func doCachedConversationsSync() {
+	fileprivate func doCachedConversationsSync() {
 		let context: NSManagedObjectContext? = self.xmppClient.stream.xmppMessageArchivingCoreDataStorage.mainThreadManagedObjectContext
-		let messageEntity: NSEntityDescription? = NSEntityDescription.entityForName(self.xmppClient.stream.xmppMessageArchivingCoreDataStorage.messageEntityName, inManagedObjectContext: context!)
+		let messageEntity: NSEntityDescription? = NSEntityDescription.entity(forEntityName: self.xmppClient.stream.xmppMessageArchivingCoreDataStorage.messageEntityName, in: context!)
 		
 		let fetchRequest = NSFetchRequest()
 		fetchRequest.entity = messageEntity
 		// Required! Unless you set the resultType to NSDictionaryResultType, distinct can't work.
 		// All objects in the backing store are implicitly distinct, but two dictionaries can be duplicates.
 		// Since you only want distinct names, only ask for the 'thread' property.
-		fetchRequest.resultType = .DictionaryResultType;
+		fetchRequest.resultType = .dictionaryResultType;
 		let params: [AnyObject] = [(messageEntity?.propertiesByName["thread"])!]
 		fetchRequest.propertiesToFetch = params
 		fetchRequest.returnsDistinctResults = true
 		
 		do {
-			let fetchResults = try context!.executeFetchRequest(fetchRequest)
+			let fetchResults = try context!.fetch(fetchRequest)
 			for result in fetchResults {
 				self.loadLatest(nil, thread: result["thread"] as? String)
 			}
@@ -146,7 +170,7 @@ class ConversationsListViewModel {
 		}
 	}
 	
-	private func doInitialConversationsSync() {
+	fileprivate func doInitialConversationsSync() {
 		disposer.addDisposable(
 			self.getConversations()
 				.observeOn(UIScheduler())
@@ -167,7 +191,7 @@ class ConversationsListViewModel {
 				}
 				.uncollect() //Transform single [Contacts] array into individiual contact signals
 				.throttleAfterFirst(1, onScheduler: UIScheduler().toRACScheduler()) //Don't flood with queries. Do 1 query per second
-				.flatMap(FlattenStrategy.Merge, transform: {
+				.flatMap(FlattenStrategy.merge, transform: {
 					[unowned self] (contact: String) -> SignalProducer<(String?, String), NSError> in
 					return self.xmppClient.stream.archiveFetcher(contact, num: 1)
 					})
@@ -175,7 +199,7 @@ class ConversationsListViewModel {
 				.start {
 					[unowned self] event in
 					switch event {
-					case let .Next(next):
+					case let .next(next):
 						let (archiveId, contact) = next
 						if archiveId != nil {
 							MAMSync.setOldestArchiveIdInThread(archiveId!, forThread: ConversationViewModel.threadId([User.senderId, contact]))
@@ -184,7 +208,7 @@ class ConversationsListViewModel {
 						} else {
 							//NSLog("No archived messages found with contact %@", contact)
 						}
-					case let .Failed(error):
+					case let .failed(error):
 						//assert(false, "error \(error)")
 						NSLog("!!!!! doInitialConversationsSync failed %@", error)
 					default:
@@ -194,13 +218,13 @@ class ConversationsListViewModel {
 		)
 	}
 	
-	private func getConversations() -> SignalProducer<Result<Any, NSError>, NSError> {
+	fileprivate func getConversations() -> SignalProducer<Result<Any, NSError>, NSError> {
 		return STHttp.get("\(Configuration.mainApi)/chat_contact_list/?app_user_id=31653&app_user_token=%242y%2410%246PRbH2TSZYMWqWuvQJcO%2FuW05ZnNXDYB4p7Bj8eogEJ9VVacfEJbK", auth:(User.username, User.token))
 	}
 	
-	private func loadLatest(contact: String? = nil, thread: String? = nil) {
+	fileprivate func loadLatest(_ contact: String? = nil, thread: String? = nil) {
 		let context: NSManagedObjectContext? = self.xmppClient.stream.xmppMessageArchivingCoreDataStorage.mainThreadManagedObjectContext
-		let messageEntity: NSEntityDescription? = NSEntityDescription.entityForName(self.xmppClient.stream.xmppMessageArchivingCoreDataStorage.messageEntityName, inManagedObjectContext: context!)
+		let messageEntity: NSEntityDescription? = NSEntityDescription.entity(forEntityName: self.xmppClient.stream.xmppMessageArchivingCoreDataStorage.messageEntityName, in: context!)
 		let sortDescriptor: NSSortDescriptor = NSSortDescriptor(key: "timestamp", ascending: false)
 		
 		let fetchRequest = NSFetchRequest()
@@ -217,7 +241,7 @@ class ConversationsListViewModel {
 		fetchRequest.fetchLimit = 1
 		fetchRequest.sortDescriptors = [sortDescriptor]
 		do {
-			let fetchResults = try context!.executeFetchRequest(fetchRequest) as! [XMPPMAMArchivingMessageCoreDataObject]
+			let fetchResults = try context!.fetch(fetchRequest) as! [XMPPMAMArchivingMessageCoreDataObject]
 			if fetchResults.count > 0 && thread != nil {
 				let jsqMessages = fetchResults.map {
 					(archivedMessage: XMPPMAMArchivingMessageCoreDataObject) -> STMessage in
@@ -233,14 +257,14 @@ class ConversationsListViewModel {
 		}
 	}
 	
-	private func chattingWith(threadId: String) -> String {
+	fileprivate func chattingWith(_ threadId: String) -> String {
 		//NOTE! We do not use msg.from.user here as the sender because it may bot@smalltalk.com if it is sending messages to this thread
 		//Instead we get the userid from the threadid (threadId is always user1-user2 even when bot is injecting messages so ww can grab it from there
-		return threadId.componentsSeparatedByString("-").filter { $0 != User.username }[0]
+		return threadId.components(separatedBy: "-").filter { $0 != User.username }[0]
 	}
 	
 	//Replace existing message from this conversation with the new message
-	private func insertLatestMsg(message: STMessage) {
+	fileprivate func insertLatestMsg(_ message: STMessage) {
 		var filtered: [STMessage!] = self.messages.value.filter {
 			existingMsg in
 			//Only keep messages from different conversations
@@ -249,11 +273,11 @@ class ConversationsListViewModel {
 		}
 		
 		//Check if filter removed (or self.messages didn't include) older message of this thread
-		let canInsert = filtered.indexOf { $0.threadId == message.threadId } == nil
+		let canInsert = filtered.index { $0.threadId == message.threadId } == nil
 		//We have actually removed a message to be replaced
 		if canInsert {
-			filtered.insert(message, atIndex: 0)
-			filtered.sortInPlace { (msg1, msg2) in
+			filtered.insert(message, at: 0)
+			filtered.sort { (msg1, msg2) in
 				return msg1.date > msg2.date
 			}
 		

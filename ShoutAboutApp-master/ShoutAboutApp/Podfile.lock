@@ -5,27 +5,22 @@ PODS:
   - Bolts/AppLinks (1.8.4):
     - Bolts/Tasks
   - Bolts/Tasks (1.8.4)
-  - ChameleonFramework/Default (2.0.1)
-  - ChameleonFramework/Swift (2.0.1):
-    - ChameleonFramework/Default
-  - CocoaAsyncSocket (7.6.0)
-  - CocoaLumberjack (2.4.0):
-    - CocoaLumberjack/Default (= 2.4.0)
-    - CocoaLumberjack/Extensions (= 2.4.0)
-  - CocoaLumberjack/Core (2.4.0)
-  - CocoaLumberjack/Default (2.4.0):
-    - CocoaLumberjack/Core
-  - CocoaLumberjack/Extensions (2.4.0):
+  - CocoaAsyncSocket (7.6.1)
+  - CocoaLumberjack (3.2.0):
+    - CocoaLumberjack/Default (= 3.2.0)
+    - CocoaLumberjack/Extensions (= 3.2.0)
+  - CocoaLumberjack/Default (3.2.0)
+  - CocoaLumberjack/Extensions (3.2.0):
     - CocoaLumberjack/Default
   - Crashlytics (3.8.4):
     - Fabric (~> 1.6.3)
-  - DeepLinkKit (1.2.2)
-  - Digits (2.8.0):
-    - TwitterCore (= 2.8.0)
+  - DeepLinkKit (1.3.0)
+  - Digits (3.0.1):
+    - TwitterCore
   - Fabric (1.6.11)
-  - FBSDKCoreKit (4.22.0):
+  - FBSDKCoreKit (4.23.0):
     - Bolts (~> 1.7)
-  - FBSDKLoginKit (4.22.0):
+  - FBSDKLoginKit (4.23.0):
     - FBSDKCoreKit
   - Firebase/Auth (3.17.0):
     - Firebase/Core
@@ -66,9 +61,9 @@ PODS:
     - GTMSessionFetcher/Core (~> 1.1)
   - FLAnimatedImage (1.0.12)
   - FMDB (1.5.1)
-  - Google/Core (3.0.3):
+  - Google/Core (3.1.0):
     - FirebaseAnalytics (~> 3.2)
-  - Google/SignIn (3.0.3):
+  - Google/SignIn (3.1.0):
     - Google/Core
     - GoogleSignIn (~> 4.0)
   - GoogleSignIn (4.0.2):
@@ -90,11 +85,11 @@ PODS:
   - GoogleToolboxForMac/NSString+URLArguments (2.1.1)
   - GTMOAuth2 (1.1.4):
     - GTMSessionFetcher (~> 1.1)
-  - GTMSessionFetcher (1.1.9):
-    - GTMSessionFetcher/Full (= 1.1.9)
-  - GTMSessionFetcher/Core (1.1.9)
-  - GTMSessionFetcher/Full (1.1.9):
-    - GTMSessionFetcher/Core (= 1.1.9)
+  - GTMSessionFetcher (1.1.10):
+    - GTMSessionFetcher/Full (= 1.1.10)
+  - GTMSessionFetcher/Core (1.1.10)
+  - GTMSessionFetcher/Full (1.1.10):
+    - GTMSessionFetcher/Core (= 1.1.10)
   - HexColors (2.3.0)
   - JSQMessagesViewController (7.3.4):
     - JSQSystemSoundPlayer (~> 2.0.1)
@@ -108,38 +103,25 @@ PODS:
     - NYTPhotoViewer/Core
   - NYTPhotoViewer/Core (1.2.0)
   - OpenUDID (1.0.0)
-  - PhoneNumberKit (0.8.5):
-    - PhoneNumberKit/PhoneNumberKitCore (= 0.8.5)
-    - PhoneNumberKit/UIKit (= 0.8.5)
-  - PhoneNumberKit/PhoneNumberKitCore (0.8.5)
-  - PhoneNumberKit/UIKit (0.8.5):
+  - PhoneNumberKit (1.2.3):
+    - PhoneNumberKit/PhoneNumberKitCore (= 1.2.3)
+    - PhoneNumberKit/UIKit (= 1.2.3)
+  - PhoneNumberKit/PhoneNumberKitCore (1.2.3)
+  - PhoneNumberKit/UIKit (1.2.3):
     - PhoneNumberKit/PhoneNumberKitCore
   - Protobuf (3.3.0)
   - Reachability (3.2)
-  - ReactiveCocoa (4.0.0-alpha-3):
-    - ReactiveCocoa/UI (= 4.0.0-alpha-3)
-    - Result (~> 0.6-beta.4)
-  - ReactiveCocoa/Core (4.0.0-alpha-3):
-    - ReactiveCocoa/no-arc
-    - Result (~> 0.6-beta.4)
-  - ReactiveCocoa/no-arc (4.0.0-alpha-3):
-    - Result (~> 0.6-beta.4)
-  - ReactiveCocoa/UI (4.0.0-alpha-3):
-    - ReactiveCocoa/Core
-    - Result (~> 0.6-beta.4)
-  - Result (0.6.0-beta.6)
-  - SDWebImage (3.8.0):
-    - SDWebImage/Core (= 3.8.0)
-  - SDWebImage/Core (3.8.0)
-  - SnapKit (0.22.0)
-  - SwiftDate (3.0.8)
-  - SwiftyJSON (2.3.3)
-  - Toucan (0.5.0)
+  - SDWebImage (4.0.0):
+    - SDWebImage/Core (= 4.0.0)
+  - SDWebImage/Core (4.0.0)
+  - SnapKit (3.2.0)
+  - SwiftDate (4.1.2)
+  - SwiftyJSON (3.1.4)
+  - Toucan (0.6.0)
   - TSMessages (0.9.13):
     - HexColors (~> 2.3.0)
-  - TwitterCore (2.8.0):
-    - Fabric
-  - Watchdog (2.1)
+  - TwitterCore (3.0.0)
+  - Watchdog (3.0)
   - xmpp-messenger-ios (1.0.1):
     - FMDB (~> 1.0)
     - JSQMessagesViewController
@@ -149,11 +131,10 @@ PODS:
     - CocoaAsyncSocket (~> 7.6.0)
     - CocoaLumberjack
     - KissXML (~> 5.2.0)
-  - youtube-ios-player-helper (0.1.4)
+  - youtube-ios-player-helper (0.1.6)
 
 DEPENDENCIES:
-  - ChameleonFramework/Swift (= 2.0.1)
-  - CocoaLumberjack (~> 2.4.0)
+  - CocoaLumberjack
   - Crashlytics
   - DeepLinkKit
   - Digits
@@ -169,20 +150,19 @@ DEPENDENCIES:
   - JSQMessagesViewController
   - NYTPhotoViewer
   - OpenUDID
-  - PhoneNumberKit (~> 0.8)
+  - PhoneNumberKit
   - Reachability
-  - ReactiveCocoa (= 4.0.0-alpha-3)
-  - SDWebImage (= 3.8.0)
-  - SnapKit (~> 0.22.0)
-  - SwiftDate (~> 3.0.8)
-  - SwiftyJSON (~> 2.3.2)
-  - Toucan (~> 0.5.0)
+  - SDWebImage
+  - SnapKit
+  - SwiftDate
+  - SwiftyJSON
+  - Toucan
   - TSMessages (from `https://github.com/KrauseFx/TSMessages.git`)
   - TwitterCore
-  - Watchdog (= 2.1)
+  - Watchdog
   - xmpp-messenger-ios
   - XMPPFramework
-  - youtube-ios-player-helper (= 0.1.4)
+  - youtube-ios-player-helper
 
 EXTERNAL SOURCES:
   TSMessages:
@@ -195,15 +175,14 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   Bolts: 8a7995239dbe724f9cba2248b766d48b7ebdd322
-  ChameleonFramework: c8e3d76f1c86a607b3b8ea776880bc5148b70c1a
-  CocoaAsyncSocket: b9d5589f07baf9de8f34cc25abd4fcba28f13805
-  CocoaLumberjack: aa9dcab71bdf9eaf2a63bbd9ddc87863efe45457
+  CocoaAsyncSocket: 7eadd3f59e1a6c84e2aefc93e9ff7b55156fe174
+  CocoaLumberjack: 9b4aed7073d242f29cc2f62068d995faf67f703a
   Crashlytics: 79e236942ca1e7fc641df1feb9a275360a78ab6a
-  DeepLinkKit: e8f59860e13714f7467b831499e052dc8da51924
-  Digits: 401151fdcc955738142d53b89112960d3c2e3930
+  DeepLinkKit: 5f1e206e97c34bfaa3a296633c2b36c4c1a11c4f
+  Digits: 5fda2e287d729e22a733fe67adaf6e92c00f2b68
   Fabric: 5911403591946b8228ab1c51d98f1d7137e863c6
-  FBSDKCoreKit: c693bad19feb225469eeff14452ba364522ee48b
-  FBSDKLoginKit: 1fa529fc622d7b32ebeaffbecd377180833c6d30
+  FBSDKCoreKit: d7829f5a69901cd7296105328e4c3c3fc7da6518
+  FBSDKLoginKit: 6b92bd65f319d669d2b0730e49db495ef1660566
   Firebase: 4b66b5b59c43edac745b87f0c87e42cdd0279c13
   FirebaseAnalytics: e5fe8486efc01bec33f6bf82e2fa9fce4b124052
   FirebaseAuth: cc8a1824170adbd351edb7f994490a3fb5c18be6
@@ -214,34 +193,32 @@ SPEC CHECKSUMS:
   FirebaseStorage: a5c55b23741a49a72af8f30f95b3bb5ddbeda12d
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
   FMDB: 0c3eed7342fdf9dc03b8fe3d8de8e7a9f08bfacc
-  Google: 813c467362eabc11385f5a5cc9ad0cb651a58f4e
+  Google: 98da4b1a60ed0beb80a290387a28333406a1eb90
   GoogleSignIn: d7ad83f13480e1f30453471d00d19b5293ac46af
   GoogleToolboxForMac: 8e329f1b599f2512c6b10676d45736bcc2cbbeb0
   GTMOAuth2: 7fc9c10f5c745f4d9850419ea88889fe3baa6b7d
-  GTMSessionFetcher: 5c046c76a1f859bc9c187e918f18e4fc7bb57b5e
+  GTMSessionFetcher: 30d874b96d0d76028f61fbd122801e3f030d47db
   HexColors: 6ad3947c3447a055a3aa8efa859def096351fe5f
   JSQMessagesViewController: 39fed975e3c9f8eba7292071e29eeb541d105e66
   JSQSystemSoundPlayer: c5850e77a4363ffd374cd851154b9af93264ed8d
   KissXML: 1c1eeeb6b94e4522cd2f2373e5d0d03c9227738f
   NYTPhotoViewer: 323217e4590a1586eb3c9674b3fefb0fb8b57896
   OpenUDID: e7cb6984c7304906ad20f3a36bf087b025896b6b
-  PhoneNumberKit: 5668a7af19d2e566d92831a632ee80f5047eff75
+  PhoneNumberKit: 1e5cca669113fc361a8c82ec1ee559c62b8cd0f7
   Protobuf: d582fecf68201eac3d79ed61369ef45734394b9c
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
-  ReactiveCocoa: f03dcfd385b0e4ee5b7a323f5e0b146a498e12d3
-  Result: dc390d0b58f9ec43fcd536f1ebdd130803cc6cbc
-  SDWebImage: 7d9fe229266696de91eadf840c77ca15efd4bbd2
-  SnapKit: 0dd2fd157330f1ea11fd84da13e6be8a7a22bae0
-  SwiftDate: 971f8b9394f664f2226b9c3ab64e801a7291c612
-  SwiftyJSON: 0fd0a115a3c0c09b277d2ab801df154902b942c3
-  Toucan: 0519c341148252ae114c5a657d2a85bb9ada9e40
+  SDWebImage: 76a6348bdc74eb5a55dd08a091ef298e56b55e41
+  SnapKit: 1ca44df72cfa543218d177cb8aab029d10d86ea7
+  SwiftDate: 2dfdebd4f67ae71c9c3e2413ee3c56947f302858
+  SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
+  Toucan: 47485bbc9cb4541ef6318d6886103e6eaf16e919
   TSMessages: eb3cf27b6900684a21bad4fe9ea426e287b8c839
-  TwitterCore: e959987be23c767004d29eb7fab8d85d8585a2e5
-  Watchdog: a891d7ed53b6620aa70c698b39ee2f9eac4d0419
+  TwitterCore: 8ce250be1eb34633a0e6acc89520d4165ec52c10
+  Watchdog: 141185b6b3a332a9f5721ea42dfa9681cf2d7c6b
   xmpp-messenger-ios: e1a81270a0d62f1307c86b493209f01853e82e6b
   XMPPFramework: 6f99ad1afcdb0cdbec7192a8e4c542c3fc3de6f8
-  youtube-ios-player-helper: 84b1485ebb4b7c6b619c6e05edcb55186723a7c6
+  youtube-ios-player-helper: 21ab92db027c7ff86cb17a3843a3f6eafc8158d2
 
-PODFILE CHECKSUM: 50a1cf71fe5546a673922a7cd5972e5214651984
+PODFILE CHECKSUM: 676854fefe3a197ac2fa36befcb70bce037d25da
 
 COCOAPODS: 1.2.1

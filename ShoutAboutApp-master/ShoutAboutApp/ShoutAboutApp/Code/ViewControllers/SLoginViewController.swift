@@ -35,7 +35,7 @@ class SLoginViewController: UIViewController, UITextFieldDelegate {
 		//Check out these values from LaunchScreen.xib
 		self.label = UILabel(frame: CGRect(x: 0, y: 0, width: 55, height: 15))
 		self.label.text = "smalltalk"
-		self.label.font = UIFont.boldSystemFontOfSize(22)
+		self.label.font = UIFont.boldSystemFont(ofSize: 22)
 		self.label.textColor = FlatRed()
 		
 		self.view.addSubview(self.label)
@@ -48,14 +48,14 @@ class SLoginViewController: UIViewController, UITextFieldDelegate {
 		digitsAppearance.backgroundColor = FlatWhite()
 		digitsAppearance.accentColor = FlatRed()
 		
-		let authenticateButton = UIButton(frame: CGRectMake(0, 0, 0, 0))
+		let authenticateButton = UIButton(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
 		self.view.addSubview(authenticateButton)
-		authenticateButton.enabled = true
+		authenticateButton.isEnabled = true
 		authenticateButton.layer.cornerRadius = 5
-		authenticateButton.backgroundColor = UIColor.whiteColor()
-		authenticateButton.setTitleColor(FlatWhite(), forState: .Normal)
-		authenticateButton.setTitle("Sign up", forState: UIControlState.Normal)
-		authenticateButton.titleLabel!.font = UIFont.boldSystemFontOfSize(UIFont.systemFontSize())
+		authenticateButton.backgroundColor = UIColor.white
+		authenticateButton.setTitleColor(FlatWhite(), for: UIControlState())
+		authenticateButton.setTitle("Sign up", for: UIControlState())
+		authenticateButton.titleLabel!.font = UIFont.boldSystemFont(ofSize: UIFont.systemFontSize)
 		authenticateButton.backgroundColor = FlatRed()
 		authenticateButton.snp_makeConstraints { (make) -> Void in
 			make.width.equalTo(self.view).multipliedBy(0.75)
@@ -63,30 +63,30 @@ class SLoginViewController: UIViewController, UITextFieldDelegate {
 			make.centerX.equalTo(self.view)
 			make.bottom.equalTo(self.view).multipliedBy(0.80)
 		}
-		authenticateButton.addTarget(self, action: "digitsAuth:", forControlEvents: UIControlEvents.TouchUpInside)
+		authenticateButton.addTarget(self, action: "digitsAuth:", for: UIControlEvents.touchUpInside)
 		
 		//Test user functionality
 		if Configuration.showTestUser {
-			self.testUserButton = UIButton(frame: CGRectMake(0, 0, 100, 100))
-			testUserButton.enabled = true
-			testUserButton.backgroundColor = UIColor.whiteColor()
-			testUserButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
-			testUserButton.setTitle("Make a test user", forState: UIControlState.Normal)
+			self.testUserButton = UIButton(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
+			testUserButton.isEnabled = true
+			testUserButton.backgroundColor = UIColor.white
+			testUserButton.setTitleColor(UIColor.blue, for: UIControlState())
+			testUserButton.setTitle("Make a test user", for: UIControlState())
 			self.view.addSubview(self.testUserButton)
 			testUserButton.snp_makeConstraints { make in
 				make.size.equalTo(authenticateButton)
 				make.centerX.equalTo(self.view)
 				make.top.equalTo(authenticateButton.snp_bottom).offset(10)
 			}
-			self.testUserButton.addTarget(self, action: "testUserButton:", forControlEvents: UIControlEvents.TouchUpInside)
+			self.testUserButton.addTarget(self, action: "testUserButton:", for: UIControlEvents.touchUpInside)
 			
-			self.testUserText = UITextField(frame: CGRectZero)
-			self.testUserText.enabled = false
-			self.testUserText.backgroundColor = UIColor.whiteColor()
+			self.testUserText = UITextField(frame: CGRect.zero)
+			self.testUserText.isEnabled = false
+			self.testUserText.backgroundColor = UIColor.white
 			self.testUserText.alpha = 0.0
-			self.testUserText.borderStyle = UITextBorderStyle.Line
-			self.testUserText.autocapitalizationType = UITextAutocapitalizationType.None
-			self.testUserText.autocorrectionType = UITextAutocorrectionType.No
+			self.testUserText.borderStyle = UITextBorderStyle.line
+			self.testUserText.autocapitalizationType = UITextAutocapitalizationType.none
+			self.testUserText.autocorrectionType = UITextAutocorrectionType.no
 			self.view.addSubview(self.testUserText)
 			testUserText.snp_makeConstraints { make in
 				make.size.equalTo(testUserButton)
@@ -98,16 +98,16 @@ class SLoginViewController: UIViewController, UITextFieldDelegate {
 		//End test user
 	}
 	
-	func digitsAuth(sender: AnyObject?) {
+	func digitsAuth(_ sender: AnyObject?) {
 		let appearance = DGTAppearance()
 		appearance.labelFont = UIFont(name: "HelveticaNeue-Bold", size: 16)
 		appearance.bodyFont = UIFont(name: "HelveticaNeue-Italic", size: 16)
 		appearance.accentColor = FlatRed()
 		appearance.backgroundColor = FlatWhite()
 		
-		let configuration = DGTAuthenticationConfiguration(accountFields: .DefaultOptionMask)
+		let configuration = DGTAuthenticationConfiguration(accountFields: .defaultOptionMask)
 		configuration.appearance = appearance
-		Digits.sharedInstance().authenticateWithViewController(nil, configuration: configuration, completion: {
+		Digits.sharedInstance().authenticate(with: nil, configuration: configuration, completion: {
 			(session: DGTSession!, error: NSError!) in
 			if (session == nil) {
 				//TODO Dismiss this view controller and start from beginning
@@ -115,7 +115,7 @@ class SLoginViewController: UIViewController, UITextFieldDelegate {
 			} else {
 				let digits = Digits.sharedInstance()
 				let oauthSigning = DGTOAuthSigning(authConfig:digits.authConfig, authSession:digits.session())
-				var authHeaders: [NSObject: AnyObject] = oauthSigning.OAuthEchoHeadersToVerifyCredentials()
+				var authHeaders: [AnyHashable: Any] = oauthSigning.oAuthEchoHeadersToVerifyCredentials()
 				
 				do {
 					let phoneNumber = try PhoneNumber(rawNumber:session.phoneNumber)
@@ -131,15 +131,15 @@ class SLoginViewController: UIViewController, UITextFieldDelegate {
 					.start {
 						event in
 						switch event {
-						case let .Next(result):
+						case let .next(result):
 							if (result.value != nil) {
 								self.saveUserData(result.value as! JSON)
 								self.loginSequenceCompleted.value  = true
 							}
 						
-						case let .Failed(error):
+						case let .failed(error):
 							NSLog("Post to digits error %@", error)
-                            TSMessage.showNotificationInViewController(self, title: "Authentication error", subtitle: error.localizedDescription , type: TSMessageNotificationType.Error)
+                            TSMessage.showNotification(in: self, title: "Authentication error", subtitle: error.localizedDescription , type: TSMessageNotificationType.error)
 						default:
 							break
 						}
@@ -148,31 +148,31 @@ class SLoginViewController: UIViewController, UITextFieldDelegate {
 		})
 	}
 	
-	private func saveUserData(data: JSON) {
+	fileprivate func saveUserData(_ data: JSON) {
 		User.loggedInWith(data)
 	}
 	
-	private func postToDigits(authHeaders: [NSObject: AnyObject]) -> SignalProducer<Result<Any, NSError>, NSError> {
+	fileprivate func postToDigits(_ authHeaders: [AnyHashable: Any]) -> SignalProducer<Result<Any, NSError>, NSError> {
 		return STHttp.post("\(Configuration.mainApi)/users/new", data: authHeaders)
 	}
 	
 	//Test user functionality
-	func testUserButton(sender: AnyObject?) {
-		self.testUserButton.enabled = false
-		UIView.animateWithDuration(0.1, delay: 0.5, options: UIViewAnimationOptions.CurveEaseOut, animations: {
+	func testUserButton(_ sender: AnyObject?) {
+		self.testUserButton.isEnabled = false
+		UIView.animate(withDuration: 0.1, delay: 0.5, options: UIViewAnimationOptions.curveEaseOut, animations: {
 			self.testUserButton.alpha = 0.0
 			},
 			completion: {
 				finished in
-				self.testUserText.enabled = true
+				self.testUserText.isEnabled = true
 				self.testUserText.alpha = 1.0
 		})
 	}
 	
-	func textFieldShouldReturn(textField: UITextField) -> Bool {   //delegate method
+	func textFieldShouldReturn(_ textField: UITextField) -> Bool {   //delegate method
 		textField.resignFirstResponder()
-		self.testUserText.enabled = false
-		UIView.animateWithDuration(0.1, delay: 0.5, options: UIViewAnimationOptions.CurveEaseOut, animations: {
+		self.testUserText.isEnabled = false
+		UIView.animate(withDuration: 0.1, delay: 0.5, options: UIViewAnimationOptions.curveEaseOut, animations: {
 			self.testUserText.alpha = 0.0
 			}, completion: nil)
 		let data = ["user": textField.text!]
@@ -181,14 +181,14 @@ class SLoginViewController: UIViewController, UITextFieldDelegate {
 			.start {
 				event in
 				switch event {
-				case let .Next(result):
+				case let .next(result):
 					if (result.value != nil) {
 						self.saveUserData(result.value as! JSON)
 						self.loginSequenceCompleted.value = true
 					}
-				case let .Failed(error):
-					TSMessage.showNotificationInViewController(self, title: "Authentication error", subtitle: "\(error.code) \(error.localizedDescription)" , type: TSMessageNotificationType.Error)
-					self.testUserText.enabled = true
+				case let .failed(error):
+					TSMessage.showNotification(in: self, title: "Authentication error", subtitle: "\(error.code) \(error.localizedDescription)" , type: TSMessageNotificationType.error)
+					self.testUserText.isEnabled = true
 					self.testUserText.alpha = 1.0
 				default:
 					break
@@ -198,7 +198,7 @@ class SLoginViewController: UIViewController, UITextFieldDelegate {
 		return true
 	}
 	
-	private func postTestUser(data: [NSObject: AnyObject]) -> SignalProducer<Result<Any, NSError>, NSError> {
+	fileprivate func postTestUser(_ data: [AnyHashable: Any]) -> SignalProducer<Result<Any, NSError>, NSError> {
 		return STHttp.post("\(Configuration.mainApi)/users/test", data: data)
 	}
 }

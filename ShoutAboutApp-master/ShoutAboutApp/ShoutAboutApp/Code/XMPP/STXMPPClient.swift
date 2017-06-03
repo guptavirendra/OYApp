@@ -15,7 +15,7 @@ class STXMPPClient: NSObject {
 	let connected = MutableProperty<Bool>(false)
 	var connectionStatus: Signal<(Bool, NSError?), NSError>?
 
-	static func clientForHost(host: String, port: UInt16, user: String, password: String) -> STXMPPClient {
+	static func clientForHost(_ host: String, port: UInt16, user: String, password: String) -> STXMPPClient {
 		return STXMPPClient(host: host, port: port, user: user, password: password, stream: STXMPPStream())
 	}
 	
@@ -28,11 +28,11 @@ class STXMPPClient: NSObject {
 		self.connectionStatus!.observe {
 			event in
 			switch event {
-			case let .Next(event):
+			case let .next(event):
 				NSLog("STXMPPClient Next: \(event)")
-			case let .Failed(event):
+			case let .failed(event):
 				NSLog("STXMPPClient Error: \(event.localizedDescription)")
-			case .Interrupted:
+			case .interrupted:
 				NSLog("STXMPPClient Interrupted")
 			default:
 				NSLog("STXMPPClient default")
@@ -49,21 +49,21 @@ class STXMPPClient: NSObject {
 		self.stream = nil
 	}
 	
-	func receiveMessageFromPushNotification(messageStr: String) {
+	func receiveMessageFromPushNotification(_ messageStr: String) {
 		self.stream.receiveMessageFromPushNotification(messageStr)
 	}
 	
-	func sendMessage(id: String, text: String, to: String, thread: String, content: STMessageAttachment?) {
+	func sendMessage(_ id: String, text: String, to: String, thread: String, content: STMessageAttachment?) {
 		self.stream.messageSender(id, body:text, to: to, thread: thread, content: content)
 			.start {
 				
 				event in
 				switch event {
-				case let .Next(event):
+				case let .next(event):
 					NSLog("sendMessage: Next \(event)")
-				case let .Failed(error):
+				case let .failed(error):
 					NSLog("sendMessage: Send error \(error)")
-				case .Interrupted:
+				case .interrupted:
 				NSLog("sendMessage Interrupted")
 				default:
 				NSLog("sendMessage default")
@@ -72,17 +72,17 @@ class STXMPPClient: NSObject {
 		}
 	}
 	
-	func sendChatState(type: String, to: String, thread: String) {
+	func sendChatState(_ type: String, to: String, thread: String) {
 		self.stream.chatStateSender(type, to: to, thread: thread)
 			.start {
 				
 				event in
 				switch event {
-				case let .Next(event):
+				case let .next(event):
 					NSLog("sendChatState: Next \(event)")
-				case let .Failed(error):
+				case let .failed(error):
 					NSLog("sendChatState: Send error \(error)")
-				case .Interrupted:
+				case .interrupted:
 					NSLog("sendChatState Interrupted")
 				default:
 					NSLog("sendChatState default")
@@ -105,7 +105,7 @@ class STXMPPClient: NSObject {
 		}
 	}
 	
-	private func setupBindings()
+	fileprivate func setupBindings()
 	{
 		self.connected <~ self.stream.connected
 		self.connectionStatus = stream.connectionStatus.observeOn(UIScheduler()) //XMPP operations happen in background queue so bring to main thread
@@ -113,11 +113,11 @@ class STXMPPClient: NSObject {
 			.observe {
 				event in
 				switch event {
-				case let .Next((connected, _)):
-					NSLog("STXMPPClient: Next \(connected) Main Thread? \(NSThread.isMainThread())")
-				case let .Failed(error):
+				case let .next((connected, _)):
+					NSLog("STXMPPClient: Next \(connected) Main Thread? \(Thread.isMainThread)")
+				case let .failed(error):
 					NSLog("STXMPPClient: Connection error \(error)")
-				case .Interrupted:
+				case .interrupted:
 					NSLog("STXMPPClient: Interrupted")
 				default:
 					NSLog("STXMPPClient: Default")

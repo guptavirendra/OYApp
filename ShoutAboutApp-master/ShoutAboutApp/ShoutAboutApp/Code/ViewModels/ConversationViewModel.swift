@@ -27,12 +27,12 @@ class ConversationViewModel: NSObject {
 	var keyboardShown = MutableProperty<Bool>(false)
 	var messagesInOtherThreads = MutableProperty<Int>(0)
 	
-	private unowned var xmppClient: STXMPPClient
-	private let chattingWith: STContact
+	fileprivate unowned var xmppClient: STXMPPClient
+	fileprivate let chattingWith: STContact
 	let currentThread: String
 	
 	//Chat state notifications
-	private var canSendChatStateComposingNotif = true //Can I send composing to chattingWith
+	fileprivate var canSendChatStateComposingNotif = true //Can I send composing to chattingWith
 	var shouldDisplayChatStateComposingNotif = MutableProperty<Bool>(false) //Can I display chattingWith's composing
 	var composingNotifTimeout: Disposable? = nil
 	
@@ -53,39 +53,39 @@ class ConversationViewModel: NSObject {
 		}
 		
 		//Done like this instead of RAC issues where RAC wouldn't remove the observer even after self had been disposed
-		NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ConversationViewModel.becameActive(_:)), name: UIApplicationDidBecomeActiveNotification, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(ConversationViewModel.becameActive(_:)), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ConversationViewModel.keyboardDidShow(_:)), name: UIKeyboardDidShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ConversationViewModel.keyboardDidShow(_:)), name: NSNotification.Name.UIKeyboardDidShow, object: nil)
         
 		 
-		NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ConversationViewModel.keyboardDidHide(_:)), name: UIKeyboardDidHideNotification, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(ConversationViewModel.keyboardDidHide(_:)), name: NSNotification.Name.UIKeyboardDidHide, object: nil)
 	}
 	
 	deinit {
 		self.disposer.dispose()
-		NSNotificationCenter.defaultCenter().removeObserver(self)
+		NotificationCenter.default.removeObserver(self)
 	}
 
-	func keyboardDidShow(notification: NSNotification) {
+	func keyboardDidShow(_ notification: Notification) {
 		self.keyboardShown.value = true
 	}
 	
-	func keyboardDidHide(notification: NSNotification) {
+	func keyboardDidHide(_ notification: Notification) {
 		self.keyboardShown.value = false
 	}
 	
-	func becameActive(notification: NSNotification) {
+	func becameActive(_ notification: Notification) {
 		//Make sure that any message that was inputted to db from push message is now loaded immediately to view
 		self.loadMore(self.messages.value.count)
 	}
 	
-	func sendMessage(text: String, image: UIImage? = nil) {
-		let id = NSUUID().UUIDString
+	func sendMessage(_ text: String, image: UIImage? = nil) {
+		let id = UUID().uuidString
 		let msg = STMessage(
 			id: id,
 			senderId: User.senderId,
 			senderDisplayName: User.displayName!,
-			date: NSDate(),
+			date: Date(),
 			text: text,
 			media: image,
             threadId: self.currentThread,
@@ -94,16 +94,16 @@ class ConversationViewModel: NSObject {
 		doSend(text, msg:msg)
 	}
 	
-	func sendGameMessage(text: String, data: STGameData, deleteOwnOnly: Bool) {
+	func sendGameMessage(_ text: String, data: STGameData, deleteOwnOnly: Bool) {
 		//Delete messages of this game (only one message per game allowed)
 		self.deleteAllPreviousMessagesOfType(data.dataContentType, deleteOwnOnly: deleteOwnOnly)
-		let id = NSUUID().UUIDString
+		let id = UUID().uuidString
 		let msgContent = STMessageAttachment(json: data.data, contentType: data.dataContentType)
 		let msg = STMessage(
 			id: id,
 			senderId: User.senderId,
 			senderDisplayName: User.displayName!,
-			date: NSDate(),
+			date: Date(),
 			text: text,
 			attachment: msgContent,
             threadId: self.currentThread,
@@ -112,14 +112,14 @@ class ConversationViewModel: NSObject {
 		doSend(text, msg:msg)
 	}
 	
-	func deleteAllPreviousMessagesOfType(contentType: String, deleteOwnOnly: Bool = false) {
+	func deleteAllPreviousMessagesOfType(_ contentType: String, deleteOwnOnly: Bool = false) {
 		let archiveIds = deleteLocalMessages(contentType, notId: "", deleteOwnOnly: deleteOwnOnly)
 		self.xmppClient.stream.purgeFromMAM(archiveIds.map { (archiveId, _) in return archiveId })
 	}
 	
-	func hasMessagesOfType(contentType: String) -> Bool {
+	func hasMessagesOfType(_ contentType: String) -> Bool {
 		let context: NSManagedObjectContext? = self.xmppClient.stream.xmppMessageArchivingCoreDataStorage.mainThreadManagedObjectContext
-		let messageEntity: NSEntityDescription? = NSEntityDescription.entityForName(self.xmppClient.stream.xmppMessageArchivingCoreDataStorage.messageEntityName, inManagedObjectContext: context!)
+		let messageEntity: NSEntityDescription? = NSEntityDescription.entity(forEntityName: self.xmppClient.stream.xmppMessageArchivingCoreDataStorage.messageEntityName, in: context!)
 		
 		let fetchRequest = NSFetchRequest()
 		let predicate: NSPredicate = NSPredicate(format: "contentType == %@ and thread == %@", contentType, self.currentThread)
@@ -127,7 +127,7 @@ class ConversationViewModel: NSObject {
 		fetchRequest.entity = messageEntity
 		fetchRequest.returnsObjectsAsFaults = false
 		do {
-			let fetchResults = try context!.executeFetchRequest(fetchRequest) as! [XMPPMAMArchivingMessageCoreDataObject]
+			let fetchResults = try context!.fetch(fetchRequest) as! [XMPPMAMArchivingMessageCoreDataObject]
 			return fetchResults.count > 0
 		} catch {
 			assert(false, "Coredata executeFetchRequest error \(error)")
@@ -137,7 +137,7 @@ class ConversationViewModel: NSObject {
 	}
 	
 	//Text is sent as a separate param because msg might be a media message without text
-	private func doSend(text: String, msg: STMessage) {
+	fileprivate func doSend(_ text: String, msg: STMessage) {
 		messagesLoadFromDb = false
 		self.messages.value.append(msg)
 		self.xmppClient.sendMessage(msg.id, text: text, to: self.chattingWith.username, thread: self.currentThread, content: msg.attachment)
@@ -149,7 +149,7 @@ class ConversationViewModel: NSObject {
 		}
 	}
 	
-	private func setupBindings() {
+	fileprivate func setupBindings() {
 		self.setupMessageReceiveBindings()
 		self.setupMessagesInOtherThreadsBindings()
 		self.setupMessageReceiptsBindings()
@@ -158,7 +158,7 @@ class ConversationViewModel: NSObject {
 		self.setupSendChatStateBindings()
 	}
 	
-	private func setupMessageReceiveBindings() {
+	fileprivate func setupMessageReceiveBindings() {
 		//Monitor for incoming messages
 		self.disposer.addDisposable(
 			self.xmppClient.stream.incomingMessages
@@ -175,7 +175,7 @@ class ConversationViewModel: NSObject {
 				.start {
 					[unowned self] event in
 					switch event {
-					case let .Next(msg):
+					case let .next(msg):
 						if !self.isDuplicate(msg) {
 							//There can be only one message of each type present
 							if (msg.isGameMediaMessage) {
@@ -204,7 +204,7 @@ class ConversationViewModel: NSObject {
 		)
 	}
 	
-	private func setupMessagesInOtherThreadsBindings() {
+	fileprivate func setupMessagesInOtherThreadsBindings() {
 		//Monitor for incoming messages in other threads
 		self.disposer.addDisposable(
 			self.xmppClient.stream.incomingMessages
@@ -217,7 +217,7 @@ class ConversationViewModel: NSObject {
 				.start {
 					[unowned self] event in
 					switch event {
-					case .Next:
+					case .next:
 						self.messagesInOtherThreads.value += 1
 					default:
 						break
@@ -226,7 +226,7 @@ class ConversationViewModel: NSObject {
 		)
 	}
 	
-	private func setupMessageReceiptsBindings() {
+	fileprivate func setupMessageReceiptsBindings() {
 		//Monitor for incoming receipt and mark messages
 		self.disposer.addDisposable(
 			self.xmppClient.stream.incomingReceipts
@@ -235,8 +235,8 @@ class ConversationViewModel: NSObject {
 				.start {
 					[unowned self] event in
 					switch event {
-					case let .Next(messageId, deliveryStatus):
-						let index = self.messages.value.indexOf {
+					case let .next(messageId, deliveryStatus):
+						let index = self.messages.value.index {
 							message in
 							return message.id == messageId
 						}
@@ -253,7 +253,7 @@ class ConversationViewModel: NSObject {
 		)
 	}
 	
-	private func setupMessageDownloadBindings() {
+	fileprivate func setupMessageDownloadBindings() {
 		//Observe messages array and download messages that are media messages but don't have data yet
 		self.disposer.addDisposable(
 			self.messages.producer
@@ -266,7 +266,7 @@ class ConversationViewModel: NSObject {
 						message.attachment!.json != nil &&
 						((message.media) as! JSQPhotoMediaItem).image == nil
 				}
-				.flatMap(FlattenStrategy.Merge, transform: {
+				.flatMap(FlattenStrategy.merge, transform: {
 					[unowned self] message in
 					return self.downloadMedia(message)
 					//We want to catch errors so that this pipeline doesn't terminate on download errors
@@ -286,7 +286,7 @@ class ConversationViewModel: NSObject {
 				.start {
 					[unowned self] event in
 					switch event {
-					case let .Next(next):
+					case let .next(next):
 						let (result, message) = next
 						if (result.value != nil) {
 							let (image, _) = result.value!
@@ -307,7 +307,7 @@ class ConversationViewModel: NSObject {
 		)
 	}
 	
-	private func setupReceiveChatStateBindings() {
+	fileprivate func setupReceiveChatStateBindings() {
 		//Did we receive a incoming composingChatState
 		self.disposer.addDisposable(
 			self.xmppClient.stream.incomingMessages
@@ -324,7 +324,7 @@ class ConversationViewModel: NSObject {
 				.start {
 					[unowned self] event in
 					switch event {
-					case let .Next(value):
+					case let .next(value):
 						self.shouldDisplayChatStateComposingNotif.value = value
 					default:
 						break
@@ -348,7 +348,7 @@ class ConversationViewModel: NSObject {
 				.start {
 					[unowned self] event in
 					switch event {
-					case let .Next(value):
+					case let .next(value):
 						self.shouldDisplayChatStateComposingNotif.value = value
 					default:
 						break
@@ -362,11 +362,11 @@ class ConversationViewModel: NSObject {
 				.start {
 					[unowned self] event in
 					switch event {
-					case let .Next(enabled):
+					case let .next(enabled):
 						self.cancelComposingTimer() //Want to cancel any current timer in whether the enabled is true or false
 						if enabled { //ChatState composing has been setup
 							//Setup a new timer to disable typing indicator after 30 seconds
-							self.composingNotifTimeout = UIScheduler().toRACScheduler().scheduleAfter(NSDate().dateByAddingTimeInterval(45)) {
+							self.composingNotifTimeout = UIScheduler().toRACScheduler().scheduleAfter(Date().addingTimeInterval(45)) {
 								self.shouldDisplayChatStateComposingNotif.value = false
 							}
 							self.disposer.addDisposable(self.composingNotifTimeout)
@@ -378,7 +378,7 @@ class ConversationViewModel: NSObject {
 		)
 	}
 	
-	private func setupSendChatStateBindings() {
+	fileprivate func setupSendChatStateBindings() {
 		//Should we send a chat state composing notification of our own
 		self.disposer.addDisposable(
 			self.typing.producer
@@ -403,7 +403,7 @@ class ConversationViewModel: NSObject {
 				.start {
 					[unowned self] event in
 					switch event {
-					case .Next:
+					case .next:
 						self.xmppClient.sendChatState("composing", to: self.chattingWith.username, thread: self.currentThread)
 					default:
 						break
@@ -429,7 +429,7 @@ class ConversationViewModel: NSObject {
 				.start {
 					[unowned self] event in
 					switch event {
-					case .Next:
+					case .next:
 						self.xmppClient.sendChatState("paused", to: self.chattingWith.username, thread: self.currentThread)
 					default:
 						break
@@ -438,12 +438,12 @@ class ConversationViewModel: NSObject {
 		)
 	}
 	
-	private func cancelComposingTimer() {
+	fileprivate func cancelComposingTimer() {
 		self.composingNotifTimeout?.dispose()
 		self.composingNotifTimeout = nil
 	}
 	
-	func loadMore(count: Int? = nil) {
+	func loadMore(_ count: Int? = nil) {
 		if !canLoad || messages.value.count < 1 {
 			//Load is in progress
 			self.loadingMoreContent.value = false
@@ -454,7 +454,7 @@ class ConversationViewModel: NSObject {
 		canLoad = false
 		
 		let context: NSManagedObjectContext? = self.xmppClient.stream.xmppMessageArchivingCoreDataStorage.mainThreadManagedObjectContext
-		let messageEntity: NSEntityDescription? = NSEntityDescription.entityForName(self.xmppClient.stream.xmppMessageArchivingCoreDataStorage.messageEntityName, inManagedObjectContext: context!)
+		let messageEntity: NSEntityDescription? = NSEntityDescription.entity(forEntityName: self.xmppClient.stream.xmppMessageArchivingCoreDataStorage.messageEntityName, in: context!)
 		let sortDescriptor: NSSortDescriptor = NSSortDescriptor(key: "timestamp", ascending: false)
 		
 		let fetchRequest = NSFetchRequest()
@@ -465,7 +465,7 @@ class ConversationViewModel: NSObject {
 		fetchRequest.fetchLimit = count != nil ? count! : self.fetchLimit //Should not be smaller than this so that we get a screenful of messages
 		fetchRequest.sortDescriptors = [sortDescriptor]
 		do {
-			let fetchResults = try context!.executeFetchRequest(fetchRequest) as! [XMPPMAMArchivingMessageCoreDataObject]
+			let fetchResults = try context!.fetch(fetchRequest) as! [XMPPMAMArchivingMessageCoreDataObject]
 			if (fetchResults.count > 0) {
 				let jsqMessages = fetchResults.map({
 					xmppMsg in
@@ -474,7 +474,7 @@ class ConversationViewModel: NSObject {
 				
 				var copy = self.messages.value
 				for jsqMessage in jsqMessages {
-					copy.insert(jsqMessage, atIndex: 0)
+					copy.insert(jsqMessage, at: 0)
 				}
 				
 				//Insert as a single block
@@ -505,7 +505,7 @@ class ConversationViewModel: NSObject {
 						[weak self] event in
 						if self != nil {
 							switch event {
-							case let .Next(next):
+							case let .next(next):
 								let (archiveId, _) = next
 								self!.canLoad = true
 								if (archiveId != nil) {
@@ -530,9 +530,9 @@ class ConversationViewModel: NSObject {
 		}
 	}
 	
-	private func loadInitialData() {
+	fileprivate func loadInitialData() {
 		let context: NSManagedObjectContext? = self.xmppClient.stream.xmppMessageArchivingCoreDataStorage.mainThreadManagedObjectContext
-		let messageEntity: NSEntityDescription? = NSEntityDescription.entityForName(self.xmppClient.stream.xmppMessageArchivingCoreDataStorage.messageEntityName, inManagedObjectContext: context!)
+		let messageEntity: NSEntityDescription? = NSEntityDescription.entity(forEntityName: self.xmppClient.stream.xmppMessageArchivingCoreDataStorage.messageEntityName, in: context!)
 		let sortDescriptor: NSSortDescriptor = NSSortDescriptor(key: "timestamp", ascending: false)
 		
 		let fetchRequest = NSFetchRequest()
@@ -542,7 +542,7 @@ class ConversationViewModel: NSObject {
 		fetchRequest.fetchLimit = self.fetchLimit //Should not be smaller than this so that we get a screenful of messages
 		fetchRequest.sortDescriptors = [sortDescriptor]
 		do {
-			let fetchResults = try context!.executeFetchRequest(fetchRequest) as! [XMPPMAMArchivingMessageCoreDataObject]
+			let fetchResults = try context!.fetch(fetchRequest) as! [XMPPMAMArchivingMessageCoreDataObject]
 			let jsqMessages = fetchResults.map({
 				archivedMessage in
 				return STMessage.fromStoredMessage(archivedMessage, inConversationWith: self.chattingWith)
@@ -550,21 +550,21 @@ class ConversationViewModel: NSObject {
 			
 			//NOTE! There's some issue with the following lines! If this NSLog(?!?!) line is not here
 			//the self.messagesLoadFromDb = true crashes if built with Release build
-			NSLog("Loaded messages thread? \(NSThread.isMainThread())")
+			NSLog("Loaded messages thread? \(Thread.isMainThread)")
 			self.messagesLoadFromDb = true
 			NSLog("Done")
-			messages.value = Array(jsqMessages.reverse())
+			messages.value = Array(jsqMessages.reversed())
 		} catch {
 			assert(false, "Coredata executeFetchRequest error \(error)")
 		}
 	}
 	
-	private func deleteLocalMessages(contentType: String, notId: String, deleteOwnOnly: Bool = false) -> [(String, String)] {
+	fileprivate func deleteLocalMessages(_ contentType: String, notId: String, deleteOwnOnly: Bool = false) -> [(String, String)] {
 		deleteLocalMessagesFromCache(contentType, notId: notId, deleteOwnOnly:  deleteOwnOnly)
 		return deleteLocalMessagesFromDb(contentType, notId: notId, deleteOwnOnly: deleteOwnOnly)
 	}
 	
-	private func deleteLocalMessagesFromCache(contentType: String, notId: String, deleteOwnOnly: Bool = false) {
+	fileprivate func deleteLocalMessagesFromCache(_ contentType: String, notId: String, deleteOwnOnly: Bool = false) {
 		//Delete from messages
 		let keep = self.messages.value.filter { message in
 			let keepCondition = message.id == notId || message.attachment == nil || message.attachment!.contentType != contentType
@@ -578,9 +578,9 @@ class ConversationViewModel: NSObject {
 		messages.value = keep
 	}
 	
-	private func deleteLocalMessagesFromDb(contentType: String, notId: String, deleteOwnOnly: Bool = false) -> [(String, String)] {
+	fileprivate func deleteLocalMessagesFromDb(_ contentType: String, notId: String, deleteOwnOnly: Bool = false) -> [(String, String)] {
 		let context: NSManagedObjectContext? = self.xmppClient.stream.xmppMessageArchivingCoreDataStorage.mainThreadManagedObjectContext
-		let messageEntity: NSEntityDescription? = NSEntityDescription.entityForName(self.xmppClient.stream.xmppMessageArchivingCoreDataStorage.messageEntityName, inManagedObjectContext: context!)
+		let messageEntity: NSEntityDescription? = NSEntityDescription.entity(forEntityName: self.xmppClient.stream.xmppMessageArchivingCoreDataStorage.messageEntityName, in: context!)
 		
 		let fetchRequest = NSFetchRequest()
 		let predicate: NSPredicate?
@@ -594,13 +594,13 @@ class ConversationViewModel: NSObject {
 		fetchRequest.entity = messageEntity
 		fetchRequest.returnsObjectsAsFaults = false
 		do {
-			let fetchResults = try context!.executeFetchRequest(fetchRequest) as! [XMPPMAMArchivingMessageCoreDataObject]
+			let fetchResults = try context!.fetch(fetchRequest) as! [XMPPMAMArchivingMessageCoreDataObject]
 			var archiveIds: [(String, String)] = []
 			
 			if fetchResults.count > 0 {
 				//Delete from DB
 				for archivedMessage in fetchResults {
-					context?.deleteObject(archivedMessage)
+					context?.delete(archivedMessage)
 					//COMPILER BUG. Can't array append tuples. Have to do it like this
 					//var deletedId = [(archivedMessage.archiveId!, archivedMessage.id)]
 					//archiveIds += deletedId
@@ -627,15 +627,15 @@ class ConversationViewModel: NSObject {
 		return []
 	}
 	
-	private func uploadMedia(media: UIImage, attachmentDesc: STMessageAttachment) {
+	fileprivate func uploadMedia(_ media: UIImage, attachmentDesc: STMessageAttachment) {
 		let key = ConversationViewModel.mediaKey(attachmentDesc)
 		SignalProducer(values: [(media, key)])
 			.observeOn(QueueScheduler())
-			.flatMap(FlattenStrategy.Merge, transform: {
+			.flatMap(FlattenStrategy.merge, transform: {
 				[unowned self] (image: UIImage, key: String) -> SignalProducer<(UIImage, String), NSError> in
 				return self.scaleImage(image, key:key)
 			})
-			.flatMap(FlattenStrategy.Merge, transform: {
+			.flatMap(FlattenStrategy.merge, transform: {
 				[unowned self] (image: UIImage, imageKey: String) -> SignalProducer<Result<Any, NSError>, NSError> in
                 return STHttp.putToS3(Configuration.mediaBucket, key: imageKey, image: image, filePath:[attachmentDesc.filePath])
                 //return
@@ -643,11 +643,11 @@ class ConversationViewModel: NSObject {
 			.start {
 				[unowned self] event in
 				switch event {
-				case .Next:
+				case .next:
 					NSLog("PutToS3 success!")
-				case .Completed:
+				case .completed:
 					NSLog("PutToS3 completed!")
-				case let .Failed(error):
+				case let .failed(error):
 					NSLog("PutToS3 %@", error)
 				default:
 					break
@@ -655,18 +655,18 @@ class ConversationViewModel: NSObject {
 		}
 	}
 	
-	private func downloadMedia(message: STMessage) -> SignalProducer<Result<(UIImage, String), NSError>, NSError> {
+	fileprivate func downloadMedia(_ message: STMessage) -> SignalProducer<Result<(UIImage, String), NSError>, NSError> {
 		let key = ConversationViewModel.mediaKey(message.attachment!)
 		let thumbKey = ConversationViewModel.thumbnailKey(key)
 		return SignalProducer(values: [thumbKey, key])
 			.observeOn(QueueScheduler())
-			.flatMap(FlattenStrategy.Merge, transform: {
+			.flatMap(FlattenStrategy.merge, transform: {
 				[unowned self] (key: String) -> SignalProducer<Result<(UIImage, String), NSError>, NSError> in
 				return STHttp.getFromS3(Configuration.mediaBucket, key: key)
 		})
 	}
 	
-	private func scaleImage(image: UIImage, key: String) -> SignalProducer<(UIImage, String), NSError> {
+	fileprivate func scaleImage(_ image: UIImage, key: String) -> SignalProducer<(UIImage, String), NSError> {
 		return SignalProducer { [unowned self] observer, disposable in
 			//https://blog.bufferapp.com/ideal-image-sizes-social-media-posts
 			let thumbSize = 256
@@ -681,31 +681,31 @@ class ConversationViewModel: NSObject {
 		}
 	}
 	
-	static func mediaKey(attachmentDesc: STMessageAttachment) -> String {
+	static func mediaKey(_ attachmentDesc: STMessageAttachment) -> String {
 		var json: JSON = attachmentDesc.json
 		return json["id"].string!
 	}
 	
-	static func thumbnailKey(key: String) -> String {
-		return key.stringByReplacingOccurrencesOfString(STMessage.imageExt, withString: "_thumbnail\(STMessage.imageExt)")
+	static func thumbnailKey(_ key: String) -> String {
+		return key.replacingOccurrences(of: STMessage.imageExt, with: "_thumbnail\(STMessage.imageExt)")
 	}
 	
-	private func reloadMsgView(message: STMessage) {
+	fileprivate func reloadMsgView(_ message: STMessage) {
 		//Notify the viewController that a message contents have changed and it's collectionView should be reloaded
-		let reloadIndex = (messages.value).indexOf(message)
+		let reloadIndex = (messages.value).index(of: message)
 		self.reloadMesssage.value = reloadIndex
 	}
 	
-	private func isDuplicate(message: STMessage) -> Bool {
-		let index = self.messages.value.indexOf { (existingMessage: STMessage) -> Bool in
+	fileprivate func isDuplicate(_ message: STMessage) -> Bool {
+		let index = self.messages.value.index { (existingMessage: STMessage) -> Bool in
 			existingMessage.id == message.id
 		}
 		
 		return index != nil
 	}
 	
-	static func threadId(participants: [String]) -> String {
-		return participants.sort { (userId1, userId2) in userId1 < userId2 }.reduce("", combine: {
+	static func threadId(_ participants: [String]) -> String {
+		return participants.sorted { (userId1, userId2) in userId1 < userId2 }.reduce("", {
 			(ret, element) in
 			if ret == "" {
 				return element

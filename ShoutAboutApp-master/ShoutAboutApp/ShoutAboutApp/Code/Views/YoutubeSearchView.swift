@@ -12,29 +12,29 @@ import ReactiveCocoa
 class YoutubeSearchView: UITableView, UITableViewDelegate, UITableViewDataSource {
 	//var superFrame: CGRect
 	weak var viewModel: SearchViewModel?
-	private let searchCellIdentifier = "YoutubeSearchViewCell"
-	private let detailCellIdentifier = "YoutubeDetailViewCell"
+	fileprivate let searchCellIdentifier = "YoutubeSearchViewCell"
+	fileprivate let detailCellIdentifier = "YoutubeDetailViewCell"
 	
 	init(frame: CGRect, viewModel: SearchViewModel) {
 		//self.superFrame = frame
 		self.viewModel = viewModel
-		super.init(frame: frame, style: .Plain)
-		self.separatorStyle = UITableViewCellSeparatorStyle.None
+		super.init(frame: frame, style: .plain)
+		self.separatorStyle = UITableViewCellSeparatorStyle.none
 		self.translatesAutoresizingMaskIntoConstraints = false
 		self.scrollsToTop = false
 		self.dataSource = self
 		self.delegate = self
 		
 		//Top hairline
-		var rect: CGRect = CGRectZero
-		rect.size = CGSizeMake(CGRectGetWidth(frame), 0.5)
+		var rect: CGRect = CGRect.zero
+		rect.size = CGSize(width: frame.width, height: 0.5)
 		let hairline = UIView(frame: rect)
-		hairline.autoresizingMask = UIViewAutoresizing.FlexibleWidth
+		hairline.autoresizingMask = UIViewAutoresizing.flexibleWidth
 		hairline.backgroundColor = self.separatorColor
 		self.addSubview(hairline)
 		
-		self.registerClass(SearchViewTableViewCell.self, forCellReuseIdentifier: searchCellIdentifier)
-		self.registerClass(SearchViewDetailTableViewCell.self, forCellReuseIdentifier: detailCellIdentifier)
+		self.register(SearchViewTableViewCell.self, forCellReuseIdentifier: searchCellIdentifier)
+		self.register(SearchViewDetailTableViewCell.self, forCellReuseIdentifier: detailCellIdentifier)
 
 		self.setupBindings()
 	}
@@ -43,18 +43,18 @@ class YoutubeSearchView: UITableView, UITableViewDelegate, UITableViewDataSource
 	    fatalError("init(coder:) has not been implemented")
 	}
 	
-	private func setupBindings() {
+	fileprivate func setupBindings() {
 		self.setupSearchResultsBindings()
 	}
 	
-	private func setupSearchResultsBindings() {
+	fileprivate func setupSearchResultsBindings() {
 		self.viewModel!.disposer.addDisposable(
 			self.viewModel!.searchResults.producer
 				.observeOn(UIScheduler())
 				.start {
 					[weak self] event in
 					switch event {
-					case .Next:
+					case .next:
 						self?.reloadData()
 					default:
 						break
@@ -64,34 +64,34 @@ class YoutubeSearchView: UITableView, UITableViewDelegate, UITableViewDataSource
 	}
 	
 	//mark - UITableViewDataSource Methods
-	func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+	func numberOfSections(in tableView: UITableView) -> Int {
 		return 1
 	}
 	
-	func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		return self.viewModel!.searchResults.value.count
 	}
 	
-	func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let (result, detailView) = self.viewModel!.searchResults.value[indexPath.row]
 		
 		if !detailView {
-			let searchResultCell = tableView.dequeueReusableCellWithIdentifier(searchCellIdentifier, forIndexPath: indexPath) as! SearchViewTableViewCell
+			let searchResultCell = tableView.dequeueReusableCell(withIdentifier: searchCellIdentifier, for: indexPath) as! SearchViewTableViewCell
 			searchResultCell.searchResult(result)
 			return searchResultCell
 		} else {
-			let searchDetailsCell = tableView.dequeueReusableCellWithIdentifier(detailCellIdentifier, forIndexPath: indexPath) as! SearchViewDetailTableViewCell
+			let searchDetailsCell = tableView.dequeueReusableCell(withIdentifier: detailCellIdentifier, for: indexPath) as! SearchViewDetailTableViewCell
 			searchDetailsCell.searchDetails(result, searchViewModel: self.viewModel!)
 			return searchDetailsCell
 		}
 	}
 	
-	func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
 		return CGFloat(80)
 	}
 	
 	//mark - UITableViewDelegate Methods
-	func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let (result, detailView) = self.viewModel!.searchResults.value[indexPath.row]
 		if !detailView {
 			self.viewModel?.needDetails(result, atIndex: indexPath.row)

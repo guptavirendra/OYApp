@@ -11,11 +11,11 @@ import SwiftyJSON
 import WebKit
 
 class WebViewModel: NSObject, WKNavigationDelegate {
-	private let gameType: String
+	fileprivate let gameType: String
 	var gameData: JSON?
-	private var outgoingView: Bool
-	private var completionCallback: ((Bool) -> Void)!
-	private var initialLoad = true
+	fileprivate var outgoingView: Bool
+	fileprivate var completionCallback: ((Bool) -> Void)!
+	fileprivate var initialLoad = true
 	
 	init(gameType: String, data: JSON?, outgoingView: Bool) {
 		self.gameType = gameType
@@ -27,21 +27,21 @@ class WebViewModel: NSObject, WKNavigationDelegate {
 
 	}
 	
-	func loadWebView(webView: WKWebView, urlConnDelegate: NSURLConnectionDelegate, completion: (Bool) -> Void) {
+	func loadWebView(_ webView: WKWebView, urlConnDelegate: NSURLConnectionDelegate, completion: (Bool) -> Void) {
 		let strUrl = Configuration.games[self.gameType]!.url
-		let url = NSURL(string:strUrl)
-		let req = NSURLRequest(URL: url!, cachePolicy: NSURLRequestCachePolicy.UseProtocolCachePolicy, timeoutInterval: 60)
+		let url = URL(string:strUrl)
+		let req = URLRequest(url: url!, cachePolicy: NSURLRequest.CachePolicy.useProtocolCachePolicy, timeoutInterval: 60)
 		var _ = NSURLConnection(request: req, delegate: urlConnDelegate)!
 		self.completionCallback = completion
 		webView.navigationDelegate = self
 		//Make sure we're in main thread
-		dispatch_async(dispatch_get_main_queue()) {
+		DispatchQueue.main.async {
 			[weak webView] in
-				webView?.loadRequest(req)!
+				webView?.load(req)!
 		}
 	}
 	
-	func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
+	func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
 		NSLog("webView didFinishNavigation")
 		if initialLoad {
 			var stateStr: String = "undefined"
@@ -52,7 +52,7 @@ class WebViewModel: NSObject, WKNavigationDelegate {
 				stateStr = "\"\(stateStr)\""
 				//UpdatedState is javascript
 				let updateState = gameData!["updateState"]
-				if let jsonStr = updateState.rawString(NSUTF8StringEncoding, options: NSJSONWritingOptions(rawValue: 0)) {
+				if let jsonStr = updateState.rawString(String.Encoding.utf8, options: JSONSerialization.WritingOptions(rawValue: 0)) {
 					updateStateStr = jsonStr
 				}
 			}
@@ -72,7 +72,7 @@ class WebViewModel: NSObject, WKNavigationDelegate {
 		initialLoad = false
 	}
 	
-	func webView(webView: WKWebView, didFailNavigation navigation: WKNavigation!, withError error: NSError) {
+	func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
 		NSLog("%s. With Error %@", __FUNCTION__, error)
 		completionCallback(false)
 	}

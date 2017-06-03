@@ -27,7 +27,7 @@ class PrivacyPolicyViewController: UIViewController {
             urlString = "http://oyapp.in/privacy-policy"
             
         }
-        myWebView.loadRequest(NSURLRequest(URL: NSURL(string: urlString)!))
+        myWebView.loadRequest(URLRequest(url: URL(string: urlString)!))
         
     }
 

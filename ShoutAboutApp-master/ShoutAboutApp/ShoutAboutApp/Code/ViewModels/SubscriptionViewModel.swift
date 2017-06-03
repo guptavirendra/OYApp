@@ -46,14 +46,14 @@ class SubscriptionViewModel: NSObject {
 			]
 		]
 		
-		self.subscribeChannel(data as [NSObject : AnyObject])
+		self.subscribeChannel(data as [AnyHashable: Any])
 			.start {
 				[unowned self] event in
 				switch event {
-				case let .Next(result):
+				case let .next(result):
 					NSLog("Subscribe to channel succeeded! \(result)")
 					self.subscribeSucceeded.value = "Subscribed to \(self.searchResult.title)"
-				case let .Failed(error):
+				case let .failed(error):
 					NSLog("Subscribe to channel failed! %@", error)
 					self.subscribeFailed.value = "Already subscribed to \(self.searchResult.title)"
 				default:
@@ -72,14 +72,14 @@ class SubscriptionViewModel: NSObject {
 			]
 		]
 		
-		self.unsubscribeChannel(data as [NSObject : AnyObject])
+		self.unsubscribeChannel(data as [AnyHashable: Any])
 			.start {
 				[unowned self] event in
 				switch event {
-				case let .Next(result):
+				case let .next(result):
 					NSLog("UnSubscribe to channel succeeded! \(result)")
 					self.unsubscribeSucceeded.value = "Unsubscribed from \(self.searchResult.title)"
-				case let .Failed(error):
+				case let .failed(error):
 					NSLog("Unsubscribe to channel failed! %@", error)
 					self.unsubscribeFailed.value = "Already Unsubscribed from \(self.searchResult.title)"
 				default:
@@ -95,14 +95,14 @@ class SubscriptionViewModel: NSObject {
 				.start {
 					[unowned self] event in
 					switch event {
-					case let .Next(result):
+					case let .next(result):
 						NSLog("Youtube details \(result)")
 						if (result.value != nil) {
 							let json = result.value as! JSON
 							let item = json["items"].arrayValue[0]
 							self.detailResult.value = YoutubeSearchResult(json: item)
 						}
-					case let .Failed(error):
+					case let .failed(error):
 						NSLog("Youtube search failed \(error)")
 					default:
 						break
@@ -116,11 +116,11 @@ class SubscriptionViewModel: NSObject {
 				.start {
 					[unowned self] event in
 					switch event {
-					case let .Next(result):
+					case let .next(result):
 						NSLog("Subscribe to channel succeeded! \(result)")
 						let json = result.value as! JSON
 						self.alreadySubscribedResult.value = json["status"].boolValue
-					case let .Failed(error):
+					case let .failed(error):
 						NSLog("Subscribe to channel failed! %@", error)
 					default:
 						break
@@ -129,19 +129,19 @@ class SubscriptionViewModel: NSObject {
 		)
 	}
 	
-	private func channelDetails() -> SignalProducer<Result<Any, NSError>, NSError> {
+	fileprivate func channelDetails() -> SignalProducer<Result<Any, NSError>, NSError> {
 		return STHttp.get("https://www.googleapis.com/youtube/v3/channels?id=\(self.searchResult.id)&key=\(Configuration.youtubeApiKey)&part=id,snippet,statistics")
 	}
 	
-	private func subscribeChannel(data: [NSObject: AnyObject]) -> SignalProducer<Result<Any, NSError>, NSError> {
+	fileprivate func subscribeChannel(_ data: [AnyHashable: Any]) -> SignalProducer<Result<Any, NSError>, NSError> {
 		return STHttp.post("\(Configuration.subscribeApi)/subscribe/new", data: data)
 	}
 	
-	private func unsubscribeChannel(data: [NSObject: AnyObject]) -> SignalProducer<Result<Any, NSError>, NSError> {
+	fileprivate func unsubscribeChannel(_ data: [AnyHashable: Any]) -> SignalProducer<Result<Any, NSError>, NSError> {
 		return STHttp.post("\(Configuration.subscribeApi)/subscribe/delete", data: data)
 	}
 	
-	private func getSubscriptionStatus() -> SignalProducer<Result<Any, NSError>, NSError> {
+	fileprivate func getSubscriptionStatus() -> SignalProducer<Result<Any, NSError>, NSError> {
 		return STHttp.get("\(Configuration.subscribeApi)/subscribe/get?user=\(User.username)&channelId=\(self.searchResult.id)&threadId=\(self.currentThreadId)")
 	}
 }

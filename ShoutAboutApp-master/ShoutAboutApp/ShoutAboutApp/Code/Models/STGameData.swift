@@ -19,7 +19,7 @@ class STGameData: NSObject {
 		self.dataContentType = STGameData.contentTypeForGameType(type)
 	}
 	
-	static func contentTypeForGameType(type: String) -> String {
+	static func contentTypeForGameType(_ type: String) -> String {
 		return "application/smalltalk-game+\(type)"
 	}
 }

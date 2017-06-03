@@ -40,10 +40,10 @@ class STGameMediaItem: JSQMediaItem {
 	}
 	
 	override func mediaViewDisplaySize() -> CGSize {
-		let screenRect: CGRect = UIScreen.mainScreen().bounds
+		let screenRect: CGRect = UIScreen.main.bounds
 		let width = screenRect.size.width * 0.78
 		let height = width * 1 //Chess is square so we don't have this any higher, other games would benefit if they had more space
-		return CGSizeMake(width, height)
+		return CGSize(width: width, height: height)
 	}
 	
 	override func mediaPlaceholderView() -> UIView? {
@@ -89,13 +89,13 @@ class STGameMediaItem: JSQMediaItem {
 		fatalError("Not implemented. See JSQPhotoMediaItem")
 	}
 	
-	override func encodeWithCoder(aCoder: NSCoder) {
+	override func encode(with aCoder: NSCoder) {
 		fatalError("Not implemented. See JSQPhotoMediaItem")
 	}
 	
 	//mark - NSCopying
 	
-	override func copyWithZone(zone: NSZone) -> AnyObject {
+	override func copy(with zone: NSZone?) -> AnyObject {
 		fatalError("CopyWithZone. See JSQPhotoMediaItem")
 	}
 }

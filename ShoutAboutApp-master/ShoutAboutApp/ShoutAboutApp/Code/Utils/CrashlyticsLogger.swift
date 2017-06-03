@@ -14,13 +14,13 @@ import Crashlytics
 // CLS_LOG_SWIFT()
 // CLS_LOG_SWIFT("message!")
 // CLS_LOG_SWIFT("message with parameter 1: %@ and 2: %@", ["First", "Second"])
-func CLS_LOG_SWIFT(format: String = "",
-	_ args:[CVarArgType] = [],
+func CLS_LOG_SWIFT(_ format: String = "",
+	_ args:[CVarArg] = [],
 	file: String = __FILE__,
 	function: String = __FUNCTION__,
 	line: Int = __LINE__)
 {
-	let filename = NSURL(string:file)?.lastPathComponent?.componentsSeparatedByString(".").first
+	let filename = URL(string:file)?.lastPathComponent?.components(separatedBy: ".").first
 	
 	#if SWIFT_DEBUG
 		CLSNSLogv("\(filename).\(function) line \(line) $ \(format)", getVaList(args))

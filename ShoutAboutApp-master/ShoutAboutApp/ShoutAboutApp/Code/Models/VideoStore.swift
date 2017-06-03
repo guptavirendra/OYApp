@@ -10,20 +10,20 @@ import UIKit
 
 struct VideoStore {
 	//Mark the playbackPosition for a video so that we can continue from the same position later on
-	static func setPlaybackPosition(position: Float, forVideoId: String) {
-		let defaults = NSUserDefaults.standardUserDefaults()
-		defaults.setObject(position, forKey: "playbackPos-\(forVideoId)")
+	static func setPlaybackPosition(_ position: Float, forVideoId: String) {
+		let defaults = UserDefaults.standard
+		defaults.set(position, forKey: "playbackPos-\(forVideoId)")
 	}
 	
 	//Get the playbackPos for video
-	static func playbackPosition(forVideoId: String) -> Float? {
-		let defaults = NSUserDefaults.standardUserDefaults()
-		return defaults.objectForKey("playbackPos-\(forVideoId)") as? Float
+	static func playbackPosition(_ forVideoId: String) -> Float? {
+		let defaults = UserDefaults.standard
+		return defaults.object(forKey: "playbackPos-\(forVideoId)") as? Float
 	}
 	
 	//Clear the playbackPos for video
-	static func clearPlaybackPosition(forVideoId: String) {
-		let defaults = NSUserDefaults.standardUserDefaults()
-		defaults.removeObjectForKey("playbackPos-\(forVideoId)")
+	static func clearPlaybackPosition(_ forVideoId: String) {
+		let defaults = UserDefaults.standard
+		defaults.removeObject(forKey: "playbackPos-\(forVideoId)")
 	}
 }

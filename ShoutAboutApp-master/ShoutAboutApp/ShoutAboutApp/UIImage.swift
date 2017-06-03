@@ -17,22 +17,22 @@ extension UIImage {
     ///
     ///  var img = image.getImageInRect(CGRectMake(50,50,150,150))
     
-    func getImageInRect(rect: CGRect) -> UIImage {
+    func getImageInRect(_ rect: CGRect) -> UIImage {
         
         // Create the bitmap context
         UIGraphicsBeginImageContext(rect.size)
         let context = UIGraphicsGetCurrentContext()
         
         // Sets the clipping path to the intersection of the current clipping path with the area defined by the specified rectangle.
-        CGContextClipToRect(context, CGRect(origin: CGPointZero, size: rect.size))
+        context?.clip(to: CGRect(origin: CGPoint.zero, size: rect.size))
         
-        drawInRect(CGRect(origin: CGPointMake(-rect.origin.x, -rect.origin.y), size: size))
+        draw(in: CGRect(origin: CGPoint(x: -rect.origin.x, y: -rect.origin.y), size: size))
         
         // Returns an image based on the contents of the current bitmap-based graphics context.
         let image = UIGraphicsGetImageFromCurrentImageContext()
         
         UIGraphicsEndImageContext()
         
-        return image
+        return image!
     }
 }

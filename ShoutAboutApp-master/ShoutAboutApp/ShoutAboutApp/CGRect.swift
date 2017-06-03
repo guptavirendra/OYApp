@@ -21,7 +21,7 @@ extension CGRect {
     ///  rect2 = CGRectMake(0, 0, 800, 500)
     ///  rect2.centersRectIn(rect1) // {x -150 y -100 w 800 h 500}
     
-    mutating func centersRectIn(rect: CGRect) {
+    mutating func centersRectIn(_ rect: CGRect) {
         
         self = CGRectCenters(self, inRect: rect)
     }
@@ -37,9 +37,9 @@ extension CGRect {
 ///  rect2 = CGRectMake(0, 0, 800, 500)
 ///  CGRectCenters(rect2, inRect: rect1) // {x -150 y -100 w 800 h 500}
 
-public func CGRectCenters(rect1: CGRect, inRect rect2: CGRect) -> CGRect {
+public func CGRectCenters(_ rect1: CGRect, inRect rect2: CGRect) -> CGRect {
     
-    return CGRect(origin: CGPointMake((CGRectGetWidth(rect2) - CGRectGetWidth(rect1)) / 2, (CGRectGetHeight(rect2) - CGRectGetHeight(rect1)) / 2), size: rect1.size)
+    return CGRect(origin: CGPoint(x: (rect2.width - rect1.width) / 2, y: (rect2.height - rect1.height) / 2), size: rect1.size)
 }
 
 /// Get scale value to fit rectangle to another rectangle with ratio
@@ -50,9 +50,9 @@ public func CGRectCenters(rect1: CGRect, inRect rect2: CGRect) -> CGRect {
 ///  var rect2 = CGRectMake(0, 0, 100, 200)
 ///  CGRectFitScale(rect1, toRect: rect2) // 0.2
 
-public func CGRectFitScale(rect1: CGRect, toRect rect2: CGRect) -> CGFloat {
+public func CGRectFitScale(_ rect1: CGRect, toRect rect2: CGRect) -> CGFloat {
     
-    return min(CGRectGetHeight(rect2) / CGRectGetHeight(rect1), CGRectGetWidth(rect2) / CGRectGetWidth(rect1))
+    return min(rect2.height / rect1.height, rect2.width / rect1.width)
 }
 
 /// Get scale value to fill rectangle to another rectangle with ratio
@@ -63,9 +63,9 @@ public func CGRectFitScale(rect1: CGRect, toRect rect2: CGRect) -> CGFloat {
 ///  var rect2 = CGRectMake(0, 0, 500, 300)
 ///  CGRectFillScale(rect1, toRect: rect2) // 5
 
-public func CGRectFillScale(rect1: CGRect, toRect rect2: CGRect) -> CGFloat {
+public func CGRectFillScale(_ rect1: CGRect, toRect rect2: CGRect) -> CGFloat {
     
-    return max(CGRectGetHeight(rect2) / CGRectGetHeight(rect1), CGRectGetWidth(rect2) / CGRectGetWidth(rect1))
+    return max(rect2.height / rect1.height, rect2.width / rect1.width)
 }
 
 /// Method returns new rectangle origin and size if rectangle `aRect` goes out the rectangle `maxRect` with min rectangle size value `minSize`
@@ -76,7 +76,7 @@ public func CGRectFillScale(rect1: CGRect, toRect rect2: CGRect) -> CGFloat {
 ///  let bRect = CGRectMake(0, 0, 500, 300)
 ///  let minSize = CGSizeMake(150, 150)
 ///  CGRectFit(aRect, toRect: bRect, minSize) // {x 0 y 150 w 150 h 150}
-public func CGRectFit(aRect: CGRect, toRect bRect: CGRect, minSize: CGSize) -> CGRect {
+public func CGRectFit(_ aRect: CGRect, toRect bRect: CGRect, minSize: CGSize) -> CGRect {
     
     var rect = aRect
     
@@ -84,16 +84,16 @@ public func CGRectFit(aRect: CGRect, toRect bRect: CGRect, minSize: CGSize) -> C
     
     rect.origin.x = max(bRect.origin.x, aRect.origin.x)
     
-    if CGRectGetMaxX(rect) > CGRectGetMaxX(bRect) {
+    if rect.maxX > bRect.maxX {
         
-        if CGRectGetMaxX(bRect) - minSize.width < rect.origin.x {
+        if bRect.maxX - minSize.width < rect.origin.x {
             
             rect.size.width = minSize.width
-            rect.origin.x = CGRectGetMaxX(bRect) - rect.size.width
+            rect.origin.x = bRect.maxX - rect.size.width
             
         } else {
             
-            rect.size.width = CGRectGetMaxX(bRect) - rect.origin.x
+            rect.size.width = bRect.maxX - rect.origin.x
         }
     }
     
@@ -101,16 +101,16 @@ public func CGRectFit(aRect: CGRect, toRect bRect: CGRect, minSize: CGSize) -> C
     
     rect.origin.y = max(bRect.origin.y, aRect.origin.y)
     
-    if CGRectGetMaxY(rect) > CGRectGetMaxY(bRect) {
+    if rect.maxY > bRect.maxY {
         
-        if CGRectGetMaxY(bRect) - minSize.height < rect.origin.y {
+        if bRect.maxY - minSize.height < rect.origin.y {
             
             rect.size.height = minSize.height
-            rect.origin.y = CGRectGetMaxY(bRect) - rect.size.height
+            rect.origin.y = bRect.maxY - rect.size.height
             
         } else {
             
-            rect.size.height = CGRectGetMaxY(bRect) - rect.origin.y
+            rect.size.height = bRect.maxY - rect.origin.y
         }
     }
     

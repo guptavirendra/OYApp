@@ -34,10 +34,10 @@ class LeftViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
     }
     
-    override func viewWillAppear(animated: Bool)
+    override func viewWillAppear(_ animated: Bool)
     {
         super.viewWillAppear(animated)
-        self.navigationController?.navigationBarHidden = true
+        self.navigationController?.isNavigationBarHidden = true
         self.nameLabel.text = ProfileManager.sharedInstance.personalProfile.name
          self.mobileLabel.text = ProfileManager.sharedInstance.personalProfile.mobileNumber
         // else need to update
@@ -55,9 +55,9 @@ class LeftViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
     }
     
-    func setProfileImgeForURL(urlString:String)
+    func setProfileImgeForURL(_ urlString:String)
     {
-        self.profileImageView.sd_setImageWithURL(NSURL(string:urlString ), placeholderImage: UIImage(named: "profile_pic"))
+        //self.profileImageView.sd_setImage(with: URL(string:urlString ), placeholderImage: UIImage(named: "profile_pic"))
     }
 }
 
@@ -65,13 +65,13 @@ class LeftViewController: UIViewController, UITableViewDataSource, UITableViewDe
 extension LeftViewController
 {
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
         return choiceArray.count
     }
     
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
 //        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath)
 //        let text = choiceArray[indexPath.row]
@@ -84,13 +84,13 @@ extension LeftViewController
         
         
         
-        let cell = tableView.dequeueReusableCellWithIdentifier("settingCell", forIndexPath: indexPath) as? settingCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "settingCell", for: indexPath) as? settingCell
         
         let text = choiceArray[indexPath.row]
-        cell?.nameLabel.textColor = UIColor.darkGrayColor()
+        cell?.nameLabel.textColor = UIColor.darkGray
         cell?.nameLabel?.text = text
-        cell?.iconView.image  = UIImage(named: text)?.imageWithRenderingMode(.AlwaysTemplate)
-        cell?.iconView.tintColor = UIColor.grayColor()
+        cell?.iconView.image  = UIImage(named: text)?.withRenderingMode(.alwaysTemplate)
+        cell?.iconView.tintColor = UIColor.gray
         cell?.textLabel?.font = UIFont(name: "TitilliumWeb-Regular", size: 18)
 //        cell?.contentView.setGraphicEffects()
         return cell!
@@ -101,13 +101,13 @@ extension LeftViewController
     }
     
     //MARK: SELECTION
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath)
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
     {
        
         if (indexPath.row == 0 ||  indexPath.row == 1 || indexPath.row == 2)
         {
             
-            let vc = self.storyboard?.instantiateViewControllerWithIdentifier("SpamFavBlockViewController") as! SpamFavBlockViewController
+            let vc = self.storyboard?.instantiateViewController(withIdentifier: "SpamFavBlockViewController") as! SpamFavBlockViewController
             if indexPath.row == 0
             {
                 vc.favSpamBlock = .block
@@ -127,26 +127,26 @@ extension LeftViewController
             
         if (indexPath.row == 3)
         {
-            let vc = self.storyboard?.instantiateViewControllerWithIdentifier("subViewController") as! subViewController
+            let vc = self.storyboard?.instantiateViewController(withIdentifier: "subViewController") as! subViewController
             self.navigationController?.pushViewController(vc, animated: true)
             
         }
         
         else if indexPath.row == 5
         {
-            if ((FBSDKAccessToken.currentAccessToken()) != nil)
+            if ((FBSDKAccessToken.current()) != nil)
             {
-                let fbRequest = FBRequest()
-                fbRequest.logoutFacebook()
+                //let fbRequest = FBRequest()
+                //fbRequest.logoutFacebook()
             }
             
              
-            NSUserDefaults.standardUserDefaults().removeObjectForKey(kapp_user_id)
-            NSUserDefaults.standardUserDefaults().removeObjectForKey(kapp_user_token)
-            NSUserDefaults.standardUserDefaults().removeObjectForKey(contactStored)
+            UserDefaults.standard.removeObject(forKey: kapp_user_id)
+            UserDefaults.standard.removeObject(forKey: kapp_user_token)
+            UserDefaults.standard.removeObject(forKey: contactStored)
             
             let vc = self.storyboard?.instantiateInitialViewController()
-            let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
             appDelegate.window?.backgroundColor = UIColor(red: 236.0, green: 238.0, blue: 241.0, alpha: 1.0)
             appDelegate.window?.rootViewController = vc
             appDelegate.window?.makeKeyAndVisible()
@@ -159,7 +159,7 @@ extension LeftViewController
         
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
     {
         return 50
         
@@ -173,14 +173,14 @@ extension LeftViewController
      // MARK: - Navigation
      
      // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?)
+     override func prepare(for segue: UIStoryboardSegue, sender: Any?)
      {
-        if  let vc = (segue.destinationViewController as? UINavigationController)?.viewControllers.first as? SpamFavBlockViewController
+        if  let vc = (segue.destination as? UINavigationController)?.viewControllers.first as? SpamFavBlockViewController
         {
         
             if let cell = sender as? UITableViewCell
             {
-                if let  indexPath = tableView.indexPathForCell(cell)
+                if let  indexPath = tableView.indexPath(for: cell)
                 {
                     if indexPath.row == 1
                     {
@@ -200,15 +200,15 @@ extension LeftViewController
     }
     
     
-    @IBAction func editProfileButtonCliceked(sender:UIButton)
+    @IBAction func editProfileButtonCliceked(_ sender:UIButton)
     {
     
-       let profileViewController = self.storyboard?.instantiateViewControllerWithIdentifier("NewProfileViewController") as! NewProfileViewController
+       let profileViewController = self.storyboard?.instantiateViewController(withIdentifier: "NewProfileViewController") as! NewProfileViewController
         profileViewController.personalProfile = ProfileManager.sharedInstance.personalProfile
         profileViewController.isViewPresented = true
          let navigation = UINavigationController(rootViewController: profileViewController)
         
-        self.presentViewController(navigation, animated: true, completion:
+        self.present(navigation, animated: true, completion:
             {
                 
             })

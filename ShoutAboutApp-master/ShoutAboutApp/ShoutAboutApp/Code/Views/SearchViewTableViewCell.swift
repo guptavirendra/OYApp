@@ -19,8 +19,8 @@ class SearchViewTableViewCell: UITableViewCell {
 
 	override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
 		super.init(style: style, reuseIdentifier: reuseIdentifier)
-		self.searchImageView = UIImageView(frame: CGRectZero)
-		self.searchImageView!.backgroundColor = UIColor.whiteColor()
+		self.searchImageView = UIImageView(frame: CGRect.zero)
+		self.searchImageView!.backgroundColor = UIColor.white
 		self.addSubview(self.searchImageView)
 		self.searchImageView!.snp_makeConstraints { make in
 			make.height.equalTo(self)
@@ -29,7 +29,7 @@ class SearchViewTableViewCell: UITableViewCell {
 			make.left.equalTo(self.snp_left)
 		}
 		
-		self.searchTitle = UILabel(frame: CGRectZero)
+		self.searchTitle = UILabel(frame: CGRect.zero)
 		self.searchTitle.adjustsFontSizeToFitWidth = true
 		self.addSubview(self.searchTitle)
 		self.searchTitle!.snp_makeConstraints { make in
@@ -38,7 +38,7 @@ class SearchViewTableViewCell: UITableViewCell {
 			make.right.equalTo(self.snp_right).offset(-10)
 		}
 		
-		self.searchSummary = UILabel(frame: CGRectZero)
+		self.searchSummary = UILabel(frame: CGRect.zero)
 		self.searchSummary.numberOfLines = 4
 		self.searchSummary.adjustsFontSizeToFitWidth = true
 		self.addSubview(self.searchSummary)
@@ -58,14 +58,14 @@ class SearchViewTableViewCell: UITableViewCell {
         // Initialization code
     }
 	
-	func searchResult(result: YoutubeSearchResult) {
+	func searchResult(_ result: YoutubeSearchResult) {
         let titleString: NSMutableAttributedString = NSMutableAttributedString(string:result.title)
-        titleString.addAttribute(NSFontAttributeName, value: UIFont.boldSystemFontOfSize(UIFont.systemFontSize()), range: NSMakeRange(0, result.title.characters.count))
+        titleString.addAttribute(NSFontAttributeName, value: UIFont.boldSystemFont(ofSize: UIFont.systemFontSize), range: NSMakeRange(0, result.title.characters.count))
         self.searchTitle?.attributedText = titleString
 		
 		let summaryString: NSMutableAttributedString = NSMutableAttributedString(string:result.desc)
-		summaryString.addAttribute(NSFontAttributeName, value: UIFont.systemFontOfSize(UIFont.smallSystemFontSize()), range: NSMakeRange(0, result.desc.characters.count))
-		summaryString.addAttribute(NSForegroundColorAttributeName, value: UIColor.lightGrayColor(), range: NSMakeRange(0, result.desc.characters.count))
+		summaryString.addAttribute(NSFontAttributeName, value: UIFont.systemFont(ofSize: UIFont.smallSystemFontSize), range: NSMakeRange(0, result.desc.characters.count))
+		summaryString.addAttribute(NSForegroundColorAttributeName, value: UIColor.lightGray, range: NSMakeRange(0, result.desc.characters.count))
 		self.searchSummary?.attributedText = summaryString
 		
 		self.downloadMedia(result.imageUrl)
@@ -73,13 +73,13 @@ class SearchViewTableViewCell: UITableViewCell {
 			.start {
 				[unowned self] event in
 				switch event {
-				case let .Next(result):
+				case let .next(result):
 					NSLog("GetImage success!")
 					if (result.value != nil) {
 						let (image, _) = result.value!
 						self.searchImageView.image = image
 					}
-				case let .Failed(error):
+				case let .failed(error):
 					NSLog("GetImage %@", error)
 				default:
 					break
@@ -87,16 +87,16 @@ class SearchViewTableViewCell: UITableViewCell {
 		}
 	}
 	
-	private func downloadMedia(url: String) -> SignalProducer<Result<(UIImage, String), NSError>, NSError> {
+	fileprivate func downloadMedia(_ url: String) -> SignalProducer<Result<(UIImage, String), NSError>, NSError> {
 		return SignalProducer(values: [url])
 			.observeOn(QueueScheduler())
-			.flatMap(FlattenStrategy.Merge, transform: {
+			.flatMap(FlattenStrategy.merge, transform: {
 				[unowned self] (key: String) -> SignalProducer<Result<(UIImage, String), NSError>, NSError> in
 				return STHttp.getImage(url)
 			})
 	}
 
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state

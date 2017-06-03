@@ -34,11 +34,35 @@ import ContactsUI
 import XMPPFramework
 import xmpp_messenger_ios
 import CoreData
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 class ContactViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ContactTableViewCellProtocol, UISearchBarDelegate,UISearchControllerDelegate, CNContactViewControllerDelegate
 {
     @IBOutlet weak var tableView: UITableView!
-    var xmppClient: STXMPPClient?
+     
     var objects = [CNContact]()
     var allValidContacts = [PersonContact]()
     var syncContactArray = [SearchPerson]()
@@ -55,7 +79,7 @@ class ContactViewController: UIViewController, UITableViewDataSource, UITableVie
     {
         super.viewDidLoad()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector:#selector(ContactViewController.contactReload) , name: "ContactUpdated", object: nil)
+        NotificationCenter.default.addObserver(self, selector:#selector(ContactViewController.contactReload) , name: NSNotification.Name(rawValue: "ContactUpdated"), object: nil)
         
         
         
@@ -77,13 +101,13 @@ class ContactViewController: UIViewController, UITableViewDataSource, UITableVie
         tableView.tableHeaderView = searchController.searchBar
         
         searchController.hidesNavigationBarDuringPresentation = false
-        searchController.searchBar.translucent = true
+        searchController.searchBar.isTranslucent = true
         self.extendedLayoutIncludesOpaqueBars = false
     }
     
     deinit
     {
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: "ContactUpdated", object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "ContactUpdated"), object: nil)
         
     }
     
@@ -106,12 +130,12 @@ class ContactViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     
-    override func viewWillAppear(animated: Bool)
+    override func viewWillAppear(_ animated: Bool)
     {
         super.viewWillAppear(animated)
         syncContactArray =  ProfileManager.sharedInstance.syncedContactArray
         
-        dispatch_async(dispatch_get_global_queue(0, 0))
+        DispatchQueue.global().async 
         {
             self.getContact()
         }
@@ -135,17 +159,17 @@ class ContactViewController: UIViewController, UITableViewDataSource, UITableVie
 extension ContactViewController
 {
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
         return  isSearching ? searchContactArray.count: syncContactArray.count //allValidContacts.count //objects.count
     }
     
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
         
         
-        let cell = tableView.dequeueReusableCellWithIdentifier("contact", forIndexPath: indexPath) as! ContactTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "contact", for: indexPath) as! ContactTableViewCell
         cell.delegate = self
         
         let personContact = isSearching ? searchContactArray[indexPath.row]: syncContactArray[indexPath.row]
@@ -157,19 +181,19 @@ extension ContactViewController
         
        // if personContact.app_user_token != nil
        // {
-            cell.revieBbutton!.hidden = false
-            cell.rateView?.hidden    = false
-            cell.ratingLabel!.hidden  = false
+            cell.revieBbutton!.isHidden = false
+            cell.rateView?.isHidden    = false
+            cell.ratingLabel!.isHidden  = false
         
             if let count = personContact.reviewCount.first?.count
             {
                 
                 let title:String = String(count) + " reviews"
-                cell.revieBbutton!.setTitle(title, forState: .Normal)
+                cell.revieBbutton!.setTitle(title, for: UIControlState())
             }else
             {
                 let title:String = String(0) + " reviews"
-                cell.revieBbutton!.setTitle(title, forState: .Normal)
+                cell.revieBbutton!.setTitle(title, for: UIControlState())
             }
             if let ratingAverage = personContact.ratingAverage.first?.average
             {
@@ -191,10 +215,10 @@ extension ContactViewController
         
         
         
-        if let urlString = personContact.photo
+        if personContact.photo != nil
         {
             
-            cell.profileImageView.setImageWithURL(NSURL(string:urlString ), placeholderImage: UIImage(named: "profile"))
+            //cell.profileImageView.setImageWith(URL(string:urlString ), placeholderImage: UIImage(named: "profile"))
             
         }else
         {
@@ -203,19 +227,19 @@ extension ContactViewController
         return cell
     }
     
-     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat
+     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
     {
         return UITableViewAutomaticDimension
     }
     
-     func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat
+     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat
     {
         return 100.0
         
     }
     
     
-    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath){
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath){
         
         let currentCount = indexPath.row + 1
         if (currentCount < self.totalContact)
@@ -229,16 +253,16 @@ extension ContactViewController
     }
     
     //MARK: CALL
-    func buttonClicked(cell: ContactTableViewCell, button: UIButton)
+    func buttonClicked(_ cell: ContactTableViewCell, button: UIButton)
     {
-        if self.tableView.indexPathForCell(cell) != nil
+        if self.tableView.indexPath(for: cell) != nil
         {
-            let indexPath = self.tableView.indexPathForCell(cell)
+            let indexPath = self.tableView.indexPath(for: cell)
             let personContact =  isSearching ? searchContactArray[(indexPath?.row)!]: syncContactArray[(indexPath?.row)!]
             if button.titleLabel?.text == " Call"
             {
                 let   phone = "tel://"+personContact.mobileNumber
-                UIApplication.sharedApplication().openURL(NSURL(string: phone)!)
+                UIApplication.shared.openURL(URL(string: phone)!)
             }
             else if button.titleLabel?.text == " Chat"
             {
@@ -246,7 +270,7 @@ extension ContactViewController
                 let ejabberID = stringID+"@localhost"
                 let user =  OneRoster.userFromRosterForJID(jid: ejabberID)
                 print("\(OneRoster.buddyList.sections)")
-                let chatVc = self.storyboard?.instantiateViewControllerWithIdentifier("ChatsViewController") as? ChatsViewController
+                let chatVc = self.storyboard?.instantiateViewController(withIdentifier: "ChatsViewController") as? ChatsViewController
                 
                 chatVc!.senderDisplayName = ProfileManager.sharedInstance.personalProfile.name
                 chatVc?.senderId          = String(ProfileManager.sharedInstance.personalProfile.idString)
@@ -255,10 +279,10 @@ extension ContactViewController
                 self.navigationController!.pushViewController(chatVc!, animated: true)
                 
             }
-            else if button.titleLabel?.text?.containsString("reviews") == true
+            else if button.titleLabel?.text?.contains("reviews") == true
             {
 
-                let rateANdReviewViewController = self.storyboard?.instantiateViewControllerWithIdentifier("RateANdReviewViewController") as? RateANdReviewViewController
+                let rateANdReviewViewController = self.storyboard?.instantiateViewController(withIdentifier: "RateANdReviewViewController") as? RateANdReviewViewController
                 rateANdReviewViewController?.idString = String(personContact.idString)
                 rateANdReviewViewController?.name = personContact.name
                 if let _ = personContact.photo
@@ -270,7 +294,7 @@ extension ContactViewController
                 
             }else
             {
-                let profileViewController = self.storyboard?.instantiateViewControllerWithIdentifier("NewProfileViewController") as? NewProfileViewController
+                let profileViewController = self.storyboard?.instantiateViewController(withIdentifier: "NewProfileViewController") as? NewProfileViewController
                 profileViewController?.personalProfile = personContact
                 self.navigationController!.pushViewController(profileViewController!, animated: true)
             }
@@ -556,13 +580,13 @@ extension ContactViewController
     */
     
     
-    func saveContacts(person:[SearchPerson])
+    func saveContacts(_ person:[SearchPerson])
     {
         
         let archivedObject = SearchPerson.archivePeople(person)
-        let defaults = NSUserDefaults.standardUserDefaults()
-        defaults.removeObjectForKey(contactStored)
-        defaults.setObject(archivedObject, forKey: contactStored)
+        let defaults = UserDefaults.standard
+        defaults.removeObject(forKey: contactStored)
+        defaults.set(archivedObject, forKey: contactStored)
         defaults.synchronize()
     }
     
@@ -588,11 +612,11 @@ extension ContactViewController
         //ProfileManager.sharedInstance.syncedContactArray.removeAll
         DataSessionManger.sharedInstance.getContactListForPage( { (response, contactPerson) in
             
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            DispatchQueue.main.async(execute: { () -> Void in
                 
                 self.saveContacts(ProfileManager.sharedInstance.syncedContactArray)
                 ProfileManager.sharedInstance.syncedContactArray.removeAll()
-                ProfileManager.sharedInstance.syncedContactArray.appendContentsOf(contactPerson.data)
+                ProfileManager.sharedInstance.syncedContactArray.append(contentsOf: contactPerson.data)
                 // self.tableView.reloadData()
                
                 self.contactReload()
@@ -600,7 +624,7 @@ extension ContactViewController
             })
             
         }) { (error) in
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            DispatchQueue.main.async(execute: { () -> Void in
                 // self.tableView.reloadData()
                 // self.view.removeSpinner()
             })
@@ -614,20 +638,20 @@ extension ContactViewController
 {
     
     
-    func searchBarShouldBeginEditing(searchBar: UISearchBar) -> Bool
+    func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool
     {
         return true
     }
     
     
     
-    func searchBarTextDidBeginEditing(searchBar: UISearchBar)
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar)
     {
         
     }
     
     
-    internal func searchBarSearchButtonClicked(searchBar: UISearchBar)
+    internal func searchBarSearchButtonClicked(_ searchBar: UISearchBar)
     {
         if searchBar.text?.characters.count > 0
         {
@@ -642,14 +666,14 @@ extension ContactViewController
     }
     
     
-    internal func searchBarCancelButtonClicked(searchBar: UISearchBar)
+    internal func searchBarCancelButtonClicked(_ searchBar: UISearchBar)
     {
         isSearching = false
         tableView.reloadData()
     }
     
     
-    internal func searchBar(searchBar: UISearchBar, textDidChange searchText: String)
+    internal func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String)
     {
         if searchText.characters.count > 0
         {
@@ -665,19 +689,19 @@ extension ContactViewController
     }
     
     
-    func searchBar(searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int)
+    func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int)
     {
         
         
     }
     
     
-    func  searchString(searchString:String)
+    func  searchString(_ searchString:String)
     {
         let phonePredicate = NSPredicate(format: "(mobileNumber BEGINSWITH[c] %@) OR (name BEGINSWITH[c] %@)", searchString, searchString)
         
         
-        searchContactArray =  syncContactArray.filter { phonePredicate.evaluateWithObject($0)
+        searchContactArray =  syncContactArray.filter { phonePredicate.evaluate(with: $0)
             
         };
         
@@ -692,7 +716,7 @@ extension ContactViewController
 extension ContactViewController
 {
     
-    @IBAction func  addContactScreen(sender:AnyObject)
+    @IBAction func  addContactScreen(_ sender:AnyObject)
     {
         let addNewContactVC = CNContactViewController(forNewContact: nil)
         addNewContactVC.contactStore = CNContactStore()
@@ -700,19 +724,19 @@ extension ContactViewController
         addNewContactVC.allowsActions = false
         let nav = UINavigationController(rootViewController: addNewContactVC)
         nav.navigationBar.tintColor =  appColor
-        nav.navigationBar.barTintColor = UIColor.whiteColor()
-        self.presentViewController(nav, animated: true, completion: nil)
+        nav.navigationBar.barTintColor = UIColor.white
+        self.present(nav, animated: true, completion: nil)
     
     }
     
-    func contactViewController(viewController: CNContactViewController, didCompleteWithContact contact: CNContact?)
+    func contactViewController(_ viewController: CNContactViewController, didCompleteWith contact: CNContact?)
     {
-         viewController.dismissViewControllerAnimated(true, completion: nil)
+         viewController.dismiss(animated: true, completion: nil)
         let joinVC = JoinViewController()
         joinVC.getContacts()
     }
     
-      func contactViewController(viewController: CNContactViewController, shouldPerformDefaultActionForContactProperty property: CNContactProperty) -> Bool
+      func contactViewController(_ viewController: CNContactViewController, shouldPerformDefaultActionFor property: CNContactProperty) -> Bool
     {
         return true
     }

@@ -10,8 +10,8 @@ import UIKit
 
 protocol EditProfileTableViewCellProtocol
 {
-    func editButtonClickedForCell(cell:EditProfileTableViewCell)
-    func getTextForCell(text:String, cell:EditProfileTableViewCell)
+    func editButtonClickedForCell(_ cell:EditProfileTableViewCell)
+    func getTextForCell(_ text:String, cell:EditProfileTableViewCell)
 }
 
 class EditProfileTableViewCell: UITableViewCell
@@ -26,19 +26,19 @@ class EditProfileTableViewCell: UITableViewCell
     override func awakeFromNib()
     {
         super.awakeFromNib()
-        self.editButton.hidden = true
+        self.editButton.isHidden = true
        // dataTextField.userInteractionEnabled = false
-        dataTextField.addTarget(self, action:#selector(InputTableViewCell.edited), forControlEvents:UIControlEvents.EditingChanged)
+        dataTextField.addTarget(self, action:#selector(InputTableViewCell.edited), for:UIControlEvents.editingChanged)
         
     }
 
-    override func setSelected(selected: Bool, animated: Bool)
+    override func setSelected(_ selected: Bool, animated: Bool)
     {
         super.setSelected(selected, animated: animated)
 
     }
     
-    @IBAction func editButtonClicked(button:UIButton)
+    @IBAction func editButtonClicked(_ button:UIButton)
     {
         self.delegate?.editButtonClickedForCell(self)
     }

@@ -10,10 +10,10 @@ import XMPPFramework
 
 extension XMPPMessage {
 	func id() -> String! {
-		return self.attributeStringValueForName("id")
+		return self.attributeStringValue(forName: "id")
 	}
 	
-	func date() -> NSDate? {
+	func date() -> Date? {
 		if self.isForwardedStanza() {
 			return self.forwardedStanzaDelayedDeliveryDate()
 		}
@@ -22,8 +22,8 @@ extension XMPPMessage {
 	}
 	
 	func content() -> STMessageAttachment? {
-		if let contentE = self.elementForName("content") {
-			let contentType = contentE.attributeStringValueForName("content-type")
+		if let contentE = self.forName("content") {
+			let contentType = contentE.attributeStringValue(forName: "content-type")
 			return STMessageAttachment(contentStr: contentE.stringValue!, contentType: contentType)
 		}
 		
@@ -31,8 +31,8 @@ extension XMPPMessage {
 	}
 	
 	func archiveId() -> String? {
-		if let archived = self.elementForName("archived") {
-			return archived.attributeStringValueForName("id")
+		if let archived = self.forName("archived") {
+			return archived.attributeStringValue(forName: "id")
 		}
 		
 		return nil

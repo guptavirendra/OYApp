@@ -14,23 +14,23 @@ import ReactiveCocoa
 //https://github.com/ChatSecure/ChatSecure-iOS/blob/develop/ChatSecure/Classes/Controllers/XMPP/OTRXMPPManager.m
 class STXMPPStream: NSObject, XMPPRosterDelegate, XMPPvCardTempModuleDelegate, XMPPvCardAvatarDelegate, XMPPMessageCarbonsDelegate, XMPPStreamManagementDelegate {
 	enum XMPPError: Int {
-		case AuthFailed = -1
-		case Disconnected = -2
+		case authFailed = -1
+		case disconnected = -2
 	}
 	
-	private let stream: XMPPStream
-	private let xmppHandlingQ: dispatch_queue_t = dispatch_queue_create("XMPP Handling", nil)
-	private var password: String!
-	private var reachability: Reachability!
+	fileprivate let stream: XMPPStream
+	fileprivate let xmppHandlingQ: DispatchQueue = DispatchQueue(label: "XMPP Handling", attributes: [])
+	fileprivate var password: String!
+	fileprivate var reachability: Reachability!
 	
-	private var reconnect: XMPPReconnect!
-	private var deliveryReceipts: XMPPMessageDeliveryReceipts!
-	private var xmppRoster: XMPPRoster!
-	private var xmppVCardTemp: XMPPvCardTempModule!
-	private var xmppVCardAvatar: XMPPvCardAvatarModule!
-	private var messageCarbons: XMPPMessageCarbons!
-	private var streamManagement: XMPPStreamManagement!
-	private var xmppMessageArchivingModule: XMPPMAMArchiving!
+	fileprivate var reconnect: XMPPReconnect!
+	fileprivate var deliveryReceipts: XMPPMessageDeliveryReceipts!
+	fileprivate var xmppRoster: XMPPRoster!
+	fileprivate var xmppVCardTemp: XMPPvCardTempModule!
+	fileprivate var xmppVCardAvatar: XMPPvCardAvatarModule!
+	fileprivate var messageCarbons: XMPPMessageCarbons!
+	fileprivate var streamManagement: XMPPStreamManagement!
+	fileprivate var xmppMessageArchivingModule: XMPPMAMArchiving!
 	
 	var xmppMessageArchivingCoreDataStorage: XMPPMAMArchivingCoreDataStorage!
 	
@@ -38,23 +38,23 @@ class STXMPPStream: NSObject, XMPPRosterDelegate, XMPPvCardTempModuleDelegate, X
 	//We don't use Event<Bool, NSError> because changes in connection status are not Signal Errors that should
 	//behave like exceptions skipping and terminating operators https://github.com/ReactiveCocoa/ReactiveCocoa/blob/master/Documentation/DesignGuidelines.md
 	var connectionStatus: Signal<(Bool, NSError?), NSError>
-	private var connectionStatusObserver: Observer<(Bool, NSError?), NSError>
+	fileprivate var connectionStatusObserver: Observer<(Bool, NSError?), NSError>
 	var incomingMessages: Signal<XMPPMessage, NoError>
-	private var incomingMessagesObserver: Observer<XMPPMessage, NoError>
+	fileprivate var incomingMessagesObserver: Observer<XMPPMessage, NoError>
 	var incomingReceipts: Signal<(String, STMessage.DeliveryStatus), NoError>
-	private var incomingReceiptsObserver: Observer<(String, STMessage.DeliveryStatus), NoError>
+	fileprivate var incomingReceiptsObserver: Observer<(String, STMessage.DeliveryStatus), NoError>
 	var incomingVCards: Signal<(username: String, vcard: XMPPvCardTemp), NoError>
-	private var incomingVCardsObserver: Observer<(username: String, vcard: XMPPvCardTemp), NoError>
+	fileprivate var incomingVCardsObserver: Observer<(username: String, vcard: XMPPvCardTemp), NoError>
 	var sentMessages: Signal<XMPPMessage, NoError>
-	private var sentMessagesObserver: Observer<XMPPMessage, NoError>
+	fileprivate var sentMessagesObserver: Observer<XMPPMessage, NoError>
 	
 	//Pending sent messages
-	private var pendingMessages: [String: (Observer<Bool, NSError>, XMPPMessage)] = [:] //String : (Observer, Message)
+	fileprivate var pendingMessages: [String: (Observer<Bool, NSError>, XMPPMessage)] = [:] //String : (Observer, Message)
 	//Pending archive requests
-	private var pendingArchiveFetches: [String: (Observer<(String?, String), NSError>, String)] = [:] //String : (Observer, ContactId)
+	fileprivate var pendingArchiveFetches: [String: (Observer<(String?, String), NSError>, String)] = [:] //String : (Observer, ContactId)
 
     //Buffer for messages that should be sent on reconnect
-    private var outboundMessageBuffer: [DDXMLElement] = []
+    fileprivate var outboundMessageBuffer: [DDXMLElement] = []
     
 	let connected = MutableProperty<Bool>(false)
 
@@ -111,7 +111,7 @@ class STXMPPStream: NSObject, XMPPRosterDelegate, XMPPvCardTempModuleDelegate, X
 	
 	//http://stackoverflow.com/questions/17876421/xmppframework-tls-ssl-connection-with-openfire
 	//http://stackoverflow.com/questions/23775801/xmpp-connection-time-optimization
-	func connectToHost(host: String, port: UInt16, username: String, password: String) {
+	func connectToHost(_ host: String, port: UInt16, username: String, password: String) {
 		assert(self.reconnect == nil, "Method connectToHost invoked multiple times")
 		NSLog("connectToHost \(host) \(username) \(password)")
 		self.setupReachability(host)
@@ -119,14 +119,14 @@ class STXMPPStream: NSObject, XMPPRosterDelegate, XMPPvCardTempModuleDelegate, X
 		self.stream.addDelegate(self, delegateQueue: xmppHandlingQ) //All operations happen in background thread
 		self.stream.hostName = host
 		self.stream.hostPort = port
-		self.stream.myJID = XMPPJID.jidWithUser(username, domain: "localhost", resource: "app")
+		self.stream.myJID = XMPPJID.withUser(username, domain: "localhost", resource: "app")
 		self.stream.keepAliveInterval = 30
 		//https://github.com/robbiehanson/XMPPFramework/blob/master/Extensions/XEP-0198/XMPPStreamManagement.h
 		
-		self.stream.startTLSPolicy = XMPPStreamStartTLSPolicy.Allowed
+		self.stream.startTLSPolicy = XMPPStreamStartTLSPolicy.allowed
 
 		self.reconnect = XMPPReconnect(dispatchQueue: xmppHandlingQ)
-		self.reconnect.reconnectTimerInterval = NSTimeInterval(10 + Int(arc4random_uniform(15))) //If reconnect fails, the next test is in 10-25 seconds (random value so that we don't get a thundering herd problem)
+		self.reconnect.reconnectTimerInterval = TimeInterval(10 + Int(arc4random_uniform(15))) //If reconnect fails, the next test is in 10-25 seconds (random value so that we don't get a thundering herd problem)
 		self.reconnect.activate(self.stream)
 		
 		//TODO! May have to have XMPPCapabilities enabled or undefine (see XMPPMessageDeliveryReceipts.m) _XMPP_CAPABILITIES_H
@@ -163,8 +163,8 @@ class STXMPPStream: NSObject, XMPPRosterDelegate, XMPPvCardTempModuleDelegate, X
 		//Stream management
 		let coredataStreamManagementStorage: XMPPStreamManagementStorage = XMPPStreamManagementMemoryStorage()
 		self.streamManagement = XMPPStreamManagement(storage: coredataStreamManagementStorage, dispatchQueue: xmppHandlingQ)
-		self.streamManagement.automaticallyRequestAcksAfterStanzaCount(1, orTimeout: 60)
-		self.streamManagement.automaticallySendAcksAfterStanzaCount(1, orTimeout: 60)
+		self.streamManagement.automaticallyRequestAcks(afterStanzaCount: 1, orTimeout: 60)
+		self.streamManagement.automaticallySendAcks(afterStanzaCount: 1, orTimeout: 60)
 		self.streamManagement.autoResume = true
 		self.streamManagement.activate(self.stream)
 		self.streamManagement.addDelegate(self, delegateQueue: xmppHandlingQ)
@@ -181,21 +181,21 @@ class STXMPPStream: NSObject, XMPPRosterDelegate, XMPPvCardTempModuleDelegate, X
         
 		//TODO Move this to async queue?
 		do {
-			try self.stream.connectWithTimeout(15)
+			try self.stream.connect(withTimeout: 15)
 		} catch {
 			NSLog("XMPP error connecting \(error)")
 			self.connectionStatusObserver.sendFailed(error as NSError) //NSError(domain: "Smalltalk", code: -1, userInfo: [NSLocalizedDescriptionKey : "Error \(error) occurred"]))
 		}
 	}
     
-    private func setupBindings() {
+    fileprivate func setupBindings() {
         //Wait for the connection to be established and send messages that have been buffered
         self.connected.producer
 		.filter { $0 == true }
 		.start {
 			event in
 			switch event {
-			case .Next:
+			case .next:
                 NSLog("Send buffered messages")
                 for message in self.outboundMessageBuffer {
                     self.sendOrBufferElement(message)
@@ -219,7 +219,7 @@ class STXMPPStream: NSObject, XMPPRosterDelegate, XMPPvCardTempModuleDelegate, X
 	}
 	
 	//mark - xmppStream setup
-	func xmppStream(sender: XMPPStream, willSecureWithSettings settings: NSMutableDictionary) {
+	func xmppStream(_ sender: XMPPStream, willSecureWithSettings settings: NSMutableDictionary) {
 		NSLog("willSecureWithSettings")
 	}
 	
@@ -228,7 +228,7 @@ class STXMPPStream: NSObject, XMPPRosterDelegate, XMPPvCardTempModuleDelegate, X
 	* - GCDAsyncSocketManuallyEvaluateTrust == YES
 	* That is, if a delegate implements xmppStream:willSecureWithSettings:, and plugs in that key/value pair.
 	*/
-	func xmppStream(sender: XMPPStream, didReceiveTrust trust: SecTrustRef, completionHandler handler: (Bool) -> (Void)) {
+	func xmppStream(_ sender: XMPPStream, didReceiveTrust trust: SecTrustRef, completionHandler handler: (Bool) -> (Void)) {
 		NSLog("didReceiveTrust")
 		
 		////http://stackoverflow.com/questions/24298917/xmppframework-connect-via-ssl-on-openfire
@@ -236,54 +236,54 @@ class STXMPPStream: NSObject, XMPPRosterDelegate, XMPPvCardTempModuleDelegate, X
 		handler(true) // // After this line, SSL connection will be established
 	}
 
-	func xmppStreamDidSecure(sender: XMPPStream) {
+	func xmppStreamDidSecure(_ sender: XMPPStream) {
 		NSLog("xmppStreamDidSecure")
 
 	}
 
-	func xmppStreamDidConnect(sender: XMPPStream) {
-		NSLog("xmppStremDidConnect Main Thread? \(NSThread.isMainThread())")
+	func xmppStreamDidConnect(_ sender: XMPPStream) {
+		NSLog("xmppStremDidConnect Main Thread? \(Thread.isMainThread)")
 		do {
-			try self.stream.authenticateWithPassword(self.password)
+			try self.stream.authenticate(withPassword: self.password)
 		} catch {
 			NSLog("XMPP authentication error \(error)")
 			self.connectionStatusObserver.sendFailed(error as NSError)
 		}
 	}
 	
-	func xmppStreamDidDisconnect(sender: XMPPStream, withError error: NSError?) {
+	func xmppStreamDidDisconnect(_ sender: XMPPStream, withError error: NSError?) {
 		NSLog("xmppStreamDidDisconnect \(error)")
 		var e = error
 		if (error == nil) {
-			e = NSError(domain: "smalltalk.xmpp", code: XMPPError.Disconnected.rawValue, userInfo: [NSLocalizedDescriptionKey : "Connection timeout"])
+			e = NSError(domain: "smalltalk.xmpp", code: XMPPError.disconnected.rawValue, userInfo: [NSLocalizedDescriptionKey : "Connection timeout"])
 		}
 		
 		self.connectionStatusObserver.sendFailed(e!)
 		self.connected.value = false
 	}
 	
-	func xmppStreamDidAuthenticate(sender: XMPPStream) {
-		NSLog("xmppStreamDidAuthenticate Main Thread? \(NSThread.isMainThread())")
+	func xmppStreamDidAuthenticate(_ sender: XMPPStream) {
+		NSLog("xmppStreamDidAuthenticate Main Thread? \(Thread.isMainThread)")
 		self.connectionStatusObserver.sendNext((true, nil))
 		self.connected.value = true
         self.sendOrBufferElement(XMPPPresence(type: "available"))
 		//Turn on stream management
-		self.streamManagement.enableStreamManagementWithResumption(true, maxTimeout: 600)
+		self.streamManagement.enable(withResumption: true, maxTimeout: 600)
 	}
 	
-	func xmppStream(sender: XMPPStream, didNotAuthenticate auth:DDXMLElement) {
+	func xmppStream(_ sender: XMPPStream, didNotAuthenticate auth:DDXMLElement) {
 		NSLog("Did not authenticate \(auth)")
-		self.connectionStatusObserver.sendFailed(NSError(domain: "smalltalk.xmpp", code: XMPPError.AuthFailed.rawValue as Int, userInfo: ["info" : auth]))
+		self.connectionStatusObserver.sendFailed(NSError(domain: "smalltalk.xmpp", code: XMPPError.authFailed.rawValue as Int, userInfo: ["info" : auth]))
 		self.connected.value = false
 	}
 	
 	//mark - message sending & receiving
 	
-	func xmppStream(sender: XMPPStream, didReceiveMessage message:XMPPMessage) {
+	func xmppStream(_ sender: XMPPStream, didReceiveMessage message:XMPPMessage) {
 		NSLog("didReceiveMessage %@", message)
 		var receipt: NSArray? = nil
 		do {
-			 receipt = try message.nodesForXPath("/*[local-name()='message']/*[local-name()='receipt']")
+			 receipt = try message.nodes(forXPath: "/*[local-name()='message']/*[local-name()='receipt']")
 		} catch {
 			assert(false, "XPath parse failed \(error)")
 		}
@@ -295,8 +295,8 @@ class STXMPPStream: NSObject, XMPPRosterDelegate, XMPPvCardTempModuleDelegate, X
 		} else if message.hasReceiptResponse() {
 			//Received
 			let messageId = message.receiptResponseID()
-			self.incomingReceiptsObserver.sendNext((messageId, STMessage.DeliveryStatus.Delivered))
-			self.xmppMessageArchivingCoreDataStorage.markMessageDeliveryStatus(STMessage.DeliveryStatus.Delivered, forMessage: messageId)
+			self.incomingReceiptsObserver.sendNext((messageId, STMessage.DeliveryStatus.delivered))
+			self.xmppMessageArchivingCoreDataStorage.markMessageDeliveryStatus(STMessage.DeliveryStatus.delivered, forMessage: messageId)
 		} else {
 			//We don't pass messages from archive to incomingMessagesObserver (only new messages go there)
 			//they are written to local DB and read from there when needed
@@ -309,15 +309,15 @@ class STXMPPStream: NSObject, XMPPRosterDelegate, XMPPvCardTempModuleDelegate, X
 	
 	//Handle push notification message payload as if it was received from the network so that it is immediately visible in UI when user comes back
 	//it is at that point received from offline storage as well
-	func receiveMessageFromPushNotification(messageStr: String) {
+	func receiveMessageFromPushNotification(_ messageStr: String) {
 		CLS_LOG_SWIFT("STXMPPStream: receiveMessageFromPushNotification %@", [messageStr])
 		do {
 			//Remove the lang attribute that is not used and causes the DDXML parser to crash
 			let pattern = "xml:lang='.*?'"
-			let regex: NSRegularExpression = try NSRegularExpression(pattern: pattern, options: NSRegularExpressionOptions.CaseInsensitive)
-			let modString = regex.stringByReplacingMatchesInString(messageStr, options: .WithTransparentBounds, range: NSMakeRange(0, messageStr.characters.count), withTemplate: "")
+			let regex: NSRegularExpression = try NSRegularExpression(pattern: pattern, options: NSRegularExpression.Options.caseInsensitive)
+			let modString = regex.stringByReplacingMatches(in: messageStr, options: .withTransparentBounds, range: NSMakeRange(0, messageStr.characters.count), withTemplate: "")
 			CLS_LOG_SWIFT("STXMPPStream: modString after stringByReplacingMatchesInString %@", [modString])
-			let message = try XMPPMessage(XMLString: modString)
+			let message = try XMPPMessage(xmlString: modString)
 			//Archive and receive
 			CLS_LOG_SWIFT("STXMPPStream: messageParsed")
 			self.xmppMessageArchivingCoreDataStorage.archiveMessage(message, outgoing: isOutgoingMsg(message), xmppStream: stream)
@@ -330,24 +330,24 @@ class STXMPPStream: NSObject, XMPPRosterDelegate, XMPPvCardTempModuleDelegate, X
 		}
 	}
 	
-	func storeAchiveResult(sender: XMPPStream,  message:XMPPMessage) -> Bool {
+	func storeAchiveResult(_ sender: XMPPStream,  message:XMPPMessage) -> Bool {
 		//Have to use the crazy local-name() crap because the message has namespace
 		//-> /message/result/forwarded/message
 		do {
-			let res = try message.nodesForXPath("/*[local-name()='message']/*[local-name()='result']/*[local-name()='forwarded']/*[local-name()='message']")
+			let res = try message.nodes(forXPath: "/*[local-name()='message']/*[local-name()='result']/*[local-name()='forwarded']/*[local-name()='message']")
 			if res.count > 0 {
-				let xmppMsg = XMPPMessage(fromElement: res[0] as! DDXMLElement)
-				let delayQ = try message.nodesForXPath("/*[local-name()='message']/*[local-name()='result']/*[local-name()='forwarded']/*[local-name()='delay']")
-				let delay = XMPPMessage(fromElement: delayQ[0] as! DDXMLElement) //The correct from value is in the delay element for some reason
+				let xmppMsg = XMPPMessage(from: res[0] as! DDXMLElement)
+				let delayQ = try message.nodes(forXPath: "/*[local-name()='message']/*[local-name()='result']/*[local-name()='forwarded']/*[local-name()='delay']")
+				let delay = XMPPMessage(from: delayQ[0] as! DDXMLElement) //The correct from value is in the delay element for some reason
                 //From may be null in the actual message for some reason
-				xmppMsg.addAttributeWithName("from", stringValue: delay.attributeStringValueForName("from"))
+				xmppMsg.addAttribute(withName: "from", stringValue: delay.attributeStringValue(forName: "from"))
 				//Add the delay to the message as well so that it has timestamp
 				xmppMsg.addChild(delay.copy() as! DDXMLNode)
                 
                 //Add the archived to the message so that it is similar to messages coming from network
-                let result = message.elementForName("result")
+                let result = message.forName("result")
                 let archived = DDXMLElement(name: "archived")
-                archived.addAttributeWithName("id", stringValue: result!.attributeStringValueForName("id"))
+                archived.addAttribute(withName: "id", stringValue: result!.attributeStringValue(forName: "id"))
                 xmppMsg.addChild(archived)
                 
 				self.xmppMessageArchivingCoreDataStorage.archiveMessage(xmppMsg, outgoing: isOutgoingMsg(xmppMsg), xmppStream: sender)
@@ -360,35 +360,35 @@ class STXMPPStream: NSObject, XMPPRosterDelegate, XMPPvCardTempModuleDelegate, X
 		return false
 	}
 	
-	func isOutgoingMsg(msg: XMPPMessage) -> Bool {
+	func isOutgoingMsg(_ msg: XMPPMessage) -> Bool {
 		return msg.from().user == User.senderId
 	}
     
-    private func sendOrBufferElement(message: DDXMLElement) {
+    fileprivate func sendOrBufferElement(_ message: DDXMLElement) {
         if self.connected.value {
-            self.stream.sendElement(message)
+            self.stream.send(message)
         } else {
             self.outboundMessageBuffer.append(message)
         }
     }
 	
 	//https://github.com/ReactiveCocoa/ReactiveCocoa/issues/2103
-	func messageSender(id: String, body: String, to: String, thread: String, content: STMessageAttachment?) -> SignalProducer<Bool, NSError> {
+	func messageSender(_ id: String, body: String, to: String, thread: String, content: STMessageAttachment?) -> SignalProducer<Bool, NSError> {
 		let producer: SignalProducer<Bool, NSError> = SignalProducer { [weak self] observer, disposable in
 			NSLog("messageSender executed")
-			let jid = XMPPJID.jidWithUser(to, domain: "localhost", resource: "/")
+			let jid = XMPPJID.withUser(to, domain: "localhost", resource: "/")
 			let message: XMPPMessage = XMPPMessage(type: "chat", to: jid)
-			message.addChild(DDXMLNode.elementWithName("body", stringValue: body) as! DDXMLNode)
+			message.addChild(DDXMLNode.element(withName: "body", stringValue: body) as! DDXMLNode)
 			message.addThread(thread)
-			message.addAttributeWithName("id", stringValue: id)
+			message.addAttribute(withName: "id", stringValue: id)
 			//From is not required to send a message but we add it here so that when we handle it in didSendMessage
 			//it is available
-			message.addAttributeWithName("from", stringValue: self!.stream.myJID.full())
-			message.addAttributeWithName("fromName", stringValue: User.displayName!)
+			message.addAttribute(withName: "from", stringValue: self!.stream.myJID.full())
+			message.addAttribute(withName: "fromName", stringValue: User.displayName!)
 			
 			if content != nil {
 				let contentE = DDXMLElement(name: "content", stringValue: content!.jsonRawString)
-				contentE.addAttributeWithName("content-type", stringValue: content!.contentType)
+				contentE.addAttribute(withName: "content-type", stringValue: content!.contentType)
 				message.addChild(contentE)
 			}
             
@@ -400,10 +400,10 @@ class STXMPPStream: NSObject, XMPPRosterDelegate, XMPPvCardTempModuleDelegate, X
 		return  producer
 	}
 	
-	func chatStateSender(type: String, to: String, thread: String) -> SignalProducer<Bool, NSError> {
+	func chatStateSender(_ type: String, to: String, thread: String) -> SignalProducer<Bool, NSError> {
 		let producer: SignalProducer<Bool, NSError> = SignalProducer { [weak self] observer, disposable in
 			NSLog("chatStateSender executed")
-			let jid = XMPPJID.jidWithUser(to, domain: "localhost", resource: "/")
+			let jid = XMPPJID.withUser(to, domain: "localhost", resource: "/")
 			let message: XMPPMessage = XMPPMessage(type: "chat", to: jid)
 			if type == "composing" {
 				message.addComposingChatState()
@@ -413,51 +413,51 @@ class STXMPPStream: NSObject, XMPPRosterDelegate, XMPPvCardTempModuleDelegate, X
 			message.addThread(thread)
 			//From is not required to send a message but we add it here so that when we handle it in didSendMessage
 			//it is available
-			message.addAttributeWithName("from", stringValue: self!.stream.myJID.full())
+			message.addAttribute(withName: "from", stringValue: self!.stream.myJID.full())
 			self?.sendOrBufferElement(message)
 		}
 		
 		return  producer
 	}
 	
-	func xmppStream(sender: XMPPStream, didSendMessage message:XMPPMessage) {
+	func xmppStream(_ sender: XMPPStream, didSendMessage message:XMPPMessage) {
 		NSLog("didSendMessage %@", message)
 
 	}
 	
-	func xmppStream(sender: XMPPStream, didFailToSendMessage message:XMPPMessage, error e: NSError) {
+	func xmppStream(_ sender: XMPPStream, didFailToSendMessage message:XMPPMessage, error e: NSError) {
 		NSLog("didFailToSendMessage %@ %@", message, e)
 		//TODO! Do not use message.body() as key!
-		let id = message.attributeStringValueForName("id")
+		let id = message.attributeStringValue(forName: "id")
 		if id != nil, let (pendingObserver, _) = self.pendingMessages[id] {
 			pendingObserver.sendFailed(e)
-			self.pendingMessages.removeValueForKey(id)
+			self.pendingMessages.removeValue(forKey: id)
 		}
 	}
 	
-	func xmppStream(sender: XMPPStream, didReceiveIQ iq:XMPPIQ) {
+	func xmppStream(_ sender: XMPPStream, didReceiveIQ iq:XMPPIQ) {
 		NSLog("didReceiveIQ %@", iq)
 		//End of MAM search
 		handleMessageArchivedReply(iq)
 		handleArchiveQueryResult(iq)
 	}
 	
-	func xmppStream(sender: XMPPStream, didReceivePresence presence:XMPPPresence) {
+	func xmppStream(_ sender: XMPPStream, didReceivePresence presence:XMPPPresence) {
 		NSLog("didReceivePresence %@", presence)
 	}
 
-	func xmppStream(sender: XMPPStream, didReceiveError error:DDXMLElement) {
+	func xmppStream(_ sender: XMPPStream, didReceiveError error:DDXMLElement) {
 		NSLog("didReceiveError %@", error)
 	}
 	
-	func archiveFetcher(contact: String, num: Int, before: String? = nil) -> SignalProducer<(String?, String), NSError> {
+	func archiveFetcher(_ contact: String, num: Int, before: String? = nil) -> SignalProducer<(String?, String), NSError> {
 		let producer: SignalProducer<(String?, String), NSError> = SignalProducer { [weak self] observer, disposable in
 			let iq: XMPPIQ = XMPPIQ()
-			iq.addAttributeWithName("type", stringValue: "get")
+			iq.addAttribute(withName: "type", stringValue: "get")
 			let id = "archive-fetch-\(contact)"
-			iq.addAttributeWithName("id", stringValue: id)
+			iq.addAttribute(withName: "id", stringValue: id)
 			let query: DDXMLElement = DDXMLElement(name: "query", xmlns: "urn:xmpp:mam:tmp")
-			query.addAttributeWithName("queryid", stringValue: "archive-fetch-q-\(contact)")
+			query.addAttribute(withName: "queryid", stringValue: "archive-fetch-q-\(contact)")
 			let with = DDXMLElement(name: "with", stringValue: "\(contact)@localhost")
 			query.addChild(with)
 			//http://stackoverflow.com/questions/31828955/xmpp-query-archive-by-latest-messages
@@ -483,14 +483,14 @@ class STXMPPStream: NSObject, XMPPRosterDelegate, XMPPvCardTempModuleDelegate, X
 		return  producer
 	}
 	
-	func purgeFromMAM(archiveIds : [String]) {
+	func purgeFromMAM(_ archiveIds : [String]) {
 		for archiveId in archiveIds {
 			let iq: XMPPIQ = XMPPIQ()
-			iq.addAttributeWithName("type", stringValue: "set")
+			iq.addAttribute(withName: "type", stringValue: "set")
 			let id = "archive-purge-\(archiveId)"
-			iq.addAttributeWithName("id", stringValue: id)
+			iq.addAttribute(withName: "id", stringValue: id)
 			let purge: DDXMLElement = DDXMLElement(name: "purge", xmlns: "urn:smalltalk:mam")
-			purge.addAttributeWithName("id", stringValue: archiveId)
+			purge.addAttribute(withName: "id", stringValue: archiveId)
 			iq.addChild(purge)
 			NSLog("Send purge \(iq)")
 			self.sendOrBufferElement(iq)
@@ -498,17 +498,17 @@ class STXMPPStream: NSObject, XMPPRosterDelegate, XMPPvCardTempModuleDelegate, X
 	}
 	
 	//Message has been archived by MAM, we'll update the archive id in local db
-	func handleMessageArchivedReply(iq: XMPPIQ) {
+	func handleMessageArchivedReply(_ iq: XMPPIQ) {
 		if iq.xmlns() != "urn:smalltalk:archived" {
 			return
 		}
 		
 		do {
-			let res = try iq.nodesForXPath("/*[local-name()='iq']/*[local-name()='archived']")
+			let res = try iq.nodes(forXPath: "/*[local-name()='iq']/*[local-name()='archived']")
 			if res.count > 0 {
 				let archived = res[0] as! DDXMLElement
-				let messageId = archived.attributeStringValueForName("id")
-				let archivedId = archived.attributeStringValueForName("archiveId")
+				let messageId = archived.attributeStringValue(forName: "id")
+				let archivedId = archived.attributeStringValue(forName: "archiveId")
 				self.xmppMessageArchivingCoreDataStorage.updateArchiveId(messageId, archiveId: archivedId)
 			}
 		} catch {
@@ -516,16 +516,16 @@ class STXMPPStream: NSObject, XMPPRosterDelegate, XMPPvCardTempModuleDelegate, X
 		}
 	}
 	
-	func handleArchiveQueryResult(iq: XMPPIQ) {
+	func handleArchiveQueryResult(_ iq: XMPPIQ) {
 		do {
-			let res = try iq.nodesForXPath("/*[local-name()='iq']/*[local-name()='query']")
+			let res = try iq.nodes(forXPath: "/*[local-name()='iq']/*[local-name()='query']")
 			if res.count > 0 {
 				let query = res[0] as! DDXMLElement
 				if query.xmlns() == "urn:xmpp:mam:tmp" {
-					let id = iq.attributeStringValueForName("id")
+					let id = iq.attributeStringValue(forName: "id")
 					if id != nil, let (pendingObserver, contact) = self.pendingArchiveFetches[id] {
 						do {
-							let archiveQuery = try iq.nodesForXPath("/*[local-name()='iq']/*[local-name()='query']/*[local-name()='set']/*[local-name()='first']")
+							let archiveQuery = try iq.nodes(forXPath: "/*[local-name()='iq']/*[local-name()='query']/*[local-name()='set']/*[local-name()='first']")
 							if archiveQuery.count > 0 {
 								let archiveId = archiveQuery[0] as! DDXMLElement
 								pendingObserver.sendNext((archiveId.stringValue!, contact))
@@ -533,7 +533,7 @@ class STXMPPStream: NSObject, XMPPRosterDelegate, XMPPvCardTempModuleDelegate, X
 								pendingObserver.sendNext((nil, contact))
 							}
 							pendingObserver.sendCompleted()
-							self.pendingArchiveFetches.removeValueForKey(id)
+							self.pendingArchiveFetches.removeValue(forKey: id)
 						} catch {
 							NSLog("MAM query result IQ error \(error)")
 						}
@@ -558,7 +558,7 @@ class STXMPPStream: NSObject, XMPPRosterDelegate, XMPPvCardTempModuleDelegate, X
 	* The methods acceptPresenceSubscriptionRequestFrom: and rejectPresenceSubscriptionRequestFrom: can
 	* be used to respond to the request.
 	**/
-	func xmppRoster(sender: XMPPRoster!, didReceivePresenceSubscriptionRequest presence: XMPPPresence!) {
+	func xmppRoster(_ sender: XMPPRoster!, didReceivePresenceSubscriptionRequest presence: XMPPPresence!) {
 		NSLog("didReceivePresenceSubscriptionRequest \(presence)")
 
 	}
@@ -566,21 +566,21 @@ class STXMPPStream: NSObject, XMPPRosterDelegate, XMPPvCardTempModuleDelegate, X
 	/**
 	* Sent when a Roster Push is received as specified in Section 2.1.6 of RFC 6121.
 	**/
-	func xmppRoster(sender: XMPPRoster!, didReceiveRosterPush iq: XMPPIQ!) {
+	func xmppRoster(_ sender: XMPPRoster!, didReceiveRosterPush iq: XMPPIQ!) {
 		NSLog("didReceiveRosterPush \(iq)")
 	}
 	
 	/**
 	* Sent when the initial roster is received.
 	**/
-	func xmppRosterDidBeginPopulating(sender: XMPPRoster!, withVersion version: String!) {
+	func xmppRosterDidBeginPopulating(_ sender: XMPPRoster!, withVersion version: String!) {
 		NSLog("xmppRosterDidBeginPopulating \(version)")
 	}
 	
 	/**
 	* Sent when the initial roster has been populated into storage.
 	**/
-	func xmppRosterDidEndPopulating(sender: XMPPRoster!) {
+	func xmppRosterDidEndPopulating(_ sender: XMPPRoster!) {
 		NSLog("xmppRosterDidEndPopulating")
 	}
 	
@@ -593,13 +593,13 @@ class STXMPPStream: NSObject, XMPPRosterDelegate, XMPPvCardTempModuleDelegate, X
 	*   <group>Friends</group>
 	* </item>
 	**/
-	func xmppRoster(sender: XMPPRoster!, didReceiveRosterItem item: DDXMLElement!) {
+	func xmppRoster(_ sender: XMPPRoster!, didReceiveRosterItem item: DDXMLElement!) {
 		NSLog("didReceiveRosterItem \(item)")
 	}
 
 	//mark - Vcard
 	
-	func updateVCard(nickname: String) {
+	func updateVCard(_ nickname: String) {
 		//Doesn't work in swift2
 		//let vcard = XMPPvCardTemp.vCardTemp()
 		let vCardTempElement = DDXMLElement(name: "vCard", xmlns: "vcard-temp")
@@ -608,37 +608,37 @@ class STXMPPStream: NSObject, XMPPRosterDelegate, XMPPvCardTempModuleDelegate, X
 		self.xmppVCardTemp.updateMyvCardTemp(vcard)
 	}
 
-	func fetchVCard(user: String) -> XMPPvCardTemp? {
-		let jid = XMPPJID.jidWithUser(user, domain: "localhost", resource: nil)
-		return self.xmppVCardTemp.vCardTempForJID(jid, shouldFetch: true)
+	func fetchVCard(_ user: String) -> XMPPvCardTemp? {
+		let jid = XMPPJID.withUser(user, domain: "localhost", resource: nil)
+		return self.xmppVCardTemp.vCardTemp(for: jid, shouldFetch: true)
 	}
 	
-	func xmppvCardTempModule(vCardTempModule: XMPPvCardTempModule!, didReceivevCardTemp vCardTemp: XMPPvCardTemp!, forJID jid: XMPPJID!) {
+	func xmppvCardTempModule(_ vCardTempModule: XMPPvCardTempModule!, didReceivevCardTemp vCardTemp: XMPPvCardTemp!, for jid: XMPPJID!) {
 		NSLog("didReceivevCardTemp \(vCardTemp) \(jid)")
 		if jid.user != nil {
 			incomingVCardsObserver.sendNext((username: jid.user, vcard: vCardTemp))
 		}
 	}
 	
-	func xmppvCardTempModuleDidUpdateMyvCard(vCardTempModule: XMPPvCardTempModule!) {
+	func xmppvCardTempModuleDidUpdateMyvCard(_ vCardTempModule: XMPPvCardTempModule!) {
 		NSLog("xmppvCardTempModuleDidUpdateMyvCard")
 	}
 	
-	func xmppvCardTempModule(vCardTempModule: XMPPvCardTempModule!, failedToUpdateMyvCard error: DDXMLElement!) {
+	func xmppvCardTempModule(_ vCardTempModule: XMPPvCardTempModule!, failedToUpdateMyvCard error: DDXMLElement!) {
 		NSLog("xmppvCardTempModule \(error)")
 	}
 	
-	func xmppvCardAvatarModule(vCardTempModule: XMPPvCardAvatarModule!, didReceivePhoto photo: UIImage!, forJID jid: XMPPJID!) {
+	func xmppvCardAvatarModule(_ vCardTempModule: XMPPvCardAvatarModule!, didReceivePhoto photo: UIImage!, for jid: XMPPJID!) {
 		NSLog("didReceivePhoto for \(jid)")
 	}
 	
 	//mark - message carbons
 
-	func xmppMessageCarbons(xmppMessageCarbons: XMPPMessageCarbons!, didReceiveMessage message: XMPPMessage!, outgoing isOutgoing: Bool) {
+	func xmppMessageCarbons(_ xmppMessageCarbons: XMPPMessageCarbons!, didReceive message: XMPPMessage!, outgoing isOutgoing: Bool) {
 		NSLog("didReceiveMessage for \(message) outgoing? \(isOutgoing)")
 	}
 	
-	func xmppMessageCarbons(xmppMessageCarbons: XMPPMessageCarbons!, willReceiveMessage message: XMPPMessage!, outgoing isOutgoing: Bool) {
+	func xmppMessageCarbons(_ xmppMessageCarbons: XMPPMessageCarbons!, willReceive message: XMPPMessage!, outgoing isOutgoing: Bool) {
 		NSLog("willReceiveMessage for \(message) outgoing? \(isOutgoing)")
 	}
 	
@@ -646,25 +646,25 @@ class STXMPPStream: NSObject, XMPPRosterDelegate, XMPPvCardTempModuleDelegate, X
 	/**
 	* Notifies delegates of the server's response from sending the <enable> stanza.
 	**/
-	func xmppStreamManagement(sender: XMPPStreamManagement!, wasEnabled enabled: DDXMLElement!) {
+	func xmppStreamManagement(_ sender: XMPPStreamManagement!, wasEnabled enabled: DDXMLElement!) {
 		NSLog("xmppStreamManagement wasEnabled \(enabled)")
 	}
 	
-	func xmppStreamManagement(sender: XMPPStreamManagement!, wasNotEnabled failed: DDXMLElement!) {
+	func xmppStreamManagement(_ sender: XMPPStreamManagement!, wasNotEnabled failed: DDXMLElement!) {
 		NSLog("xmppStreamManagement wasNotEnabled \(failed)")
 	}
 	
 	/**
 	* Notifies delegates that a request <r/> for an ack from the server was sent.
 	**/
-	func xmppStreamManagementDidRequestAck(sender: XMPPStreamManagement!) {
+	func xmppStreamManagementDidRequestAck(_ sender: XMPPStreamManagement!) {
 		NSLog("xmppStreamManagementDidRequestAck")
 	}
 	
 	/**
 	* Invoked when an ack is received from the server, and new stanzas have been acked.
 	**/
-	func xmppStreamManagement(sender: XMPPStreamManagement!, didReceiveAckForStanzaIds stanzaIds: [AnyObject]!) {
+	func xmppStreamManagement(_ sender: XMPPStreamManagement!, didReceiveAckForStanzaIds stanzaIds: [AnyObject]!) {
 		NSLog("xmppStreamManagement didReceiveAckForStanzaIds \(stanzaIds)")
 		//TODO message sender's complete should be called here to make sure that the message has reached the server
         
@@ -674,10 +674,10 @@ class STXMPPStream: NSObject, XMPPRosterDelegate, XMPPvCardTempModuleDelegate, X
                 //Message has been sent
                 sentMessagesObserver.sendNext(pendingMessage)
                 pendingObserver.sendCompleted()
-                self.pendingMessages.removeValueForKey(id)
+                self.pendingMessages.removeValue(forKey: id)
                 //Mark deliveryStatus
-                self.incomingReceiptsObserver.sendNext((id, STMessage.DeliveryStatus.ServerAck))
-                self.xmppMessageArchivingCoreDataStorage.markMessageDeliveryStatus(STMessage.DeliveryStatus.ServerAck, forMessage: id)
+                self.incomingReceiptsObserver.sendNext((id, STMessage.DeliveryStatus.serverAck))
+                self.xmppMessageArchivingCoreDataStorage.markMessageDeliveryStatus(STMessage.DeliveryStatus.serverAck, forMessage: id)
             }
         }
 	}
@@ -732,18 +732,18 @@ class STXMPPStream: NSObject, XMPPRosterDelegate, XMPPvCardTempModuleDelegate, X
 
 	// Private functions
 
-	private func setupReachability(host: String) {
+	fileprivate func setupReachability(_ host: String) {
 		self.reachability = Reachability(hostName: host)
 		self.reachability.reachableBlock = {
 			reachable in
-			dispatch_async(dispatch_get_main_queue(), {
+			DispatchQueue.main.async(execute: {
 				NSLog("REACHABLE! \(reachable)");
 				self.reconnect.manualStart() //Manually reconnect on reachability change
 			})
 		}
 		self.reachability.unreachableBlock = {
 			reachable in
-			dispatch_async(dispatch_get_main_queue(), {
+			DispatchQueue.main.async(execute: {
 				NSLog("UNREACHABLE! \(reachable)");
 			})
 		}

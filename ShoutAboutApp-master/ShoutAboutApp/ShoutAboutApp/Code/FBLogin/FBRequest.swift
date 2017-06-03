@@ -16,10 +16,10 @@ class FBRequest: NSObject
 {
     let fbLoginManager : FBSDKLoginManager = FBSDKLoginManager()
     
-    func loginWithFacebook(successBlock:CompletionHandler ,vc:UIViewController)
+    func loginWithFacebook(_ successBlock:CompletionHandler ,vc:UIViewController)
     {
         let facebookReadPermissions = ["public_profile", "email", "user_friends"]
-        fbLoginManager.logInWithReadPermissions(facebookReadPermissions, fromViewController: vc,handler: { (result, error) -> Void in
+        fbLoginManager.logIn(withReadPermissions: facebookReadPermissions, from: vc,handler: { (result, error) -> Void in
             if (error == nil)
             {
                 let fbloginresult : FBSDKLoginManagerLoginResult = result
@@ -48,11 +48,11 @@ class FBRequest: NSObject
         fbLoginManager.logOut()
     }
     
-    func getFBUserData(success: CompletionHandler)
+    func getFBUserData(_ success: CompletionHandler)
     {
-        if((FBSDKAccessToken.currentAccessToken()) != nil)
+        if((FBSDKAccessToken.current()) != nil)
         {
-            FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, name, first_name, last_name, picture.type(large), email,  birthday, gender, location, website"]).startWithCompletionHandler({ (connection, result, error) -> Void in
+            FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, name, first_name, last_name, picture.type(large), email,  birthday, gender, location, website"]).start(completionHandler: { (connection, result, error) -> Void in
                 if (error == nil)
                 {
                     if(success != nil)
@@ -69,16 +69,16 @@ class FBRequest: NSObject
         
     
         let request = FBSDKGraphRequest(graphPath:"/me?fields=invitable_friends", parameters: nil);
-        request.startWithCompletionHandler { (connection : FBSDKGraphRequestConnection!, result : AnyObject!, error : NSError!) -> Void in
+        request.start { (connection : FBSDKGraphRequestConnection!, result : AnyObject!, error : NSError!) -> Void in
             let resultdict = result as! NSDictionary
            // DLog("Result Dict: \(resultdict)")
             
-                    let friendArr : [AnyObject] = (resultdict.objectForKey("invitable_friends")!).objectForKey("data")! as! [AnyObject]
+                    let friendArr : [AnyObject] = (resultdict.object(forKey: "invitable_friends")!).object(forKey: "data")! as! [AnyObject]
             
                     for i in 0 ..< friendArr.count
                     {
                         let valueDict : NSDictionary = friendArr[i] as! NSDictionary
-                        let id = valueDict.objectForKey("id") as! String
+                        let id = valueDict.object(forKey: "id") as! String
                        // PlayerTemplate.buildWithFB(valueDict.objectForKey("name") as! String, id: id, photo: ((valueDict.objectForKey("picture"))?.objectForKey("data"))?.objectForKey("url") as! String)
             
                     }
@@ -88,13 +88,13 @@ class FBRequest: NSObject
             
             
             
-             let pagingData : AnyObject = (resultdict.objectForKey("invitable_friends")!).objectForKey("paging")!
+             let pagingData : AnyObject = (resultdict.object(forKey: "invitable_friends")!).object(forKey: "paging")!
             
-            if(pagingData.objectForKey("next") != nil){
+            if(pagingData.object(forKey: "next") != nil){
                 
-                let pagingStr = pagingData.objectForKey("next")! as! String
+                let pagingStr = pagingData.object(forKey: "next")! as! String
 
-                 NSOperationQueue().addOperationWithBlock({
+                 OperationQueue().addOperation({
             
                     self.getFacebookFriendListRecursively(pagingStr)
             
@@ -108,11 +108,11 @@ class FBRequest: NSObject
     }
     
     
-    func getFacebookFriendListRecursively(next: String?) -> Void {
+    func getFacebookFriendListRecursively(_ next: String?) -> Void {
         
-        let url = NSURL(string: next!)
-        let request = NSURLRequest(URL: url!);
-        let operationQueue = NSOperationQueue.mainQueue();
+        let url = URL(string: next!)
+        let request = URLRequest(url: url!);
+        let operationQueue = OperationQueue.main;
         let connection = NSURLConnection.sendAsynchronousRequest(request, queue: operationQueue) { (response, data, error) in
         
     
@@ -120,21 +120,21 @@ class FBRequest: NSObject
 
             
             do {
-                jsonResults = try NSJSONSerialization.JSONObjectWithData(data!, options: [])
+                jsonResults = try JSONSerialization.jsonObject(with: data!, options: [])
                 
-                let frndArr : [AnyObject] = jsonResults.objectForKey("data")! as! [AnyObject]
+                let frndArr : [AnyObject] = jsonResults.object(forKey: "data")! as! [AnyObject]
                 
                 for i in 0 ..< frndArr.count
                 {
                     let valueDict : NSDictionary = frndArr[i] as! NSDictionary
-                    let id = valueDict.objectForKey("id") as! String
+                    let id = valueDict.object(forKey: "id") as! String
                    // PlayerTemplate.buildWithFB(valueDict.objectForKey("name") as! String, id: id, photo: ((valueDict.objectForKey("picture"))?.objectForKey("data"))?.objectForKey("url") as! String)
                     
                 }
                 
-                let pagingData : AnyObject = jsonResults.objectForKey("paging")!
+                let pagingData : AnyObject = jsonResults.object(forKey: "paging")!
                 
-                let nextPage = (pagingData.objectForKey("next") as? String)
+                let nextPage = (pagingData.object(forKey: "next") as? String)
                 
                 
                 if nextPage != nil && (frndArr.count > 0){

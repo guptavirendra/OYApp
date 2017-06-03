@@ -16,7 +16,7 @@ import UIKit
 ///  ceil(1, 0.3) // 0.9
 ///  ceil(-0.75, 0.5) // -0.5
 
-public func ceil(x: CGFloat, multiplier: CGFloat) -> CGFloat {
+public func ceil(_ x: CGFloat, multiplier: CGFloat) -> CGFloat {
 
     // I some cases % not work properly
     let y = x / multiplier

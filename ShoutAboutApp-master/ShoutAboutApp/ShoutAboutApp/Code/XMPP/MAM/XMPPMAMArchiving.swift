@@ -11,7 +11,7 @@ import XMPPFramework
 
 class XMPPMAMArchiving: XMPPMessageArchiving
 {
-	override init(messageArchivingStorage storage: XMPPMessageArchivingStorage!, dispatchQueue queue: dispatch_queue_t!) {
+	override init(messageArchivingStorage storage: XMPPMessageArchivingStorage!, dispatchQueue queue: DispatchQueue!) {
 		super.init(messageArchivingStorage: storage, dispatchQueue: queue)
 		self.clientSideMessageArchivingOnly = true //NOTE! This refers to old style XEP-0136 archiving NOT MAM style server archiving
 		(storage as! XMPPMessageArchivingCoreDataStorage).messageEntityName = "XMPPMAMArchivingMessageCoreDataObject"

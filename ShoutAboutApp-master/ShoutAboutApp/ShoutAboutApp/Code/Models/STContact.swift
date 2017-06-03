@@ -17,7 +17,7 @@ class STContact: NSObject {
 		self.displayName = displayName
 	}
 	
-	static func contactWith(username: String, xmppClient: STXMPPClient) -> STContact {
+	static func contactWith(_ username: String, xmppClient: STXMPPClient) -> STContact {
 		if username == User.username {
 			return STContact(username: username, displayName: User.displayName!)
 		}
@@ -35,7 +35,7 @@ class STContact: NSObject {
 		}
 	}
 	
-	override func isEqual(object: AnyObject?) -> Bool {
+	override func isEqual(_ object: Any?) -> Bool {
 		if let rhs = object as? STContact {
 			return username == rhs.username
 		}

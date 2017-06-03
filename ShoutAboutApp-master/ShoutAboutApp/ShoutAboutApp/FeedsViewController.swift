@@ -1,6 +1,30 @@
 
 
 import UIKit
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func >= <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l >= r
+  default:
+    return !(lhs < rhs)
+  }
+}
+
 
 class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
 {
@@ -25,7 +49,7 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
     override func viewDidLoad()
     {
         super.viewDidLoad()
-        self.countBackView?.makeImageRoundedWithWidth(1, color: UIColor.redColor())
+        self.countBackView?.makeImageRoundedWithWidth(1, color: UIColor.red)
         self.automaticallyAdjustsScrollViewInsets = false
         self.ConfigureVariable()
         self.loadfeedAPICall()
@@ -35,13 +59,13 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
     
     func ConfigureVariable()
     {
-        appUserId = NSUserDefaults.standardUserDefaults().objectForKey(kapp_user_id) as! Int
-        let appUserToken = NSUserDefaults.standardUserDefaults().objectForKey(kapp_user_token) as! String
+        appUserId = UserDefaults.standard.object(forKey: kapp_user_id) as! Int
+        let appUserToken = UserDefaults.standard.object(forKey: kapp_user_token) as! String
         dict = [kapp_user_id:String(appUserId),kapp_user_token :appUserToken]
     }
     
     
-    override func viewWillAppear(animated: Bool)
+    override func viewWillAppear(_ animated: Bool)
     {
         super.viewWillAppear(animated)
         getAlertCount()
@@ -58,9 +82,9 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
         {
             DataSessionManger.sharedInstance.getAlertCount({ (response, deserializedResponse) in
                 
-                if let alert_count = deserializedResponse.objectForKey("alert_count") as? NSNumber
+                if let alert_count = deserializedResponse.object(forKey: "alert_count") as? NSNumber
                 {
-                    ProfileManager.sharedInstance.alert_count = alert_count.integerValue
+                    ProfileManager.sharedInstance.alert_count = alert_count.intValue
                     self.countLabel?.text = alert_count.stringValue
                     
                     
@@ -79,19 +103,19 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
         // Dispose of any resources that can be recreated.
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
          return dataFeedsArray.count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
+    func tableView(_ tableView: UITableView, cellForRowAtIndexPath indexPath: IndexPath) -> UITableViewCell
     {
         
         let dataFeedMyfeed = dataFeedsArray[indexPath.row]
         if dataFeedMyfeed.action != profile_picture
         {
             
-            let cell = tableView.dequeueReusableCellWithIdentifier("MyFeedsTableViewCell", forIndexPath: indexPath) as? FeedsTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "MyFeedsTableViewCell", for: indexPath) as? FeedsTableViewCell
             cell?.delegate = self
             cell?.contentView.setGraphicEffects()
             self.configureReviewCellData(cell!, dataFeedMyfeed: dataFeedMyfeed)
@@ -99,7 +123,7 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
         }
         
 
-        let cell = tableView.dequeueReusableCellWithIdentifier("MyFeedsTableViewCell1", forIndexPath: indexPath) as? FeedsTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "MyFeedsTableViewCell1", for: indexPath) as? FeedsTableViewCell
         cell?.contentView.setGraphicEffects()
         cell?.delegate = self
         
@@ -107,13 +131,13 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
         return cell!
     }
     
-    func configureReviewCellData(cell:FeedsTableViewCell,dataFeedMyfeed: dataFeedMyfeedModel)
+    func configureReviewCellData(_ cell:FeedsTableViewCell,dataFeedMyfeed: dataFeedMyfeedModel)
     {
        
         // by performed person
         if let _ =  dataFeedMyfeed.performed.photo
         {
-        cell.RUserImageView.sd_setImageWithURL(NSURL(string:dataFeedMyfeed.performed.photo!), placeholderImage: UIImage(named: "profile"))
+        //cell.RUserImageView.sd_setImage(with: URL(string:dataFeedMyfeed.performed.photo!), placeholderImage: UIImage(named: "profile"))
         }
         cell.RUserImageView.makeImageRounded()
         
@@ -124,8 +148,8 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
             reviewAttributeString.addAttribute(NSForegroundColorAttributeName, value: appColor, range: NSRange(location: 0, length:reviewAttributeString.length ))
             
             let reviewAttributeStrings = NSMutableAttributedString(string:" reviewed")
-            reviewAttributeStrings.addAttribute(NSForegroundColorAttributeName, value: UIColor.blackColor(), range: NSRange(location: 0, length:reviewAttributeStrings.length ))
-            reviewAttributeString.appendAttributedString(reviewAttributeStrings)
+            reviewAttributeStrings.addAttribute(NSForegroundColorAttributeName, value: UIColor.black, range: NSRange(location: 0, length:reviewAttributeStrings.length ))
+            reviewAttributeString.append(reviewAttributeStrings)
             
             // name of performed person
             cell.RdescriptionLabel.attributedText  = reviewAttributeString
@@ -144,7 +168,7 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
         // effected person profile picture
         if let _ = dataFeedMyfeed.effected.photo
         {
-            cell.UserImageView.sd_setImageWithURL(NSURL(string:dataFeedMyfeed.effected.photo!), placeholderImage: UIImage(named: "profile"))
+            //cell.UserImageView.sd_setImage(with: URL(string:dataFeedMyfeed.effected.photo!), placeholderImage: UIImage(named: "profile"))
         }
         cell.UserImageView.makeImageRounded()
         
@@ -166,40 +190,40 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
     }
     
     
-    func setLikeDislikeCountCell(cell:FeedsTableViewCell, dataFeedMyfeed: dataFeedMyfeedModel)
+    func setLikeDislikeCountCell(_ cell:FeedsTableViewCell, dataFeedMyfeed: dataFeedMyfeedModel)
     {
         if dataFeedMyfeed.likes_count.likeDislikecount.stringValue.characters.count > 0
         {
-            cell.likeCountButton!.setTitle(String(dataFeedMyfeed.likes_count.likeDislikecount.stringValue), forState: UIControlState.Normal)
+            cell.likeCountButton!.setTitle(String(dataFeedMyfeed.likes_count.likeDislikecount.stringValue), for: UIControlState())
         }else
         {
-            cell.likeCountButton!.setTitle("0", forState: UIControlState.Normal)
+            cell.likeCountButton!.setTitle("0", for: UIControlState())
         }
         if  dataFeedMyfeed.dislikes_count.likeDislikecount.stringValue.characters.count > 0
         {
-            cell.dislikeCountButton!.setTitle(String(dataFeedMyfeed.dislikes_count.likeDislikecount.stringValue), forState: UIControlState.Normal)
+            cell.dislikeCountButton!.setTitle(String(dataFeedMyfeed.dislikes_count.likeDislikecount.stringValue), for: UIControlState())
         }else
         {
-            cell.dislikeCountButton!.setTitle("0", forState: UIControlState.Normal)
+            cell.dislikeCountButton!.setTitle("0", for: UIControlState())
         }
         
     }
     
     
-    func configureProfileCellData(cell:FeedsTableViewCell, dataFeedMyfeed: dataFeedMyfeedModel)
+    func configureProfileCellData(_ cell:FeedsTableViewCell, dataFeedMyfeed: dataFeedMyfeedModel)
     {
         // you
         
         let reviewAttributeString = NSMutableAttributedString(string: (appUserId == dataFeedMyfeed.performed.idString ? "You":dataFeedMyfeed.performed.name))
-        reviewAttributeString.addAttribute(NSForegroundColorAttributeName, value: UIColor.blueColor(), range: NSRange(location: 0, length:reviewAttributeString.length ))
+        reviewAttributeString.addAttribute(NSForegroundColorAttributeName, value: UIColor.blue, range: NSRange(location: 0, length:reviewAttributeString.length ))
         
         // perforemed Action
         cell.nameLabel.attributedText = reviewAttributeString
         cell.performedActionLabel?.text = "changed " + dataFeedMyfeed.action
         
-        cell.UserImageView.sd_setImageWithURL(NSURL(string:dataFeedMyfeed.action_val), placeholderImage: UIImage(named: "profile"))
+        //cell.UserImageView.sd_setImage(with: URL(string:dataFeedMyfeed.action_val), placeholderImage: UIImage(named: "profile"))
         cell.UserImageView.makeImageRounded()
-        cell.RUserImageView.sd_setImageWithURL(NSURL(string:dataFeedMyfeed.performed.photo!), placeholderImage: UIImage(named: "another"))
+        //cell.RUserImageView.sd_setImage(with: URL(string:dataFeedMyfeed.performed.photo!), placeholderImage: UIImage(named: "another"))
         
         //cell?.picButton2?.tag =  indexPath.row
         
@@ -208,7 +232,7 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
     
     
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat{
+    func tableView(_ tableView: UITableView, heightForRowAtIndexPath indexPath: IndexPath) -> CGFloat{
 
       let  dataFeedMyfeed = dataFeedsArray[indexPath.row]
        
@@ -224,29 +248,29 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
     
     
     
-    @IBAction func Clicked(sender:AnyObject){
+    @IBAction func Clicked(_ sender:AnyObject){
         
-        let chatVc = self.storyboard?.instantiateViewControllerWithIdentifier("AlertViewController") as? AlertViewController
+        let chatVc = self.storyboard?.instantiateViewController(withIdentifier: "AlertViewController") as? AlertViewController
         self.navigationController!.pushViewController(chatVc!, animated: true)
         
     }
     
     
-    func likeDislikeScreenClicked(index: Int)
+    func likeDislikeScreenClicked(_ index: Int)
     {
 
         
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any!) {
         
         print(segue.identifier)
         
         let btn = sender as! UIButton!
         
-        if let cell =  btn.superview?.superview?.superview?.superview as? FeedsTableViewCell
+        if let cell =  btn?.superview?.superview?.superview?.superview as? FeedsTableViewCell
         {
-            if let indexPath = self.tableView.indexPathForCell(cell)
+            if let indexPath = self.tableView.indexPath(for: cell)
             {
                let  dataFeedMyfeed = dataFeedsArray[indexPath.row]
                 
@@ -255,10 +279,10 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
                 if (segue.identifier == "LikeDislikeViewController")
                 {
                     //get a reference to the destination view controller
-                    let destinationVC:likeDislikeViewController = segue.destinationViewController as! likeDislikeViewController
+                    let destinationVC:likeDislikeViewController = segue.destination as! likeDislikeViewController
                     
                     //set properties on the destination view controller
-                    destinationVC.isSelectedDislike = btn.tag
+                    destinationVC.isSelectedDislike = (btn?.tag)!
                     destinationVC.dataFeedMyfeed = dataFeedMyfeed
                     
                     //etc...
@@ -268,12 +292,12 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
                 if (segue.identifier == "photopreviewViewController")
                 {
                     //get a reference to the destination view controller
-                    let destinationVC:photopreviewViewController = segue.destinationViewController as! photopreviewViewController
+                    let destinationVC:photopreviewViewController = segue.destination as! photopreviewViewController
                     
                     print(dataFeedMyfeed.performed.photo)
                     destinationVC.picname = dataFeedMyfeed.performed.photo
                     //set properties on the destination view controller
-                    print(destinationVC.picname)
+                    print(destinationVC.picname!)
                     //etc...
                 }
             }
@@ -281,15 +305,15 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
         }
     }
     
-    @IBAction func reportAtSpam(sender: UIButton) {
+    @IBAction func reportAtSpam(_ sender: UIButton) {
         
     }
     
-    func screenMoveClicked(cell:FeedsTableViewCell, button:UIButton)
+    func screenMoveClicked(_ cell:FeedsTableViewCell, button:UIButton)
     {
-       if let indexPath = tableView.indexPathForCell(cell)
+       if let indexPath = tableView.indexPath(for: cell)
         {
-            let profileViewController = self.storyboard?.instantiateViewControllerWithIdentifier("NewProfileViewController") as? NewProfileViewController
+            let profileViewController = self.storyboard?.instantiateViewController(withIdentifier: "NewProfileViewController") as? NewProfileViewController
             let  dataFeedMyfeed = dataFeedsArray[indexPath.row]
             if  dataFeedMyfeed.action == "reviewed"
             {
@@ -321,26 +345,26 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
     }
     
     
-    func likebuttonClicked(cell:FeedsTableViewCell, button:UIButton)
+    func likebuttonClicked(_ cell:FeedsTableViewCell, button:UIButton)
     {
         likeData( dict, cell: cell)
     }
     
-    func dislikebuttonClicked(cell:FeedsTableViewCell, button:UIButton)
+    func dislikebuttonClicked(_ cell:FeedsTableViewCell, button:UIButton)
     {
         
         dislikeData(dict, cell: cell)
     }
     
-    func picbuttonClicked(cell:FeedsTableViewCell, button:UIButton)
+    func picbuttonClicked(_ cell:FeedsTableViewCell, button:UIButton)
     {
         //reportTospamUser(dict)
         
-      if self.tableView.indexPathForCell(cell) != nil
+      if self.tableView.indexPath(for: cell) != nil
         {
-            if let indexPath = self.tableView.indexPathForCell(cell)
+            if let indexPath = self.tableView.indexPath(for: cell)
             {
-                let chatVc = self.storyboard?.instantiateViewControllerWithIdentifier("photopreviewViewController") as? photopreviewViewController
+                let chatVc = self.storyboard?.instantiateViewController(withIdentifier: "photopreviewViewController") as? photopreviewViewController
                 let  dataFeedMyfeed = dataFeedsArray[indexPath.row]
                 if  dataFeedMyfeed.action == "reviewed"
                 {
@@ -370,20 +394,20 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
     }
     
     
-    func likeCountbuttonClicked(cell: FeedsTableViewCell, button: UIButton) {
+    func likeCountbuttonClicked(_ cell: FeedsTableViewCell, button: UIButton) {
         self.likeDislikeScreenClicked(1)
     }
     
     
-    func dislikeCountbuttonClicked(cell: FeedsTableViewCell, button: UIButton) {
+    func dislikeCountbuttonClicked(_ cell: FeedsTableViewCell, button: UIButton) {
         self.likeDislikeScreenClicked(2)
     }
     
     //Profile Screen get Called
-    func profileScreen(index: Int)
+    func profileScreen(_ index: Int)
     {
         
-        let profileViewController = self.storyboard?.instantiateViewControllerWithIdentifier("NewProfileViewController") as? NewProfileViewController
+        let profileViewController = self.storyboard?.instantiateViewController(withIdentifier: "NewProfileViewController") as? NewProfileViewController
         
         profileViewController?.isToGetPersonData = true
         
@@ -391,7 +415,7 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
     }
     
     
-    @IBAction func segmentChanged(sender: UISegmentedControl)
+    @IBAction func segmentChanged(_ sender: UISegmentedControl)
     {
         
         segmentIndex = sender.selectedSegmentIndex
@@ -425,8 +449,7 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
         DataSessionManger.sharedInstance.getfeedslist( { (response, deserializedResponse) in
                 print("deserializedResponse \(deserializedResponse)")
                 
-                dispatch_async(dispatch_get_main_queue(),
-                    {
+                DispatchQueue.main.async(execute: {
                         
                         self.getAlertCount()
                     
@@ -444,8 +467,7 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
                 }, onError: { (error) in
                     
                     print("error \(error)")
-                    dispatch_async(dispatch_get_main_queue(),
-                        {
+                    DispatchQueue.main.async(execute: {
                             
                             self.view.removeSpinner()
                     })
@@ -470,7 +492,7 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
                 
                 print("deserializedResponse \(deserializedResponse)")
                 
-                dispatch_async(dispatch_get_main_queue(), {
+                DispatchQueue.main.async(execute: {
                     
                     self.responseData = deserializedResponse
                     print(self.responseData.data.count)
@@ -484,7 +506,7 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
                 }, onError: { (error) in
                     
                     print("error \(error)")
-                    dispatch_async(dispatch_get_main_queue(),{
+                    DispatchQueue.main.async(execute: {
                             
                         self.view.removeSpinner()
                   })
@@ -493,20 +515,19 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
     }
 
     
-    func likeData( dict:[String:String], cell:FeedsTableViewCell)
+    func likeData( _ dict:[String:String], cell:FeedsTableViewCell)
     {
-        let indexPath = self.tableView.indexPathForCell(cell)
+        let indexPath = self.tableView.indexPath(for: cell)
         let dataFeedMyfeed = self.dataFeedsArray[indexPath!.row]
         var newDict = dict
         newDict[user_report_spam_post] = String(dataFeedMyfeed.id)
         self.view.showSpinner()
         DataSessionManger.sharedInstance.feedLikeUser(newDict, onFinish: { (response, deserializedResponse) in
-            dispatch_async(dispatch_get_main_queue(),
-                {
+            DispatchQueue.main.async(execute: {
                 deserializedResponse.performed = dataFeedMyfeed.performed
                 deserializedResponse.effected  = dataFeedMyfeed.effected
                 self.dataFeedsArray[indexPath!.row] = deserializedResponse
-                self.tableView.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: .None)
+                self.tableView.reloadRows(at: [indexPath!], with: .none)
                
                 self.view.removeSpinner()
                     self.getAlertCount()
@@ -514,7 +535,7 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
             });
 
         }) { (error) in
-            dispatch_async(dispatch_get_main_queue(), {
+            DispatchQueue.main.async(execute: {
                 self.view.removeSpinner()
                 self.displayAlertMessage(error as! String)
             });
@@ -522,21 +543,20 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
         }
  
     }
-    func dislikeData(dict:[String:String], cell:FeedsTableViewCell)
+    func dislikeData(_ dict:[String:String], cell:FeedsTableViewCell)
     {
-        let indexPath = self.tableView.indexPathForCell(cell)
+        let indexPath = self.tableView.indexPath(for: cell)
         let dataFeedMyfeed = self.dataFeedsArray[indexPath!.row]
         var newDict = dict
         newDict[user_report_spam_post] = String(dataFeedMyfeed.id)
         self.view.showSpinner()
         DataSessionManger.sharedInstance.feedisLikeUser(newDict, onFinish: { (response, deserializedResponse) in
-            dispatch_async(dispatch_get_main_queue(),
-                {
+            DispatchQueue.main.async(execute: {
                     
                 deserializedResponse.performed = dataFeedMyfeed.performed
                 deserializedResponse.effected = dataFeedMyfeed.effected
                 self.dataFeedsArray[indexPath!.row] = deserializedResponse
-                self.tableView.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: .None)
+                self.tableView.reloadRows(at: [indexPath!], with: .none)
              
                 print(deserializedResponse)
                 self.view.removeSpinner()
@@ -544,7 +564,7 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
                 
             });
         }) { (error) in
-            dispatch_async(dispatch_get_main_queue(), {
+            DispatchQueue.main.async(execute: {
                 self.view.removeSpinner()
                 self.displayAlertMessage(error as! String)
                 
@@ -552,20 +572,19 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
         }
     }
     
-    func reportTospamUser(dict:[String:String])
+    func reportTospamUser(_ dict:[String:String])
     {
         
         self.view.showSpinner()
         DataSessionManger.sharedInstance.reportTospamUser(dict, onFinish: {(response, deserializedResponse) in
-            dispatch_async(dispatch_get_main_queue(),
-                {
+            DispatchQueue.main.async(execute: {
                 self.getAlertCount()
                 self.view.removeSpinner()
                 
             });
         }) { (error) in
             
-            dispatch_async(dispatch_get_main_queue(), {
+            DispatchQueue.main.async(execute: {
                 
                 self.view.removeSpinner()
                 self.displayAlertMessage(error as! String)

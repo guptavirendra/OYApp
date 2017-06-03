@@ -10,11 +10,19 @@ import Foundation
 import UIKit
 import MobileCoreServices
 
+import Foundation
+import UIKit
+import MobileCoreServices
+
+
+//USE_PRODUCTION_SERVER
 
 var doctorBaseURL = "http://oyapp.in/api/"
 //var doctorBaseURL = "http://demo.varyavega.co.in/shoutaboutapp/api/"
-var baseURL = doctorBaseURL
 
+//var doctorBaseURL = "http://dev-cerebellum.cloudapp.net/"
+var doctorProd =  "https://cerebellum.medocity.com/"
+var baseURL = doctorBaseURL
 
 extension String
 {
@@ -24,77 +32,84 @@ extension String
      :returns: Encoded version of of string it was called as.
      */
     var escaped: String
-        {
-            return CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,self,"[].",":/?&=;+!@#$()',*",CFStringConvertNSStringEncodingToEncoding(NSUTF8StringEncoding)) as String
+    {
+        return CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,self as CFString!,"[]." as CFString!,":/?&=;+!@#$()',*" as CFString!,CFStringConvertNSStringEncodingToEncoding(String.Encoding.utf8.rawValue)) as String
     }
     
     var lastPathComponent: String {
         
-        get {
+        get
+        {
             return (self as NSString).lastPathComponent
         }
     }
+    
     var pathExtension: String {
         
-        get {
+        get
+        {
             
             return (self as NSString).pathExtension
         }
     }
+    
     var stringByDeletingLastPathComponent: String {
         
-        get {
+        get
+        {
             
-            return (self as NSString).stringByDeletingLastPathComponent
+            return (self as NSString).deletingLastPathComponent
         }
     }
+    
     var stringByDeletingPathExtension: String {
         
         get {
             
-            return (self as NSString).stringByDeletingPathExtension
+            return (self as NSString).deletingPathExtension
         }
     }
-    var pathComponents: [String] {
-        
+    
+    var pathComponents: [String]
+    {
         get {
             
             return (self as NSString).pathComponents
         }
     }
     
-    func stringByAppendingPathComponent(path: String) -> String {
-        
+    func stringByAppendingPathComponent(_ path: String) -> String
+    {
         let nsSt = self as NSString
         
-        return nsSt.stringByAppendingPathComponent(path)
+        return nsSt.appendingPathComponent(path)
     }
     
-    func stringByAppendingPathExtension(ext: String) -> String? {
+    func stringByAppendingPathExtension(_ ext: String) -> String? {
         
         let nsSt = self as NSString
         
-        return nsSt.stringByAppendingPathExtension(ext)
+        return nsSt.appendingPathExtension(ext)
     }
 }
 
-public class BaseNSURLSession: NSObject
+open class BaseNSURLSession: NSObject
 {
     //Here prefix m represents Member variable;
-    var mNSURLSessionConfiguration:NSURLSessionConfiguration
-    var mNSURLSession: NSURLSession
-    var mNSURLSessionDataTask: NSURLSessionDataTask?
-    var mNSURLSessionDownloadTask:NSURLSessionDownloadTask?
-    var mNSMutableRequest: NSMutableURLRequest?
+    var mNSURLSessionConfiguration:URLSessionConfiguration
+    var mNSURLSession: URLSession
+    var mNSURLSessionDataTask: URLSessionDataTask?
+    var mNSURLSessionDownloadTask:URLSessionDownloadTask?
+    var mNSMutableRequest: URLRequest?
     var mNSMutableData: NSMutableData?
     var mNSError: NSError?
     var mIsDataAvailable: Bool = false
     let mStringURL: NSString
     //let mNSURLSessionDelegate:NSURLSessionDataDelegate
-    var mConnectionHeaders:Dictionary<String, AnyObject>?
-    var mNSHTTPURLResponse: NSHTTPURLResponse?
+    var mConnectionHeaders:[String: String]?
+    var mNSHTTPURLResponse: HTTPURLResponse?
     //let delegate: NSURLSessionDelegate?
-    var  mPath: NSString = NSString()
+    var  mPath: String = String()
     let  mCHWebServiceMethod = WebServicePath()
     
     var mStoreRequestDictionary: NSMutableDictionary
@@ -102,17 +117,16 @@ public class BaseNSURLSession: NSObject
     
     // Basic initializers With Base URL This initializer may be change at later stage for concerting convence initializer
     
-    init(stringURL:NSString,sessionConfiguration: NSURLSessionConfiguration  )
+    init(stringURL:NSString,sessionConfiguration: URLSessionConfiguration  )
     {
         
         mNSURLSessionConfiguration = sessionConfiguration
-        mNSURLSessionConfiguration.allowsCellularAccess = true
-        mNSURLSession              = NSURLSession(configuration: sessionConfiguration, delegate: nil, delegateQueue: NSOperationQueue.mainQueue()) //NSURLSession.sharedSession()//Session Class
+        mNSURLSession              = URLSession(configuration: sessionConfiguration, delegate: nil, delegateQueue: OperationQueue.main) //NSURLSession.sharedSession()//Session Class
         
         print("\(stringURL)")
         mStringURL                 = stringURL //Base URL
         mNSMutableData             = NSMutableData()// To strore Data
-        mConnectionHeaders         = [String: AnyObject]()// Dictionary to set Data
+        mConnectionHeaders         = [String: String]()// Dictionary to set Data
         mStoreRequestDictionary    = NSMutableDictionary()// To store request
         key                        = " "
     }
@@ -121,30 +135,24 @@ public class BaseNSURLSession: NSObject
     public convenience  override init()
     {
         
-        var sessionConfig:NSURLSessionConfiguration
-        sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
-        self.init(stringURL:baseURL,sessionConfiguration:sessionConfig)
+        var sessionConfig:URLSessionConfiguration
+        sessionConfig = URLSessionConfiguration.default
+        self.init(stringURL:baseURL as NSString,sessionConfiguration:sessionConfig)
     }
     deinit
     {
         mNSURLSession.invalidateAndCancel()
-       
+        
     }
     
     //Add Headers That is required
-    func setSessionHeader(headerName:NSString, value: NSString?)
+    func setSessionHeader(_ headerName:NSString, value: String?)
     {
-        guard let _ = mConnectionHeaders else  {
-            return
-        }
-        
-        guard let val = value as? String else    {
-            return
-        }
-        
-        mConnectionHeaders![headerName as String] = val
-        // mNSMutableRequest?.setValue(value, forHTTPHeaderField: headerName)
-        //        mConnectionHeaders.setValue(value, forKey: headerName as String)
+        //        guard let _ = mConnectionHeaders else
+        //        {
+        //            return
+        //        }
+        mConnectionHeaders![headerName as String] = value
         
     }
     
@@ -155,69 +163,69 @@ public class BaseNSURLSession: NSObject
         mNSMutableRequest?.setValue("application/json", forHTTPHeaderField: "Content-Type")
         var session:NSString?
         var sessionKey:String?
-        session    = NSUserDefaults.standardUserDefaults().valueForKey("session") as? NSString
+        session    = UserDefaults.standard.value(forKey: "session") as? NSString
         sessionKey = "session"
         //isSessionTokenExpiredDoctor = false
         if let sessions = session
         {
-            if((!self.mPath.isEqualToString("/login"))||(!self.mPath.isEqualToString("/v2/login")))
+            if((!self.mPath.isEqual("/login"))||(!self.mPath.isEqual("/v2/login")))
             {
                 print("------------->sessionToken added")
-               
+                
                 mNSMutableRequest?.setValue(sessions as String, forHTTPHeaderField: sessionKey!)
             }
         }
         
     }
     
-    
-    
     //Configure MutableRequest For GetRequest
-    func configureGetMutableRequest(path:String,parameters : Dictionary<String, AnyObject>?)
+    func configureGetMutableRequest(_ path:String,parameters : Dictionary<String, Any>?)
     {
         self.mPath = path
         var stringURL:String = String()
-        if path.rangeOfString("http") != nil
+        if path.range(of: "http") != nil
         {
             print("exists")
             stringURL = path
-        }else
+        }
+        else
         {
             stringURL  = (mStringURL as String)+path
         }
         
         
-        stringURL =  stringURL.stringByReplacingOccurrencesOfString("//", withString: "/", options:NSStringCompareOptions.LiteralSearch, range: nil)
+        stringURL =  stringURL.replacingOccurrences(of: "//", with: "/", options:NSString.CompareOptions.literal, range: nil)
         //Can do with Alternate way
-        stringURL =  stringURL.stringByReplacingOccurrencesOfString(":/", withString: "://", options:NSStringCompareOptions.LiteralSearch, range: nil)
+        stringURL =  stringURL.replacingOccurrences(of: ":/", with: "://", options:NSString.CompareOptions.literal, range: nil)
         
-        if((self.mPath.isEqualToString("/diary/url")))
+        if((self.mPath.isEqual("/diary/url")))
         {
             if let param = parameters
             {
                 for( key, value) in param
                 {
-                    setSessionHeader(key, value: value as? NSString)
+                    setSessionHeader(key as NSString, value: value as? NSString as String?)
                 }
                 
             }
-        }else
+        }
+        else
         {
             if let param = parameters
             {
-                let array: NSMutableArray = NSMutableArray()
+                var array = Array<String>()
                 for( key, val) in param
                 {
                     let newVal = val as? String
-                    array.addObject(key+"="+newVal!.escaped)
+                    array.append(key+"="+newVal!.escaped)
                     
                 }
-                let final = array.componentsJoinedByString("&")
+                let final = array.joined(separator: "&")
                 //final = dropLast(final)
                 
                 if (final as NSString).length > 0
                 {
-                    if stringURL.rangeOfString("graph?start=") != nil
+                    if stringURL.range(of: "graph?start=") != nil
                     {
                         stringURL = stringURL+final
                     }
@@ -228,50 +236,49 @@ public class BaseNSURLSession: NSObject
                 }
             }
         }
-        stringURL =  stringURL.stringByReplacingOccurrencesOfString(" ", withString: "%20", options:NSStringCompareOptions.LiteralSearch, range: nil)
-        if let lURL = NSURL(string: stringURL)// Need to check if does not nil
+        stringURL =  stringURL.replacingOccurrences(of: " ", with: "%20", options:NSString.CompareOptions.literal, range: nil)
+        if let lURL = URL(string: stringURL)// Need to check if does not nil
         {
             print("All urls goes Here \(stringURL)")
-            mNSMutableRequest = NSMutableURLRequest(URL:lURL )// Apend Path to Hit
-            mNSMutableRequest?.timeoutInterval = 300
+            mNSMutableRequest = NSMutableURLRequest(url:lURL ) as URLRequest// Apend Path to Hit
+            mNSMutableRequest?.timeoutInterval = 180
             addDefaultJSONHeader()// Added Json Header Only
-            if let tempData = mConnectionHeaders as? Dictionary<String, String>
+            if let tempData = mConnectionHeaders
             {
                 mNSMutableRequest?.allHTTPHeaderFields = tempData
             }
-            
-        }else
-        {
         }
-        
-        
-        
+        else
+        {
+            
+        }
         //println(" Data \(mNSMutableRequest?.HTTPBody?.description) Type  \(mNSMutableRequest?.HTTPMethod)")
     }
     
     //Configure MutableRequest For GetRequest
-    func configureGetMutableRequestWithHeaders(path:String,headerParameters : Dictionary<String, String>?)
+    func configureGetMutableRequestWithHeaders(_ path:String,headerParameters : Dictionary<String, String>?)
     {
         self.mPath = path
         var stringURL:String = (mStringURL as String)+path
         
-        stringURL =  stringURL.stringByReplacingOccurrencesOfString("//", withString: "/", options:NSStringCompareOptions.LiteralSearch, range: nil)
+        stringURL =  stringURL.replacingOccurrences(of: "//", with: "/", options:NSString.CompareOptions.literal, range: nil)
         //Can do with Alternate way
-        stringURL =  stringURL.stringByReplacingOccurrencesOfString(":/", withString: "://", options:NSStringCompareOptions.LiteralSearch, range: nil)
-        let lURL = NSURL(string: stringURL)// Need to check if does not nil
+        stringURL =  stringURL.replacingOccurrences(of: ":/", with: "://", options:NSString.CompareOptions.literal, range: nil)
+        let lURL = URL(string: stringURL)// Need to check if does not nil
         
         print("All urls goes Here \(stringURL)")
-        mNSMutableRequest = NSMutableURLRequest(URL:lURL! )// Apend Path to Hit
-        mNSMutableRequest?.timeoutInterval = 60
+        mNSMutableRequest = NSMutableURLRequest(url:lURL! ) as URLRequest// Apend Path to Hit
+        mNSMutableRequest?.timeoutInterval = 180
         addDefaultJSONHeader()// Added Json Header Only
         if let param = headerParameters
         {
             for( key, value) in param
             {
-                setSessionHeader(key, value: value)
+                setSessionHeader(key as NSString, value: value as String?)
             }
         }
-        if let tempData = mConnectionHeaders as? Dictionary<String, String>   {
+        if let tempData = mConnectionHeaders
+        {
             mNSMutableRequest?.allHTTPHeaderFields = tempData
         }
         
@@ -279,108 +286,103 @@ public class BaseNSURLSession: NSObject
     }
     
     //Configure MutableRequest For GetRequest
-    func configureDeleteMutableRequest(path:String,parameters : Dictionary<String, String>?)
+    func configureDeleteMutableRequest(_ path:String,parameters : Dictionary<String, String>?)
     {
-        configureGetMutableRequest(path, parameters: parameters)
-        mNSMutableRequest?.HTTPMethod = "DELETE"
+        configureGetMutableRequest(path, parameters: parameters as Dictionary<String, Any>?)
+        mNSMutableRequest?.httpMethod = "DELETE"
     }
     
     //Configure MutableRequest For PostRequest
     
-    final func configurePostMutableRequest(path:String,parameters : Dictionary<String, AnyObject>?, postBody:Dictionary<String, AnyObject>?)//->NSMutableURLRequest
+    final func configurePostMutableRequest(_ path:String,parameters : Dictionary<String, AnyObject>?, postBody:Dictionary<String, AnyObject>?)//->NSMutableURLRequest
     {
         configureGetMutableRequest(path, parameters: parameters)
         
-        mNSMutableRequest?.HTTPMethod = "POST"
+        mNSMutableRequest?.httpMethod = "POST"
         if let _ = postBody
         {
             do {
-                mNSMutableRequest?.HTTPBody   = try NSJSONSerialization.dataWithJSONObject(postBody!, options: NSJSONWritingOptions())
+                mNSMutableRequest?.httpBody   = try JSONSerialization.data(withJSONObject: postBody!, options: JSONSerialization.WritingOptions())
             }
             catch  {
                 print("Error \(error)")
             }
             
         }
-        
-        
         //println(" Should be Data \(mNSMutableRequest?.HTTPBody?.description) Type  \(mNSMutableRequest?.HTTPMethod)")
     }
     
-    final func configurePostMutableRequestWithHeader(path:String,headerParameters : Dictionary<String, String>?, postBody:Dictionary<String, AnyObject>?)//->NSMutableURLRequest
+    final func configurePostMutableRequestWithHeader(_ path:String,headerParameters : Dictionary<String, String>?, postBody:Dictionary<String, AnyObject>?)//->NSMutableURLRequest
     {
         configureGetMutableRequestWithHeaders(path, headerParameters: headerParameters)
-        mNSMutableRequest?.HTTPMethod = "POST"
+        mNSMutableRequest?.httpMethod = "POST"
         if let _ = postBody
         {
             do {
-                mNSMutableRequest?.HTTPBody = try NSJSONSerialization.dataWithJSONObject(postBody!, options: NSJSONWritingOptions())
+                mNSMutableRequest?.httpBody = try JSONSerialization.data(withJSONObject: postBody!, options: JSONSerialization.WritingOptions())
             }
             catch   {
                 print("Error \(error)")
             }
             
         }
-        
-        
         //println(" Should be Data \(mNSMutableRequest?.HTTPBody?.description) Type  \(mNSMutableRequest?.HTTPMethod)")
     }
     
-    final func configurePutMutableRequestWithHeader(path:String,headerParameters : Dictionary<String, String>?, putBody:Dictionary<String, String>?)//->NSMutableURLRequest
+    final func configurePutMutableRequestWithHeader(_ path:String,headerParameters : Dictionary<String, String>?, putBody:Dictionary<String, String>?)//->NSMutableURLRequest
     {
         configureGetMutableRequestWithHeaders(path, headerParameters: headerParameters)
-        mNSMutableRequest?.HTTPMethod = "PUT"
+        mNSMutableRequest?.httpMethod = "PUT"
         if let putBody = putBody
         {
             do {
-                mNSMutableRequest?.HTTPBody = try NSJSONSerialization.dataWithJSONObject(putBody, options: NSJSONWritingOptions())
+                mNSMutableRequest?.httpBody = try JSONSerialization.data(withJSONObject: putBody, options: JSONSerialization.WritingOptions())
             }
             catch   {
                 print("Error \(error)")
             }
             
         }
-        
-        
         //println(" Should be Data \(mNSMutableRequest?.HTTPBody?.description) Type  \(mNSMutableRequest?.HTTPMethod)")
     }
     
-    final func configureRawPostMutableRequest(postType:String, urlString:String, postBody:String?)//->NSMutableURLRequest
+    final func configureRawPostMutableRequest(_ postType:String, urlString:String, postBody:String?)//->NSMutableURLRequest
     {
         self.mPath = urlString
         let stringURL:String = urlString
-        let lURL = NSURL(string: stringURL)// Need to check if does not nil
+        let lURL = URL(string: stringURL)// Need to check if does not nil
         print("JSON Raw post URL \(stringURL)")
-        mNSMutableRequest = NSMutableURLRequest(URL:lURL! )// Apend Path to Hit
-        mNSMutableRequest?.timeoutInterval = 60
+        mNSMutableRequest = NSMutableURLRequest(url:lURL! ) as URLRequest// Apend Path to Hit
+        mNSMutableRequest?.timeoutInterval = 180
         addDefaultJSONHeader()// Added Json Header Only
         
-        if let tempData = mConnectionHeaders as? [String : String]  {
+        if let tempData = mConnectionHeaders
+        {
             mNSMutableRequest?.allHTTPHeaderFields = tempData
         }
         
-        mNSMutableRequest?.HTTPMethod = postType
+        mNSMutableRequest?.httpMethod = postType
         if let postbody = postBody
         {
-            let requestData = (postbody as NSString).dataUsingEncoding(NSUTF8StringEncoding)
-            mNSMutableRequest?.HTTPBody   =  requestData
+            let requestData = (postbody as NSString).data(using: String.Encoding.utf8.rawValue)
+            mNSMutableRequest?.httpBody   =  requestData
             //[request setValue:[NSString stringWithFormat:@"%d", [requestData length]] forHTTPHeaderField:@"Content-Length"];
-            let lenght = NSString(format: "%d", requestData!.length)
+            let lenght = NSString(format: "%d", requestData!.count)
             mNSMutableRequest?.addValue(lenght as String, forHTTPHeaderField: "Content-Length")
             
         }
     }
-    // Configure MutableRequest For Put Request
     
-    func configurePutMutableRequest(path:String,parameters : Dictionary<String, AnyObject>?, postBody:Dictionary<String, AnyObject>?)//->NSMutableURLRequest
+    // Configure MutableRequest For Put Request
+    func configurePutMutableRequest(_ path:String,parameters : Dictionary<String, Any>?, postBody:Dictionary<String, AnyObject>?)//->NSMutableURLRequest
     {
         configureGetMutableRequest(path, parameters: parameters)
         
-        mNSMutableRequest?.HTTPMethod = "PUT"
+        mNSMutableRequest?.httpMethod = "PUT"
         if let _ = postBody
         {
             do {
-                mNSMutableRequest?.HTTPBody =  try NSJSONSerialization.dataWithJSONObject(postBody!, options: NSJSONWritingOptions())
+                mNSMutableRequest?.httpBody =  try JSONSerialization.data(withJSONObject: postBody!, options: JSONSerialization.WritingOptions())
             }
             catch  {
                 print("Error \(error)")
@@ -389,11 +391,40 @@ public class BaseNSURLSession: NSObject
         //println(" Should be Data \(mNSMutableRequest?.HTTPBody?.description) Type  \(mNSMutableRequest?.HTTPMethod)")
     }
     
+    //This function basically work Append Path and PassParameter
+    /*
+     func get( path : String, parameters : Dictionary<String, String>?,getDataWithDictionary:(dataInDictionary:NSDictionary?, stringMessage:String)->() )
+     {
+     if let param = parameters
+     {
+     configureGetMutableRequest(path, parameters: parameters!)
+     
+     }else
+     {
+     configureGetMutableRequest(path, parameters:nil)
+     }
+     
+     startSessionDataTaskWithRequest(
+     {(dataInDictionary, stringMessage)->() in
+     
+     println("Dictionary in base get  \(dataInDictionary)")
+     if let dict = dataInDictionary
+     {
+     getDataWithDictionary(dataInDictionary: dataInDictionary!, stringMessage:stringMessage)
+     }
+     else
+     {
+     getDataWithDictionary(dataInDictionary: nil, stringMessage:stringMessage)
+     
+     }
+     
+     })
+     }*/
     
     // MARK:  With on finish and with on
     
     //This function is GET plus takes parameter headers and appends to http headers
-    final func getWithHeader( path : String, headerParameters : Dictionary<String, String>?,onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    final func getWithHeader( _ path : String, headerParameters : Dictionary<String, String>?,onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->())
     {
         print("get  path" + "\(path)")
         if let _ = headerParameters
@@ -408,52 +439,48 @@ public class BaseNSURLSession: NSObject
         startSessionTaskDataTaskWithRequest(
             {
                 (response, deserializedResponse) -> () in
-                onFinish(response: response, deserializedResponse: deserializedResponse)
-            },
+                onFinish(response, deserializedResponse)
+        },
             onError: { (error) -> () in
-                onError(error: error)
+                onError(error)
         })
         
     }
     
     // MARK:  With on finish and with on
     // This function will add parameters to query ie. append as get params in URL
-    final public func getWithOnFinish( path : String, parameters : Dictionary<String, String>?,onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    final public func getWithOnFinish( _ path : String, parameters : Dictionary<String, String>?,onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->())
     {
         print("get  path" + "\(path)")
         if let _ = parameters
         {
-            configureGetMutableRequest(path, parameters: parameters!)
-            
-        }else
+            configureGetMutableRequest(path, parameters: parameters! as Dictionary<String, Any>?)
+        }
+        else
         {
             configureGetMutableRequest(path, parameters:nil)
         }
         
-        dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_BACKGROUND.rawValue), 0), { () -> Void in
-        self.startSessionTaskDataTaskWithRequest(
+        startSessionTaskDataTaskWithRequest(
             {
                 (response, deserializedResponse) -> () in
-                onFinish(response: response, deserializedResponse: deserializedResponse)
-            },
+                onFinish(response, deserializedResponse)
+        },
             onError: { (error) -> () in
-                onError(error: error)
+                onError(error)
         })
-            
-        })
-        
         
     }
     
-    public func getDownloadWithOnFinish( path : String, parameters : Dictionary<String, String>?,onFinish:(response:AnyObject,url:Bool )->(), onError:(error:AnyObject)->())
+    open func getDownloadWithOnFinish( _ path : String, parameters : Dictionary<String, String>?,onFinish:@escaping (_ response:AnyObject,_ url:Bool )->(), onError:@escaping (_ error:AnyObject)->())
     {
         
         print("get  path" + "\(path)")
         if let _ = parameters
         {
-            configureGetMutableRequest(path, parameters: parameters!)
-            
-        }else
+            configureGetMutableRequest(path, parameters: parameters! as Dictionary<String, Any>?)
+        }
+        else
         {
             configureGetMutableRequest(path, parameters:nil)
         }
@@ -464,20 +491,17 @@ public class BaseNSURLSession: NSObject
         mNSMutableRequest?.addValue(fileType, forHTTPHeaderField: "Accept")
         mNSMutableRequest?.setValue(fileType, forHTTPHeaderField: "Content-Type")
         downloadRequest({ (response, url) -> () in
-            onFinish(response: response, url: url)
+            onFinish(response, url)
             
-            }) { (error) -> () in
-                onError(error: error)
-                
+        }) { (error) -> () in
+            onError(error)
+            
         }
-        
-        
-        
     }
     
     
     // MARK: post json function
-    public final func postJSONRawDataWithOnFinish(urlString:String,postBody:String?,onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    public final func postJSONRawDataWithOnFinish(_ urlString:String,postBody:String?,onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->())
     {
         
         if let postBody = postBody
@@ -490,31 +514,31 @@ public class BaseNSURLSession: NSObject
         startSessionTaskDataTaskWithRequest(
             {
                 (response, deserializedResponse) -> () in
-                onFinish(response: response, deserializedResponse: deserializedResponse)
-            },
+                onFinish(response, deserializedResponse)
+        },
             onError: { (error) -> () in
-                onError(error: error)
+                onError(error)
         })
         
     }
     
     // MARK: this function does a request outside the ICH servers.
-    final public func getWithCustomURL(urlString:String,onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    final public func getWithCustomURL(_ urlString:String,onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->())
     {
         configureRawPostMutableRequest("GET", urlString:  urlString , postBody: nil)
         startSessionTaskDataTaskWithRequest(
             {
                 (response, deserializedResponse) -> () in
-                onFinish(response: response, deserializedResponse: deserializedResponse)
-            },
+                onFinish(response, deserializedResponse)
+        },
             onError: { (error) -> () in
-                onError(error: error)
+                onError(error)
         })
         
     }
     
     // MARK: post function
-    public final  func postDataWithOnFinish(path:String,parameters : Dictionary<String, AnyObject>?, postBody:Dictionary<String, AnyObject>?,onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    public final  func postDataWithOnFinish(_ path:String,parameters : Dictionary<String, AnyObject>?, postBody:Dictionary<String, AnyObject>?,onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->())
     {
         
         if let postBody = postBody
@@ -524,46 +548,96 @@ public class BaseNSURLSession: NSObject
         {
             configurePostMutableRequest(path , parameters: parameters, postBody: nil)
         }
-        dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_BACKGROUND.rawValue), 0), { () -> Void in
-        self.startSessionTaskDataTaskWithRequest(
+        startSessionTaskDataTaskWithRequest(
             {
                 (response, deserializedResponse) -> () in
-                onFinish(response: response, deserializedResponse: deserializedResponse)
-            },
+                onFinish(response, deserializedResponse)
+        },
             onError: { (error) -> () in
-                onError(error: error)
-        })
+                onError(error)
         })
         
     }
-    final  func postDataWithHeaderOnFinish(path:String,headerParameters : Dictionary<String, String>?, postBody:Dictionary<String, AnyObject>?,onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    
+    final  func postDataWithHeaderOnFinish(_ path:String,headerParameters : Dictionary<String, String>?, postBody:Dictionary<String, AnyObject>?,onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->())
     {
-        
         if let postBody = postBody
         {
             configurePostMutableRequestWithHeader(path, headerParameters: headerParameters, postBody: postBody)
-        }else
+        }
+        else
         {
             configurePostMutableRequestWithHeader(path, headerParameters: headerParameters, postBody: nil)
         }
         startSessionTaskDataTaskWithRequest(
             {
                 (response, deserializedResponse) -> () in
-                onFinish(response: response, deserializedResponse: deserializedResponse)
-            },
+                onFinish(response, deserializedResponse)
+        },
             onError: { (error) -> () in
-                onError(error: error)
+                onError(error)
         })
         
     }
+    /* Post String To The Server */
+    /*
+     func postData(path:String,parameters : Dictionary<String, String>?, postBody:Dictionary<String, String>?,getDataWithDictionary:(dataInDictionary:NSDictionary?, stringMessage:String)->())
+     {
+     if let postBody = postBody
+     {
+     configurePostMutableRequest(path , parameters: parameters!, postBody: postBody)
+     }else
+     {
+     configurePostMutableRequest(path , parameters: parameters!, postBody: nil)
+     }
+     
+     startSessionDataTaskWithRequest(
+     {(dataInDictionary, stringMessage)->() in
+     
+     println("Dictionary in base post \(dataInDictionary)")
+     if let dict = dataInDictionary
+     {
+     getDataWithDictionary(dataInDictionary: dataInDictionary!, stringMessage:stringMessage)
+     }
+     else
+     {
+     getDataWithDictionary(dataInDictionary: nil, stringMessage:stringMessage)
+     
+     }
+     
+     })
+     }*/
+    
+    /*Put string to the server*/
+    /*
+     func putData(path:String,parameters : Dictionary<String, String>, postBody:Dictionary<String, String>?,getDataWithDictionary:(dataInDictionary:NSDictionary?, stringMessage:String)->())
+     {
+     configurePutMutableRequest(path , parameters: parameters, postBody: postBody!)
+     startSessionDataTaskWithRequest(
+     {(dataInDictionary, stringMessage)->() in
+     
+     println("Dictionary in base put \(dataInDictionary)")
+     if let dict = dataInDictionary
+     {
+     getDataWithDictionary(dataInDictionary: dataInDictionary!, stringMessage:stringMessage)
+     }
+     else
+     {
+     getDataWithDictionary(dataInDictionary: nil, stringMessage:stringMessage)
+     
+     }
+     
+     })
+     }*/
     
     /* Put data with on finish and onError*/
-    public final  func putDataOnFinish(path:String,parameters : Dictionary<String, AnyObject>?, postBody:Dictionary<String, AnyObject>?, onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    public final  func putDataOnFinish(_ path:String,parameters : Dictionary<String, AnyObject>?, postBody:Dictionary<String, AnyObject>?, onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->())
     {
         if let postBody = postBody
         {
             configurePutMutableRequest(path, parameters: parameters, postBody: postBody)
-        }else
+        }
+        else
         {
             configurePutMutableRequest(path, parameters: parameters, postBody: nil)
         }
@@ -571,86 +645,162 @@ public class BaseNSURLSession: NSObject
         startSessionTaskDataTaskWithRequest(
             {
                 (response, deserializedResponse) -> () in
-                onFinish(response: response, deserializedResponse: deserializedResponse)
-            },
+                onFinish(response, deserializedResponse)
+        },
             onError: { (error) -> () in
-                onError(error: error)
+                onError(error)
         })
         
     }
     
-    final  func putDataWithHeaderOnFinish(path:String,headerParameters : Dictionary<String, String>?, putBody:Dictionary<String, String>?,onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    final func putDataWithHeaderOnFinish(_ path:String,headerParameters : Dictionary<String, String>?, putBody:Dictionary<String, String>?,onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->())
     {
-        
         if let putBody = putBody
         {
             configurePutMutableRequestWithHeader(path, headerParameters: headerParameters, putBody: putBody)
-        }else
+        }
+        else
         {
             configurePutMutableRequestWithHeader(path, headerParameters: headerParameters, putBody: nil)
         }
         startSessionTaskDataTaskWithRequest(
             {
                 (response, deserializedResponse) -> () in
-                onFinish(response: response, deserializedResponse: deserializedResponse)
-            },
+                onFinish(response, deserializedResponse)
+        },
             onError: { (error) -> () in
-                onError(error: error)
+                onError(error)
         })
         
     }
     
     /*Delete data from server with onFinish and On error*/
-    final public func deleteDataOnFinish(path:String,parameters : Dictionary<String, String>?, onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    final public func deleteDataOnFinish(_ path:String,parameters : Dictionary<String, String>?, onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->())
     {
         configureDeleteMutableRequest(path , parameters: parameters)
         startSessionTaskDataTaskWithRequest(
             {
                 (response, deserializedResponse) -> () in
-                onFinish(response: response, deserializedResponse: deserializedResponse)
-            },
+                onFinish(response, deserializedResponse)
+        },
             onError: { (error) -> () in
-                onError(error: error)
+                onError(error)
         })
     }
     
+    /*Delete data from the server*/
+    /*
+     func deleteData(path:String,parameters : Dictionary<String, String>?,getDataWithDictionary:(dataInDictionary:NSDictionary?, stringMessage:String)->())
+     {
+     configureDeleteMutableRequest(path , parameters: parameters)
+     startSessionDataTaskWithRequest(
+     {(dataInDictionary, stringMessage)->() in
+     println("Dictionary in base Delete \(dataInDictionary)")
+     
+     if let dict = dataInDictionary
+     {
+     getDataWithDictionary(dataInDictionary: dataInDictionary!, stringMessage:stringMessage)
+     }
+     else
+     {
+     getDataWithDictionary(dataInDictionary: nil, stringMessage:stringMessage)
+     
+     }
+     })
+     }
+     */
     
-    
-    
+    //To start Session task
+    /*
+     final  func startSessionDataTaskWithRequest(getDataWithDictionary:(dataInDictionary:NSDictionary?, stringMessage:String)->())
+     {
+     
+     mNSURLSessionDataTask = mNSURLSession.dataTaskWithRequest(mNSMutableRequest!/*lNSMutableURLRequest*/, completionHandler:
+     {
+     data, response, error -> Void in
+     if error != nil
+     {
+     println("\(error.localizedFailureReason)")
+     getDataWithDictionary(dataInDictionary:nil,stringMessage:error.localizedDescription)
+     }
+     
+     println("Response: \(response)")
+     self.mNSHTTPURLResponse = response as? NSHTTPURLResponse// Check Data is HTTPURl Response
+     println("Status Code \(self.mNSHTTPURLResponse?.statusCode)")
+     
+     var strData = NSString(data: data, encoding: NSUTF8StringEncoding)
+     // println("Body: \(strData)")
+     
+     var json = NSJSONSerialization.JSONObjectWithData(data, options: .MutableLeaves, error: &self.mNSError) as? NSDictionary
+     
+     if(self.mNSError != nil)
+     {
+     println(self.mNSError!.localizedDescription)
+     let jsonStr = NSString(data: data, encoding: NSUTF8StringEncoding)
+     println("Error could not parse JSON: '\(jsonStr)'")
+     }
+     else
+     {
+     if let parseJSON = json
+     {
+     // Okay, the parsedJSON is here, let's get the value for 'success' out of it
+     var success = parseJSON["success"] as? Int// Check wheater 0 or 1
+     println("Succes: \(success)")
+     if success == 1
+     {
+     getDataWithDictionary(dataInDictionary: parseJSON, stringMessage:strData! as String)
+     }
+     else
+     {
+     println("Unsuccess event")
+     }
+     
+     }
+     else
+     {
+     let jsonStr = NSString(data: data, encoding: NSUTF8StringEncoding)
+     println("Error could not parse JSON: \(jsonStr)")
+     }
+     }
+     })
+     
+     
+     
+     println("status of task \(mNSURLSessionDataTask?.state)")
+     mNSURLSessionDataTask?.resume()
+     }
+     */
     // MARK: Session taskData
     // To match exact
     
     // Response is in form of Data and deserializedResponse in form of dictionary
-    final  func startSessionTaskDataTaskWithRequest(onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    final  func startSessionTaskDataTaskWithRequest(_ onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->())
     {
+        print(" URL path of request" + "\(mNSMutableRequest?.url)")
         
-        print(" URL path of request" + "\(mNSMutableRequest?.URL)")
-        
-        
+        let lAppDelegate = UIApplication.shared.delegate as AnyObject
         if let _ = mNSMutableRequest
         {
             
-            
-            mNSURLSessionDataTask = mNSURLSession.dataTaskWithRequest(mNSMutableRequest!, completionHandler:
+            mNSURLSessionDataTask = mNSURLSession.dataTask(with: mNSMutableRequest!, completionHandler:
                 {
                     data, response, error -> Void in
                     //println("data: \(data)")
-                    print("Response: \(response)")
-                    print("error: \(error)")
-                    self.mNSHTTPURLResponse = response as? NSHTTPURLResponse// Check Data is HTTPURl Response
+                    self.mNSHTTPURLResponse = response as? HTTPURLResponse// Check Data is HTTPURl Response
                     let HttpResponseStatusClass = HttpResponseStatus()
                     var responseMessage:String
-                    print("Status Code::  \(self.mNSHTTPURLResponse?.statusCode) & URL : \(self.mNSHTTPURLResponse?.URL)" )
+                    print("Status Code::  \(self.mNSHTTPURLResponse?.statusCode) & URL : \(self.mNSHTTPURLResponse?.url)" )
                     
                     // First check for any error
                     if error != nil
                     {
-                        print("Error description: \(error!.localizedFailureReason)")
-                        let errors = errorDescription(error!)
-                        onError(error: errors)
+                        //print("Error description: \(error!.localizedFailureReason)")
+                        let errors = errorDescription(error! as AnyObject)
+                        onError(errors as AnyObject)
                     }
                     else
                     {
+                        var savePassword:NSString = ""
                         
                         // Here Check for status code if it is not null
                         if let statusCode = self.mNSHTTPURLResponse?.statusCode
@@ -658,16 +808,97 @@ public class BaseNSURLSession: NSObject
                             // Get a corresponding Status code message
                             responseMessage = HttpResponseStatusClass.getResponseStatusMessage(statusCode)
                             print("Status code message" + responseMessage )
-                
-                                // Response code 200 means success
-                             if(self.mNSHTTPURLResponse?.statusCode  == 200 )
+                            
+                            if(self.mNSHTTPURLResponse?.statusCode  == 401  && ( self.mNSHTTPURLResponse?.url?.lastPathComponent == "login" || self.mNSHTTPURLResponse?.url?.lastPathComponent == "changepassword" || self.mNSHTTPURLResponse?.url?.lastPathComponent == "forgotpassword"))
                             {
+                                
+                                if let dataInAnyObject = data
+                                {
+                                    do  {
+                                        let json = try JSONSerialization.jsonObject(with: dataInAnyObject, options: .mutableLeaves) as? NSDictionary
+                                        // Check  if there is any error while converting the data
+                                        if(self.mNSError != nil)
+                                        {
+                                            print(self.mNSError!.localizedDescription)
+                                            let jsonStr = String(data: dataInAnyObject, encoding: String.Encoding.utf8)
+                                            print("Error could not parse JSON with new block:  '\(jsonStr)'")
+                                            let errors = errorDescription(self.mNSError!)
+                                            // If there is any error while converting data to dict then through error block
+                                            onError(errors as AnyObject)
+                                        }
+                                        else
+                                        {
+                                            //Here we check is there converted json dict or not
+                                            if let parseJSON = json
+                                            {
+                                                let success = parseJSON["success"] as? Int
+                                                if success == 1
+                                                {
+                                                    onError(parseJSON as AnyObject)
+                                                }
+                                                else
+                                                {
+                                                    onError(parseJSON as AnyObject)
+                                                }
+                                            }
+                                        }
+                                    }
+                                    catch   {
+                                        print("Error \(error)")
+                                    }
+                                }
+                                
+                            }
+                            else  if(self.mNSHTTPURLResponse?.statusCode  == 401 &&  savePassword.length == 0)
+                            {
+                                // "isTokenExpired"
+                                UserDefaults.standard.set(true, forKey: "isTokenExpired")
+                                NotificationCenter.default.post(name: Notification.Name(rawValue: "tokenexpirednotification"), object: self)
+                                
+                                let errors = "Session Expired."
+                                onError(errors as AnyObject)
+                                
+                            }
+                            else  if(self.mNSHTTPURLResponse?.statusCode  == 401  && (self.mNSHTTPURLResponse?.url?.lastPathComponent != "login" || self.mNSHTTPURLResponse?.url?.lastPathComponent != "changepassword" || self.mNSHTTPURLResponse?.url?.lastPathComponent != "forgotpassword"))
+                            {
+                                //                                print(self.mNSMutableRequest?.URL)
+                                //                                 print(self.mNSMutableRequest?.HTTPMethod)
+                                
+                                if  ((self.mNSMutableRequest?.url != nil && self.mNSMutableRequest?.httpMethod != nil)  )
+                                {
+                                    if let urlString = self.mNSMutableRequest?.url?.lastPathComponent
+                                    {
+                                        self.key = urlString + (self.mNSMutableRequest?.httpMethod)!
+                                    }
+                                }
+                                
+                                
+                                
+                                let dicRequest : NSMutableDictionary = NSMutableDictionary()
+                                dicRequest.setValue(self.mNSMutableRequest, forKey: self.key)
+                                
+                                
+                                
+                                
+                                
+                                                            }
+                            else  if(self.mNSHTTPURLResponse?.statusCode  == 500 && self.mNSHTTPURLResponse?.url?.lastPathComponent == "account")
+                            {
+                                var errors = "500"
+                                onError(errors as AnyObject)
+                                
+                            }
+                                // Response code 200 means success
+                            else if(self.mNSHTTPURLResponse?.statusCode  == 200)
+                            {
+                                
+                                
                                 
                                 // here we check if there is any data
                                 if let dataInAnyObject = data
                                 {
                                     do  {
-                                        let json = try NSJSONSerialization.JSONObjectWithData(dataInAnyObject, options: .MutableLeaves) as? AnyObject
+                                        let json = try JSONSerialization.jsonObject(with: dataInAnyObject, options: .mutableLeaves) as? NSDictionary
                                         // println("DeserilizedDict:"+"\(json)")
                                         
                                         // Check  if there is any error while converting the data
@@ -675,11 +906,11 @@ public class BaseNSURLSession: NSObject
                                         {
                                             
                                             print(self.mNSError!.localizedDescription)
-                                            let jsonStr = NSString(data: dataInAnyObject, encoding: NSUTF8StringEncoding)
-                                            print("Error could not parse JSON with new block:  '\(jsonStr)'")
+                                            let jsonStr = String(data: dataInAnyObject, encoding: String.Encoding.utf8)
+                                            print("Error could not parse JSON with new block:  '\(String(describing: jsonStr))'")
                                             let errors = errorDescription(self.mNSError!)
                                             // If there is any error while converting data to dict then through error block
-                                            onError(error:errors)
+                                            onError(errors as AnyObject)
                                             
                                         }
                                         else
@@ -693,13 +924,13 @@ public class BaseNSURLSession: NSObject
                                                 // Note Here we check success to 1 No need of if else here check success in some cases there is no message of success
                                                 if success == 1
                                                 {
-                                                    onFinish(response: data!,deserializedResponse: parseJSON)
+                                                    onFinish(data! as AnyObject,parseJSON)
                                                 }
                                                 else
                                                 {
                                                     //There is no success Key
                                                     print("This shows there is no Success key")
-                                                    onFinish(response: data!,deserializedResponse: parseJSON)
+                                                    onFinish(data! as AnyObject,parseJSON)
                                                     
                                                     //onError(error: "Unsuccess event")
                                                 }
@@ -707,35 +938,23 @@ public class BaseNSURLSession: NSObject
                                                 // No need to check this but for surity used this else
                                             else
                                             {
-                                                let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                                                print("Error could not parse JSON: \(jsonStr)")
-                                                let errors = errorDescription("Error could not parse JSON: \(jsonStr)")
-                                                onError(error:errors )
+                                                let jsonStr = String(data: data!, encoding: String.Encoding(rawValue: String.Encoding.utf8.rawValue))
+                                                
+                                                //let errors  = (errorDescription("Error could not parse JSON: \(jsonStr)")) as AnyObject as AnyObject
+                                                //onError(errors as AnyObject )
                                             }
                                         }
-                                        
-                                        
                                     }
-                                    catch
-                                    {
-                                        
-                                        do  {
-                                            let json = try NSJSONSerialization.JSONObjectWithData(dataInAnyObject, options: .MutableLeaves) as? NSString
-                                            onFinish(response: data!,deserializedResponse: json!)
-                                        }
-                                        catch
-                                        {
-                                            print("Error \(error)")
-                                            onError(error:"\(error)")
-                                        }
+                                    catch   {
+                                        print("Error \(error)")
                                     }
                                     
                                     
                                 }
                             }else
                             {
-                                let errors = errorDescription(responseMessage)
-                                onError(error:errors )
+                                let errors = errorDescription(responseMessage as AnyObject)
+                                onError(errors as AnyObject )
                             }
                             
                         }
@@ -748,30 +967,28 @@ public class BaseNSURLSession: NSObject
     //-------------------------------
     
     // download Image with just URL
-    func downloadImageWithURL(urlString:String, downloadedImageData:(imageData:NSData?, message:String)->())
+    func downloadImageWithURL(_ urlString:String, downloadedImageData:@escaping (_ imageData:Data?, _ message:String)->())
     {
         
-        let lNSURLSessionDownloadTask: NSURLSessionDownloadTask = mNSURLSession.downloadTaskWithURL(NSURL(string: urlString)! , completionHandler:
+        let lNSURLSessionDownloadTask: URLSessionDownloadTask = mNSURLSession.downloadTask(with: URL(string: urlString)! , completionHandler:
+        {
+            urlLocation, response, error -> Void in
+            
+            var lImageData:Data?
+            if let url = urlLocation
             {
-                urlLocation, response, error -> Void in
-                
-                var lImageData:NSData?
-                if let url = urlLocation
-                {
-                    print("we get error\(urlLocation!.path)")
-                    lImageData = NSData(contentsOfURL: url)
-                }
-                
-                if let err = error
-                {
-                    // in case of error I have to pass nil data
-                    downloadedImageData(imageData: NSData(), message:"\(err.localizedDescription)")
-                }else
-                {
-                    downloadedImageData(imageData: lImageData!, message:"Success")
-                }
-                
-                
+                print("we get error\(urlLocation!.path)")
+                lImageData = try? Data(contentsOf: url)
+            }
+            
+            if let err = error
+            {
+                // in case of error I have to pass nil data
+                downloadedImageData(Data(), "\(err.localizedDescription)")
+            }else
+            {
+                downloadedImageData(lImageData!, "Success")
+            }
         })
         lNSURLSessionDownloadTask.resume()
         
@@ -779,17 +996,14 @@ public class BaseNSURLSession: NSObject
     
     //MARK: Download pdf
     
-    func downloadRequest(onFinish:(response:AnyObject,url:Bool)->(), onError:(error:AnyObject)->())
+    func downloadRequest(_ onFinish:@escaping (_ response:AnyObject,_ url:Bool)->(), onError:@escaping (_ error:AnyObject)->())
     {
+        print(" URL path of request" + "\(mNSMutableRequest?.url)")
         
-        print(" URL path of request" + "\(mNSMutableRequest?.URL)")
-        
-        
+        let lAppDelegate = UIApplication.shared.delegate as AnyObject
         if let _ = mNSMutableRequest
         {
-            
-            
-            mNSURLSessionDownloadTask = mNSURLSession.downloadTaskWithRequest(mNSMutableRequest!, completionHandler:
+            mNSURLSessionDownloadTask = mNSURLSession.downloadTask(with: mNSMutableRequest!, completionHandler:
                 {
                     url, response, error -> Void in
                     
@@ -797,20 +1011,21 @@ public class BaseNSURLSession: NSObject
                     //println("data: \(data)")
                     print("Response: \(response)")
                     print("error: \(error)")
-                    self.mNSHTTPURLResponse = response as? NSHTTPURLResponse// Check Data is HTTPURl Response
+                    self.mNSHTTPURLResponse = response as? HTTPURLResponse// Check Data is HTTPURl Response
                     let HttpResponseStatusClass = HttpResponseStatus()
                     var responseMessage:String
-                    print("Status Code::  \(self.mNSHTTPURLResponse?.statusCode) & URL : \(self.mNSHTTPURLResponse?.URL)" )
+                    print("Status Code::  \(self.mNSHTTPURLResponse?.statusCode) & URL : \(self.mNSHTTPURLResponse?.url)" )
                     
                     // First check for any error
                     if error != nil
                     {
-                        print("Error description: \(error!.localizedFailureReason)")
-                        let errors = errorDescription(error!)
-                        onError(error: errors)
+                        //print("Error description: \(error!.localizedFailureReason)")
+                        let errors = errorDescription(error! as AnyObject)
+                        onError(errors as AnyObject)
                     }
                     else
                     {
+                        var savePassword:NSString = ""
                         
                         // Here Check for status code if it is not null
                         if let statusCode = self.mNSHTTPURLResponse?.statusCode
@@ -819,27 +1034,37 @@ public class BaseNSURLSession: NSObject
                             responseMessage = HttpResponseStatusClass.getResponseStatusMessage(statusCode)
                             print("Status code message" + responseMessage )
                             
-                            if(self.mNSHTTPURLResponse?.statusCode  == 401  && ( self.mNSHTTPURLResponse?.URL?.lastPathComponent == "login" || self.mNSHTTPURLResponse?.URL?.lastPathComponent == "changepassword" || self.mNSHTTPURLResponse?.URL?.lastPathComponent == "forgotpassword"))
+                            if(self.mNSHTTPURLResponse?.statusCode  == 401  && ( self.mNSHTTPURLResponse?.url?.lastPathComponent == "login" || self.mNSHTTPURLResponse?.url?.lastPathComponent == "changepassword" || self.mNSHTTPURLResponse?.url?.lastPathComponent == "forgotpassword"))
                             {
                                 let errors = "Username or Password not correct"
-                                onError(error:errors)
+                                onError(errors as AnyObject)
+                                
+                            }else  if(self.mNSHTTPURLResponse?.statusCode  == 401 &&  savePassword.length == 0)
+                            {
+                                // "isTokenExpired"
+                                UserDefaults.standard.set(true, forKey: "isTokenExpired")
+                                NotificationCenter.default.post(name: Notification.Name(rawValue: "tokenexpirednotification"), object: self)
+                                
+                                let errors = "Session Expired."
+                                onError(errors as AnyObject)
                                 
                             }
-
                                 
-                            else  if(self.mNSHTTPURLResponse?.statusCode  == 401  && (self.mNSHTTPURLResponse?.URL?.lastPathComponent != "login" || self.mNSHTTPURLResponse?.URL?.lastPathComponent != "changepassword" || self.mNSHTTPURLResponse?.URL?.lastPathComponent != "forgotpassword"))
+                                
+                            else  if(self.mNSHTTPURLResponse?.statusCode  == 401  && (self.mNSHTTPURLResponse?.url?.lastPathComponent != "login" || self.mNSHTTPURLResponse?.url?.lastPathComponent != "changepassword" || self.mNSHTTPURLResponse?.url?.lastPathComponent != "forgotpassword"))
                             {
-                                if  ((self.mNSMutableRequest?.URL != nil && self.mNSMutableRequest?.HTTPMethod != nil)  )
+                                if  ((self.mNSMutableRequest?.url != nil && self.mNSMutableRequest?.httpMethod != nil)  )
                                 {
-                                    if let urlString = self.mNSMutableRequest?.URL?.lastPathComponent
+                                    if let urlString = self.mNSMutableRequest?.url?.lastPathComponent
                                     {
-                                        self.key = urlString + (self.mNSMutableRequest?.HTTPMethod)!
+                                        self.key = urlString + (self.mNSMutableRequest?.httpMethod)!
                                     }
                                 }
                                 
                                 let dicRequest : NSMutableDictionary = NSMutableDictionary()
                                 dicRequest.setValue(self.mNSMutableRequest, forKey: self.key)
-                                
+                                //lAppDelegate.performSelector("setStoreRequestDict:", withObject: [self.key: self.mNSMutableRequest] as! AnyObject as! NSMutableDictionary)
+                                //                                dictData.setObject(self.mNSMutableRequest!, forKey: self.key)
                                 
                             }
                                 
@@ -848,52 +1073,50 @@ public class BaseNSURLSession: NSObject
                             {
                                 
                                 
-                                // here we check if there is any data
                                 
-                               
                                 
                                 if (url != nil)
                                 {
-                                    let fileManager = NSFileManager.defaultManager()
-                                    let documents = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] 
+                                    let fileManager = FileManager.default
+                                    let documents = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
                                     let writePath = documents.stringByAppendingPathComponent((response?.suggestedFilename)!)
-                                    let documentURL = NSURL.fileURLWithPath(writePath)
+                                    let documentURL = URL(fileURLWithPath: writePath)
                                     
                                     
-                                    if fileManager.fileExistsAtPath(documentURL.path!)
+                                    if fileManager.fileExists(atPath: documentURL.path)
                                     {
                                         do
                                         {
-                                            try  fileManager.replaceItemAtURL(documentURL, withItemAtURL: url!, backupItemName: nil, options: NSFileManagerItemReplacementOptions.UsingNewMetadataOnly, resultingItemURL: nil)
+                                            try  fileManager.replaceItem(at: documentURL, withItemAt: url!, backupItemName: nil, options: FileManager.ItemReplacementOptions.usingNewMetadataOnly, resultingItemURL: nil)
                                         }
                                         catch
                                         {
-                                            onError(error:"error")
+                                            onError("error" as AnyObject)
                                             
                                         }
                                     }else
                                     {
                                         do
                                         {
-                                            try fileManager.moveItemAtURL(url!, toURL: documentURL)
+                                            try fileManager.moveItem(at: url!, to: documentURL)
                                         }
                                         catch
                                         {
-                                            onError(error:"error")
+                                            onError("error" as AnyObject)
                                             
                                         }
                                         
                                     }
                                     
-
+                                    
                                 }
-                                onFinish(response: response!, url: true)
+                                onFinish(response!, true)
                                 
                                 
                             }else
                             {
-                                let errors = errorDescription(responseMessage)
-                                onError(error:errors )
+                                let errors = errorDescription(responseMessage as AnyObject)
+                                onError(errors as AnyObject )
                             }
                             
                         }
@@ -904,59 +1127,25 @@ public class BaseNSURLSession: NSObject
         mNSURLSessionDownloadTask?.resume()
     }
     
-    
-    
-    
     func isDataAvailable()->Bool
     {
         return mIsDataAvailable
     }
+    
     func cancelRequest()
     {
         mNSURLSessionDataTask?.cancel()
-        
-        
     }
     
-        
     
 }
 
-
-
-
-
-func errorDescription(error:AnyObject)->NSString
+func errorDescription(_ error:AnyObject)->String
 {
-    var errorinString = ""
+    let _:NSDictionary =  ["success":"0", "message":error.description]
+    let errorinString = error.description
     
-    let errorDict:NSDictionary =  ["success":"0", "message":error.description]
-    
-    print("\(errorinString)")
-    
-    
-    
-    do
-    {
-        let data = try NSJSONSerialization.dataWithJSONObject(errorDict, options: NSJSONWritingOptions.PrettyPrinted)
-        
-            let json = NSString(data: data, encoding: NSUTF8StringEncoding)
-            if let json = json
-            {
-                errorinString = json as String
-                print(json)
-            }
-        
-    }
-    catch
-    {
-        print(" in catch block")
-        
-    }
-    
-    return errorinString;
-    
-    
+    return errorinString!;
 }
 
 extension String
@@ -972,11 +1161,9 @@ extension String
     
 }
 
-
-
 class HttpResponseStatus:NSObject
 {
-    func getResponseStatusMessage(statusCode:Int)->String
+    func getResponseStatusMessage(_ statusCode:Int)->String
     {
         switch statusCode
         {
@@ -1000,32 +1187,32 @@ class HttpResponseStatus:NSObject
             return "Unknown Status"
         }
     }
-    
 }
 
 // MARK:Extension to base class to upload media files
 extension BaseNSURLSession
 {
-    func configureMediaRequest(methodType:String, path:String, headerParam:Dictionary<String, String>?, mediaPaths:[String]?, bodyDict:Dictionary<String, String>?, name:String )
+    func configureMediaRequest(_ methodType:String, path:String, headerParam:Dictionary<String, String>?, mediaPaths:[String]?, bodyDict:Dictionary<String, String>?, name:String )
     {
-        let boundary = NSString.generateBoundaryString()
-        configureGetMutableRequest(path, parameters:headerParam)
-        mNSMutableRequest!.HTTPMethod = methodType
+        let boundary = String.generateBoundaryString()//"---------------------------14737809831466499882746641449"
+        
+        configureGetMutableRequest(path, parameters:headerParam as Dictionary<String, Any>?)
+        mNSMutableRequest!.httpMethod = methodType
         mNSMutableRequest!.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
-        mNSMutableRequest!.HTTPBody = createBodyWithParameters(name, mediaPaths: mediaPaths, boundary: boundary, bodyDict: bodyDict)
+        mNSMutableRequest!.httpBody = createBodyWithParameters(name, mediaPaths: mediaPaths, boundary: boundary, bodyDict: bodyDict)
     }
     
-    func configurePostMediaRequest(path:String, headerParam:Dictionary<String, String>?, mediaPaths:[String]?, bodyDict:Dictionary<String, String>?, name:String)
+    func configurePostMediaRequest(_ path:String, headerParam:Dictionary<String, String>?, mediaPaths:[String]?, bodyDict:Dictionary<String, String>?, name:String)
     {
         configureMediaRequest("POST", path: path, headerParam: headerParam, mediaPaths: mediaPaths, bodyDict:bodyDict, name:name)
     }
     
-    func configurePutMediaRequest(path:String, headerParam:Dictionary<String, String>?, mediaPaths:[String]?, bodyDict:Dictionary<String, String>?, name:String)
+    func configurePutMediaRequest(_ path:String, headerParam:Dictionary<String, String>?, mediaPaths:[String]?, bodyDict:Dictionary<String, String>?, name:String)
     {
         configureMediaRequest("PUT", path: path, headerParam: headerParam, mediaPaths: mediaPaths, bodyDict:bodyDict, name:name)
     }
     
-    private func createBodyWithParameters( name: String?, mediaPaths: [String]?, boundary: String, bodyDict:Dictionary<String, String>?) -> NSData
+    fileprivate func createBodyWithParameters( _ name: String?, mediaPaths: [String]?, boundary: String, bodyDict:Dictionary<String, String>?) -> Data
     {
         let body = NSMutableData()
         if bodyDict != nil
@@ -1044,20 +1231,20 @@ extension BaseNSURLSession
             {
                 let filename = path.lastPathComponent
                 //let data = path.dataUsingEncoding(NSUTF8StringEncoding)
-                let data = NSData(contentsOfFile: path)
+                let data = try? Data(contentsOf: URL(fileURLWithPath: path))
                 let mimetype = mimeTypeForPath(path)
                 body.appendString("--\(boundary)\r\n")
                 body.appendString("Content-Disposition: form-data; name=\"\(name!)\"; filename=\"\(filename)\"\r\n")
                 body.appendString("Content-Type: \(mimetype)\r\n\r\n")
-                body.appendData(data!)
+                body.append(data!)
                 body.appendString("\r\n")
             }
         }
         body.appendString("--\(boundary)--\r\n")
-        return body
+        return body as Data
     }
     
-    private func mimeTypeForPath(path: String) -> String
+    fileprivate func mimeTypeForPath(_ path: String) -> String
     {
         let pathExtension = path.pathExtension
         if let uti = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, pathExtension as NSString, nil)?.takeRetainedValue()
@@ -1070,70 +1257,73 @@ extension BaseNSURLSession
         return "application/octet-stream";
     }
     
-    public final  func postMediaWithOnFinish(path:String, headerParam:Dictionary<String, String>?, mediaPaths:[String]?, bodyDict:Dictionary<String, String>?, name:String, onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    public final func postMediaWithOnFinish(_ path:String, headerParam:Dictionary<String, String>?, mediaPaths:[String]?, bodyDict:Dictionary<String, String>?, name:String, onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->())
     {
         configurePostMediaRequest(path, headerParam: headerParam, mediaPaths: mediaPaths, bodyDict:bodyDict, name:name)
         startSessionTaskDataTaskWithRequest(
             {
                 (response, deserializedResponse) -> () in
-                onFinish(response: response, deserializedResponse: deserializedResponse)
-            },
+                onFinish(response, deserializedResponse)
+        },
             onError: { (error) -> () in
-                onError(error: error)
+                onError(error)
         })
     }
     
-    public final  func putMediaWithOnFinish(path:String, headerParam:Dictionary<String, String>?, mediaPaths:[String]?, bodyDict:Dictionary<String, String>?, name:String, onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    public final func putMediaWithOnFinish(_ path:String, headerParam:Dictionary<String, String>?, mediaPaths:[String]?, bodyDict:Dictionary<String, String>?, name:String, onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->())
     {
         configurePutMediaRequest(path, headerParam: headerParam, mediaPaths: mediaPaths, bodyDict:bodyDict, name:name)
         startSessionTaskDataTaskWithRequest(
             {
                 (response, deserializedResponse) -> () in
-                onFinish(response: response, deserializedResponse: deserializedResponse)
-            },
+                onFinish(response, deserializedResponse)
+        },
             onError: { (error) -> () in
-                onError(error: error)
+                onError(error)
         })
     }
     
     //MARK: Scrapbook Media Send
     
-    public final func postSBMediaWithOnFinish(path:String, headerParam:Dictionary<String, String>?, mediaPaths:[String]?, bodyDict:Dictionary<String, String>?, name:[String]?, onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    public final func postSBMediaWithOnFinish(_ path:String, headerParam:Dictionary<String, String>?, mediaPaths:[String]?, bodyDict:Dictionary<String, AnyObject>?, name:[String]?, onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->())
     {
         configureSBMediaRequest("POST", path: path, headerParam: headerParam, mediaPaths: mediaPaths, bodyDict:bodyDict, name:name)
         startSessionTaskDataTaskWithRequest(
             {
                 (response, deserializedResponse) -> () in
-                onFinish(response: response, deserializedResponse: deserializedResponse)
-            },
+                onFinish(response, deserializedResponse)
+        },
             onError: { (error) -> () in
-                onError(error: error)
+                onError(error)
         })
     }
     
-    final  func putSBMediaWithOnFinish(path:String, headerParam:Dictionary<String, String>?, mediaPaths:[String]?, bodyDict:Dictionary<String, String>?, name:[String]?, onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    final func putSBMediaWithOnFinish(_ path:String, headerParam:Dictionary<String, String>?, mediaPaths:[String]?, bodyDict:Dictionary<String, AnyObject>?, name:[String]?, onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->())
     {
         configureSBMediaRequest("PUT", path: path, headerParam: headerParam, mediaPaths: mediaPaths, bodyDict:bodyDict, name:name)
         startSessionTaskDataTaskWithRequest(
             {
                 (response, deserializedResponse) -> () in
-                onFinish(response: response, deserializedResponse: deserializedResponse)
-            },
+                onFinish(response, deserializedResponse)
+        },
             onError: { (error) -> () in
-                onError(error: error)
+                onError(error)
         })
     }
     
-    func configureSBMediaRequest(methodType:String, path:String, headerParam:Dictionary<String, String>?, mediaPaths:[String]?, bodyDict:Dictionary<String, String>?, name:[String]? )
+    func configureSBMediaRequest(_ methodType:String, path:String, headerParam:Dictionary<String, String>?, mediaPaths:[String]?, bodyDict:Dictionary<String, AnyObject>?, name:[String]? )
     {
-        let boundary = String.generateBoundaryString()
-        configureGetMutableRequest(path, parameters:headerParam)
-        mNSMutableRequest!.HTTPMethod = methodType
+        //Fixed Multipart Post
+        //NSString.generateBoundary() not working in Swift 3
+        let boundary = String.generateBoundaryString() // "---------------------------14737809831466499882746641449"
+        /*"---------------------------14737809831466499882746641449"*///NSString.generateBoundary()
+        configureGetMutableRequest(path, parameters:headerParam as Dictionary<String, Any>?)
+        mNSMutableRequest!.httpMethod = methodType
         mNSMutableRequest!.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
-        mNSMutableRequest!.HTTPBody = createSBBodyWithParameters(name, mediaPaths: mediaPaths, boundary: boundary, bodyDict: bodyDict)
+        mNSMutableRequest!.httpBody = createSBBodyWithParameters(name, mediaPaths: mediaPaths, boundary: boundary, bodyDict: bodyDict)
     }
     
-    private func createSBBodyWithParameters( name: [String]?, mediaPaths: [String]?, boundary: String, bodyDict:Dictionary<String, String>?) -> NSData
+    fileprivate func createSBBodyWithParameters( _ name: [String]?, mediaPaths: [String]?, boundary: String, bodyDict:Dictionary<String, AnyObject>?) -> Data
     {
         let body = NSMutableData()
         if bodyDict != nil
@@ -1146,26 +1336,26 @@ extension BaseNSURLSession
             }
         }
         
-        if mediaPaths?.count > 0
+        if (mediaPaths?.count)! > 0
         {
             for i in 0..<(mediaPaths?.count)!
             {
                 let index = name![i]
                 let path = mediaPaths![i]
                 let filename = path.lastPathComponent
-                if let data = NSData(contentsOfFile: path) {
+                if let data = try? Data(contentsOf: URL(fileURLWithPath: path)) {
                     let mimetype = mimeTypeForPath(path)
                     body.appendString("--\(boundary)\r\n")
                     body.appendString("Content-Disposition: form-data; name=\"\(index)\"; filename=\"\(filename)\"\r\n")
                     body.appendString("Content-Type: \(mimetype)\r\n\r\n")
-                    body.appendData(data)
+                    body.append(data)
                     body.appendString("\r\n")
                 }
             }
         }
         
         body.appendString("--\(boundary)--\r\n")
-        return body
+        return body as Data
     }
     
 }
@@ -1173,20 +1363,19 @@ extension BaseNSURLSession
 //Mark:Mutabledata
 extension NSMutableData
 {
-    func appendString(string: String)
+    func appendString(_ string: String)
     {
         print(string)
-        let data = string.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
-        appendData(data!)
+        let data = string.data(using: String.Encoding.utf8, allowLossyConversion: true)
+        append(data!)
     }
 }
 
 extension String
 {
-    
-//    static func generateBoundaryString()->String
-//    {
-//        return ""
-//    }
+    static func generateBoundaryString()->String
+    {
+        return "Boundary-\(NSUUID().uuidString)"
+    }
 }
 

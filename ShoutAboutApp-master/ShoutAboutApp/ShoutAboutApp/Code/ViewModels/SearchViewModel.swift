@@ -33,31 +33,31 @@ class SearchViewModel: NSObject {
 		self.disposer.dispose()
 	}
 	
-	func needDetails(result: YoutubeSearchResult, atIndex: Int) {
+	func needDetails(_ result: YoutubeSearchResult, atIndex: Int) {
 		if self.searchResults.value.count > atIndex + 1 {
 			let (_, detailView) = self.searchResults.value[atIndex + 1]
 			//There's already a detail view visible
 			if detailView {
-				self.searchResults.value.removeAtIndex(atIndex + 1)
+				self.searchResults.value.remove(at: atIndex + 1)
 			} else {
-				self.searchResults.value.insert((result, true), atIndex: atIndex + 1)
+				self.searchResults.value.insert((result, true), at: atIndex + 1)
 			}
 		} else {
 			self.searchResults.value.append((result, true))
 		}
 	}
 	
-	private func setupBindings() {
+	fileprivate func setupBindings() {
 		setupSlashCommandBindings()
 	}
 	
-	private func setupSlashCommandBindings() {
+	fileprivate func setupSlashCommandBindings() {
 		//We do a /command
 		self.disposer.addDisposable(
 			self.typing.producer
 				.map {
 					[unowned self] (value: String) in
-					return value.trimWithNewline().lowercaseString
+					return value.trimWithNewline().lowercased()
 				}
 				.skipRepeats()
 				.filter {
@@ -69,23 +69,23 @@ class SearchViewModel: NSObject {
 				.start {
 					[unowned self] event in
 					switch event {
-					case let .Next(typedCommand):
-						if typedCommand.containsString("/youtube ") {
+					case let .next(typedCommand):
+						if typedCommand.contains("/youtube ") {
 							//Remove the /youtube part
-							let ytSearchQuery = typedCommand.stringByReplacingOccurrencesOfString("/youtube ", withString: "")
+							let ytSearchQuery = typedCommand.replacingOccurrences(of: "/youtube ", with: "")
 							if ytSearchQuery.characters.count >= 2 {
 								self.youtubeSearch(ytSearchQuery)
 									.start {
 										[unowned self] event in
 										switch event {
-										case let .Next(result):
+										case let .next(result):
 											NSLog("Youtube search \(result)")
 											if (result.value != nil) {
 												let json = result.value as! JSON
 												let items = json["items"].arrayValue
 												self.searchResults.value = items.map { return (YoutubeSearchResult(json: $0), false) }
 											}
-										case let .Failed(error):
+										case let .failed(error):
 											NSLog("Youtube search failed \(error)")
 										default:
 											break
@@ -100,11 +100,11 @@ class SearchViewModel: NSObject {
 		)
 	}
 	
-	private func youtubeSearch(youtubeSearch: String) -> SignalProducer<Result<Any, NSError>, NSError> {
+	fileprivate func youtubeSearch(_ youtubeSearch: String) -> SignalProducer<Result<Any, NSError>, NSError> {
         /*
         The q parameter specifies the query term to search for. Your request can also use the Boolean NOT (-) and OR (|) operators to exclude videos or to find videos that are associated with one of several search terms. For example, to search for videos matching either "boating" or "sailing", set the q parameter value to boating|sailing. Similarly, to search for videos matching either "boating" or "sailing" but not "fishing", set the q parameter value to boating|sailing -fishing. Note that the pipe character must be URL-escaped when it is sent in your API request. The URL-escaped value for the pipe character is %7C. (string)
         */
-		let escapedString: String = youtubeSearch.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
+		let escapedString: String = youtubeSearch.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
         return STHttp.get("https://www.googleapis.com/youtube/v3/search?q=\(escapedString)&key=\(Configuration.youtubeApiKey)&type=channel&part=id,snippet")
 	}
 }

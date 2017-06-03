@@ -86,21 +86,21 @@ extension String
 }
 
 struct STHttp {
-	static func get(url: String, auth: (String, String)? = nil) -> SignalProducer<Result<Any, NSError>, NSError> {
+	static func get(_ url: String, auth: (String, String)? = nil) -> SignalProducer<Result<Any, NSError>, NSError> {
 		NSLog("STHttp.get [%@]", url)
 		let urlRequest = STHttp.urlRequest(url, contentType: "application/json", auth: auth)
-		urlRequest.HTTPMethod = "GET"
+		urlRequest.httpMethod = "GET"
 		return STHttp.doRequest(urlRequest)
 	}
 	
-	static func post(url: String, data: [NSObject: AnyObject], auth: (String, String)? = nil) -> SignalProducer<Result<Any, NSError>, NSError> {
+	static func post(_ url: String, data: [AnyHashable: Any], auth: (String, String)? = nil) -> SignalProducer<Result<Any, NSError>, NSError> {
 		//NSLog("STHttp.post [%@] data %@", url, data)
 		let urlRequest = STHttp.urlRequest(url, contentType: "application/json", auth: auth)
-		urlRequest.HTTPMethod = "POST"
+		urlRequest.httpMethod = "POST"
 		do {
             
-			let theJSONData =  try NSJSONSerialization.dataWithJSONObject(data, options: NSJSONWritingOptions(rawValue: 0))
-			urlRequest.HTTPBody = theJSONData
+			let theJSONData =  try JSONSerialization.data(withJSONObject: data, options: JSONSerialization.WritingOptions(rawValue: 0))
+			urlRequest.httpBody = theJSONData
             
 			return STHttp.doRequest(urlRequest)
 		} catch {
@@ -110,13 +110,13 @@ struct STHttp {
 	}
     
     
-    static func postImage(url: String, data: [NSObject: AnyObject], auth: (String, String)? = nil, image: UIImage, mediaPath:[String]) -> SignalProducer<String, NSError> {
-        let boundary = String.generateBoundaryString()
+    static func postImage(_ url: String, data: [AnyHashable: Any], auth: (String, String)? = nil, image: UIImage, mediaPath:[String]) -> SignalProducer<String, NSError> {
+        let boundary = String.generateBoundary()
         let urlRequest = STHttp.urlRequest(url, contentType: "multipart/form-data; boundary=\(boundary)", auth: nil)
-        urlRequest.HTTPMethod = "POST"
+        urlRequest.httpMethod = "POST"
         
         
-        urlRequest.HTTPBody = createBodyWithParameters("image", mediaPaths: mediaPath, boundary: boundary, bodyDict: nil) //
+        urlRequest.httpBody = createBodyWithParameters("image", mediaPaths: mediaPath, boundary: boundary, bodyDict: nil) //
         return STHttp.doRequest(urlRequest)
              .map {
                 //Grab the fetched url
@@ -125,27 +125,27 @@ struct STHttp {
                     let dict = result.value as! JSON
                     let urls = dict["image"].stringValue
                     
-                    let url = NSURL(string: urls)
+                    let url = URL(string: urls)
                     
                     
                     //SDImageCache.sharedImageCache().storeImage(image, forKey: self.cacheKey(url!), completion: nil)
-                  /*Small Talk */  SDImageCache.sharedImageCache().storeImage(image, forKey: self.cacheKey(url!))
+                  /*Small Talk */  SDImageCache.shared().store(image, forKey: self.cacheKey(url!))
                     return urls
                 }
         return ""
         }
     }
 	
-    static func getFromS3(bucket: String, key: String) -> SignalProducer<Result<(UIImage, String), NSError>, NSError> {
+    static func getFromS3(_ bucket: String, key: String) -> SignalProducer<Result<(UIImage, String), NSError>, NSError> {
         return signGetIfNotInCache(bucket, key: key)
-            .flatMap(FlattenStrategy.Merge, transform: {
+            .flatMap(FlattenStrategy.merge, transform: {
                 url in
                 return STHttp.doImageGet(url).observeOn(QueueScheduler()).retryWithDelay(15, interval: 5, onScheduler: QueueScheduler())
             })
             .retry(2)
     }
 	
-	static func getImage(url: String) -> SignalProducer<Result<(UIImage, String), NSError>, NSError> {
+	static func getImage(_ url: String) -> SignalProducer<Result<(UIImage, String), NSError>, NSError> {
 		if url == "" {
 			return SignalProducer(error: NSError(domain: "smalltalk.getimage", code: -1, userInfo: [ NSLocalizedDescriptionKey: "empty url"]))
 		}
@@ -153,15 +153,15 @@ struct STHttp {
 		return STHttp.doImageGet(url).observeOn(QueueScheduler()).retryWithDelay(15, interval: 5, onScheduler: QueueScheduler())
 	}
 	
-	static func getFromCache(bucket: String, key: String) -> UIImage? {
+	static func getFromCache(_ bucket: String, key: String) -> UIImage? {
 		let url = self.cacheKey(self.urlWithoutSigning(bucket, key:key))
-		return SDImageCache.sharedImageCache().imageFromDiskCacheForKey(url)
+		return SDImageCache.shared().imageFromDiskCache(forKey: url)
 	}
 	
-    static func putToS3(bucket: String, key: String, image: UIImage, filePath:[String]) -> SignalProducer<Result<Any, NSError>, NSError>
+    static func putToS3(_ bucket: String, key: String, image: UIImage, filePath:[String]) -> SignalProducer<Result<Any, NSError>, NSError>
     {
         
-        return STHttp.postImage("\(Configuration.mainApi)/send_message?app_user_id=31653&app_user_token=%242y%2410%246PRbH2TSZYMWqWuvQJcO%2FuW05ZnNXDYB4p7Bj8eogEJ9VVacfEJbK", data: [:], image: image, mediaPath:filePath ).flatMap(FlattenStrategy.Latest, transform: { (url: String) -> SignalProducer<Result<Any, NSError>, NSError> in
+        return STHttp.postImage("\(Configuration.mainApi)/send_message?app_user_id=31653&app_user_token=%242y%2410%246PRbH2TSZYMWqWuvQJcO%2FuW05ZnNXDYB4p7Bj8eogEJ9VVacfEJbK", data: [:], image: image, mediaPath:filePath ).flatMap(FlattenStrategy.latest, transform: { (url: String) -> SignalProducer<Result<Any, NSError>, NSError> in
             return SignalProducer<Result<Any, NSError>, NSError>.empty
 
             
@@ -203,7 +203,7 @@ struct STHttp {
     
     
     
-    static func createBodyWithParameters( name: String?, mediaPaths: [String]?, boundary: String, bodyDict:Dictionary<String, String>?) -> NSData
+    static func createBodyWithParameters( _ name: String?, mediaPaths: [String]?, boundary: String, bodyDict:Dictionary<String, String>?) -> Data
     {
         let body = NSMutableData()
         if bodyDict != nil
@@ -222,12 +222,12 @@ struct STHttp {
             {
                 let filename = path.lastPathComponent
                 //let data = path.dataUsingEncoding(NSUTF8StringEncoding)
-                let data = NSData(contentsOfFile: path)
+                let data = try? Data(contentsOf: URL(fileURLWithPath: path))
                 let mimetype = mimeTypeForPath(path)
                 body.appendString("--\(boundary)\r\n")
                 body.appendString("Content-Disposition: form-data; name=\"\(name!)\"; filename=\"\(filename)\"\r\n")
                 body.appendString("Content-Type: \(mimetype)\r\n\r\n")
-                body.appendData(data!)
+                body.append(data!)
                 body.appendString("\r\n")
             }
         }
@@ -235,7 +235,7 @@ struct STHttp {
         return body
     }
     
-   static private func mimeTypeForPath(path: String) -> String
+   static fileprivate func mimeTypeForPath(_ path: String) -> String
     {
         let pathExtension = path.pathExtension
         if let uti = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, pathExtension as NSString, nil)?.takeRetainedValue()
@@ -253,12 +253,12 @@ struct STHttp {
 
 	
 	//Private methods
-	static private func signGetIfNotInCache(bucket: String, key: String) -> SignalProducer<String, NSError>
+	static fileprivate func signGetIfNotInCache(_ bucket: String, key: String) -> SignalProducer<String, NSError>
     {
 		//If image is already in cache, there is no need to sign - we'll just pass through the cache key for doS3Get which will fetch it form cache
 		let url = urlWithoutSigning(bucket, key: key)
 		let cachedUrl = self.cacheKey(url)
-		let imageInCache = SDImageCache.sharedImageCache().diskImageExistsWithKey(cachedUrl)
+		let imageInCache = SDImageCache.shared().diskImageExists(withKey: cachedUrl)
 		if (imageInCache) {
 			return SignalProducer(values: [cachedUrl])
 		}
@@ -267,16 +267,16 @@ struct STHttp {
 		return STHttp.sign("GET", bucket: bucket, key: key)
 	}
 	
-	static private func urlWithoutSigning(bucket: String, key: String) -> NSURL {
-		return NSURL(string: "http://demo.varyavega.co.in/shoutaboutapp/public/uploads/chat/images/\(key)")!
+	static fileprivate func urlWithoutSigning(_ bucket: String, key: String) -> URL {
+		return URL(string: "http://demo.varyavega.co.in/shoutaboutapp/public/uploads/chat/images/\(key)")!
 	}
 	
-	static private func AWSUrl(bucket: String, key: String) -> NSURL {
-		return NSURL(string: "https://\(bucket).s3.amazonaws.com/\(key)")!
+	static fileprivate func AWSUrl(_ bucket: String, key: String) -> URL {
+		return URL(string: "https://\(bucket).s3.amazonaws.com/\(key)")!
 	}
 	
 	//Do AWS signing
-	static private func sign(method: String, bucket: String, key: String) -> SignalProducer<String, NSError>
+	static fileprivate func sign(_ method: String, bucket: String, key: String) -> SignalProducer<String, NSError>
     {
         let data = [String:AnyObject
 			//"method": method,
@@ -296,38 +296,38 @@ struct STHttp {
 		}
 	}
 	
-	static private func cacheKey(url: NSURL) -> String {
+	static fileprivate func cacheKey(_ url: URL) -> String {
 		//Url without query parameters (since they keep changing for every query)
-		let newUrl = NSURL(scheme: url.scheme, host: url.host!, path: url.path!)
+		let newUrl = NSURL(scheme: url.scheme, host: url.host!, path: url.path!) as? URL
 		return newUrl!.absoluteString
 	}
 	
-	static private func doImageGet(strUrl: String) -> SignalProducer<Result<(UIImage, String), NSError>, NSError> {
+	static fileprivate func doImageGet(_ strUrl: String) -> SignalProducer<Result<(UIImage, String), NSError>, NSError> {
 		NSLog("doImageGet [%@]", strUrl)
-		let url: NSURL = NSURL(string: strUrl)!
+		let url: URL = URL(string: strUrl)!
 		let cachedUrl = self.cacheKey(url)
        //let imageInCache =  SDImageCache.sharedImageCache().diskImageExistsWithKey(cachedUrl, completion: nil)
         
-		let imageInCache = SDImageCache.sharedImageCache().diskImageExistsWithKey(cachedUrl)
+		let imageInCache = SDImageCache.shared().diskImageExists(withKey: cachedUrl)
 		if (imageInCache) {
-			let image = SDImageCache.sharedImageCache().imageFromDiskCacheForKey(strUrl)
+			let image = SDImageCache.shared().imageFromDiskCache(forKey: strUrl)
 			let retResult = Result<(UIImage, String), NSError>(value: (image!, strUrl))
 
 			return SignalProducer(values: [retResult])
 		}
 		
 		let urlRequest = STHttp.urlRequest(strUrl, contentType: nil, auth: nil)
-		urlRequest.HTTPMethod = "GET"
+		urlRequest.httpMethod = "GET"
 		return STHttp.doRequest(urlRequest, deserializeJSON: false).map {
 			result in
 			if result.value != nil
             {
-                if let data = result.value as? NSData
+                if let data = result.value as? Data
                 {
                     if let image = UIImage(data: data)
                     {
 				
-                        SDImageCache.sharedImageCache().storeImage(image, forKey: self.cacheKey(url))
+                        SDImageCache.shared().store(image, forKey: self.cacheKey(url))
                         let retResult = Result<(UIImage, String), NSError>(value: (image, strUrl))
                         return retResult
                     }
@@ -338,8 +338,8 @@ struct STHttp {
 		}
 	}
 	
-	static private func urlRequest(url: String, contentType: String?, auth: (String, String)?) -> NSMutableURLRequest {
-		let urlRequest = NSMutableURLRequest(URL: NSURL(string: url)!, cachePolicy: NSURLRequestCachePolicy.ReloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 10)
+	static fileprivate func urlRequest(_ url: String, contentType: String?, auth: (String, String)?) -> NSMutableURLRequest {
+		let urlRequest = NSMutableURLRequest(url: URL(string: url)!, cachePolicy: NSURLRequest.CachePolicy.reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 10)
         if contentType != nil {
             urlRequest.setValue(contentType, forHTTPHeaderField: "Content-Type")
         }
@@ -349,8 +349,8 @@ struct STHttp {
             
 			let (username, password) = auth!
 			let loginString = "\(username):\(password)"
-			let loginData: NSData = loginString.dataUsingEncoding(NSUTF8StringEncoding)!
-			_ = loginData.base64EncodedStringWithOptions(NSDataBase64EncodingOptions(rawValue: 0))
+			let loginData: Data = loginString.data(using: String.Encoding.utf8)!
+			_ = loginData.base64EncodedString(options: NSData.Base64EncodingOptions(rawValue: 0))
 			
 			//urlRequest.setValue(username, forHTTPHeaderField: "app_user_id")
            // urlRequest.setValue(password, forHTTPHeaderField: "app_user_token")
@@ -358,30 +358,30 @@ struct STHttp {
 		return urlRequest
 	}
 	
-	static private func doRequest(urlRequest: NSURLRequest, deserializeJSON: Bool = true) -> SignalProducer<Result<Any, NSError>, NSError> {
+	static fileprivate func doRequest(_ urlRequest: URLRequest, deserializeJSON: Bool = true) -> SignalProducer<Result<Any, NSError>, NSError> {
 		return STHttp.networkProducer(urlRequest)
-			.flatMap(FlattenStrategy.Merge, transform: {
-				(incomingData: NSData, response: NSURLResponse) in
-				return SignalProducer<(NSData, NSURLResponse), NSError> { observer, disposable in
+			.flatMap(FlattenStrategy.merge, transform: {
+				(incomingData: Data, response: URLResponse) in
+				return SignalProducer<(Data, URLResponse), NSError> { observer, disposable in
 					//NSLog("Response %@ %@", response, NSThread.isMainThread())
-					let statusCode = (response as! NSHTTPURLResponse).statusCode
+					let statusCode = (response as! HTTPURLResponse).statusCode
 					if  statusCode >= 200 && statusCode < 299
                     {
                         do {
-                        let json = try NSJSONSerialization.JSONObjectWithData(incomingData, options: NSJSONReadingOptions(rawValue: 0))
+                        let json = try JSONSerialization.jsonObject(with: incomingData, options: JSONSerialization.ReadingOptions(rawValue: 0))
                         print(json)
                         }catch {}
 						observer.sendNext((incomingData, response))
 					} else {
 						var errorSent = false
-						if incomingData.length > 0 {
+						if incomingData.count > 0 {
 							if deserializeJSON {
 								do {
-									let json = try NSJSONSerialization.JSONObjectWithData(incomingData, options: NSJSONReadingOptions(rawValue: 0))
+									let json = try JSONSerialization.jsonObject(with: incomingData, options: JSONSerialization.ReadingOptions(rawValue: 0))
 									observer.sendFailed(
 											NSError(domain: "smalltalk.http",
 												code: statusCode,
-												userInfo: [ NSLocalizedDescriptionKey: "\(NSHTTPURLResponse.localizedStringForStatusCode(statusCode)) + \(json)"]
+												userInfo: [ NSLocalizedDescriptionKey: "\(HTTPURLResponse.localizedString(forStatusCode: statusCode)) + \(json)"]
 										)
 									)
 									errorSent = true
@@ -393,7 +393,7 @@ struct STHttp {
 							observer.sendFailed(
 								NSError(domain: "smalltalk.http",
 									code: statusCode,
-									userInfo: [ NSLocalizedDescriptionKey: "\(NSHTTPURLResponse.localizedStringForStatusCode(statusCode))"]
+									userInfo: [ NSLocalizedDescriptionKey: "\(HTTPURLResponse.localizedString(forStatusCode: statusCode))"]
 								)
 							)
 						}
@@ -403,23 +403,23 @@ struct STHttp {
 				}
 			})
 			.map {
-				(incomingData: NSData, response: NSURLResponse) -> Result<Any, NSError> in
-				if incomingData.length > 0 {
+				(incomingData: Data, response: URLResponse) -> Result<Any, NSError> in
+				if incomingData.count > 0 {
 					if deserializeJSON {
 						let json = JSON(data: incomingData)
-						return Result.Success(json) //Result<JSON, NSError>(value: json)
+						return Result.success(json) //Result<JSON, NSError>(value: json)
 					} else {
-						return Result.Success(incomingData)
+						return Result.success(incomingData)
 					}
 				}
 				
-				return Result.Success("")
+				return Result.success("")
 		}
 	}
 	
-	static func networkProducer(urlRequest: NSURLRequest) -> SignalProducer<(NSData, NSURLResponse), NSError>
+	static func networkProducer(_ urlRequest: URLRequest) -> SignalProducer<(Data, URLResponse), NSError>
 	{
-		return NSURLSession.sharedSession().rac_dataWithRequestBackgroundSupport(urlRequest)
+		return URLSession.shared.rac_dataWithRequestBackgroundSupport(urlRequest)
 			.retry(2)
 	}
 }

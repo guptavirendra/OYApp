@@ -10,20 +10,20 @@ import UIKit
 
 class DataSession: BaseNSURLSession
 {
-    func  getAlertCount(onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    func  getAlertCount(_ onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->())
     {
         let dict = NSObject.getAppUserIdAndToken()
         super.getWithOnFinish(mCHWebServiceMethod.alert_count, parameters: dict, onFinish: { (response, deserializedResponse) in
-            onFinish(response: response, deserializedResponse: deserializedResponse)
+            onFinish(response, deserializedResponse)
         }) { (error) in
-            onError(error: error)
+            onError(error)
         }
     }
     
     
     
     //MARK: get post Detail
-    func getPostDetail(post_id:String, alert_id:String, onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    func getPostDetail(_ post_id:String, alert_id:String, onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->())
     {
         
         let dict = NSObject.getAppUserIdAndToken()
@@ -32,12 +32,12 @@ class DataSession: BaseNSURLSession
         paramaDict["alert_id"] = alert_id
         
         super.getWithOnFinish(mCHWebServiceMethod.post_detail, parameters: paramaDict, onFinish: { (response, deserializedResponse) in
-            onFinish(response: response, deserializedResponse: deserializedResponse)
+            onFinish(response, deserializedResponse)
 
             
         }) { (error) in
             
-            onError(error: error)
+            onError(error)
         }
     }
     
@@ -45,41 +45,41 @@ class DataSession: BaseNSURLSession
     // Mohit
     /*******************  Feed Screen ********************/
     //MARK: GET Feeds
-    func getFeedsData(onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->()) {
+    func getFeedsData(_ onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->()) {
         
         let dict = NSObject.getAppUserIdAndToken()
         super.getWithOnFinish(mCHWebServiceMethod.user_feed_list, parameters: dict, onFinish: { (response, deserializedResponse) in
-            onFinish(response: response, deserializedResponse: deserializedResponse)
+            onFinish(response, deserializedResponse)
         }) { (error) in
-            onError(error: error)
+            onError(error)
         }
         
     }
     
     /*******************  MYFeed Screen ********************/
     //MARK: GET MYFeeds
-    func getMyFeedsData(onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->()) {
+    func getMyFeedsData(_ onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->()) {
         
         let dict = NSObject.getAppUserIdAndToken()
         super.getWithOnFinish(mCHWebServiceMethod.user_myfeed_list, parameters: dict, onFinish: { (response, deserializedResponse) in
-            onFinish(response: response, deserializedResponse: deserializedResponse)
+            onFinish(response, deserializedResponse)
         }) { (error) in
-            onError(error: error)
+            onError(error)
         }
         
     }
     
     /*******************  Alert Screen ********************/
     //MARK: GET Alert
-    func getAlertData(onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->()) {
+    func getAlertData(_ onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->()) {
         
         let dict = NSObject.getAppUserIdAndToken()
         
         super.getWithOnFinish(mCHWebServiceMethod.user_alerts_list, parameters: dict, onFinish: {(response, deserializedResponse) in
-            onFinish(response: response, deserializedResponse: deserializedResponse)
+            onFinish(response, deserializedResponse)
             
         }) {(error) in
-            onError(error: error)
+            onError(error)
         }
         
     }
@@ -89,25 +89,25 @@ class DataSession: BaseNSURLSession
     
     /*******************  FEED Screen ********************/
     //MARK: Feed Like
-    func feedLike(dict:[String:String], onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    func feedLike(_ dict:[String:String], onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->())
     {
         
-        super.postDataWithOnFinish(mCHWebServiceMethod.like_user, parameters: dict, postBody: nil, onFinish: { (response, deserializedResponse) in
-            onFinish(response: response, deserializedResponse: deserializedResponse)
+        super.postDataWithOnFinish(mCHWebServiceMethod.like_user, parameters: dict as Dictionary<String, AnyObject>, postBody: nil, onFinish: { (response, deserializedResponse) in
+            onFinish(response, deserializedResponse)
         }) { (error) in
-            onError(error: error)
+            onError(error)
         }
     }
     
     /*******************  Feed Screen ********************/
     //MARK: Feed Dislike
-    func feedisLike(dict:[String:String], onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    func feedisLike(_ dict:[String:String], onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->())
     {
         
-        super.postDataWithOnFinish(mCHWebServiceMethod.dislike_user, parameters: dict, postBody: nil, onFinish: { (response, deserializedResponse) in
-            onFinish(response: response, deserializedResponse: deserializedResponse)
+        super.postDataWithOnFinish(mCHWebServiceMethod.dislike_user, parameters: dict as Dictionary<String, AnyObject>, postBody: nil, onFinish: { (response, deserializedResponse) in
+            onFinish(response, deserializedResponse)
         }) { (error) in
-            onError(error: error)
+            onError(error)
         }
     }
     
@@ -115,13 +115,13 @@ class DataSession: BaseNSURLSession
     
     /*******************  Alert Screen ********************/
     //MARK: Report To Spam
-    func reportTospam(dict:[String:String], onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    func reportTospam(_ dict:[String:String], onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->())
     {
         
-        super.postDataWithOnFinish(mCHWebServiceMethod.user_report_spam_state, parameters: dict, postBody: nil, onFinish: { (response, deserializedResponse) in
-            onFinish(response: response, deserializedResponse: deserializedResponse)
+        super.postDataWithOnFinish(mCHWebServiceMethod.user_report_spam_state, parameters: dict as Dictionary<String, AnyObject>, postBody: nil, onFinish: { (response, deserializedResponse) in
+            onFinish(response, deserializedResponse)
         }) { (error) in
-            onError(error: error)
+            onError(error)
         }
     }
     
@@ -131,53 +131,53 @@ class DataSession: BaseNSURLSession
     
     /*******************  LOGIN SCREEN ********************/
    //MARK: GET OTP
-    func getOTPForMobileNumber(mobileNumber:String, onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->()) {
+    func getOTPForMobileNumber(_ mobileNumber:String, onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->()) {
         
         let dict = ["mobile_number":mobileNumber]
         super.getWithOnFinish(mCHWebServiceMethod.add_app_user, parameters: dict, onFinish: { (response, deserializedResponse) in
             
-               onFinish(response: response, deserializedResponse: deserializedResponse)
+               onFinish(response, deserializedResponse)
             
             }) { (error) in
-                onError(error: error)
+                onError(error)
         }
         
     }
     
     /*******************  OTP SCREEN ********************/
     //MARK: GET OTP VALIDATION
-    func getOTPValidateForMobileNumber(mobileNumber:String, otp:String,  onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    func getOTPValidateForMobileNumber(_ mobileNumber:String, otp:String,  onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->())
     {
         let dict = ["mobile_number":mobileNumber, "otp":otp]
         super.getWithOnFinish(mCHWebServiceMethod.match_otp, parameters: dict, onFinish: { (response, deserializedResponse) in
-            onFinish(response: response, deserializedResponse: deserializedResponse)
+            onFinish(response, deserializedResponse)
             }) { (error) in
-                onError(error: error)
+                onError(error)
         }
         
     }
     
     /*******************  SIGN UP ********************/
     //MARK: UPDATE PROFILE
-    func updateProfile(dict:[String:String], onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    func updateProfile(_ dict:[String:String], onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->())
     {
         
-        super.postDataWithOnFinish(mCHWebServiceMethod.update_profile, parameters: dict, postBody: nil, onFinish: { (response, deserializedResponse) in
-            onFinish(response: response, deserializedResponse: deserializedResponse)
+        super.postDataWithOnFinish(mCHWebServiceMethod.update_profile, parameters: dict as Dictionary<String, AnyObject>, postBody: nil, onFinish: { (response, deserializedResponse) in
+            onFinish(response, deserializedResponse)
             }) { (error) in
-                onError(error: error)
+                onError(error)
         }
     }
     /*******************  SEARCH CONTACT ********************/
     
     //MARK:SEARCH CONTACT
-    func searchContact(dict:[String:String], onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    func searchContact(_ dict:[String:String], onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->())
     {
         
-        super.postDataWithOnFinish(mCHWebServiceMethod.search_mobile_number, parameters: dict, postBody: nil, onFinish: { (response, deserializedResponse) in
-            onFinish(response: response, deserializedResponse: deserializedResponse)
+        super.postDataWithOnFinish(mCHWebServiceMethod.search_mobile_number, parameters: dict as Dictionary<String, AnyObject>, postBody: nil, onFinish: { (response, deserializedResponse) in
+            onFinish(response, deserializedResponse)
         }) { (error) in
-            onError(error: error)
+            onError(error)
         }
         
     }
@@ -185,7 +185,7 @@ class DataSession: BaseNSURLSession
     /******************* PROFILE SCREEN ********************/
     
     //MARK: GET USER PROFILE DATA
-    func getProfileData(contact_id:String?, onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    func getProfileData(_ contact_id:String?, onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->())
     {
         var dict = NSObject.getAppUserIdAndToken()
         if let _ = contact_id
@@ -193,9 +193,9 @@ class DataSession: BaseNSURLSession
             dict["contact_id"] = contact_id
         }
         super.getWithOnFinish(mCHWebServiceMethod.app_user_profile, parameters: dict, onFinish: { (response, deserializedResponse) in
-            onFinish(response: response, deserializedResponse: deserializedResponse)
+            onFinish(response, deserializedResponse)
         }) { (error) in
-            onError(error: error)
+            onError(error)
         }
         
         
@@ -203,45 +203,45 @@ class DataSession: BaseNSURLSession
     
     //MARK: POST PROFILE IMAGE
     
-    func postProfileImage(mediaPath:[String]?, name:[String]?,onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    func postProfileImage(_ mediaPath:[String]?, name:[String]?,onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->())
     {
         let dict = NSObject.getAppUserIdAndToken()
         /*
          super.postSBMediaWithOnFinish(mCHWebServiceMethod.image_upload, headerParam: dict, mediaPaths: mediaPath, bodyDict: nil, name: name, onFinish: { (response, deserializedResponse) in
-         onFinish(response: response, deserializedResponse: deserializedResponse)
+         onFinish(response, deserializedResponse)
          }) { (error) in
-         onError(error: error)
+         onError(error)
          }*/
         
         super.postMediaWithOnFinish(mCHWebServiceMethod.image_upload, headerParam: dict, mediaPaths: mediaPath, bodyDict: nil, name: "photo", onFinish: { (response, deserializedResponse) in
-            onFinish(response: response, deserializedResponse: deserializedResponse)
+            onFinish(response, deserializedResponse)
         }) { (error) in
-            onError(error: error)
+            onError(error)
         }
     }
     
     
     
     //MARK: SYNC CONTACT
-    func syncContactToTheServer(dict:[String:String], postDict:[String:String], onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    func syncContactToTheServer(_ dict:[String:String], postDict:[String:String], onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->())
     {
-        super.postDataWithOnFinish(mCHWebServiceMethod.add_contact_list, parameters: dict, postBody: postDict, onFinish: { (response, deserializedResponse) in
-            onFinish(response: response, deserializedResponse: deserializedResponse)
+        super.postDataWithOnFinish(mCHWebServiceMethod.add_contact_list, parameters: dict as Dictionary<String, AnyObject>, postBody: postDict as Dictionary<String, AnyObject>, onFinish: { (response, deserializedResponse) in
+            onFinish(response, deserializedResponse)
         }) { (error) in
-            onError(error: error)
+            onError(error)
         }
     }
     
     
-    func getContactListForPage(/*page:String,*/ onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    func getContactListForPage(/*page:String,*/ _ onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->())
     {
         
          let dict = NSObject.getAppUserIdAndToken()
          //dict["page"] = page
          super.getWithOnFinish(mCHWebServiceMethod.user_contact_list, parameters: dict, onFinish: { (response, deserializedResponse) in
-            onFinish(response: response, deserializedResponse: deserializedResponse)
+            onFinish(response, deserializedResponse)
         }) { (error) in
-            onError(error: error)
+            onError(error)
         }
         
     }
@@ -250,52 +250,52 @@ class DataSession: BaseNSURLSession
     
     
     //MARK: CHAT LIST
-    func getChatList(onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    func getChatList(_ onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->())
     {
         let dict = NSObject.getAppUserIdAndToken()
         super.getWithOnFinish(mCHWebServiceMethod.chat_contact_list, parameters: dict, onFinish: { (response, deserializedResponse) in
-            onFinish(response: response, deserializedResponse: deserializedResponse)
+            onFinish(response, deserializedResponse)
         }) { (error) in
-            onError(error: error)
+            onError(error)
         }
         
     }
     
     //MARK: Get conversation
-    func getChatConversationForID(contactID:String, page: String, onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    func getChatConversationForID(_ contactID:String, page: String, onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->())
     {
         var  dict = NSObject.getAppUserIdAndToken()
         dict["contact_id"] = contactID
         dict["page"] = page
         
         super.getWithOnFinish(mCHWebServiceMethod.chat_conversation, parameters: dict, onFinish: { (response, deserializedResponse) in
-            onFinish(response: response, deserializedResponse: deserializedResponse)
+            onFinish(response, deserializedResponse)
         }) { (error) in
-            onError(error: error)
+            onError(error)
         }
         
     }
     
     
     //MARK: ADD REVIEW LIST
-    func addRateReview(dict:[String:String], onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    func addRateReview(_ dict:[String:String], onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->())
     {
-        super.postDataWithOnFinish(mCHWebServiceMethod.add_rate_review, parameters: dict, postBody: nil, onFinish: { (response, deserializedResponse) in
-            onFinish(response: response, deserializedResponse: deserializedResponse)
+        super.postDataWithOnFinish(mCHWebServiceMethod.add_rate_review, parameters: dict as Dictionary<String, AnyObject>, postBody: nil, onFinish: { (response, deserializedResponse) in
+            onFinish(response, deserializedResponse)
         }) { (error) in
-            onError(error: error)
+            onError(error)
         }
         
     }
     
     //MARK: CONTACT LIST REVIEW
-    func getContactReviewList(dict:[String:String], onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    func getContactReviewList(_ dict:[String:String], onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->())
     {
         
         super.getWithOnFinish(mCHWebServiceMethod.contact_review_list, parameters: dict, onFinish: { (response, deserializedResponse) in
-            onFinish(response: response, deserializedResponse: deserializedResponse)
+            onFinish(response, deserializedResponse)
         }) { (error) in
-            onError(error: error)
+            onError(error)
         }
         
     }
@@ -304,19 +304,19 @@ class DataSession: BaseNSURLSession
     
     //MARK: CHAT CONVERSATION
     
-    func getChatConversionForContactID(dict:[String:String], onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    func getChatConversionForContactID(_ dict:[String:String], onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->())
     {
         super.getWithOnFinish(mCHWebServiceMethod.chat_conversation, parameters: nil, onFinish: { (response, deserializedResponse) in
-            onFinish(response: response, deserializedResponse: deserializedResponse)
+            onFinish(response, deserializedResponse)
         }) { (error) in
-            onError(error: error)
+            onError(error)
         }
 
 
     }
     
     // MARK: TEXT MESSAGE
-    func sendTextMessage(recipient_id:String, message:String,  onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    func sendTextMessage(_ recipient_id:String, message:String,  onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->())
     {
          var  paramdict = NSObject.getAppUserIdAndToken()
          paramdict["recipient_id"] = recipient_id
@@ -324,18 +324,18 @@ class DataSession: BaseNSURLSession
         
          let  postDict = ["text":message]
         
-        super.postDataWithOnFinish(mCHWebServiceMethod.send_message, parameters: paramdict, postBody: postDict, onFinish: { (response, deserializedResponse) in
-            onFinish(response: response, deserializedResponse: deserializedResponse)
+        super.postDataWithOnFinish(mCHWebServiceMethod.send_message, parameters: paramdict as Dictionary<String, AnyObject>, postBody: postDict as Dictionary<String, AnyObject>, onFinish: { (response, deserializedResponse) in
+            onFinish(response, deserializedResponse)
 
             }) { (error) in
-                onError(error: error)
+                onError(error)
         }
         
        
     }
     
     
-    func sendVideoORImageMessage(recipentID:String, message_type: String, mediaPath:[String]?, name:[String]?,onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    func sendVideoORImageMessage(_ recipentID:String, message_type: String, mediaPath:[String]?, name:[String]?,onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->())
     {
         
         var dict = NSObject.getAppUserIdAndToken()
@@ -343,69 +343,69 @@ class DataSession: BaseNSURLSession
         dict["message_type"] = message_type
     
         super.postMediaWithOnFinish(mCHWebServiceMethod.send_message, headerParam: dict, mediaPaths: mediaPath, bodyDict: nil, name: message_type, onFinish: { (response, deserializedResponse) in
-            onFinish(response: response, deserializedResponse: deserializedResponse)
+            onFinish(response, deserializedResponse)
         }) { (error) in
-            onError(error: error)
+            onError(error)
         }
         
     }
     
     
-    func likeUserID(ratereviews_id:String, onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    func likeUserID(_ ratereviews_id:String, onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->())
     {
         var dict = NSObject.getAppUserIdAndToken()
         dict["ratereviews_id"] = ratereviews_id
         super.getWithOnFinish(mCHWebServiceMethod.like_review, parameters: dict, onFinish: { (response, deserializedResponse) in
-            onFinish(response: response, deserializedResponse: deserializedResponse)
+            onFinish(response, deserializedResponse)
         }) { (error) in
-            onError(error: error)
+            onError(error)
         }
         
     }
     
-    func dislikeUserID(ratereviews_id:String, onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    func dislikeUserID(_ ratereviews_id:String, onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->())
     {
         var dict = NSObject.getAppUserIdAndToken()
         dict["ratereviews_id"] = ratereviews_id
         super.getWithOnFinish(mCHWebServiceMethod.dislike_review, parameters: dict, onFinish: { (response, deserializedResponse) in
-            onFinish(response: response, deserializedResponse: deserializedResponse)
+            onFinish(response, deserializedResponse)
         }) { (error) in
-            onError(error: error)
+            onError(error)
         }
         
     }
     
     //MARK: block user id
     
-    func blockUserID(userID:String, onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    func blockUserID(_ userID:String, onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->())
     {
         var dict = NSObject.getAppUserIdAndToken()
-        let appUserId = NSUserDefaults.standardUserDefaults().objectForKey(kapp_user_id) as! Int
+        let appUserId = UserDefaults.standard.object(forKey: kapp_user_id) as! Int
         
         dict["block_user_id"] = String(appUserId)
         dict ["for_user_id"]  = userID
         
-        super.postDataWithOnFinish(mCHWebServiceMethod.block_mobile_number, parameters: dict, postBody: nil, onFinish: { (response, deserializedResponse) in
-            onFinish(response: response, deserializedResponse: deserializedResponse)
+        super.postDataWithOnFinish(mCHWebServiceMethod.block_mobile_number, parameters: dict as Dictionary<String, AnyObject>, postBody: nil, onFinish: { (response, deserializedResponse) in
+            onFinish(response, deserializedResponse)
 
             }) { (error) in
-                onError(error: error)
+                onError(error)
 
         }
         
     }
     
-    func unblockUserID(userID:String, onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    func unblockUserID(_ userID:String, onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->())
     {
         var dict = NSObject.getAppUserIdAndToken()
-        let appUserId = NSUserDefaults.standardUserDefaults().objectForKey(kapp_user_id) as! Int
+        let appUserId = UserDefaults.standard.object(forKey: kapp_user_id) as! Int
         dict["block_user_id"] = String(appUserId)
         dict ["for_user_id"]  = userID
-        super.postDataWithOnFinish(mCHWebServiceMethod.unblock_mobile_number, parameters: dict, postBody: nil, onFinish: { (response, deserializedResponse) in
-            onFinish(response: response, deserializedResponse: deserializedResponse)
+        super.postDataWithOnFinish(mCHWebServiceMethod.unblock_mobile_number, parameters: dict as Dictionary<String, AnyObject>, postBody: nil, onFinish: { (response, deserializedResponse) in
+            onFinish(response, deserializedResponse)
             
         }) { (error) in
-            onError(error: error)
+            onError(error)
             
         }
         
@@ -413,61 +413,61 @@ class DataSession: BaseNSURLSession
 
     
     
-    func getBlockUsersList(onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    func getBlockUsersList(_ onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->())
     {
         let dict = NSObject.getAppUserIdAndToken()
         super.getWithOnFinish(mCHWebServiceMethod.user_block_list, parameters: dict, onFinish: { (response, deserializedResponse) in
-             onFinish(response: response, deserializedResponse: deserializedResponse)
+             onFinish(response, deserializedResponse)
             }) { (error) in
-                onError(error: error)
+                onError(error)
         }
         
     }
     
     
     //MARK SPAM
-    func spamUserID(userID:String, onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    func spamUserID(_ userID:String, onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->())
     {
         var dict = NSObject.getAppUserIdAndToken()
         //dict.removeValueForKey(kapp_user_id)
-        let appUserId = NSUserDefaults.standardUserDefaults().objectForKey(kapp_user_id) as! Int
+        let appUserId = UserDefaults.standard.object(forKey: kapp_user_id) as! Int
         
         dict["by_user_id"] = String(appUserId)
         dict["spam_user_id"] = userID
-        super.postDataWithOnFinish(mCHWebServiceMethod.spam_mobile_number, parameters: dict, postBody: nil, onFinish: { (response, deserializedResponse) in
-            onFinish(response: response, deserializedResponse: deserializedResponse)
+        super.postDataWithOnFinish(mCHWebServiceMethod.spam_mobile_number, parameters: dict as Dictionary<String, AnyObject>, postBody: nil, onFinish: { (response, deserializedResponse) in
+            onFinish(response, deserializedResponse)
             
         }) { (error) in
-            onError(error: error)
+            onError(error)
             
         }
         
     }
     
     //MARK SPAM
-    func unspamUserID(userID:String, onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    func unspamUserID(_ userID:String, onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->())
     {
         var dict = NSObject.getAppUserIdAndToken()
-         let appUserId = NSUserDefaults.standardUserDefaults().objectForKey(kapp_user_id) as! Int
+         let appUserId = UserDefaults.standard.object(forKey: kapp_user_id) as! Int
         dict["by_user_id"] = String(appUserId)
         dict["spam_user_id"] = userID
-        super.postDataWithOnFinish(mCHWebServiceMethod.unspam_mobile_number, parameters: dict, postBody: nil, onFinish: { (response, deserializedResponse) in
-            onFinish(response: response, deserializedResponse: deserializedResponse)
+        super.postDataWithOnFinish(mCHWebServiceMethod.unspam_mobile_number, parameters: dict as Dictionary<String, AnyObject>, postBody: nil, onFinish: { (response, deserializedResponse) in
+            onFinish(response, deserializedResponse)
             
         }) { (error) in
-            onError(error: error)
+            onError(error)
             
         }
         
     }
     
-    func getUserSpamList(onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    func getUserSpamList(_ onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->())
     {
         let dict = NSObject.getAppUserIdAndToken()
         super.getWithOnFinish(mCHWebServiceMethod.user_spam_list, parameters: dict, onFinish: { (response, deserializedResponse) in
-        onFinish(response: response, deserializedResponse: deserializedResponse)
+        onFinish(response, deserializedResponse)
         }) { (error) in
-        onError(error: error)
+        onError(error)
         }
         
     }
@@ -475,40 +475,40 @@ class DataSession: BaseNSURLSession
     
     
     //MARK:FAVOURITE
-    func favouriteUserID(userID:String, onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    func favouriteUserID(_ userID:String, onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->())
     {
         var dict = NSObject.getAppUserIdAndToken()
         dict["fav_user_id"] = userID
-        super.postDataWithOnFinish(mCHWebServiceMethod.favourite_mobile_number, parameters: dict, postBody: nil, onFinish: { (response, deserializedResponse) in
-            onFinish(response: response, deserializedResponse: deserializedResponse)
+        super.postDataWithOnFinish(mCHWebServiceMethod.favourite_mobile_number, parameters: dict as Dictionary<String, AnyObject>, postBody: nil, onFinish: { (response, deserializedResponse) in
+            onFinish(response, deserializedResponse)
             
         }) { (error) in
-            onError(error: error)
+            onError(error)
             
         }
     }
 
-    func unfavouriteUserID(userID:String, onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    func unfavouriteUserID(_ userID:String, onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->())
     {
         var dict = NSObject.getAppUserIdAndToken()
         dict["fav_user_id"] = userID
-        super.postDataWithOnFinish(mCHWebServiceMethod.unfavourite_mobile_number, parameters: dict, postBody: nil, onFinish: { (response, deserializedResponse) in
-            onFinish(response: response, deserializedResponse: deserializedResponse)
+        super.postDataWithOnFinish(mCHWebServiceMethod.unfavourite_mobile_number, parameters: dict as Dictionary<String, AnyObject>, postBody: nil, onFinish: { (response, deserializedResponse) in
+            onFinish(response, deserializedResponse)
             
         }) { (error) in
-            onError(error: error)
+            onError(error)
             
         }
         
     }
     
-    func getUserfavoriteList(onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    func getUserfavoriteList(_ onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->())
     {
         let dict = NSObject.getAppUserIdAndToken()
         super.getWithOnFinish(mCHWebServiceMethod.user_favourite_list, parameters: dict, onFinish: { (response, deserializedResponse) in
-            onFinish(response: response, deserializedResponse: deserializedResponse)
+            onFinish(response, deserializedResponse)
         }) { (error) in
-            onError(error: error)
+            onError(error)
         }
         
     }
@@ -524,48 +524,48 @@ class DataSessionManger: NSObject
     static let sharedInstance = DataSessionManger()
     
     
-    func downloadImageWithURL(urlString:String, downloadedImageData:(imageData:NSData?, message:String)->())
+    func downloadImageWithURL(_ urlString:String, downloadedImageData:@escaping (_ imageData:Data?, _ message:String)->())
     {
         let dataSession = DataSession()
         dataSession.downloadImageWithURL(urlString ) { (imageData, message) in
-            downloadedImageData(imageData: imageData, message: message)
+            downloadedImageData(imageData, message)
         }
         
     }
     
     
-    func sendVideoORImageMessage(recipentID:String, message_type: String, mediaPath:[String]?, name:[String]?,onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    func sendVideoORImageMessage(_ recipentID:String, message_type: String, mediaPath:[String]?, name:[String]?,onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->())
     {
         
          let dataSession = DataSession()
         dataSession.sendVideoORImageMessage(recipentID, message_type: message_type, mediaPath: mediaPath, name: name, onFinish: { (response, deserializedResponse) in
-            onFinish(response: response, deserializedResponse: deserializedResponse)
+            onFinish(response, deserializedResponse)
             }) { (error) in
-                 onError(error: error)
+                 onError(error)
         }
     }
     
     
-    func  getAlertCount(onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    func  getAlertCount(_ onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->())
     {
         let dataSession = DataSession()
         dataSession.getAlertCount({ (response, deserializedResponse) in
-            onFinish(response: response, deserializedResponse: deserializedResponse)
+            onFinish(response, deserializedResponse)
 
             }) { (error) in
-                onError(error: error)
+                onError(error)
         }
     }
     
     
     
-    func dislikeUserID(ratereviews_id:String, onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->()){
+    func dislikeUserID(_ ratereviews_id:String, onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->()){
         
         let dataSession = DataSession()
         dataSession.dislikeUserID(ratereviews_id, onFinish: { (response, deserializedResponse) in
-             onFinish(response: response, deserializedResponse: deserializedResponse)
+             onFinish(response, deserializedResponse)
             }) { (error) in
-                 onError(error: error)
+                 onError(error)
         }
         
         
@@ -573,99 +573,99 @@ class DataSessionManger: NSObject
     
     
     
-    func likeUserID(ratereviews_id:String, onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->()){
+    func likeUserID(_ ratereviews_id:String, onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->()){
         
         let dataSession = DataSession()
         dataSession.likeUserID(ratereviews_id, onFinish: { (response, deserializedResponse) in
-            onFinish(response: response, deserializedResponse: deserializedResponse)
+            onFinish(response, deserializedResponse)
 
             }) { (error) in
-                onError(error: error)
+                onError(error)
         }
         
         
     }
     
-    func postProfileImage(mediaPath:[String]?, name:[String]?,onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->()){
+    func postProfileImage(_ mediaPath:[String]?, name:[String]?,onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->()){
         
         let dataSession = DataSession()
         dataSession.postProfileImage(mediaPath, name: name, onFinish: { (response, deserializedResponse) in
-            onFinish(response: response, deserializedResponse: deserializedResponse)
+            onFinish(response, deserializedResponse)
             }) { (error) in
-                onError(error: error)
+                onError(error)
         }
         
     }
     
-    func getProfileData(contact_id:String?, onFinish:(response:AnyObject,personalProfile:SearchPerson)->(), onError:(error:AnyObject)->()){
+    func getProfileData(_ contact_id:String?, onFinish:@escaping (_ response:AnyObject,_ personalProfile:SearchPerson)->(), onError:@escaping (_ error:AnyObject)->()){
         
         let dataSession = DataSession()
         dataSession.getProfileData(contact_id, onFinish: { (response, deserializedResponse) in
             let personalProfileData = SearchPerson()
             if deserializedResponse is NSDictionary
             {
-                if let arrayDict = deserializedResponse.objectForKey(user_profile) as? [NSDictionary]
+                if let arrayDict = deserializedResponse.object(forKey: user_profile) as? [NSDictionary]
                 {
                     
                     
                     let dataDict = arrayDict.first
                     
-                    if let _ = dataDict?.objectForKey("id") as? Int
+                    if let _ = dataDict?.object(forKey: "id") as? Int
                     {
-                        personalProfileData.idString = (dataDict?.objectForKey("id") as? Int)!
+                        personalProfileData.idString = (dataDict?.object(forKey: "id") as? Int)!
                     }
-                    if let  name = dataDict?.objectForKey(name) as? String
+                    if let  name = dataDict?.object(forKey: name) as? String
                     {
                         personalProfileData.name = name
                     }
                     
-                    if let _ = dataDict?.objectForKey(email)
+                    if let _ = dataDict?.object(forKey: email)
                     {
-                        personalProfileData.email = (dataDict?.objectForKey(email))! as? String
+                        personalProfileData.email = (dataDict?.object(forKey: email))! as? String
                     }
                     
-                    if let _ = dataDict?.objectForKey(mobile_number) as? String
+                    if let _ = dataDict?.object(forKey: mobile_number) as? String
                     {
-                        personalProfileData.mobileNumber = (dataDict?.objectForKey(mobile_number) as? String!)!
+                        personalProfileData.mobileNumber = (dataDict?.object(forKey: mobile_number) as? String!)!
                     }
                     
-                    if let createdAt = dataDict?.objectForKey(created_at) as? String
+                    if let createdAt = dataDict?.object(forKey: created_at) as? String
                     {
                         personalProfileData.created_at = createdAt
                     }
                    
                      
-                    personalProfileData.updated_at = dataDict?.objectForKey(updated_at) as? String
-                    personalProfileData.address = dataDict?.objectForKey(address) as? String
-                    personalProfileData.website = dataDict?.objectForKey(website) as? String
-                    personalProfileData.birthday = dataDict?.objectForKey("dob") as? String
-                    personalProfileData.gender = dataDict?.objectForKey("gender") as? String
-                    personalProfileData.status = dataDict?.objectForKey("status") as? String
-                    if let _ = dataDict?.objectForKey(photo) as? String
+                    personalProfileData.updated_at = dataDict?.object(forKey: updated_at) as? String
+                    personalProfileData.address = dataDict?.object(forKey: address) as? String
+                    personalProfileData.website = dataDict?.object(forKey: website) as? String
+                    personalProfileData.birthday = dataDict?.object(forKey: "dob") as? String
+                    personalProfileData.gender = dataDict?.object(forKey: "gender") as? String
+                    personalProfileData.status = dataDict?.object(forKey: "status") as? String
+                    if let _ = dataDict?.object(forKey: photo) as? String
                     {
-                        personalProfileData.photo = dataDict?.objectForKey(photo) as? String
+                        personalProfileData.photo = dataDict?.object(forKey: photo) as? String
                     }
                     
-                    if let _ = dataDict?.objectForKey(gcm_token) as? String
+                    if let _ = dataDict?.object(forKey: gcm_token) as? String
                     {
                     
-                        personalProfileData.gcm_token = (dataDict?.objectForKey(gcm_token) as? String)!
+                        personalProfileData.gcm_token = (dataDict?.object(forKey: gcm_token) as? String)!
                     }
                     
                     
-                    if let lastonlineTime = dataDict?.objectForKey(last_online_time) as? String
+                    if let lastonlineTime = dataDict?.object(forKey: last_online_time) as? String
                     {
                          personalProfileData.last_online_time = lastonlineTime
                         
                     }
                     
                     
-                    if let  ratingAverage = dataDict?.objectForKey("rating_average") as? [NSDictionary]
+                    if let  ratingAverage = dataDict?.object(forKey: "rating_average") as? [NSDictionary]
                     {
                         for dict in ratingAverage
                         {
                             let average = RatingAverage()
-                            if let avg = dict.objectForKey("average") as? String
+                            if let avg = dict.object(forKey: "average") as? String
                             {
                                 average.average =   avg
                             }
@@ -675,12 +675,12 @@ class DataSessionManger: NSObject
                         
                     }
                     
-                    if let  reviewCount = dataDict?.objectForKey("review_count") as? [NSDictionary]
+                    if let  reviewCount = dataDict?.object(forKey: "review_count") as? [NSDictionary]
                     {
                         for dict in reviewCount
                         {
                             let count = ReviewCount()
-                            count.count =   String(dict.objectForKey("count") as! Int)
+                            count.count =   String(dict.object(forKey: "count") as! Int)
                             personalProfileData.reviewCount.append(count)
                             
                         }
@@ -688,24 +688,24 @@ class DataSessionManger: NSObject
                 }
             }
             
-            onFinish(response: response, personalProfile: personalProfileData)
+            onFinish(response, personalProfileData)
             
             
             }) { (error) in
-                onError(error: error)
+                onError(error)
         }
         
     }
     
     
     
-    func getOTPForMobileNumber(mobileNumber:String, onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->()){
+    func getOTPForMobileNumber(_ mobileNumber:String, onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->()){
         
         let dataSession = DataSession()
         dataSession.getOTPForMobileNumber(mobileNumber, onFinish: { (response, deserializedResponse) in
-            onFinish(response: response, deserializedResponse: deserializedResponse)
+            onFinish(response, deserializedResponse)
             }) { (error) in
-                onError(error: error)
+                onError(error)
         }
         
     }
@@ -716,7 +716,7 @@ class DataSessionManger: NSObject
     
     
     //feed Like
-    func feedLikeUser(dict:[String:String], onFinish:(response:AnyObject,deserializedResponse:dataFeedMyfeedModel)->(), onError:(error:AnyObject)->()){
+    func feedLikeUser(_ dict:[String:String], onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:dataFeedMyfeedModel)->(), onError:@escaping (_ error:AnyObject)->()){
         
         let dataSession = DataSession()
         
@@ -732,63 +732,63 @@ class DataSessionManger: NSObject
 //                AlertUser.post_id = (deserializedResponse.objectForKey("success") as? Int)!
            // AlertUser.likeDislikecount = NSNumber( ptr:(deserializedResponse.objectForKey("message") as? String)!)
                 
-            if let message = deserializedResponse.objectForKey("message") as? String
+            if let message = deserializedResponse.object(forKey: "message") as? String
             {
                 if let _ = Int(message)
                 {
-                    AlertUser.likeDislikecount = NSNumber(integer: Int(message)!)
+                    AlertUser.likeDislikecount = NSNumber(value: Int(message)! as Int)
                 }
             }
             
             let datavalue = dataFeedMyfeedModel()
-            if let  dict = deserializedResponse.objectForKey("post") as? NSDictionary
+            if let  dict = deserializedResponse.object(forKey: "post") as? NSDictionary
             {
                 
-                    datavalue.id =   (dict.objectForKey("id") as? Int)!
+                    datavalue.id =   (dict.object(forKey: "id") as? Int)!
                     
-                    if let action = dict.objectForKey("action") as? String
+                    if let action = dict.object(forKey: "action") as? String
                     {
                         datavalue.action = action
                     }
                     
-                    if dict.objectForKey("action_val") != nil
+                    if dict.object(forKey: "action_val") != nil
                     {
                         
-                        if let _ = dict.objectForKey("action_val") as? String
+                        if let _ = dict.object(forKey: "action_val") as? String
                         {
-                            datavalue.action_val = (dict.objectForKey("action_val") as? String)!
+                            datavalue.action_val = (dict.object(forKey: "action_val") as? String)!
                         }
                         
                     }
                     
-                    if let review =  dict.objectForKey("review") as? String
+                    if let review =  dict.object(forKey: "review") as? String
                     {
                         datavalue.review = review
                         
                     }
                     
-                    if (dict.objectForKey("recent_action") as? String) != nil
+                    if (dict.object(forKey: "recent_action") as? String) != nil
                     {
                         
-                        datavalue.recent_action =   (dict.objectForKey("recent_action") as? String)!
+                        datavalue.recent_action =   (dict.object(forKey: "recent_action") as? String)!
                     }
                     
-                    datavalue.created_at =   (dict.objectForKey("created_at") as? String)!
+                    datavalue.created_at =   (dict.object(forKey: "created_at") as? String)!
                     
-                    if let innerDict = dict.objectForKey("performed")
+                    if let innerDict = dict.object(forKey: "performed")
                     {
                         
                         let performedatavalue = SearchPerson()
-                        performedatavalue.idString =   (innerDict.objectForKey("id") as? Int)!
+                        performedatavalue.idString =   ((innerDict as AnyObject).object(forKey: "id") as? Int)!
                         
-                        if innerDict.objectForKey("name") != nil
+                        if (innerDict as AnyObject).object(forKey: "name") != nil
                         {
-                            performedatavalue.name =   (innerDict.objectForKey("name") as? String)!
+                            performedatavalue.name =   ((innerDict as AnyObject).object(forKey: "name") as? String)!
                         }
                         
-                        performedatavalue.mobileNumber =  (innerDict.objectForKey("mobile_number") as? String)!
+                        performedatavalue.mobileNumber =  ((innerDict as AnyObject).object(forKey: "mobile_number") as? String)!
                         
-                        if let photo = innerDict.objectForKey("photo") as? String
+                        if let photo = (innerDict as AnyObject).object(forKey: "photo") as? String
                         {
                             performedatavalue.photo =   photo
                         }
@@ -797,26 +797,26 @@ class DataSessionManger: NSObject
                     }
                     
                     
-                    if (self.nullToNil(dict.objectForKey("effected")) != nil)
+                    if (self.nullToNil(dict.object(forKey: "effected") as AnyObject) != nil)
                     {
-                        if let effectedDict = dict.objectForKey("effected")
+                        if let effectedDict = dict.object(forKey: "effected")
                         {
                             
                             print(effectedDict)
-                            print(dict.objectForKey("effected"))
+                            print(dict.object(forKey: "effected") ?? "") 
                             let effectedatavalue = SearchPerson()
-                            effectedatavalue.idString =   (effectedDict.objectForKey("id") as? Int)!
+                            effectedatavalue.idString =   ((effectedDict as AnyObject).object(forKey: "id") as? Int)!
                             
                             
                             
-                            if effectedDict.objectForKey("name") != nil
+                            if (effectedDict as AnyObject).object(forKey: "name") != nil
                             {
-                                effectedatavalue.name =   (effectedDict.objectForKey("name") as? String)!
+                                effectedatavalue.name =   ((effectedDict as AnyObject).object(forKey: "name") as? String)!
                             }
                             
-                            effectedatavalue.mobileNumber =  (effectedDict.objectForKey("mobile_number") as? String)!
+                            effectedatavalue.mobileNumber =  ((effectedDict as AnyObject).object(forKey: "mobile_number") as? String)!
                             
-                            if let photo = effectedDict.objectForKey("photo") as? String
+                            if let photo = (effectedDict as AnyObject).object(forKey: "photo") as? String
                             {
                                 effectedatavalue.photo =   photo
                             }
@@ -828,23 +828,23 @@ class DataSessionManger: NSObject
                     }
                     
                     
-                    if let  likesList = dict.objectForKey("likes_count") as? [NSDictionary]
+                    if let  likesList = dict.object(forKey: "likes_count") as? [NSDictionary]
                     {
                         
                         for dict in likesList
                         {
                             
                             let LikeDislikevalue = AlertCountCommonModel()
-                            if let _ = dict.objectForKey("post_id") as? String
+                            if let _ = dict.object(forKey: "post_id") as? String
                             {
-                                LikeDislikevalue.post_id = (dict.objectForKey("post_id") as? NSNumber)!
+                                LikeDislikevalue.post_id = (dict.object(forKey: "post_id") as? NSNumber)!
                             }
                             
-                            if let _ =  dict.objectForKey("likes") as? NSNumber
+                            if let _ =  dict.object(forKey: "likes") as? NSNumber
                             {
                                 
                                 
-                                LikeDislikevalue.likeDislikecount =   (dict.objectForKey("likes") as? NSNumber)!
+                                LikeDislikevalue.likeDislikecount =   (dict.object(forKey: "likes") as? NSNumber)!
                             }
                             
                             datavalue.likes_count = LikeDislikevalue
@@ -853,7 +853,7 @@ class DataSessionManger: NSObject
                         print(likesList)
                     }
                     
-                    if let  dislikesList = dict.objectForKey("dislikes_count") as? [NSDictionary]
+                    if let  dislikesList = dict.object(forKey: "dislikes_count") as? [NSDictionary]
                     {
                         
                         for dict in dislikesList
@@ -861,8 +861,8 @@ class DataSessionManger: NSObject
                             
                             let LikeDislikevalue = AlertCountCommonModel()
                             
-                            LikeDislikevalue.post_id =   (dict.objectForKey("post_id") as? NSNumber)!
-                            LikeDislikevalue.likeDislikecount =   (dict.objectForKey("dislikes") as? NSNumber)!
+                            LikeDislikevalue.post_id =   (dict.object(forKey: "post_id") as? NSNumber)!
+                            LikeDislikevalue.likeDislikecount =   (dict.object(forKey: "dislikes") as? NSNumber)!
                             
                             datavalue.dislikes_count = LikeDislikevalue
                         }
@@ -871,22 +871,22 @@ class DataSessionManger: NSObject
                     
                     
                     
-                    if let  likesUserList = dict.objectForKey("likes_user") as? [NSDictionary]{
+                    if let  likesUserList = dict.object(forKey: "likes_user") as? [NSDictionary]{
                         
                         for dict in likesUserList
                         {
                             
                             let likesUserdatavalue = SearchPerson()
-                            likesUserdatavalue.idString =   (dict.objectForKey("id") as? Int)!
-                            if let name = dict.objectForKey("name") as? String
+                            likesUserdatavalue.idString =   (dict.object(forKey: "id") as? Int)!
+                            if let name = dict.object(forKey: "name") as? String
                             {
                                 likesUserdatavalue.name = name
                             }
-                            likesUserdatavalue.mobileNumber =   (dict.objectForKey("mobile_number") as? String)!
+                            likesUserdatavalue.mobileNumber =   (dict.object(forKey: "mobile_number") as? String)!
                             
-                            if (dict.objectForKey("photo") as? String) != nil
+                            if (dict.object(forKey: "photo") as? String) != nil
                             {
-                                likesUserdatavalue.photo =   (dict.objectForKey("photo") as? String)!
+                                likesUserdatavalue.photo =   (dict.object(forKey: "photo") as? String)!
                             }
                             
                             datavalue.likes_user.append(likesUserdatavalue)
@@ -894,22 +894,22 @@ class DataSessionManger: NSObject
                     }
                     
                     
-                    if let  dislikesUserList = dict.objectForKey("dislikes_user") as? [NSDictionary]{
+                    if let  dislikesUserList = dict.object(forKey: "dislikes_user") as? [NSDictionary]{
                         
                         for dict in dislikesUserList
                         {
                             
                             let dislikesUserdatavalue = SearchPerson()
-                            dislikesUserdatavalue.idString =   (dict.objectForKey("id") as? Int)!
-                            if let name = dict.objectForKey("name") as? String
+                            dislikesUserdatavalue.idString =   (dict.object(forKey: "id") as? Int)!
+                            if let name = dict.object(forKey: "name") as? String
                             {
                                 dislikesUserdatavalue.name = name
                             }
                             //                                    dislikesUserdatavalue.name =   (dict.objectForKey("name") as? String)!
                             //
-                            dislikesUserdatavalue.mobileNumber =   (dict.objectForKey("mobile_number") as? String)!
+                            dislikesUserdatavalue.mobileNumber =   (dict.object(forKey: "mobile_number") as? String)!
                             
-                            if let photo = dict.objectForKey("photo") as? String
+                            if let photo = dict.object(forKey: "photo") as? String
                             {
                                 dislikesUserdatavalue.photo =   photo
                             }
@@ -930,16 +930,16 @@ class DataSessionManger: NSObject
             
             
             
-            onFinish(response: response, deserializedResponse: datavalue)
+            onFinish(response, datavalue)
         }) { (error) in
-            onError(error: error)
+            onError(error)
         }
         
     }
     
     
     //feed DisLike
-    func feedisLikeUser(dict:[String:String], onFinish:(response:AnyObject,deserializedResponse:dataFeedMyfeedModel)->(), onError:(error:AnyObject)->()){
+    func feedisLikeUser(_ dict:[String:String], onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:dataFeedMyfeedModel)->(), onError:@escaping (_ error:AnyObject)->()){
         
         let dataSession = DataSession()
         dataSession.feedisLike(dict, onFinish: { (response, deserializedResponse) in
@@ -948,62 +948,62 @@ class DataSessionManger: NSObject
             
             print(deserializedResponse)
             
-            if let likedislikeCount = deserializedResponse.objectForKey("message") as? String
+            if let likedislikeCount = deserializedResponse.object(forKey: "message") as? String
             {
                 if let _ = Int(likedislikeCount)
                 {
-                    AlertUser.likeDislikecount =  NSNumber(integer: Int(likedislikeCount)!)
+                    AlertUser.likeDislikecount =  NSNumber(value: Int(likedislikeCount)! as Int)
                 }
              }
             let datavalue = dataFeedMyfeedModel()
-            if let  dict = deserializedResponse.objectForKey("post") as? NSDictionary
+            if let  dict = deserializedResponse.object(forKey: "post") as? NSDictionary
             {
                 
-                datavalue.id =   (dict.objectForKey("id") as? Int)!
+                datavalue.id =   (dict.object(forKey: "id") as? Int)!
                 
-                if let action = dict.objectForKey("action") as? String
+                if let action = dict.object(forKey: "action") as? String
                 {
                     datavalue.action = action
                 }
                 
-                if dict.objectForKey("action_val") != nil
+                if dict.object(forKey: "action_val") != nil
                 {
                     
-                    if let _ = dict.objectForKey("action_val") as? String
+                    if let _ = dict.object(forKey: "action_val") as? String
                     {
-                        datavalue.action_val = (dict.objectForKey("action_val") as? String)!
+                        datavalue.action_val = (dict.object(forKey: "action_val") as? String)!
                     }
                     
                 }
                 
-                if let review =  dict.objectForKey("review") as? String
+                if let review =  dict.object(forKey: "review") as? String
                 {
                     datavalue.review = review
                     
                 }
                 
-                if (dict.objectForKey("recent_action") as? String) != nil
+                if (dict.object(forKey: "recent_action") as? String) != nil
                 {
                     
-                    datavalue.recent_action =   (dict.objectForKey("recent_action") as? String)!
+                    datavalue.recent_action =   (dict.object(forKey: "recent_action") as? String)!
                 }
                 
-                datavalue.created_at =   (dict.objectForKey("created_at") as? String)!
+                datavalue.created_at =   (dict.object(forKey: "created_at") as? String)!
                 
-                if let innerDict = dict.objectForKey("performed")
+                if let innerDict = dict.object(forKey: "performed")
                 {
                     
                     let performedatavalue = SearchPerson()
-                    performedatavalue.idString =   (innerDict.objectForKey("id") as? Int)!
+                    performedatavalue.idString =   ((innerDict as AnyObject).object(forKey: "id") as? Int)!
                     
-                    if innerDict.objectForKey("name") != nil
+                    if (innerDict as AnyObject).object(forKey: "name") != nil
                     {
-                        performedatavalue.name =   (innerDict.objectForKey("name") as? String)!
+                        performedatavalue.name =   ((innerDict as AnyObject).object(forKey: "name") as? String)!
                     }
                     
-                    performedatavalue.mobileNumber =  (innerDict.objectForKey("mobile_number") as? String)!
+                    performedatavalue.mobileNumber =  ((innerDict as AnyObject).object(forKey: "mobile_number") as? String)!
                     
-                    if let photo = innerDict.objectForKey("photo") as? String
+                    if let photo = (innerDict as AnyObject).object(forKey: "photo") as? String
                     {
                         performedatavalue.photo =   photo
                     }
@@ -1012,26 +1012,25 @@ class DataSessionManger: NSObject
                 }
                 
                 
-                if (self.nullToNil(dict.objectForKey("effected")) != nil)
+                if (self.nullToNil(dict.object(forKey: "effected") as AnyObject) != nil)
                 {
-                    if let effectedDict = dict.objectForKey("effected")
+                    if let effectedDict = dict.object(forKey: "effected")
                     {
                         
-                        print(effectedDict)
-                        print(dict.objectForKey("effected"))
+                         
                         let effectedatavalue = SearchPerson()
-                        effectedatavalue.idString =   (effectedDict.objectForKey("id") as? Int)!
+                        effectedatavalue.idString =   ((effectedDict as AnyObject).object(forKey: "id") as? Int)!
                         
                         
                         
-                        if effectedDict.objectForKey("name") != nil
+                        if (effectedDict as AnyObject).object(forKey: "name") != nil
                         {
-                            effectedatavalue.name =   (effectedDict.objectForKey("name") as? String)!
+                            effectedatavalue.name =   ((effectedDict as AnyObject).object(forKey: "name") as? String)!
                         }
                         
-                        effectedatavalue.mobileNumber =  (effectedDict.objectForKey("mobile_number") as? String)!
+                        effectedatavalue.mobileNumber =  ((effectedDict as AnyObject).object(forKey: "mobile_number") as? String)!
                         
-                        if let photo = effectedDict.objectForKey("photo") as? String
+                        if let photo = (effectedDict as AnyObject).object(forKey: "photo") as? String
                         {
                             effectedatavalue.photo =   photo
                         }
@@ -1043,23 +1042,23 @@ class DataSessionManger: NSObject
                 }
                 
                 
-                if let  likesList = dict.objectForKey("likes_count") as? [NSDictionary]
+                if let  likesList = dict.object(forKey: "likes_count") as? [NSDictionary]
                 {
                     
                     for dict in likesList
                     {
                         
                         let LikeDislikevalue = AlertCountCommonModel()
-                        if let _ = dict.objectForKey("post_id") as? String
+                        if let _ = dict.object(forKey: "post_id") as? String
                         {
-                            LikeDislikevalue.post_id = (dict.objectForKey("post_id") as? NSNumber)!
+                            LikeDislikevalue.post_id = (dict.object(forKey: "post_id") as? NSNumber)!
                         }
                         
-                        if let _ =  dict.objectForKey("likes") as? NSNumber
+                        if let _ =  dict.object(forKey: "likes") as? NSNumber
                         {
                             
                             
-                            LikeDislikevalue.likeDislikecount =   (dict.objectForKey("likes") as? NSNumber)!
+                            LikeDislikevalue.likeDislikecount =   (dict.object(forKey: "likes") as? NSNumber)!
                         }
                         
                         datavalue.likes_count = LikeDislikevalue
@@ -1068,7 +1067,7 @@ class DataSessionManger: NSObject
                     print(likesList)
                 }
                 
-                if let  dislikesList = dict.objectForKey("dislikes_count") as? [NSDictionary]
+                if let  dislikesList = dict.object(forKey: "dislikes_count") as? [NSDictionary]
                 {
                     
                     for dict in dislikesList
@@ -1076,8 +1075,8 @@ class DataSessionManger: NSObject
                         
                         let LikeDislikevalue = AlertCountCommonModel()
                         
-                        LikeDislikevalue.post_id =   (dict.objectForKey("post_id") as? NSNumber)!
-                        LikeDislikevalue.likeDislikecount =   (dict.objectForKey("dislikes") as? NSNumber)!
+                        LikeDislikevalue.post_id =   (dict.object(forKey: "post_id") as? NSNumber)!
+                        LikeDislikevalue.likeDislikecount =   (dict.object(forKey: "dislikes") as? NSNumber)!
                         
                         datavalue.dislikes_count = LikeDislikevalue
                     }
@@ -1086,22 +1085,22 @@ class DataSessionManger: NSObject
                 
                 
                 
-                if let  likesUserList = dict.objectForKey("likes_user") as? [NSDictionary]{
+                if let  likesUserList = dict.object(forKey: "likes_user") as? [NSDictionary]{
                     
                     for dict in likesUserList
                     {
                         
                         let likesUserdatavalue = SearchPerson()
-                        likesUserdatavalue.idString =   (dict.objectForKey("id") as? Int)!
-                        if let name = dict.objectForKey("name") as? String
+                        likesUserdatavalue.idString =   (dict.object(forKey: "id") as? Int)!
+                        if let name = dict.object(forKey: "name") as? String
                         {
                             likesUserdatavalue.name = name
                         }
-                        likesUserdatavalue.mobileNumber =   (dict.objectForKey("mobile_number") as? String)!
+                        likesUserdatavalue.mobileNumber =   (dict.object(forKey: "mobile_number") as? String)!
                         
-                        if (dict.objectForKey("photo") as? String) != nil
+                        if (dict.object(forKey: "photo") as? String) != nil
                         {
-                            likesUserdatavalue.photo =   (dict.objectForKey("photo") as? String)!
+                            likesUserdatavalue.photo =   (dict.object(forKey: "photo") as? String)!
                         }
                         
                         datavalue.likes_user.append(likesUserdatavalue)
@@ -1109,22 +1108,22 @@ class DataSessionManger: NSObject
                 }
                 
                 
-                if let  dislikesUserList = dict.objectForKey("dislikes_user") as? [NSDictionary]{
+                if let  dislikesUserList = dict.object(forKey: "dislikes_user") as? [NSDictionary]{
                     
                     for dict in dislikesUserList
                     {
                         
                         let dislikesUserdatavalue = SearchPerson()
-                        dislikesUserdatavalue.idString =   (dict.objectForKey("id") as? Int)!
-                        if let name = dict.objectForKey("name") as? String
+                        dislikesUserdatavalue.idString =   (dict.object(forKey: "id") as? Int)!
+                        if let name = dict.object(forKey: "name") as? String
                         {
                             dislikesUserdatavalue.name = name
                         }
                         //                                    dislikesUserdatavalue.name =   (dict.objectForKey("name") as? String)!
                         //
-                        dislikesUserdatavalue.mobileNumber =   (dict.objectForKey("mobile_number") as? String)!
+                        dislikesUserdatavalue.mobileNumber =   (dict.object(forKey: "mobile_number") as? String)!
                         
-                        if let photo = dict.objectForKey("photo") as? String
+                        if let photo = dict.object(forKey: "photo") as? String
                         {
                             dislikesUserdatavalue.photo =   photo
                         }
@@ -1146,27 +1145,27 @@ class DataSessionManger: NSObject
             
             
             
-            onFinish(response: response, deserializedResponse: datavalue)
+            onFinish(response, datavalue)
         }) { (error) in
-            onError(error: error)
+            onError(error)
         }
         
     }
     
     
     //Report To Spam
-    func reportTospamUser(dict:[String:String], onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->()){
+    func reportTospamUser(_ dict:[String:String], onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->()){
         
         let dataSession = DataSession()
         dataSession.reportTospam(dict, onFinish: { (response, deserializedResponse) in
-            onFinish(response: response, deserializedResponse: deserializedResponse)
+            onFinish(response, deserializedResponse)
         }) { (error) in
-            onError(error: error)
+            onError(error)
         }
         
     }
     
-    func getPostDetail(post_id:String, alert_id:String, onFinish:(response:AnyObject,dataFeedsArray:[dataFeedMyfeedModel])->(), onError:(error:AnyObject)->())
+    func getPostDetail(_ post_id:String, alert_id:String, onFinish:@escaping (_ response:AnyObject,_ dataFeedsArray:[dataFeedMyfeedModel])->(), onError:(_ error:AnyObject)->())
     {
         
         let dataSession = DataSession()
@@ -1178,51 +1177,51 @@ class DataSessionManger: NSObject
             for dict in (deserializedResponse as? NSArray)!
             {
                 let datavalue = dataFeedMyfeedModel()
-                datavalue.id =   (dict.objectForKey("id") as? Int)!
+                datavalue.id =   ((dict as AnyObject).object(forKey: "id") as? Int)!
                 
-                if let action = dict.objectForKey("action") as? String
+                if let action = (dict as AnyObject).object(forKey: "action") as? String
                 {
                     datavalue.action = action
                 }
                 
-                if dict.objectForKey("action_val") != nil
+                if (dict as AnyObject).object(forKey: "action_val") != nil
                 {
                     
-                    if let _ = dict.objectForKey("action_val") as? String
+                    if let _ = (dict as AnyObject).object(forKey: "action_val") as? String
                     {
-                        datavalue.action_val = (dict.objectForKey("action_val") as? String)!
+                        datavalue.action_val = ((dict as AnyObject).object(forKey: "action_val") as? String)!
                     }
                     
                 }
                 
-                if let review =  dict.objectForKey("review") as? String
+                if let review =  (dict as AnyObject).object(forKey: "review") as? String
                 {
                     datavalue.review = review
                     
                 }
                 
-                if (dict.objectForKey("recent_action") as? String) != nil
+                if ((dict as AnyObject).object(forKey: "recent_action") as? String) != nil
                 {
                     
-                    datavalue.recent_action =   (dict.objectForKey("recent_action") as? String)!
+                    datavalue.recent_action =   ((dict as AnyObject).object(forKey: "recent_action") as? String)!
                 }
                 
-                datavalue.created_at =   (dict.objectForKey("created_at") as? String)!
+                datavalue.created_at =   ((dict as AnyObject).object(forKey: "created_at") as? String)!
                 
-                if let innerDict = dict.objectForKey("performed")
+                if let innerDict = (dict as AnyObject).object(forKey: "performed")
                 {
                     
                     let performedatavalue = SearchPerson()
-                    performedatavalue.idString =   (innerDict.objectForKey("id") as? Int)!
+                    performedatavalue.idString =   ((innerDict as AnyObject).object(forKey: "id") as? Int)!
                     
-                    if innerDict.objectForKey("name") != nil
+                    if (innerDict as AnyObject).object(forKey: "name") != nil
                     {
-                        performedatavalue.name =   (innerDict.objectForKey("name") as? String)!
+                        performedatavalue.name =   ((innerDict as AnyObject).object(forKey: "name") as? String)!
                     }
                     
-                    performedatavalue.mobileNumber =  (innerDict.objectForKey("mobile_number") as? String)!
+                    performedatavalue.mobileNumber =  ((innerDict as AnyObject).object(forKey: "mobile_number") as? String)!
                     
-                    if let photo = innerDict.objectForKey("photo") as? String
+                    if let photo = (innerDict as AnyObject).object(forKey: "photo") as? String
                     {
                         performedatavalue.photo =   photo
                     }
@@ -1231,26 +1230,26 @@ class DataSessionManger: NSObject
                 }
                 
                 
-                if (self.nullToNil(dict.objectForKey("effected")) != nil)
+                if (self.nullToNil((dict as! NSDictionary).object(forKey: "effected") as AnyObject) != nil)
                 {
-                    if let effectedDict = dict.objectForKey("effected")
+                    if let effectedDict = (dict as AnyObject).object(forKey: "effected")
                     {
                         
                         print(effectedDict)
-                        print(dict.objectForKey("effected"))
+                       // print((dict as AnyObject).object(forKey: "effected") ?? <#default value#>)
                         let effectedatavalue = SearchPerson()
-                        effectedatavalue.idString  =   (effectedDict.objectForKey("id") as? Int)!
+                        effectedatavalue.idString  =   ((effectedDict as AnyObject).object(forKey: "id") as? Int)!
                         
                         
                         
-                        if effectedDict.objectForKey("name") != nil
+                        if (effectedDict as AnyObject).object(forKey: "name") != nil
                         {
-                            effectedatavalue.name =   (effectedDict.objectForKey("name") as? String)!
+                            effectedatavalue.name =   ((effectedDict as AnyObject).object(forKey: "name") as? String)!
                         }
                         
-                        effectedatavalue.mobileNumber =  (effectedDict.objectForKey("mobile_number") as? String)!
+                        effectedatavalue.mobileNumber =  ((effectedDict as AnyObject).object(forKey: "mobile_number") as? String)!
                         
-                        if let photo = effectedDict.objectForKey("photo") as? String
+                        if let photo = (effectedDict as AnyObject).object(forKey: "photo") as? String
                         {
                             effectedatavalue.photo =   photo
                         }
@@ -1262,23 +1261,23 @@ class DataSessionManger: NSObject
                 }
                 
                 
-                if let  likesList = dict.objectForKey("likes_count") as? [NSDictionary]
+                if let  likesList = (dict as AnyObject).object(forKey: "likes_count") as? [NSDictionary]
                 {
                     
                     for dict in likesList
                     {
                         
                         let LikeDislikevalue = AlertCountCommonModel()
-                        if let _ = dict.objectForKey("post_id") as? String
+                        if let _ = dict.object(forKey: "post_id") as? String
                         {
-                            LikeDislikevalue.post_id = (dict.objectForKey("post_id") as? NSNumber)!
+                            LikeDislikevalue.post_id = (dict.object(forKey: "post_id") as? NSNumber)!
                         }
                         
-                        if let _ =  dict.objectForKey("likes") as? NSNumber
+                        if let _ =  dict.object(forKey: "likes") as? NSNumber
                         {
                             
                             
-                            LikeDislikevalue.likeDislikecount =   (dict.objectForKey("likes") as? NSNumber)!
+                            LikeDislikevalue.likeDislikecount =   (dict.object(forKey: "likes") as? NSNumber)!
                         }
                         
                         datavalue.likes_count = LikeDislikevalue
@@ -1287,7 +1286,7 @@ class DataSessionManger: NSObject
                     print(likesList)
                 }
                 
-                if let  dislikesList = dict.objectForKey("dislikes_count") as? [NSDictionary]
+                if let  dislikesList = (dict as AnyObject).object(forKey: "dislikes_count") as? [NSDictionary]
                 {
                     
                     for dict in dislikesList
@@ -1295,8 +1294,8 @@ class DataSessionManger: NSObject
                         
                         let LikeDislikevalue = AlertCountCommonModel()
                         
-                        LikeDislikevalue.post_id =   (dict.objectForKey("post_id") as? NSNumber)!
-                        LikeDislikevalue.likeDislikecount =   (dict.objectForKey("dislikes") as? NSNumber)!
+                        LikeDislikevalue.post_id =   (dict.object(forKey: "post_id") as? NSNumber)!
+                        LikeDislikevalue.likeDislikecount =   (dict.object(forKey: "dislikes") as? NSNumber)!
                         
                         datavalue.dislikes_count = LikeDislikevalue
                     }
@@ -1305,22 +1304,22 @@ class DataSessionManger: NSObject
                 
                 
                 
-                if let  likesUserList = dict.objectForKey("likes_user") as? [NSDictionary]{
+                if let  likesUserList = (dict as AnyObject).object(forKey: "likes_user") as? [NSDictionary]{
                     
                     for dict in likesUserList
                     {
                         
                         let likesUserdatavalue = SearchPerson()
-                        likesUserdatavalue.idString =   (dict.objectForKey("id") as? Int)!
-                        if let name = dict.objectForKey("name") as? String
+                        likesUserdatavalue.idString =   (dict.object(forKey: "id") as? Int)!
+                        if let name = dict.object(forKey: "name") as? String
                         {
                             likesUserdatavalue.name = name
                         }
-                        likesUserdatavalue.mobileNumber =   (dict.objectForKey("mobile_number") as? String)!
+                        likesUserdatavalue.mobileNumber =   (dict.object(forKey: "mobile_number") as? String)!
                         
-                        if (dict.objectForKey("photo") as? String) != nil
+                        if (dict.object(forKey: "photo") as? String) != nil
                         {
-                            likesUserdatavalue.photo =   (dict.objectForKey("photo") as? String)!
+                            likesUserdatavalue.photo =   (dict.object(forKey: "photo") as? String)!
                         }
                         
                         datavalue.likes_user.append(likesUserdatavalue)
@@ -1328,22 +1327,22 @@ class DataSessionManger: NSObject
                 }
                 
                 
-                if let  dislikesUserList = dict.objectForKey("dislikes_user") as? [NSDictionary]{
+                if let  dislikesUserList = (dict as AnyObject).object(forKey: "dislikes_user") as? [NSDictionary]{
                     
                     for dict in dislikesUserList
                     {
                         
                         let dislikesUserdatavalue = SearchPerson()
-                        dislikesUserdatavalue.idString =   (dict.objectForKey("id") as? Int)!
-                        if let name = dict.objectForKey("name") as? String
+                        dislikesUserdatavalue.idString =   (dict.object(forKey: "id") as? Int)!
+                        if let name = dict.object(forKey: "name") as? String
                         {
                             dislikesUserdatavalue.name = name
                         }
                         //                                    dislikesUserdatavalue.name =   (dict.objectForKey("name") as? String)!
                         //
-                        dislikesUserdatavalue.mobileNumber =   (dict.objectForKey("mobile_number") as? String)!
+                        dislikesUserdatavalue.mobileNumber =   (dict.object(forKey: "mobile_number") as? String)!
                         
-                        if let photo = dict.objectForKey("photo") as? String
+                        if let photo = dict.object(forKey: "photo") as? String
                         {
                             dislikesUserdatavalue.photo =   photo
                         }
@@ -1365,7 +1364,7 @@ class DataSessionManger: NSObject
             }
             
             
-            onFinish(response: response, dataFeedsArray: dataFeedsArray)
+            onFinish(response, dataFeedsArray)
             
             
             
@@ -1379,7 +1378,7 @@ class DataSessionManger: NSObject
     
     
      //Feedslist
-    func getfeedslist(onFinish:(response:AnyObject,deserializedResponse:FeedMyfeed)->(), onError:(error:AnyObject)->()){
+    func getfeedslist(_ onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:FeedMyfeed)->(), onError:@escaping (_ error:AnyObject)->()){
         
         let dataSession = DataSession()
         
@@ -1389,85 +1388,85 @@ class DataSessionManger: NSObject
             if deserializedResponse is NSDictionary
             {
                 
-                feedMyfeedUser.total = (deserializedResponse.objectForKey("total") as? Int)!
-                feedMyfeedUser.per_page = (deserializedResponse.objectForKey("per_page") as? Int)!
-                feedMyfeedUser.current_page = (deserializedResponse.objectForKey("current_page") as? Int)!
-                feedMyfeedUser.last_page = (deserializedResponse.objectForKey("last_page") as? Int)!
+                feedMyfeedUser.total = (deserializedResponse.object(forKey: "total") as? Int)!
+                feedMyfeedUser.per_page = (deserializedResponse.object(forKey: "per_page") as? Int)!
+                feedMyfeedUser.current_page = (deserializedResponse.object(forKey: "current_page") as? Int)!
+                feedMyfeedUser.last_page = (deserializedResponse.object(forKey: "last_page") as? Int)!
                 
                 
-                if let next_page_url = deserializedResponse.objectForKey("next_page_url") as? String
+                if let next_page_url = deserializedResponse.object(forKey: "next_page_url") as? String
                 {
                     feedMyfeedUser.next_page_url = next_page_url
                 }
                 
-                if let prev_page_url = deserializedResponse.objectForKey("prev_page_url") as? String
+                if let prev_page_url = deserializedResponse.object(forKey: "prev_page_url") as? String
                 {
                     feedMyfeedUser.prev_page_url = prev_page_url
                 }
                 
-                feedMyfeedUser.from = (deserializedResponse.objectForKey("from") as? Int)!
-                feedMyfeedUser.to = (deserializedResponse.objectForKey("to") as? Int)!
+                feedMyfeedUser.from = (deserializedResponse.object(forKey: "from") as? Int)!
+                feedMyfeedUser.to = (deserializedResponse.object(forKey: "to") as? Int)!
                 
-                if let  dataList = deserializedResponse.objectForKey("data") as? [NSDictionary]
+                if let  dataList = deserializedResponse.object(forKey: "data") as? [NSDictionary]
                 {
                     
                     for dict in dataList
                     {
                         
                         let datavalue = dataFeedMyfeedModel()
-                        datavalue.id =   (dict.objectForKey("id") as? Int)!
-                        datavalue.action =   (dict.objectForKey("action") as? String)!
-                        if let review = dict.objectForKey("review") as? String
+                        datavalue.id =   (dict.object(forKey: "id") as? Int)!
+                        datavalue.action =   (dict.object(forKey: "action") as? String)!
+                        if let review = dict.object(forKey: "review") as? String
                         {
                             datavalue.review = review
                         }
                         
-                        if let action = dict.objectForKey("action") as? String
+                        if let action = dict.object(forKey: "action") as? String
                         {
                             datavalue.action = action
                         }
                         
-                        if dict.objectForKey("action_val") != nil
+                        if dict.object(forKey: "action_val") != nil
                         {
                             
-                            if let _ = dict.objectForKey("action_val") as? String
+                            if let _ = dict.object(forKey: "action_val") as? String
                             {
-                                datavalue.action_val = (dict.objectForKey("action_val") as? String)!
+                                datavalue.action_val = (dict.object(forKey: "action_val") as? String)!
                             }
                             
                         }
 
                         
-                        if let recent_action = dict.objectForKey("recent_action") as? String
+                        if let recent_action = dict.object(forKey: "recent_action") as? String
                         {
                             datavalue.recent_action =  recent_action
                         }
                         
-                        if let created_at = dict.objectForKey("created_at") as? String
+                        if let created_at = dict.object(forKey: "created_at") as? String
                         {
                             datavalue.created_at =   created_at
                         }
                         
                         
                         
-                        if let innerDict = dict.objectForKey("performed")
+                        if let innerDict = dict.object(forKey: "performed")
                         {
                             
                             let performedatavalue = SearchPerson()
-                            performedatavalue.idString =   (innerDict.objectForKey("id") as? Int)!
+                            performedatavalue.idString =   ((innerDict as AnyObject).object(forKey: "id") as? Int)!
                             
-                            if let  name = innerDict.objectForKey("name") as? String
+                            if let  name = (innerDict as AnyObject).object(forKey: "name") as? String
                             {
                                 performedatavalue.name = name
                             }
                            
                             
-                            if let photo = innerDict.objectForKey("photo") as? String
+                            if let photo = (innerDict as AnyObject).object(forKey: "photo") as? String
                             {
                                 performedatavalue.photo =   photo
                             }
                             
-                            if let mobileNumber = innerDict.objectForKey("mobile_number") as? String
+                            if let mobileNumber = (innerDict as AnyObject).object(forKey: "mobile_number") as? String
                             {
                                 performedatavalue.mobileNumber =   mobileNumber
                             }
@@ -1481,26 +1480,26 @@ class DataSessionManger: NSObject
                         
                         
                         
-                        if (self.nullToNil(dict.objectForKey("effected")) != nil)
+                        if (self.nullToNil(dict.object(forKey: "effected") as AnyObject) != nil)
                         {
-                            if let effectedDict = dict.objectForKey("effected")
+                            if let effectedDict = dict.object(forKey: "effected")
                             {
                                 
                                 print(effectedDict)
-                                print(dict.objectForKey("effected"))
+                                print(dict.object(forKey: "effected"))
                                 let effectedatavalue = SearchPerson()
-                                effectedatavalue.idString =   (effectedDict.objectForKey("id") as? Int)!
+                                effectedatavalue.idString =   ((effectedDict as AnyObject).object(forKey: "id") as? Int)!
                                 
                                 
                                 
-                                if effectedDict.objectForKey("name") != nil
+                                if (effectedDict as AnyObject).object(forKey: "name") != nil
                                 {
-                                    effectedatavalue.name =   (effectedDict.objectForKey("name") as? String)!
+                                    effectedatavalue.name =   ((effectedDict as AnyObject).object(forKey: "name") as? String)!
                                 }
                                 
-                                effectedatavalue.mobileNumber =  (effectedDict.objectForKey("mobile_number") as? String)!
+                                effectedatavalue.mobileNumber =  ((effectedDict as AnyObject).object(forKey: "mobile_number") as? String)!
                                 
-                                if let photo = effectedDict.objectForKey("photo") as? String
+                                if let photo = (effectedDict as AnyObject).object(forKey: "photo") as? String
                                 {
                                     effectedatavalue.photo =   photo
                                 }
@@ -1516,21 +1515,21 @@ class DataSessionManger: NSObject
                         
                         
                         
-                        if let  likesList = dict.objectForKey("likes_count") as? [NSDictionary]
+                        if let  likesList = dict.object(forKey: "likes_count") as? [NSDictionary]
                         {
                             
                             for dict in likesList
                             {
                                 
                                 let LikeDislikevalue = AlertCountCommonModel()
-                                if let _ = dict.objectForKey("post_id") as? String
+                                if let _ = dict.object(forKey: "post_id") as? String
                                 {
-                                    LikeDislikevalue.post_id = (dict.objectForKey("post_id") as? NSNumber)!
+                                    LikeDislikevalue.post_id = (dict.object(forKey: "post_id") as? NSNumber)!
                                 }
                                 
-                                if let _ =  dict.objectForKey("likes") as? NSNumber
+                                if let _ =  dict.object(forKey: "likes") as? NSNumber
                                 {
-                                    LikeDislikevalue.likeDislikecount =   (dict.objectForKey("likes") as? NSNumber)!
+                                    LikeDislikevalue.likeDislikecount =   (dict.object(forKey: "likes") as? NSNumber)!
                                 }
                                 
                                 datavalue.likes_count = LikeDislikevalue
@@ -1539,15 +1538,15 @@ class DataSessionManger: NSObject
                             print(likesList)
                         }
                         
-                        if let  dislikesList = dict.objectForKey("dislikes_count") as? [NSDictionary]{
+                        if let  dislikesList = dict.object(forKey: "dislikes_count") as? [NSDictionary]{
                             
                             for dict in dislikesList
                             {
                                 
                                 let LikeDislikevalue = AlertCountCommonModel()
                                 
-                                LikeDislikevalue.post_id =   (dict.objectForKey("post_id") as? NSNumber)!
-                                LikeDislikevalue.likeDislikecount =   (dict.objectForKey("dislikes") as? NSNumber)!
+                                LikeDislikevalue.post_id =   (dict.object(forKey: "post_id") as? NSNumber)!
+                                LikeDislikevalue.likeDislikecount =   (dict.object(forKey: "dislikes") as? NSNumber)!
                                 
                                 datavalue.dislikes_count = LikeDislikevalue
                             }
@@ -1556,20 +1555,20 @@ class DataSessionManger: NSObject
                         
                         
                         
-                        if let  likesUserList = dict.objectForKey("likes_user") as? [NSDictionary]{
+                        if let  likesUserList = dict.object(forKey: "likes_user") as? [NSDictionary]{
                             
                             for dict in likesUserList
                             {
                                 
                                 let likesUserdatavalue = SearchPerson()
-                                likesUserdatavalue.idString =   (dict.objectForKey("id") as? Int)!
-                                if let _ = dict.objectForKey("name") as? String
+                                likesUserdatavalue.idString =   (dict.object(forKey: "id") as? Int)!
+                                if let _ = dict.object(forKey: "name") as? String
                                 {
-                                    likesUserdatavalue.name =   (dict.objectForKey("name") as? String)!
+                                    likesUserdatavalue.name =   (dict.object(forKey: "name") as? String)!
                                 }
-                                likesUserdatavalue.mobileNumber =   (dict.objectForKey("mobile_number") as? String)!
+                                likesUserdatavalue.mobileNumber =   (dict.object(forKey: "mobile_number") as? String)!
                                 
-                                if let photo = dict.objectForKey("photo") as? String
+                                if let photo = dict.object(forKey: "photo") as? String
                                 {
                                     likesUserdatavalue.photo =   photo
                                 }
@@ -1579,20 +1578,20 @@ class DataSessionManger: NSObject
                         }
                         
                         
-                        if let  dislikesUserList = dict.objectForKey("dislikes_user") as? [NSDictionary]{
+                        if let  dislikesUserList = dict.object(forKey: "dislikes_user") as? [NSDictionary]{
                             
                             for dict in dislikesUserList{
                                 
                                 let dislikesUserdatavalue = SearchPerson()
-                                dislikesUserdatavalue.idString =   (dict.objectForKey("id") as? Int)!
-                                if let name = dict.objectForKey("name") as? String
+                                dislikesUserdatavalue.idString =   (dict.object(forKey: "id") as? Int)!
+                                if let name = dict.object(forKey: "name") as? String
                                 {
                                     dislikesUserdatavalue.name =   name
                                 }
                                
-                                dislikesUserdatavalue.mobileNumber =   (dict.objectForKey("mobile_number") as? String)!
+                                dislikesUserdatavalue.mobileNumber =   (dict.object(forKey: "mobile_number") as? String)!
                              
-                                dislikesUserdatavalue.photo =   (dict.objectForKey("photo") as? String)!
+                                dislikesUserdatavalue.photo =   (dict.object(forKey: "photo") as? String)!
                                 datavalue.dislikes_user.append(dislikesUserdatavalue)
                             }
                             
@@ -1612,16 +1611,16 @@ class DataSessionManger: NSObject
             
             
             
-            onFinish(response: response, deserializedResponse: feedMyfeedUser)
+            onFinish(response, feedMyfeedUser)
         }) { (error) in
-            onError(error: error)
+            onError(error)
         }
         
     }
     
     
     //MYFeedslist
-    func getMyfeedslist(onFinish:(response:AnyObject,deserializedResponse:FeedMyfeed)->(), onError:(error:AnyObject)->())
+    func getMyfeedslist(_ onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:FeedMyfeed)->(), onError:@escaping (_ error:AnyObject)->())
     {
         
         let dataSession = DataSession()
@@ -1631,74 +1630,74 @@ class DataSessionManger: NSObject
             if deserializedResponse is NSDictionary
             {
                 
-                feedMyfeedUser.total = (deserializedResponse.objectForKey("total") as? Int)!
-                feedMyfeedUser.per_page = (deserializedResponse.objectForKey("per_page") as? Int)!
-                feedMyfeedUser.current_page = (deserializedResponse.objectForKey("current_page") as? Int)!
-                feedMyfeedUser.last_page = (deserializedResponse.objectForKey("last_page") as? Int)!
+                feedMyfeedUser.total = (deserializedResponse.object(forKey: "total") as? Int)!
+                feedMyfeedUser.per_page = (deserializedResponse.object(forKey: "per_page") as? Int)!
+                feedMyfeedUser.current_page = (deserializedResponse.object(forKey: "current_page") as? Int)!
+                feedMyfeedUser.last_page = (deserializedResponse.object(forKey: "last_page") as? Int)!
                 
-                if let next_page_url = deserializedResponse.objectForKey("next_page_url") as? String
+                if let next_page_url = deserializedResponse.object(forKey: "next_page_url") as? String
                 {
                     feedMyfeedUser.next_page_url = next_page_url
                 }
-                if let prev_page_url = deserializedResponse.objectForKey("prev_page_url") as? String
+                if let prev_page_url = deserializedResponse.object(forKey: "prev_page_url") as? String
                 {
                 
                         feedMyfeedUser.prev_page_url = prev_page_url
                 }
                 
                 
-                feedMyfeedUser.from = (deserializedResponse.objectForKey("from") as? Int)!
-                feedMyfeedUser.to = (deserializedResponse.objectForKey("to") as? Int)!
-                if let  dataList = deserializedResponse.objectForKey("data") as? [NSDictionary]
+                feedMyfeedUser.from = (deserializedResponse.object(forKey: "from") as? Int)!
+                feedMyfeedUser.to = (deserializedResponse.object(forKey: "to") as? Int)!
+                if let  dataList = deserializedResponse.object(forKey: "data") as? [NSDictionary]
                 {
                     for dict in dataList
                     {
                         let datavalue = dataFeedMyfeedModel()
-                        datavalue.id =   (dict.objectForKey("id") as? Int)!
+                        datavalue.id =   (dict.object(forKey: "id") as? Int)!
                         
-                        if let action = dict.objectForKey("action") as? String
+                        if let action = dict.object(forKey: "action") as? String
                         {
                             datavalue.action = action
                         }
                         
-                        if dict.objectForKey("action_val") != nil
+                        if dict.object(forKey: "action_val") != nil
                         {
                             
-                            if let _ = dict.objectForKey("action_val") as? String
+                            if let _ = dict.object(forKey: "action_val") as? String
                             {
-                                datavalue.action_val = (dict.objectForKey("action_val") as? String)!
+                                datavalue.action_val = (dict.object(forKey: "action_val") as? String)!
                             }
                             
                         }
                         
-                        if let review =  dict.objectForKey("review") as? String
+                        if let review =  dict.object(forKey: "review") as? String
                         {
                             datavalue.review = review
                         
                          }
                         
-                        if (dict.objectForKey("recent_action") as? String) != nil
+                        if (dict.object(forKey: "recent_action") as? String) != nil
                         {
                         
-                            datavalue.recent_action =   (dict.objectForKey("recent_action") as? String)!
+                            datavalue.recent_action =   (dict.object(forKey: "recent_action") as? String)!
                         }
                         
-                        datavalue.created_at =   (dict.objectForKey("created_at") as? String)!
+                        datavalue.created_at =   (dict.object(forKey: "created_at") as? String)!
                         
-                        if let innerDict = dict.objectForKey("performed")
+                        if let innerDict = dict.object(forKey: "performed")
                         {
                             
                             let performedatavalue = SearchPerson()
-                            performedatavalue.idString =   (innerDict.objectForKey("id") as? Int)!
+                            performedatavalue.idString =   ((innerDict as AnyObject).object(forKey: "id") as? Int)!
                             
-                            if innerDict.objectForKey("name") != nil
+                            if (innerDict as AnyObject).object(forKey: "name") != nil
                             {
-                                performedatavalue.name =   (innerDict.objectForKey("name") as? String)!
+                                performedatavalue.name =   ((innerDict as AnyObject).object(forKey: "name") as? String)!
                             }
                  
-                            performedatavalue.mobileNumber =  (innerDict.objectForKey("mobile_number") as? String)!
+                            performedatavalue.mobileNumber =  ((innerDict as AnyObject).object(forKey: "mobile_number") as? String)!
                  
-                            if let photo = innerDict.objectForKey("photo") as? String
+                            if let photo = (innerDict as AnyObject).object(forKey: "photo") as? String
                             {
                                 performedatavalue.photo =   photo
                             }
@@ -1707,26 +1706,26 @@ class DataSessionManger: NSObject
                         }
 
                         
-                        if (self.nullToNil(dict.objectForKey("effected")) != nil)
+                        if (self.nullToNil(dict.object(forKey: "effected") as AnyObject) != nil)
                         {
-                            if let effectedDict = dict.objectForKey("effected")
+                            if let effectedDict = dict.object(forKey: "effected")
                               {
                             
                                  print(effectedDict)
-                                    print(dict.objectForKey("effected"))
+                                    print(dict.object(forKey: "effected"))
                                     let effectedatavalue = SearchPerson()
-                                effectedatavalue.idString =   (effectedDict.objectForKey("id") as? Int)!
+                                effectedatavalue.idString =   ((effectedDict as AnyObject).object(forKey: "id") as? Int)!
                                 
                                 
                                 
-                                if effectedDict.objectForKey("name") != nil
+                                if (effectedDict as AnyObject).object(forKey: "name") != nil
                                 {
-                                    effectedatavalue.name =   (effectedDict.objectForKey("name") as? String)!
+                                    effectedatavalue.name =   ((effectedDict as AnyObject).object(forKey: "name") as? String)!
                                 }
                                 
-                                effectedatavalue.mobileNumber =  (effectedDict.objectForKey("mobile_number") as? String)!
+                                effectedatavalue.mobileNumber =  ((effectedDict as AnyObject).object(forKey: "mobile_number") as? String)!
                                 
-                                if let photo = effectedDict.objectForKey("photo") as? String
+                                if let photo = (effectedDict as AnyObject).object(forKey: "photo") as? String
                                 {
                                     effectedatavalue.photo =   photo
                                 }
@@ -1738,23 +1737,23 @@ class DataSessionManger: NSObject
                         }
                             
                         
-                            if let  likesList = dict.objectForKey("likes_count") as? [NSDictionary]
+                            if let  likesList = dict.object(forKey: "likes_count") as? [NSDictionary]
                             {
                                 
                                 for dict in likesList
                                 {
                                     
                                     let LikeDislikevalue = AlertCountCommonModel()
-                                    if let _ = dict.objectForKey("post_id") as? String
+                                    if let _ = dict.object(forKey: "post_id") as? String
                                     {
-                                            LikeDislikevalue.post_id = (dict.objectForKey("post_id") as? NSNumber)!
+                                            LikeDislikevalue.post_id = (dict.object(forKey: "post_id") as? NSNumber)!
                                     }
                                     
-                                    if let _ =  dict.objectForKey("likes") as? NSNumber
+                                    if let _ =  dict.object(forKey: "likes") as? NSNumber
                                     {
                                     
                                     
-                                        LikeDislikevalue.likeDislikecount =   (dict.objectForKey("likes") as? NSNumber)!
+                                        LikeDislikevalue.likeDislikecount =   (dict.object(forKey: "likes") as? NSNumber)!
                                     }
                                     
                                     datavalue.likes_count = LikeDislikevalue
@@ -1763,7 +1762,7 @@ class DataSessionManger: NSObject
                                 print(likesList)
                             }
                             
-                            if let  dislikesList = dict.objectForKey("dislikes_count") as? [NSDictionary]
+                            if let  dislikesList = dict.object(forKey: "dislikes_count") as? [NSDictionary]
                             {
                                 
                                 for dict in dislikesList
@@ -1771,8 +1770,8 @@ class DataSessionManger: NSObject
                                     
                                     let LikeDislikevalue = AlertCountCommonModel()
                                     
-                                    LikeDislikevalue.post_id =   (dict.objectForKey("post_id") as? NSNumber)!
-                                    LikeDislikevalue.likeDislikecount =   (dict.objectForKey("dislikes") as? NSNumber)!
+                                    LikeDislikevalue.post_id =   (dict.object(forKey: "post_id") as? NSNumber)!
+                                    LikeDislikevalue.likeDislikecount =   (dict.object(forKey: "dislikes") as? NSNumber)!
                                     
                                     datavalue.dislikes_count = LikeDislikevalue
                                 }
@@ -1781,22 +1780,22 @@ class DataSessionManger: NSObject
                             
                             
                             
-                            if let  likesUserList = dict.objectForKey("likes_user") as? [NSDictionary]{
+                            if let  likesUserList = dict.object(forKey: "likes_user") as? [NSDictionary]{
                                 
                                 for dict in likesUserList
                                 {
                                     
                                     let likesUserdatavalue = SearchPerson()
-                                    likesUserdatavalue.idString =   (dict.objectForKey("id") as? Int)!
-                                    if let name = dict.objectForKey("name") as? String
+                                    likesUserdatavalue.idString =   (dict.object(forKey: "id") as? Int)!
+                                    if let name = dict.object(forKey: "name") as? String
                                     {
                                         likesUserdatavalue.name = name
                                     }
-                                    likesUserdatavalue.mobileNumber =   (dict.objectForKey("mobile_number") as? String)!
+                                    likesUserdatavalue.mobileNumber =   (dict.object(forKey: "mobile_number") as? String)!
                 
-                                    if (dict.objectForKey("photo") as? String) != nil
+                                    if (dict.object(forKey: "photo") as? String) != nil
                                     {
-                                       likesUserdatavalue.photo =   (dict.objectForKey("photo") as? String)!
+                                       likesUserdatavalue.photo =   (dict.object(forKey: "photo") as? String)!
                                     }
                  
                                     datavalue.likes_user.append(likesUserdatavalue)
@@ -1804,22 +1803,22 @@ class DataSessionManger: NSObject
                             }
                             
                             
-                            if let  dislikesUserList = dict.objectForKey("dislikes_user") as? [NSDictionary]{
+                            if let  dislikesUserList = dict.object(forKey: "dislikes_user") as? [NSDictionary]{
                                 
                                 for dict in dislikesUserList
                                 {
                                     
                                     let dislikesUserdatavalue = SearchPerson()
-                                    dislikesUserdatavalue.idString =   (dict.objectForKey("id") as? Int)!
-                                    if let name = dict.objectForKey("name") as? String
+                                    dislikesUserdatavalue.idString =   (dict.object(forKey: "id") as? Int)!
+                                    if let name = dict.object(forKey: "name") as? String
                                     {
                                         dislikesUserdatavalue.name = name
                                     }
 //                                    dislikesUserdatavalue.name =   (dict.objectForKey("name") as? String)!
 //
-                                    dislikesUserdatavalue.mobileNumber =   (dict.objectForKey("mobile_number") as? String)!
+                                    dislikesUserdatavalue.mobileNumber =   (dict.object(forKey: "mobile_number") as? String)!
         
-                                    if let photo = dict.objectForKey("photo") as? String
+                                    if let photo = dict.object(forKey: "photo") as? String
                                     {
                                         dislikesUserdatavalue.photo =   photo
                                     }
@@ -1840,16 +1839,16 @@ class DataSessionManger: NSObject
             }
             
 
-            onFinish(response: response, deserializedResponse: feedMyfeedUser)
+            onFinish(response,  feedMyfeedUser)
         }) { (error) in
-            onError(error: error)
+            onError(error)
         }
         
     }
     
     
     
-    func nullToNil(value : AnyObject?) -> AnyObject?
+    func nullToNil(_ value : AnyObject?) -> AnyObject?
     {
         if value is NSNull {
             return nil
@@ -1864,7 +1863,7 @@ class DataSessionManger: NSObject
     
     
     //Alertlist
-    func getAlertlist(onFinish:(response:AnyObject,deserializedResponse:AlertModel)->(), onError:(error:AnyObject)->()){
+    func getAlertlist(_ onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AlertModel)->(), onError:@escaping (_ error:AnyObject)->()){
         
         let dataSession = DataSession()
         
@@ -1877,52 +1876,52 @@ class DataSessionManger: NSObject
             if deserializedResponse is NSDictionary
             {
                 
-                if let _ = deserializedResponse.objectForKey("total") as? Int
+                if let _ = deserializedResponse.object(forKey: "total") as? Int
                 {
-                    AlertUser.total = (deserializedResponse.objectForKey("total") as? Int)!
+                    AlertUser.total = (deserializedResponse.object(forKey: "total") as? Int)!
                 }
                 
-                if let _ = deserializedResponse.objectForKey("per_page") as? Int
+                if let _ = deserializedResponse.object(forKey: "per_page") as? Int
                 {
-                    AlertUser.per_page = (deserializedResponse.objectForKey("per_page") as? Int)!
+                    AlertUser.per_page = (deserializedResponse.object(forKey: "per_page") as? Int)!
                 }
                 
-                if let _ = deserializedResponse.objectForKey("current_page") as? Int
+                if let _ = deserializedResponse.object(forKey: "current_page") as? Int
                 {
-                    AlertUser.current_page = (deserializedResponse.objectForKey("current_page") as? Int)!
+                    AlertUser.current_page = (deserializedResponse.object(forKey: "current_page") as? Int)!
                 }
                 
-                if let _ = deserializedResponse.objectForKey("last_page") as? Int
+                if let _ = deserializedResponse.object(forKey: "last_page") as? Int
                 {
-                    AlertUser.last_page = (deserializedResponse.objectForKey("last_page") as? Int)!
+                    AlertUser.last_page = (deserializedResponse.object(forKey: "last_page") as? Int)!
                 }
                 
-                if let _ = deserializedResponse.objectForKey("next_page_url") as? String
+                if let _ = deserializedResponse.object(forKey: "next_page_url") as? String
                 {
-                    AlertUser.next_page_url = (deserializedResponse.objectForKey("next_page_url") as? String)!
+                    AlertUser.next_page_url = (deserializedResponse.object(forKey: "next_page_url") as? String)!
                 }
                 
-                if let _ = deserializedResponse.objectForKey("prev_page_url") as? String
+                if let _ = deserializedResponse.object(forKey: "prev_page_url") as? String
                 {
                 
-                    AlertUser.prev_page_url = (deserializedResponse.objectForKey("prev_page_url") as? String)!
+                    AlertUser.prev_page_url = (deserializedResponse.object(forKey: "prev_page_url") as? String)!
                 }
                 
                 
                 
                 
                 
-                if let _ = deserializedResponse.objectForKey("from") as? Int
+                if let _ = deserializedResponse.object(forKey: "from") as? Int
                 {
-                    AlertUser.from = (deserializedResponse.objectForKey("from") as? Int)!
+                    AlertUser.from = (deserializedResponse.object(forKey: "from") as? Int)!
                 }
                 
-                if let _ = deserializedResponse.objectForKey("to") as? Int
+                if let _ = deserializedResponse.object(forKey: "to") as? Int
                 {
-                    AlertUser.to = (deserializedResponse.objectForKey("to") as? Int)!
+                    AlertUser.to = (deserializedResponse.object(forKey: "to") as? Int)!
                 }
                 
-                if let  dataList = deserializedResponse.objectForKey("data") as? [NSDictionary]
+                if let  dataList = deserializedResponse.object(forKey: "data") as? [NSDictionary]
                 {
                     
                     for dict in dataList
@@ -1930,32 +1929,32 @@ class DataSessionManger: NSObject
                         
                         let datavalue = dataModel()
                         
-                        datavalue.id =   (dict.objectForKey("id") as? Int)!
+                        datavalue.id =   (dict.object(forKey: "id") as? Int)!
                         
-                        datavalue.action =   (dict.objectForKey("action") as? String)!
+                        datavalue.action =   (dict.object(forKey: "action") as? String)!
                         
-                        if let _ = dict.objectForKey("created_at") as? String
+                        if let _ = dict.object(forKey: "created_at") as? String
                         {
-                            datavalue.created_at =   (dict.objectForKey("created_at") as? String)!
+                            datavalue.created_at =   (dict.object(forKey: "created_at") as? String)!
                         }
 
-                        if let innerDict = dict.objectForKey("action_by")
+                        if let innerDict = dict.object(forKey: "action_by")
                         {
                             
                             let action_bydatavalue = commonModel()
-                            action_bydatavalue.id =   (innerDict.objectForKey("id") as? Int)!
+                            action_bydatavalue.id =   ((innerDict as AnyObject).object(forKey: "id") as? Int)!
                             
-                            if (innerDict.objectForKey("name") as? String) != nil
+                            if ((innerDict as AnyObject).object(forKey: "name") as? String) != nil
                             {
-                                action_bydatavalue.name =   (innerDict.objectForKey("name") as? String)!
+                                action_bydatavalue.name =   ((innerDict as AnyObject).object(forKey: "name") as? String)!
                             }
                             
 //
-                            action_bydatavalue.mobile_number =   (innerDict.objectForKey("mobile_number") as? String)!
+                            action_bydatavalue.mobile_number =   ((innerDict as AnyObject).object(forKey: "mobile_number") as? String)!
                         
-                            if let _ = innerDict.objectForKey("photo") as? String
+                            if let _ = (innerDict as AnyObject).object(forKey: "photo") as? String
                             {
-                                action_bydatavalue.photo =   (innerDict.objectForKey("photo") as? String)!
+                                action_bydatavalue.photo =   ((innerDict as AnyObject).object(forKey: "photo") as? String)!
                             }
 //
 
@@ -1964,43 +1963,43 @@ class DataSessionManger: NSObject
                             
                         }
                         
-                        if let postDict = dict.objectForKey("post")
+                        if let postDict = dict.object(forKey: "post")
                         {
                             
                             let postdatavalue = postModel()
-                            postdatavalue.id =   (postDict.objectForKey("id") as? Int)!
+                            postdatavalue.id =   ((postDict as AnyObject).object(forKey: "id") as? Int)!
                             
-                            postdatavalue.action =   (postDict.objectForKey("action") as? String)!
+                            postdatavalue.action =   ((postDict as AnyObject).object(forKey: "action") as? String)!
                             
-                            if let _ = postDict.objectForKey("action_val") as? String
+                            if let _ = (postDict as AnyObject).object(forKey: "action_val") as? String
                             {
-                                postdatavalue.action_val =   (postDict.objectForKey("action_val") as? String)!
+                                postdatavalue.action_val =   ((postDict as AnyObject).object(forKey: "action_val") as? String)!
                             }
-                            if let _ = postDict.objectForKey("review") as? String
+                            if let _ = (postDict as AnyObject).object(forKey: "review") as? String
                             {
-                                postdatavalue.review =   (postDict.objectForKey("review") as? String)!
+                                postdatavalue.review =   ((postDict as AnyObject).object(forKey: "review") as? String)!
                             }
-                            if let _ = postDict.objectForKey("recent_action") as? String
+                            if let _ = (postDict as AnyObject).object(forKey: "recent_action") as? String
                             {
-                                postdatavalue.recent_action =   (postDict.objectForKey("recent_action") as? String)!
+                                postdatavalue.recent_action =   ((postDict as AnyObject).object(forKey: "recent_action") as? String)!
                             }
                             
-                            postdatavalue.created_at =   (postDict.objectForKey("created_at") as? String)!
+                            postdatavalue.created_at =   ((postDict as AnyObject).object(forKey: "created_at") as? String)!
                            
                             
-                           if let performedDict = postDict.objectForKey("performed")
+                           if let performedDict = (postDict as AnyObject).object(forKey: "performed")
                            {
                                 
                                 let performedatavalue = commonModel()
-                                performedatavalue.id =   (performedDict.objectForKey("id") as? Int)!
+                                performedatavalue.id =   ((performedDict as AnyObject).object(forKey: "id") as? Int)!
                             
-                            if (performedDict.objectForKey("name") as? String) != nil
+                            if ((performedDict as AnyObject).object(forKey: "name") as? String) != nil
                             {
-                                performedatavalue.name =   (performedDict.objectForKey("name") as? String)!
+                                performedatavalue.name =   ((performedDict as AnyObject).object(forKey: "name") as? String)!
                             }
-                                performedatavalue.mobile_number =   (performedDict.objectForKey("mobile_number") as? String)!
+                                performedatavalue.mobile_number =   ((performedDict as AnyObject).object(forKey: "mobile_number") as? String)!
     
-                                performedatavalue.photo =   (performedDict.objectForKey("photo") as? String)!
+                                performedatavalue.photo =   ((performedDict as AnyObject).object(forKey: "photo") as? String)!
                             
                                 
                                  postdatavalue.performed = performedatavalue
@@ -2010,26 +2009,26 @@ class DataSessionManger: NSObject
                             
                             
                             
-                            if (self.nullToNil(dict.objectForKey("effected")) != nil)
+                            if (self.nullToNil(dict.object(forKey: "effected") as AnyObject) != nil)
                             {
-                                if let effectedDict = dict.objectForKey("effected")
+                                if let effectedDict = dict.object(forKey: "effected")
                                 {
                                     
                                     print(effectedDict)
-                                    print(dict.objectForKey("effected"))
+                                    print(dict.object(forKey: "effected"))
                                     let effectedatavalue = commonModel()
-                                    effectedatavalue.id =   (effectedDict.objectForKey("id") as? Int)!
+                                    effectedatavalue.id =   ((effectedDict as AnyObject).object(forKey: "id") as? Int)!
                                     
                                     
                                     
-                                    if effectedDict.objectForKey("name") != nil
+                                    if (effectedDict as AnyObject).object(forKey: "name") != nil
                                     {
-                                        effectedatavalue.name =   (effectedDict.objectForKey("name") as? String)!
+                                        effectedatavalue.name =   ((effectedDict as AnyObject).object(forKey: "name") as? String)!
                                     }
                                     
-                                    effectedatavalue.mobile_number =  (effectedDict.objectForKey("mobile_number") as? String)!
+                                    effectedatavalue.mobile_number =  ((effectedDict as AnyObject).object(forKey: "mobile_number") as? String)!
                                     
-                                    if let photo = effectedDict.objectForKey("photo") as? String
+                                    if let photo = (effectedDict as AnyObject).object(forKey: "photo") as? String
                                     {
                                         effectedatavalue.photo =   photo
                                     }
@@ -2154,52 +2153,52 @@ class DataSessionManger: NSObject
             print(AlertUser)
             
             
-            onFinish(response: response, deserializedResponse: AlertUser)
+            onFinish(response, AlertUser)
         }) { (error) in
-            onError(error: error)
+            onError(error)
         }
         
     }
     
     
     //MARK:// GRET OTP
-    func getOTPValidateForMobileNumber(mobileNumber:String, otp:String,  onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->()){
+    func getOTPValidateForMobileNumber(_ mobileNumber:String, otp:String,  onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->()){
         
         let dataSession = DataSession()
         dataSession.getOTPValidateForMobileNumber(mobileNumber, otp: otp, onFinish: { (response, deserializedResponse) in
-            onFinish(response: response, deserializedResponse: deserializedResponse)
+            onFinish(response, deserializedResponse)
             }) { (error) in
-                onError(error: error)
+                onError(error)
         }
         
     }
     
     //UPDATE PROFILE
-    func updateProfile(dict:[String:String], onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->()){
+    func updateProfile(_ dict:[String:String], onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->()){
         
         let dataSession = DataSession()
         dataSession.updateProfile(dict, onFinish: { (response, deserializedResponse) in
-            onFinish(response: response, deserializedResponse: deserializedResponse)
+            onFinish(response, deserializedResponse)
             }) { (error) in
-                onError(error: error)
+                onError(error)
         }
         
     }
     
     // SYNC CONTACT TO SERVER
-    func syncContactToTheServer(dict:[String:String],postDict:[String:String], onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->()){
+    func syncContactToTheServer(_ dict:[String:String],postDict:[String:String], onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->()){
         
         let dataSession = DataSession()
         dataSession.syncContactToTheServer(dict, postDict:postDict, onFinish: { (response, deserializedResponse) in
-            onFinish(response: response, deserializedResponse: deserializedResponse)
+            onFinish(response, deserializedResponse)
             }) { (error) in
-                onError(error: error)
+                onError(error)
         }
 
     }
     
     //CONTACT
-    func searchContact(dict:[String:String], onFinish:(response:AnyObject,deserializedResponse:[SearchPerson], errorMessage:String?)->(), onError:(error:AnyObject)->()){
+    func searchContact(_ dict:[String:String], onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:[SearchPerson], _ errorMessage:String?)->(), onError:@escaping (_ error:AnyObject)->()){
         
         let dataSession = DataSession()
         dataSession.searchContact(dict, onFinish: { (response, deserializedResponse) in
@@ -2208,17 +2207,17 @@ class DataSessionManger: NSObject
             var errorMessage:String?
             if deserializedResponse is NSDictionary
             {
-                if deserializedResponse.objectForKey("error") != nil
+                if deserializedResponse.object(forKey: "error") != nil
                 {
-                    errorMessage = deserializedResponse.objectForKey("error") as?String
+                    errorMessage = deserializedResponse.object(forKey: "error") as?String
                 }
                 
                 
-                if deserializedResponse.objectForKey(search_mobile) != nil
+                if deserializedResponse.object(forKey: search_mobile) != nil
                 {
                     
-                    let responseDictionary = deserializedResponse.objectForKey(search_mobile) as? NSDictionary
-                    if let dataArray = responseDictionary?.objectForKey("data") as? [NSDictionary]
+                    let responseDictionary = deserializedResponse.object(forKey: search_mobile) as? NSDictionary
+                    if let dataArray = responseDictionary?.object(forKey: "data") as? [NSDictionary]
                     {
                     for dataDict in dataArray
                     {
@@ -2226,62 +2225,62 @@ class DataSessionManger: NSObject
                         
                         
                         
-                        if let _ = dataDict.objectForKey("id") as? Int
+                        if let _ = dataDict.object(forKey: "id") as? Int
                         {
-                            personalProfileData.idString = (dataDict.objectForKey("id") as? Int)!
+                            personalProfileData.idString = (dataDict.object(forKey: "id") as? Int)!
                         }
-                        if let  name = dataDict.objectForKey(name) as? String
+                        if let  name = dataDict.object(forKey: name) as? String
                         {
                             personalProfileData.name = name
                         }
                         
-                        if let _ = dataDict.objectForKey(email)
+                        if let _ = dataDict.object(forKey: email)
                         {
-                            personalProfileData.email = (dataDict.objectForKey(email))! as? String
+                            personalProfileData.email = (dataDict.object(forKey: email))! as? String
                         }
                         
-                        if let _ = dataDict.objectForKey(mobile_number) as? String
+                        if let _ = dataDict.object(forKey: mobile_number) as? String
                         {
-                            personalProfileData.mobileNumber = (dataDict.objectForKey(mobile_number) as? String!)!
+                            personalProfileData.mobileNumber = (dataDict.object(forKey: mobile_number) as? String!)!
                         }
                         
-                        if let createdAt = dataDict.objectForKey(created_at) as? String
+                        if let createdAt = dataDict.object(forKey: created_at) as? String
                         {
                             personalProfileData.created_at = createdAt
                         }
                         
                         
-                        personalProfileData.updated_at = dataDict.objectForKey(updated_at) as? String
-                        personalProfileData.address = dataDict.objectForKey(address) as? String
-                        personalProfileData.website = dataDict.objectForKey(website) as? String
-                        personalProfileData.birthday = dataDict.objectForKey("dob") as? String
-                        personalProfileData.gender = dataDict.objectForKey("gender") as? String
-                        personalProfileData.status = dataDict.objectForKey("status") as? String
-                        if let _ = dataDict.objectForKey(photo) as? String
+                        personalProfileData.updated_at = dataDict.object(forKey: updated_at) as? String
+                        personalProfileData.address = dataDict.object(forKey: address) as? String
+                        personalProfileData.website = dataDict.object(forKey: website) as? String
+                        personalProfileData.birthday = dataDict.object(forKey: "dob") as? String
+                        personalProfileData.gender = dataDict.object(forKey: "gender") as? String
+                        personalProfileData.status = dataDict.object(forKey: "status") as? String
+                        if let _ = dataDict.object(forKey: photo) as? String
                         {
-                            personalProfileData.photo = dataDict.objectForKey(photo) as? String
+                            personalProfileData.photo = dataDict.object(forKey: photo) as? String
                         }
                         
-                        if let _ = dataDict.objectForKey(gcm_token) as? String
+                        if let _ = dataDict.object(forKey: gcm_token) as? String
                         {
                             
-                            personalProfileData.gcm_token = (dataDict.objectForKey(gcm_token) as? String)!
+                            personalProfileData.gcm_token = (dataDict.object(forKey: gcm_token) as? String)!
                         }
                         
                         
-                        if let lastonlineTime = dataDict.objectForKey(last_online_time) as? String
+                        if let lastonlineTime = dataDict.object(forKey: last_online_time) as? String
                         {
                             personalProfileData.last_online_time = lastonlineTime
                             
                         }
                         
                         
-                        if let  ratingAverage = dataDict.objectForKey("rating_average") as? [NSDictionary]
+                        if let  ratingAverage = dataDict.object(forKey: "rating_average") as? [NSDictionary]
                         {
                             for dict in ratingAverage
                             {
                                 let average = RatingAverage()
-                                if let avg = dict.objectForKey("average") as? String
+                                if let avg = dict.object(forKey: "average") as? String
                                 {
                                     average.average =   avg
                                 }
@@ -2291,12 +2290,12 @@ class DataSessionManger: NSObject
                             
                         }
                         
-                        if let  reviewCount = dataDict.objectForKey("review_count") as? [NSDictionary]
+                        if let  reviewCount = dataDict.object(forKey: "review_count") as? [NSDictionary]
                         {
                             for dict in reviewCount
                             {
                                 let count = ReviewCount()
-                                count.count =   String(dict.objectForKey("count") as! Int)
+                                count.count =   String(dict.object(forKey: "count") as! Int)
                                 personalProfileData.reviewCount.append(count)
                                 
                             }
@@ -2308,18 +2307,18 @@ class DataSessionManger: NSObject
             }
         }
             
-            onFinish(response: response, deserializedResponse: personArray, errorMessage:errorMessage )
+            onFinish(response, personArray, errorMessage )
             
             
             }) { (error) in
-                onError(error: error)
+                onError(error)
         }
         
     }
     
     //MARK: CHAT LIST
     
-    func getChatList(onFinish:(response:AnyObject,deserializedResponse:[ChatPerson])->(), onError:(error:AnyObject)->())
+    func getChatList(_ onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:[ChatPerson])->(), onError:@escaping (_ error:AnyObject)->())
     {
         let dataSession = DataSession()
         dataSession.getChatList({ (response, deserializedResponse) in
@@ -2332,29 +2331,29 @@ class DataSessionManger: NSObject
                 {
                     let chatPerson = ChatPerson()
                     
-                    chatPerson.idString = dict.objectForKey("id") as! Int
+                    chatPerson.idString = dict.object(forKey: "id") as! Int
                     
-                    if let name = dict.objectForKey("name") as? String
+                    if let name = dict.object(forKey: "name") as? String
                     {
                         chatPerson.name = name
                     }
-                    if let photo = dict.objectForKey("photo") as? String
+                    if let photo = dict.object(forKey: "photo") as? String
                     {
                         chatPerson.photo = photo
                     }
                     
-                    if let lastMessage = dict.objectForKey("last_message") as? String
+                    if let lastMessage = dict.object(forKey: "last_message") as? String
                     {
                     
                         chatPerson.last_message = lastMessage
                     }
                     
-                    if let lastMessageTime = dict.objectForKey("last_message_time") as? String
+                    if let lastMessageTime = dict.object(forKey: "last_message_time") as? String
                     {
                         chatPerson.last_message_time = lastMessageTime
                     }
                     
-                    if let unreadMessage = dict.objectForKey("last_message_time") as? Int
+                    if let unreadMessage = dict.object(forKey: "last_message_time") as? Int
                     {
                         chatPerson.unread_message = unreadMessage
                     }
@@ -2362,16 +2361,16 @@ class DataSessionManger: NSObject
                 }
                 
             }
-            onFinish(response: response, deserializedResponse: dataArray)
+            onFinish(response, dataArray)
             
           }) { (error) in
             
-            onError(error: error)
+            onError(error)
                 
         }
     }
     
-    func addRateReview(dict:[String:String], onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    func addRateReview(_ dict:[String:String], onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->())
     {
         //by_user_id
         //for_user_id
@@ -2380,14 +2379,14 @@ class DataSessionManger: NSObject
         
         let dataSession = DataSession()
         dataSession.addRateReview(dict, onFinish: { (response, deserializedResponse) in
-            onFinish(response: response, deserializedResponse: deserializedResponse)
+            onFinish(response, deserializedResponse)
             }) { (error) in
-                 onError(error: error)
+                 onError(error)
         }
         
     }
     
-    func getContactReviewList(dict:[String:String], onFinish:(response:AnyObject,reviewUser:ReviewUser)->(), onError:(error:AnyObject)->())
+    func getContactReviewList(_ dict:[String:String], onFinish:@escaping (_ response:AnyObject,_ reviewUser:ReviewUser)->(), onError:@escaping (_ error:AnyObject)->())
     {
          // GET
         /// for_user_id
@@ -2398,9 +2397,9 @@ class DataSessionManger: NSObject
             let reviewUser:ReviewUser = ReviewUser()
             if deserializedResponse is NSDictionary
             {
-                if let  review_user = deserializedResponse.objectForKey("review_user") as? [NSDictionary]
+                if let  review_user = deserializedResponse.object(forKey: "review_user") as? [NSDictionary]
                 {
-                    if let name = review_user.first!.objectForKey("name") as? String
+                    if let name = review_user.first!.object(forKey: "name") as? String
                     {
                         reviewUser.reviewPerson.name = name
                     }
@@ -2408,7 +2407,7 @@ class DataSessionManger: NSObject
                 }
                 
                 
-                if let  rateReviewList = deserializedResponse.objectForKey("rateReviewList") as? [NSDictionary]
+                if let  rateReviewList = deserializedResponse.object(forKey: "rateReviewList") as? [NSDictionary]
                 {
                     
                     
@@ -2416,66 +2415,66 @@ class DataSessionManger: NSObject
                     {
                         
                         let rateReviewr = RateReviewer()
-                        rateReviewr.rate =   (dict.objectForKey("rate") as? String)!
+                        rateReviewr.rate =   (dict.object(forKey: "rate") as? String)!
                         
-                        if let _ = dict.objectForKey("review") as? String
+                        if let _ = dict.object(forKey: "review") as? String
                         {
-                            rateReviewr.review =  (dict.objectForKey("review") as? String)!
+                            rateReviewr.review =  (dict.object(forKey: "review") as? String)!
                         }
-                        rateReviewr.created_at =  (dict.objectForKey("created_at") as? String)!
+                        rateReviewr.created_at =  (dict.object(forKey: "created_at") as? String)!
                         
-                        if let appuserDict =  dict.objectForKey("app_user") as? NSDictionary
+                        if let appuserDict =  dict.object(forKey: "app_user") as? NSDictionary
                         {
                             
-                            rateReviewr.appUser.idInt =   (appuserDict.objectForKey("id") as? Int)!
+                            rateReviewr.appUser.idInt =   (appuserDict.object(forKey: "id") as? Int)!
                             
-                            if let name = appuserDict.objectForKey("name") as? String
+                            if let name = appuserDict.object(forKey: "name") as? String
                             {
                                 rateReviewr.appUser.name =  name
                             }
-                            if let email = appuserDict.objectForKey("email") as? String
+                            if let email = appuserDict.object(forKey: "email") as? String
                             {
                                 rateReviewr.appUser.email = email
                                 
                             }
                             
-                            if let mobile = appuserDict.objectForKey("mobile_number") as? String
+                            if let mobile = appuserDict.object(forKey: "mobile_number") as? String
                             {
                                 rateReviewr.appUser.mobileNumber = mobile
                             }
                             
-                            if let createdAt = appuserDict.objectForKey("created_at") as? String
+                            if let createdAt = appuserDict.object(forKey: "created_at") as? String
                             {
                                 rateReviewr.appUser.createdAt = createdAt
                             }
                             
-                            if let updatedAt = appuserDict.objectForKey("updated_at") as? String
+                            if let updatedAt = appuserDict.object(forKey: "updated_at") as? String
                             {
                                 rateReviewr.appUser.updatedAt = updatedAt
                             }
-                            if let dob = appuserDict.objectForKey("dob") as? String
+                            if let dob = appuserDict.object(forKey: "dob") as? String
                             {
                                 rateReviewr.appUser.dob = dob
                             }
                             
-                            if let address = appuserDict.objectForKey("address") as? String
+                            if let address = appuserDict.object(forKey: "address") as? String
                             {
                                 rateReviewr.appUser.address = address
                             }
-                            if let website = appuserDict.objectForKey("website") as? String
+                            if let website = appuserDict.object(forKey: "website") as? String
                             {
                                 rateReviewr.appUser.website = website
                             }
-                            if let photo = appuserDict.objectForKey("photo") as? String
+                            if let photo = appuserDict.object(forKey: "photo") as? String
                             {
                                 rateReviewr.appUser.photo = photo
                             }
-                            if let gcmToken = appuserDict.objectForKey("gcm_token") as? String
+                            if let gcmToken = appuserDict.object(forKey: "gcm_token") as? String
                             {
                                 rateReviewr.appUser.gcmToken = gcmToken
                             }
                             
-                            if let lastOnlineTime = appuserDict.objectForKey("last_online_time") as? String
+                            if let lastOnlineTime = appuserDict.object(forKey: "last_online_time") as? String
                             {
                                 rateReviewr.appUser.lastOnlineTime = lastOnlineTime
                             }
@@ -2490,24 +2489,24 @@ class DataSessionManger: NSObject
                     
                 }
                 
-                if let  ratingAverage = deserializedResponse.objectForKey("ratingAverage") as? [NSDictionary]
+                if let  ratingAverage = deserializedResponse.object(forKey: "ratingAverage") as? [NSDictionary]
                 {
                     for dict in ratingAverage
                     {
                         let average = RatingAverage()
-                        average.average =   (dict.objectForKey("average") as? String)!
+                        average.average =   (dict.object(forKey: "average") as? String)!
                         reviewUser.ratingAverageArray.append(average)
                         
                     }
                     
                 }
                 
-                if let  reviewCount = deserializedResponse.objectForKey("reviewCount") as? [NSDictionary]
+                if let  reviewCount = deserializedResponse.object(forKey: "reviewCount") as? [NSDictionary]
                 {
                     for dict in reviewCount
                     {
                         let count = ReviewCount()
-                        if let countNumber = dict.objectForKey("count") as? NSNumber
+                        if let countNumber = dict.object(forKey: "count") as? NSNumber
                         {
                             
                            count.count = countNumber.stringValue
@@ -2518,13 +2517,13 @@ class DataSessionManger: NSObject
                     
                 }
                 
-                if let  rateGraph = deserializedResponse.objectForKey("rateGraph") as? [NSDictionary]
+                if let  rateGraph = deserializedResponse.object(forKey: "rateGraph") as? [NSDictionary]
                 {
                     for dict in rateGraph
                     {
                         let ratGraph   = RateGraph()
-                        ratGraph.rate  =   (dict.objectForKey("rate") as? String)!
-                        if let countNumber = dict.objectForKey("count") as? NSNumber
+                        ratGraph.rate  =   (dict.object(forKey: "rate") as? String)!
+                        if let countNumber = dict.object(forKey: "count") as? NSNumber
                         {
                             ratGraph.count = countNumber.stringValue
                         }
@@ -2534,17 +2533,17 @@ class DataSessionManger: NSObject
                 }
             }
             
-            onFinish(response: response, reviewUser: reviewUser)
+            onFinish(response, reviewUser)
             
             
             }) { (error) in
                 
-                onError(error: error)
+                onError(error)
         }
        
     }
     
-    func getChatConversionForContactID(dict:[String:String], onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    func getChatConversionForContactID(_ dict:[String:String], onFinish:(_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:(_ error:AnyObject)->())
     {
         
         
@@ -2552,20 +2551,20 @@ class DataSessionManger: NSObject
     }
     
     
-    func sendTextMessage(recipient_id:String, message:String,  onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    func sendTextMessage(_ recipient_id:String, message:String,  onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->())
     {
          let dataSession = DataSession()
         dataSession.sendTextMessage(recipient_id, message: message, onFinish: { (response, deserializedResponse) in
-            onFinish(response: response, deserializedResponse: deserializedResponse)
+            onFinish(response, deserializedResponse)
             }) { (error) in
-                onError(error: error)
+                onError(error)
         }
         
     }
     
     
     
-    func getContactListForPage(/*page:String,*/ onFinish:(response:AnyObject,contactPerson:ContactPerson)->(), onError:(error:AnyObject)->())
+    func getContactListForPage(/*page:String,*/ _ onFinish:@escaping (_ response:AnyObject,_ contactPerson:ContactPerson)->(), onError:@escaping (_ error:AnyObject)->())
     {
         let dataSession = DataSession()
         dataSession.getContactListForPage(/*page,*/ { (response, deserializedResponse) in
@@ -2593,38 +2592,38 @@ class DataSessionManger: NSObject
                         
                         let searchPerson = SearchPerson()
                         
-                        if let _ = dict.objectForKey("id") as? Int
+                        if let _ = (dict as AnyObject).object(forKey: "id") as? Int
                         {
-                             searchPerson.idString = (dict.objectForKey("id") as? Int)!
+                             searchPerson.idString = ((dict as AnyObject).object(forKey: "id") as? Int)!
                             
                         }
-                        if let  idString = dict.objectForKey("id") as? String
+                        if let  idString = (dict as AnyObject).object(forKey: "id") as? String
                         {
                             searchPerson.idString =  Int(idString)!
                             
                         }
                         
                        
-                        if let name = dict.objectForKey("name") as? String
+                        if let name = (dict as AnyObject).object(forKey: "name") as? String
                         {
                             searchPerson.name   = name
                         }
                         
-                        searchPerson.email = dict.objectForKey("email") as? String
-                        if let mobileNumber = dict.objectForKey("mobile_number") as? String
+                        searchPerson.email = (dict as AnyObject).object(forKey: "email") as? String
+                        if let mobileNumber = (dict as AnyObject).object(forKey: "mobile_number") as? String
                         {
                             searchPerson.mobileNumber = mobileNumber
                         }
                         
-                        searchPerson.app_user_token = dict.objectForKey("app_user_token") as? String
-                         searchPerson.created_at = dict.objectForKey("created_at") as? String
-                         searchPerson.updated_at = dict.objectForKey("updated_at") as? String
-                         searchPerson.dob = dict.objectForKey("dob") as? String
-                         searchPerson.address = dict.objectForKey("address") as? String
-                         searchPerson.website = dict.objectForKey("website") as? String
-                         searchPerson.photo = dict.objectForKey("photo") as? String
-                         searchPerson.gcm_token = dict.objectForKey("gcm_token") as? String
-                         searchPerson.last_online_time = dict.objectForKey("last_online_time") as? String
+                        searchPerson.app_user_token = (dict as AnyObject).object(forKey: "app_user_token") as? String
+                         searchPerson.created_at = (dict as AnyObject).object(forKey: "created_at") as? String
+                         searchPerson.updated_at = (dict as AnyObject).object(forKey: "updated_at") as? String
+                         searchPerson.dob = (dict as AnyObject).object(forKey: "dob") as? String
+                         searchPerson.address = (dict as AnyObject).object(forKey: "address") as? String
+                         searchPerson.website = (dict as AnyObject).object(forKey: "website") as? String
+                         searchPerson.photo = (dict as AnyObject).object(forKey: "photo") as? String
+                         searchPerson.gcm_token = (dict as AnyObject).object(forKey: "gcm_token") as? String
+                         searchPerson.last_online_time = (dict as AnyObject).object(forKey: "last_online_time") as? String
                         /*
                         if let ratingAverage =  dict.objectForKey("rating_average") as? [AnyObject]
                         {
@@ -2636,12 +2635,12 @@ class DataSessionManger: NSObject
                             searchPerson.reviewCount = reviewcount
                         }*/
                         
-                        if let  ratingAverage = dict.objectForKey("rating_average") as? [NSDictionary]
+                        if let  ratingAverage = (dict as AnyObject).object(forKey: "rating_average") as? [NSDictionary]
                         {
                             for dict in ratingAverage
                             {
                                 let average = RatingAverage()
-                                if let avg = dict.objectForKey("average") as? String
+                                if let avg = dict.object(forKey: "average") as? String
                                 {
                                     average.average =   avg
                                 }
@@ -2651,14 +2650,14 @@ class DataSessionManger: NSObject
                             
                         }
                         
-                        if let  reviewCount = dict.objectForKey("review_count") as? [NSDictionary]
+                        if let  reviewCount = (dict as AnyObject).object(forKey: "review_count") as? [NSDictionary]
                         {
                             for dict in reviewCount
                             {
                                 let count = ReviewCount()
-                                if let _ = dict.objectForKey("count") as? String
+                                if let _ = dict.object(forKey: "count") as? String
                                 {
-                                    count.count =   (dict.objectForKey("count") as? String)!
+                                    count.count =   (dict.object(forKey: "count") as? String)!
                                 }
                                 searchPerson.reviewCount.append(count)
                                 
@@ -2672,10 +2671,10 @@ class DataSessionManger: NSObject
                 }
                 
             //}*/
-            onFinish(response: response, contactPerson: conatactPerson)
+            onFinish(response, conatactPerson)
             
             }) { (error) in
-                onError(error: error)
+                onError(error)
         }
         
         
@@ -2683,7 +2682,7 @@ class DataSessionManger: NSObject
     
     
      //MARK: Get conversation
-    func getChatConversationForID(contactID:String, page: String, onFinish:(response:AnyObject,chatConversation:ChatConversation)->(), onError:(error:AnyObject)->())
+    func getChatConversationForID(_ contactID:String, page: String, onFinish:@escaping (_ response:AnyObject,_ chatConversation:ChatConversation)->(), onError:@escaping (_ error:AnyObject)->())
     {
         let dataSession = DataSession()
         dataSession.getChatConversationForID(contactID, page: page, onFinish: { (response, deserializedResponse) in
@@ -2692,73 +2691,73 @@ class DataSessionManger: NSObject
             if deserializedResponse is NSDictionary
             {
                 
-                chatConversation.total = (deserializedResponse.objectForKey("total") as? Int)!
-                chatConversation.per_page =  (deserializedResponse.objectForKey("per_page") as? Int)!
-                chatConversation.current_page =    (deserializedResponse.objectForKey("current_page") as? Int)!
-                chatConversation.last_page =  (deserializedResponse.objectForKey("last_page") as? Int)!
+                chatConversation.total = (deserializedResponse.object(forKey: "total") as? Int)!
+                chatConversation.per_page =  (deserializedResponse.object(forKey: "per_page") as? Int)!
+                chatConversation.current_page =    (deserializedResponse.object(forKey: "current_page") as? Int)!
+                chatConversation.last_page =  (deserializedResponse.object(forKey: "last_page") as? Int)!
                 
                 
-                if let data = deserializedResponse.objectForKey("data") as? NSArray
+                if let data = deserializedResponse.object(forKey: "data") as? NSArray
                 {
                    for dict in data
                     {
                         let chattDetail = ChatDetail()
-                         chattDetail.id = (dict.objectForKey("id") as? Int)!
+                         chattDetail.id = ((dict as AnyObject).object(forKey: "id") as? Int)!
                         
-                        if let  senderId =   dict.objectForKey("sender_id") as? String
+                        if let  senderId =   (dict as AnyObject).object(forKey: "sender_id") as? String
                         {
                            chattDetail.sender_id = senderId
                         }
-                        if let recipient_id = dict.objectForKey("recipient_id") as? String
+                        if let recipient_id = (dict as AnyObject).object(forKey: "recipient_id") as? String
                         {
                             chattDetail.recipient_id = recipient_id
                         }
-                        if let message_type =  dict.objectForKey("message_type") as? String
+                        if let message_type =  (dict as AnyObject).object(forKey: "message_type") as? String
                         {
                             chattDetail.message_type = message_type
                         }
                         
                         if let text =
-                            dict.objectForKey("text") as? String
+                            (dict as AnyObject).object(forKey: "text") as? String
                         {
                             chattDetail.text = text
                         }
                         
-                        if let  image = dict.objectForKey("image") as? String
+                        if let  image = (dict as AnyObject).object(forKey: "image") as? String
                         {
                             chattDetail.image = image
                         }
                         
-                        if let  video = dict.objectForKey("video") as? String
+                        if let  video = (dict as AnyObject).object(forKey: "video") as? String
                         {
                             chattDetail.video = video
                         }
                         
                         if let message_read =
-                            dict.objectForKey("message_read") as? String
+                            (dict as AnyObject).object(forKey: "message_read") as? String
                         {
                             chattDetail.message_read = message_read
                         }
                         if let received_at =
-                            dict.objectForKey("received_at") as? String
+                            (dict as AnyObject).object(forKey: "received_at") as? String
                         {
                             chattDetail.received_at =  received_at
                             
                         }
                         
                         if let created_at =
-                            dict.objectForKey("created_at") as? String
+                            (dict as AnyObject).object(forKey: "created_at") as? String
                         {
                            chattDetail.created_at = created_at
                         }
                         
                         if let updated_at =
-                            dict.objectForKey("updated_at") as? String
+                            (dict as AnyObject).object(forKey: "updated_at") as? String
                         {
                             chattDetail.updated_at = updated_at
                         }
                         if let conversation_id =
-                            dict.objectForKey("conversation_id") as? String
+                            (dict as AnyObject).object(forKey: "conversation_id") as? String
                         {
                             chattDetail.conversation_id = conversation_id
                         }
@@ -2769,47 +2768,47 @@ class DataSessionManger: NSObject
                 }
                 
             }
-            onFinish(response: response, chatConversation: chatConversation)
+            onFinish(response, chatConversation)
             
             
             
             }) { (error) in
-                onError(error: error)
+                onError(error)
         }
         
     
     }
     
     //MARK: BLOCK
-    func blockUserID(userID:String, onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    func blockUserID(_ userID:String, onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->())
     {
         
         let dataSession = DataSession()
         dataSession.blockUserID(userID, onFinish: { (response, deserializedResponse) in
-            onFinish(response: response, deserializedResponse: deserializedResponse)
+            onFinish(response, deserializedResponse)
             }) { (error) in
-                onError(error: error)
+                onError(error)
         }
         
     }
     
-    func unblockUserID(userID:String, onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    func unblockUserID(_ userID:String, onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->())
     {
         
         let dataSession = DataSession()
         dataSession.blockUserID(userID, onFinish: { (response, deserializedResponse) in
-            onFinish(response: response, deserializedResponse: deserializedResponse)
+            onFinish(response, deserializedResponse)
         }) { (error) in
-            onError(error: error)
+            onError(error)
         }
 
         
         /*
         let dataSession = DataSession()
         dataSession.unblockUserID(userID, onFinish: { (response, deserializedResponse) in
-            onFinish(response: response, deserializedResponse: deserializedResponse)
+            onFinish(response, deserializedResponse)
         }) { (error) in
-            onError(error: error)
+            onError(error)
         }
         
    */
@@ -2822,45 +2821,45 @@ class DataSessionManger: NSObject
     
     
     
-    func getSearchPersonArray(deserializedResponse:NSArray)->[SearchPerson]
+    func getSearchPersonArray(_ deserializedResponse:NSArray)->[SearchPerson]
     {
         var lBlockUserArray = [SearchPerson]()
         
-        if  deserializedResponse.isKindOfClass(NSArray)
+        if  deserializedResponse.isKind(of: NSArray.self)
         {
             
             for i in 0..<deserializedResponse.count
             {
                 let lBlockUser = SearchPerson()
                 let dict = deserializedResponse[i]
-                if let _ = dict.objectForKey("id") as? Int
+                if let _ = (dict as AnyObject).object(forKey: "id") as? Int
                 {
-                    lBlockUser.idString = (dict.objectForKey("id") as? Int)!
+                    lBlockUser.idString = ((dict as AnyObject).object(forKey: "id") as? Int)!
                 }
-                if let name = dict.objectForKey("name") as? String
+                if let name = (dict as AnyObject).object(forKey: "name") as? String
                 {
                     lBlockUser.name   = name
                 }
                 
-                if let _ = dict.objectForKey("email") as? String
+                if let _ = (dict as AnyObject).object(forKey: "email") as? String
                 {
                     
-                    lBlockUser.email = (dict.objectForKey("email") as? String)!
+                    lBlockUser.email = ((dict as AnyObject).object(forKey: "email") as? String)!
                 }
-                if let mobileNumber = dict.objectForKey("mobile_number") as? String
+                if let mobileNumber = (dict as AnyObject).object(forKey: "mobile_number") as? String
                 {
                     lBlockUser.mobileNumber = mobileNumber
                 }
                 
-                lBlockUser.app_user_token = dict.objectForKey("app_user_token") as? String
-                lBlockUser.created_at = dict.objectForKey("created_at") as? String
-                lBlockUser.updated_at = dict.objectForKey("updated_at") as? String
-                lBlockUser.dob = dict.objectForKey("dob") as? String
-                lBlockUser.address = dict.objectForKey("address") as? String
-                lBlockUser.website = dict.objectForKey("website") as? String
-                lBlockUser.photo = dict.objectForKey("photo") as? String
-                lBlockUser.gcm_token = dict.objectForKey("gcm_token") as? String
-                lBlockUser.last_online_time = dict.objectForKey("last_online_time") as? String
+                lBlockUser.app_user_token = (dict as AnyObject).object(forKey: "app_user_token") as? String
+                lBlockUser.created_at = (dict as AnyObject).object(forKey: "created_at") as? String
+                lBlockUser.updated_at = (dict as AnyObject).object(forKey: "updated_at") as? String
+                lBlockUser.dob = (dict as AnyObject).object(forKey: "dob") as? String
+                lBlockUser.address = (dict as AnyObject).object(forKey: "address") as? String
+                lBlockUser.website = (dict as AnyObject).object(forKey: "website") as? String
+                lBlockUser.photo = (dict as AnyObject).object(forKey: "photo") as? String
+                lBlockUser.gcm_token = (dict as AnyObject).object(forKey: "gcm_token") as? String
+                lBlockUser.last_online_time = (dict as AnyObject).object(forKey: "last_online_time") as? String
                 
                 lBlockUserArray.append(lBlockUser)
                 
@@ -2874,58 +2873,58 @@ class DataSessionManger: NSObject
     
     
     
-    func getBlockUserList(onFinish:(response:AnyObject, blockUserArray:[SearchPerson])->(), onError:(error:AnyObject)->())
+    func getBlockUserList(_ onFinish:@escaping (_ response:AnyObject, _ blockUserArray:[SearchPerson])->(), onError:@escaping (_ error:AnyObject)->())
     {
         let dataSession = DataSession()
         dataSession.getBlockUsersList({ (response, deserializedResponse) in
             
             var lBlockUserArray = [SearchPerson]()
             
-            if  deserializedResponse.isKindOfClass(NSArray)
+            if  deserializedResponse.isKind(of: NSArray.self)
             {
                 
-                for i in 0..<deserializedResponse.count
+                for i in 0..<(deserializedResponse as! NSArray).count
                 {
                     let lBlockUser = SearchPerson()
-                    let dict = deserializedResponse.objectAtIndex(i)
-                    if let _ = dict.objectForKey("id") as? Int
+                    let dict = deserializedResponse.object(at: i)
+                    if let _ = (dict as AnyObject).object(forKey: "id") as? Int
                     {
-                        lBlockUser.idString = (dict.objectForKey("id") as? Int)!
+                        lBlockUser.idString = ((dict as AnyObject).object(forKey: "id") as? Int)!
                     }
-                    if let name = dict.objectForKey("name") as? String
+                    if let name = (dict as AnyObject).object(forKey: "name") as? String
                     {
                         lBlockUser.name   = name
                     }
                     
-                    if let _ = dict.objectForKey("email") as? String
+                    if let _ = (dict as AnyObject).object(forKey: "email") as? String
                     {
                     
-                        lBlockUser.email = (dict.objectForKey("email") as? String)!
+                        lBlockUser.email = ((dict as AnyObject).object(forKey: "email") as? String)!
                     }
-                    if let mobileNumber = dict.objectForKey("mobile_number") as? String
+                    if let mobileNumber = (dict as AnyObject).object(forKey: "mobile_number") as? String
                     {
                         lBlockUser.mobileNumber = mobileNumber
                     }
                     
-                    lBlockUser.app_user_token = dict.objectForKey("app_user_token") as? String
-                    lBlockUser.created_at = dict.objectForKey("created_at") as? String
-                    lBlockUser.updated_at = dict.objectForKey("updated_at") as? String
-                    lBlockUser.dob = dict.objectForKey("dob") as? String
-                    lBlockUser.address = dict.objectForKey("address") as? String
-                    lBlockUser.website = dict.objectForKey("website") as? String
-                    lBlockUser.photo = dict.objectForKey("photo") as? String
-                    lBlockUser.gcm_token = dict.objectForKey("gcm_token") as? String
-                    lBlockUser.last_online_time = dict.objectForKey("last_online_time") as? String
+                    lBlockUser.app_user_token = (dict as AnyObject).object(forKey: "app_user_token") as? String
+                    lBlockUser.created_at = (dict as AnyObject).object(forKey: "created_at") as? String
+                    lBlockUser.updated_at = (dict as AnyObject).object(forKey: "updated_at") as? String
+                    lBlockUser.dob = (dict as AnyObject).object(forKey: "dob") as? String
+                    lBlockUser.address = (dict as AnyObject).object(forKey: "address") as? String
+                    lBlockUser.website = (dict as AnyObject).object(forKey: "website") as? String
+                    lBlockUser.photo = (dict as AnyObject).object(forKey: "photo") as? String
+                    lBlockUser.gcm_token = (dict as AnyObject).object(forKey: "gcm_token") as? String
+                    lBlockUser.last_online_time = (dict as AnyObject).object(forKey: "last_online_time") as? String
                     
                    lBlockUserArray.append(lBlockUser)
                     
                 }
             }
             
-             onFinish(response: response, blockUserArray: lBlockUserArray)
+             onFinish(response, lBlockUserArray)
             
             }) { (error) in
-            onError(error: error)
+            onError(error)
         }
         
         
@@ -2936,46 +2935,46 @@ class DataSessionManger: NSObject
 
     }
     //MARK: SPAM
-    func spamUserID(userID:String, onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    func spamUserID(_ userID:String, onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->())
     {
         let dataSession = DataSession()
         dataSession.spamUserID(userID, onFinish: { (response, deserializedResponse) in
-            onFinish(response: response, deserializedResponse: deserializedResponse)
+            onFinish(response, deserializedResponse)
         }) { (error) in
-            onError(error: error)
+            onError(error)
         }
      }
     
     //MARK: SPAM
-    func unspamUserID(userID:String, onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    func unspamUserID(_ userID:String, onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->())
     {
         let dataSession = DataSession()
         dataSession.spamUserID(userID, onFinish: { (response, deserializedResponse) in
-            onFinish(response: response, deserializedResponse: deserializedResponse)
+            onFinish(response, deserializedResponse)
         }) { (error) in
-            onError(error: error)
+            onError(error)
         }
 
         /*
         let dataSession = DataSession()
         dataSession.unspamUserID(userID, onFinish: { (response, deserializedResponse) in
-            onFinish(response: response, deserializedResponse: deserializedResponse)
+            onFinish(response, deserializedResponse)
         }) { (error) in
-            onError(error: error)
+            onError(error)
         }
         
         */
     }
     
-    func getUserSpamList(onFinish:(response:AnyObject,spamUserArray:[SearchPerson])->(), onError:(error:AnyObject)->())
+    func getUserSpamList(_ onFinish:@escaping (_ response:AnyObject,_ spamUserArray:[SearchPerson])->(), onError:@escaping (_ error:AnyObject)->())
     {
         let dataSession = DataSession()
         dataSession.getUserSpamList({ (response, deserializedResponse) in
             var lBlockUserArray = [SearchPerson]()
             lBlockUserArray =   self.getSearchPersonArray(deserializedResponse as! NSArray)
-            onFinish(response: response, spamUserArray: lBlockUserArray)
+            onFinish(response, lBlockUserArray)
             }) { (error) in
-                onError(error: error)
+                onError(error)
 
         }
 
@@ -2983,48 +2982,48 @@ class DataSessionManger: NSObject
 
     
     //MARK:FAVOURITE
-    func favouriteUserID(userID:String, onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    func favouriteUserID(_ userID:String, onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->())
     {
         let dataSession = DataSession()
         dataSession.favouriteUserID(userID, onFinish: { (response, deserializedResponse) in
-            onFinish(response: response, deserializedResponse: deserializedResponse)
+            onFinish(response, deserializedResponse)
         }) { (error) in
-            onError(error: error)
+            onError(error)
         }
 
         
     }
     
     //MARK:FAVOURITE
-    func unfavouriteUserID(userID:String, onFinish:(response:AnyObject,deserializedResponse:AnyObject)->(), onError:(error:AnyObject)->())
+    func unfavouriteUserID(_ userID:String, onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->())
     {
         let dataSession = DataSession()
         dataSession.favouriteUserID(userID, onFinish: { (response, deserializedResponse) in
-            onFinish(response: response, deserializedResponse: deserializedResponse)
+            onFinish(response, deserializedResponse)
         }) { (error) in
-            onError(error: error)
+            onError(error)
         }
         /*
         let dataSession = DataSession()
         dataSession.unfavouriteUserID(userID, onFinish: { (response, deserializedResponse) in
-            onFinish(response: response, deserializedResponse: deserializedResponse)
+            onFinish(response, deserializedResponse)
         }) { (error) in
-            onError(error: error)
+            onError(error)
         }
         */
         
     }
     
     
-    func getUserfavoriteList(onFinish:(response:AnyObject,favUserArray:[SearchPerson])->(), onError:(error:AnyObject)->())
+    func getUserfavoriteList(_ onFinish:@escaping (_ response:AnyObject,_ favUserArray:[SearchPerson])->(), onError:@escaping (_ error:AnyObject)->())
     {
         let dataSession = DataSession()
         dataSession.getUserfavoriteList({ (response, deserializedResponse) in
             var lBlockUserArray = [SearchPerson]()
             lBlockUserArray =   self.getSearchPersonArray(deserializedResponse as! NSArray)
-            onFinish(response: response, favUserArray: lBlockUserArray)
+            onFinish(response, lBlockUserArray)
             }) { (error) in
-                onError(error: error)
+                onError(error)
 
         }
         
@@ -3042,15 +3041,15 @@ extension NSObject
     //MARK: get up user Token
     class func getAppUserIdAndToken()->[String:String]
     {
-         let appUserId = NSUserDefaults.standardUserDefaults().objectForKey(kapp_user_id) as! Int
-         let appUserToken = NSUserDefaults.standardUserDefaults().objectForKey(kapp_user_token) as! String
+         let appUserId = UserDefaults.standard.object(forKey: kapp_user_id) as! Int
+         let appUserToken = UserDefaults.standard.object(forKey: kapp_user_token) as! String
          return [kapp_user_id:String(appUserId), kapp_user_token :appUserToken]
     }
     
     class func resetAppUserIdAndToken()
     {
-        NSUserDefaults.standardUserDefaults().setObject(nil, forKey: kapp_user_id)
-        NSUserDefaults.standardUserDefaults().setObject(nil, forKey: kapp_user_token)
+        UserDefaults.standard.set(nil, forKey: kapp_user_id)
+        UserDefaults.standard.set(nil, forKey: kapp_user_token)
         
     }
 }
@@ -3107,14 +3106,14 @@ class ReviewCount:NSObject, NSCoding
     required init?(coder aDecoder: NSCoder)
     {
         super.init()
-        if let count = aDecoder.decodeObjectForKey("count") as? String
+        if let count = aDecoder.decodeObject(forKey: "count") as? String
         {
             self.count = count
         }
     }
-    func encodeWithCoder(aCoder: NSCoder)
+    func encode(with aCoder: NSCoder)
     {
-         aCoder.encodeObject(count, forKey: "count")
+         aCoder.encode(count, forKey: "count")
         
     }
 }
@@ -3129,14 +3128,14 @@ class RatingAverage:NSObject, NSCoding
     required init?(coder aDecoder: NSCoder)
     {
         super.init()
-        if let average = aDecoder.decodeObjectForKey("average") as? String
+        if let average = aDecoder.decodeObject(forKey: "average") as? String
         {
             self.average = average
         }
     }
-    func encodeWithCoder(aCoder: NSCoder)
+    func encode(with aCoder: NSCoder)
     {
-        aCoder.encodeObject(average, forKey: "average")
+        aCoder.encode(average, forKey: "average")
     }
 }
 

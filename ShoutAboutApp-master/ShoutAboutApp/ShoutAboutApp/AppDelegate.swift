@@ -22,11 +22,11 @@ import XMPPFramework
 import Fabric
 import Crashlytics
 import DigitsKit
-import ReactiveCocoa
+//import ReactiveCocoa
 import OpenUDID
 import TSMessages
 import DeepLinkKit
-import ChameleonFramework
+//import ChameleonFramework
 import youtube_ios_player_helper
 import Watchdog
 
@@ -58,15 +58,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate/*, GIDSignInDelegate*/
     //MARK:// GET CONTACT
     func retrieveContacts() -> [SearchPerson]?
     {
-        if let unarchivedObject = NSUserDefaults.standardUserDefaults().objectForKey(contactStored) as? NSData {
-            return NSKeyedUnarchiver.unarchiveObjectWithData(unarchivedObject) as? [SearchPerson]
+        if let unarchivedObject = UserDefaults.standard.object(forKey: contactStored) as? Data {
+            return NSKeyedUnarchiver.unarchiveObject(with: unarchivedObject) as? [SearchPerson]
         }
         return nil
     }
     
     
     //MARK: Refresh Token
-    func tokenRefreshNotification(notification: NSNotification)
+    func tokenRefreshNotification(_ notification: Notification)
     {
         if let refreshedToken = FIRInstanceID.instanceID().token()
         {
@@ -78,7 +78,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate/*, GIDSignInDelegate*/
     
     
     
-    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool
     {
         
         OneChat.start(true, delegate: nil) { (stream, error) -> Void in
@@ -100,7 +100,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate/*, GIDSignInDelegate*/
         // Initialize google sign-in
         var configureError: NSError?
         GGLContext.sharedInstance().configureWithError(&configureError)
-        assert(configureError == nil, "Error configuring Google services: \(configureError)")
+        assert(configureError == nil, "Error configuring Google services: \(String(describing: configureError))")
         
         
 //        if User.isLoggedIn()
@@ -115,52 +115,51 @@ class AppDelegate: UIResponder, UIApplicationDelegate/*, GIDSignInDelegate*/
 //        // Register a class to a route using object subscripting
 //        self.router["/messsage/:thread"] = MessageDeeplinkRouteHandler.self
         
-        let controller: FirstViewController = FirstViewController()
         
         // Show View Controller from Main storyboard
     /* Small talk block*/    //self.window!.rootViewController = UINavigationController(rootViewController: controller)
         //self.window!.backgroundColor = UIColor.whiteColor()
         //self.window!.rootViewController?.navigationController?.navigationBarHidden = true
-        let darkBlue = UIColor(hexString: "2C3E50")
-        let red = UIColor(hexString: "E74C3C")
-        let light = UIColor(hexString: "ECF0F1")
-        let lightBlue = UIColor(hexString: "1F8DC8")
-        let medBlue = UIColor(hexString: "FFFFFF")
-        self.backgroundColor = light
-        self.darkColor = darkBlue
-        self.selfColor = UIColor.whiteColor()
-        self.highlightColor = red
+//        let darkBlue = UIColor(hexString: "2C3E50")
+//        let red = UIColor(hexString: "E74C3C")
+//        let light = UIColor(hexString: "ECF0F1")
+//        let lightBlue = UIColor(hexString: "1F8DC8")
+//        let medBlue = UIColor(hexString: "FFFFFF")
+//        self.backgroundColor = light
+//        self.darkColor = darkBlue
+//        self.selfColor = UIColor.white
+//        self.highlightColor = red
         //UIBarButtonItem.appearance().tintColor = lightBlue
         //UIBarButtonItem.my_appearanceWhenContainedIn(UISearchBar.self).tintColor = lightBlue
        // UIBarButtonItem.my_appearanceWhenContainedIn(UINavigationBar.self).tintColor = lightBlue
         //UIBarButtonItem.my_appearanceWhenContainedIn(UIToolbar.self).tintColor = lightBlue
         
-         UINavigationBar.appearance().barTintColor = lightBlue //UIColor.whiteColor()
-           UINavigationBar.appearance().tintColor =  medBlue//appColor
-          UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
+         //UINavigationBar.appearance().barTintColor = lightBlue //UIColor.whiteColor()
+           //UINavigationBar.appearance().tintColor =  medBlue//appColor
+          UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
         
         
         let attributes = [
-            NSForegroundColorAttributeName : UIColor.whiteColor(),
-            NSFontAttributeName : UIFont.systemFontOfSize(13)
+            NSForegroundColorAttributeName : UIColor.white,
+            NSFontAttributeName : UIFont.systemFont(ofSize: 13)
         ]
-        UIBarButtonItem.appearanceWhenContainedInInstancesOfClasses([UISearchBar.self]).setTitleTextAttributes(attributes, forState: .Normal)
+        UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).setTitleTextAttributes(attributes, for: UIControlState())
         
        // UITableViewCell.appearance().backgroundColor = light
        // UICollectionView.appearance().backgroundColor = light
        // UIScrollView.appearance().backgroundColor = light
         //UITableView.appearance().backgroundColor = light
         
-        NSNotificationCenter.defaultCenter().addObserver(self,
+        NotificationCenter.default.addObserver(self,
                                                          selector: #selector(tokenRefreshNotification(_:)),
-                                                         name: kFIRInstanceIDTokenRefreshNotification,
+                                                         name: NSNotification.Name.firInstanceIDTokenRefresh,
                                                          object: nil)
         
       //  UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.LightContent
         
 
-        let appUserId = NSUserDefaults.standardUserDefaults().objectForKey(kapp_user_id)
-        let appUserToken = NSUserDefaults.standardUserDefaults().objectForKey(kapp_user_token)
+        let appUserId = UserDefaults.standard.object(forKey: kapp_user_id)
+        let appUserToken = UserDefaults.standard.object(forKey: kapp_user_token)
         
         
         
@@ -168,8 +167,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate/*, GIDSignInDelegate*/
         {
             
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-             let tabBarVC = storyboard.instantiateViewControllerWithIdentifier("tabBarVC") as? MyTabViewController
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+             let tabBarVC = storyboard.instantiateViewController(withIdentifier: "tabBarVC") as? MyTabViewController
             
             appDelegate.window?.backgroundColor = UIColor(red: 236.0, green: 238.0, blue: 241.0, alpha: 1.0)
             appDelegate.window?.rootViewController = tabBarVC
@@ -177,7 +176,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate/*, GIDSignInDelegate*/
             
             if let contactStored = self.retrieveContacts()
             {
-                ProfileManager.sharedInstance.syncedContactArray.appendContentsOf(contactStored)
+                ProfileManager.sharedInstance.syncedContactArray.append(contentsOf: contactStored)
             }
             
         }
@@ -212,9 +211,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate/*, GIDSignInDelegate*/
          
          } else*/
     
-        let notificationTypes: UIUserNotificationType = [UIUserNotificationType.Alert, UIUserNotificationType.Badge, UIUserNotificationType.Sound]
+        let notificationTypes: UIUserNotificationType = [UIUserNotificationType.alert, UIUserNotificationType.badge, UIUserNotificationType.sound]
         
-        let pushNotificationSettings = UIUserNotificationSettings(forTypes: notificationTypes, categories: nil)
+        let pushNotificationSettings = UIUserNotificationSettings(types: notificationTypes, categories: nil)
         
         application.registerUserNotificationSettings(pushNotificationSettings)
         application.registerForRemoteNotifications()
@@ -222,12 +221,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate/*, GIDSignInDelegate*/
         return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
 }
 
-    func applicationWillResignActive(application: UIApplication) {
+    func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
     }
 
-    func applicationDidEnterBackground(application: UIApplication) {
+    func applicationDidEnterBackground(_ application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
         
@@ -237,27 +236,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate/*, GIDSignInDelegate*/
 
     }
 
-    func applicationWillEnterForeground(application: UIApplication) {
+    func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
     }
 
-    func applicationDidBecomeActive(application: UIApplication) {
+    func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     }
 
-    func applicationWillTerminate(application: UIApplication) {
+    func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
     
     
-    func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool
+    func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool
     {
         
-        if (FBSDKApplicationDelegate.sharedInstance().application(application, openURL: url, sourceApplication: sourceApplication, annotation: annotation)) {
+        if (FBSDKApplicationDelegate.sharedInstance().application(application, open: url, sourceApplication: sourceApplication, annotation: annotation)) {
             
             return true;
         }
-        else if(GIDSignIn.sharedInstance().handleURL(url,
+        else if(GIDSignIn.sharedInstance().handle(url,
             sourceApplication: sourceApplication,
             annotation: annotation))
         {
@@ -274,25 +273,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate/*, GIDSignInDelegate*/
 
 
 
-func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError)
+func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError)
 {
     print(error)
 }
 
-func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData)
+func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data)
 {
     
-    let tokenChars = UnsafePointer<CChar>(deviceToken.bytes)
+    let tokenChars = (deviceToken as NSData).bytes.bindMemory(to: CChar.self, capacity: deviceToken.count)
     
     var tokenString = ""
-    for i in 0..<deviceToken.length
+    for i in 0..<deviceToken.count
     {
         
         tokenString += String(format: "%02.2hhx", arguments: [tokenChars[i]])
         
     }
     
-    FIRInstanceID.instanceID().setAPNSToken(deviceToken, type: FIRInstanceIDAPNSTokenType.Unknown)
+    FIRInstanceID.instanceID().setAPNSToken(deviceToken, type: FIRInstanceIDAPNSTokenType.unknown)
     
     print("Device Token:", tokenString)
 }
@@ -301,7 +300,7 @@ func application(application: UIApplication, didRegisterForRemoteNotificationsWi
 
 func connectToFcm()
 {
-    FIRMessaging.messaging().connectWithCompletion { (error) in
+    FIRMessaging.messaging().connect { (error) in
         if error != nil
         {
            print("Unable to connect with FCM. \(error)")
@@ -317,7 +316,7 @@ func connectToFcm()
 }
 
 
-func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject], fetchCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void)
+func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any], fetchCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void)
 {
     if userInfo["gcm.message_id"] != nil
     {
@@ -328,7 +327,7 @@ func application(application: UIApplication, didReceiveRemoteNotification userIn
     print(userInfo)
 }
 
-func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject])
+func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any])
 {
     
     // If you are receiving a notification message while your app is in the background,

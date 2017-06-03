@@ -9,7 +9,7 @@
 
 
 protocol InputTableViewCellProtocol {
-    func getTextsForCell(text:String, cell:InputTableViewCell)
+    func getTextsForCell(_ text:String, cell:InputTableViewCell)
 }
 import UIKit
 
@@ -24,12 +24,12 @@ class InputTableViewCell: UITableViewCell
     override func awakeFromNib()
     {
         super.awakeFromNib()
-        inputTextField.addTarget(self, action:#selector(InputTableViewCell.edited), forControlEvents:UIControlEvents.EditingChanged)
+        inputTextField.addTarget(self, action:#selector(InputTableViewCell.edited), for:UIControlEvents.editingChanged)
         inputBaseView.makeBorder()
         
     }
 
-    override func setSelected(selected: Bool, animated: Bool)
+    override func setSelected(_ selected: Bool, animated: Bool)
     {
         super.setSelected(selected, animated: animated)
 

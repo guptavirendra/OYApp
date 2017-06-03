@@ -9,7 +9,7 @@
 import UIKit
 
 protocol ChatPersionTableViewCellProtocol {
-    func buttonClicked(cell:ChatPersionTableViewCell, button:UIButton)
+    func buttonClicked(_ cell:ChatPersionTableViewCell, button:UIButton)
 }
 
 class ChatPersionTableViewCell: UITableViewCell
@@ -34,16 +34,16 @@ class ChatPersionTableViewCell: UITableViewCell
         unreadMessageView.makeImageRounded()
        // self.contentView.backgroundColor = bgColor
         baseView.setGraphicEffects()
-        profileView.makeImageRoundedWithWidth(3.0, color: UIColor.grayColor())
+        profileView.makeImageRoundedWithWidth(3.0, color: UIColor.gray)
         
     }
 
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
     }
-    @IBAction func buttonClicked(button:UIButton)
+    @IBAction func buttonClicked(_ button:UIButton)
     {
         self.delegate?.buttonClicked(self, button:button )
     }

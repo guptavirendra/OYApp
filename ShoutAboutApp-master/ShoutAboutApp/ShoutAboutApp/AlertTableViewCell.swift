@@ -13,7 +13,7 @@ import UIKit
 protocol AlertTableViewCellProtocol {
     
     
-    func picbuttonClicked(cell:AlertTableViewCell, button:UIButton)
+    func picbuttonClicked(_ cell:AlertTableViewCell, button:UIButton)
     
     
 }
@@ -35,14 +35,14 @@ class AlertTableViewCell: UITableViewCell {
         // Initialization code
     }
 
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
     }
     
     
-    @IBAction func picbuttonClicked(button:UIButton){
+    @IBAction func picbuttonClicked(_ button:UIButton){
         
         self.picButton?.tag = button.tag
         self.delegate?.picbuttonClicked(self, button:button)

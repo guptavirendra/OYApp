@@ -11,24 +11,24 @@ import Result
 
 private let defaultSessionError = NSError(domain: "org.reactivecocoa.ReactiveCocoa.rac_dataWithRequestBackgroundSupport", code: 1, userInfo: nil)
 
-extension NSURLSession {
+extension URLSession {
 	/// Returns a producer that will execute the given request once for each
 	/// invocation of start().
-	public func rac_dataWithRequestBackgroundSupport(request: NSURLRequest) -> SignalProducer<(NSData, NSURLResponse), NSError> {
+	public func rac_dataWithRequestBackgroundSupport(_ request: URLRequest) -> SignalProducer<(Data, URLResponse), NSError> {
 		return SignalProducer { observer, disposable in
-			let backgroundTaskId = UIApplication.sharedApplication().beginBackgroundTaskWithExpirationHandler({})
-			let task = self.dataTaskWithRequest(request) { data, response, error in
+			let backgroundTaskId = UIApplication.shared.beginBackgroundTask(expirationHandler: {})
+			let task = self.dataTask(with: request, completionHandler: { data, response, error in
 				if let data = data, response = response {
 					observer.sendNext((data, response))
 					observer.sendCompleted()
 				} else {
 					observer.sendFailed(error ?? defaultSessionError)
 				}				
-			}
+			}) 
 			
 			disposable.addDisposable {
 				task.cancel()
-				UIApplication.sharedApplication().endBackgroundTask(backgroundTaskId)
+				UIApplication.shared.endBackgroundTask(backgroundTaskId)
 			}
 			task.resume()
 		}
@@ -42,9 +42,9 @@ extension SignalProducerType {
 		}
 	}
 	
-	func merge<Value, Error>(signals: [SignalProducer<Value, Error>]) -> SignalProducer<Value, Error> {
+	func merge<Value, Error>(_ signals: [SignalProducer<Value, Error>]) -> SignalProducer<Value, Error> {
 		return SignalProducer<SignalProducer<Value, Error>, Error>(values: signals)
-			.flatten(.Merge)
+			.flatten(.merge)
 	}
 	
 	/// Delays `Next` and `Completed` events by the given interval after the first event has passed, forwarding
@@ -52,14 +52,14 @@ extension SignalProducerType {
 	///
 	/// `Error` and `Interrupted` events are always scheduled immediately.
 	@warn_unused_result(message="Did you forget to call `start` on the producer?")
-	public func throttleAfterFirst(interval: NSTimeInterval, onScheduler scheduler: DateSchedulerType) -> SignalProducer<Value, Error> {
+	public func throttleAfterFirst(_ interval: TimeInterval, onScheduler scheduler: DateSchedulerType) -> SignalProducer<Value, ReactiveCocoa.Error> {
 		return lift { $0.throttleAfterFirst(interval, onScheduler: scheduler) }
 	}
 	
 	/// Delays `Failed` events by the given interval, forwarding
 	/// them on the given scheduler.
 	@warn_unused_result(message="Did you forget to call `start` on the producer?")
-	public func delayFailed(interval: NSTimeInterval, onScheduler scheduler: DateSchedulerType) -> SignalProducer<Value, Error> {
+	public func delayFailed(_ interval: TimeInterval, onScheduler scheduler: DateSchedulerType) -> SignalProducer<Value, ReactiveCocoa.Error> {
 		return lift { $0.delayFailed(interval, onScheduler: scheduler) }
 	}
 	
@@ -68,14 +68,14 @@ extension SignalProducerType {
 	/// Figure out how to do this with scheduler (naiive implementations do not work because this
 	/// function NEEDS to return a signalProducer which is not possible with scheduleafter callback
 	@warn_unused_result(message="Did you forget to call `start` on the producer?")
-	public func unsafeSleepRetryWithDelay(count: Int, interval: NSTimeInterval, onScheduler scheduler: DateSchedulerType) -> SignalProducer<Value, Error> {
+	public func unsafeSleepRetryWithDelay(_ count: Int, interval: TimeInterval, onScheduler scheduler: DateSchedulerType) -> SignalProducer<Value, ReactiveCocoa.Error> {
 		precondition(count >= 0)
 		
 		if count == 0 {
 			return producer
 		} else {
 			return flatMapError { _ in
-				NSThread.sleepForTimeInterval(interval)
+				Thread.sleep(forTimeInterval: interval)
 				return self.unsafeSleepRetryWithDelay(count - 1, interval: interval, onScheduler: scheduler)
 			}
 		}
@@ -83,7 +83,7 @@ extension SignalProducerType {
 	
 	/// Ignores failures up to `count` times.
 	@warn_unused_result(message="Did you forget to call `start` on the producer?")
-	public func retryWithDelay(count: Int, interval: NSTimeInterval, onScheduler scheduler: DateSchedulerType) -> SignalProducer<Value, Error> {
+	public func retryWithDelay(_ count: Int, interval: TimeInterval, onScheduler scheduler: DateSchedulerType) -> SignalProducer<Value, ReactiveCocoa.Error> {
 		precondition(count >= 0)
 		
 		if count == 0 {
@@ -134,14 +134,14 @@ extension SignalType {
 	/// Delays `Failed` events by the given interval, forwarding
 	/// them on the given scheduler.
 	@warn_unused_result(message="Did you forget to call `observe` on the signal?")
-	public func delayFailed(interval: NSTimeInterval, onScheduler scheduler: DateSchedulerType) -> Signal<Value, Error> {
+	public func delayFailed(_ interval: TimeInterval, onScheduler scheduler: DateSchedulerType) -> Signal<Value, ReactiveCocoa.Error> {
 		precondition(interval >= 0)
 		
 		return Signal { observer in
 			return self.observe { event in
 				switch event {
-				case .Failed:
-					let date = scheduler.currentDate.dateByAddingTimeInterval(interval)
+				case .failed:
+					let date = scheduler.currentDate.addingTimeInterval(interval)
 					scheduler.scheduleAfter(date) {
 						observer.action(event)
 					}
@@ -160,20 +160,20 @@ extension SignalType {
 	///
 	/// `Error` and `Interrupted` events are always scheduled immediately.
 	@warn_unused_result(message="Did you forget to call `observe` on the signal?")
-	public func throttleAfterFirst(interval: NSTimeInterval, onScheduler scheduler: DateSchedulerType) -> Signal<Value, Error> {
+	public func throttleAfterFirst(_ interval: TimeInterval, onScheduler scheduler: DateSchedulerType) -> Signal<Value, ReactiveCocoa.Error> {
 		precondition(interval >= 0)
 		
 		return Signal { observer in
-			var cumulativeInterval = NSTimeInterval(0)
+			var cumulativeInterval = TimeInterval(0)
 			return self.observe { event in
 				switch event {
-				case .Failed, .Interrupted:
+				case .failed, .interrupted:
 					//scheduler.schedule { //DELAY has this but not sure why
 						observer.action(event)
 					//}
 					
 				default:
-					let date = scheduler.currentDate.dateByAddingTimeInterval(cumulativeInterval)
+					let date = scheduler.currentDate.addingTimeInterval(cumulativeInterval)
 					scheduler.scheduleAfter(date) {
 						observer.action(event)
 					}
@@ -183,18 +183,18 @@ extension SignalType {
 		}
 	}
 	
-	func toSignalProducer() -> SignalProducer<Value, Error> {
+	func toSignalProducer() -> SignalProducer<Value, ReactiveCocoa.Error> {
 		return SignalProducer {
 			(observer, disposable) in
 			let disp = self.observe(Signal.Observer { event in
 				switch event {
-				case let .Next(next):
+				case let .next(next):
 					observer.sendNext(next)
-				case let .Failed(error):
+				case let .failed(error):
 					observer.sendFailed(error)
-				case .Interrupted:
+				case .interrupted:
 					observer.sendInterrupted()
-				case .Completed:
+				case .completed:
 					observer.sendCompleted()
 				}
 				})
@@ -210,8 +210,8 @@ extension SignalType {
 	
 	/// Applies `transform` to values from `signal` with non-`nil` results unwrapped and
 	/// forwared on the returned signal.
-	public func filterMap<U>(transform: Value -> U?) -> Signal<U, Error> {
-		return Signal<U, Error> { observer in
+	public func filterMap<U>(_ transform: (Value) -> U?) -> Signal<U, ReactiveCocoa.Error> {
+		return Signal<U, ReactiveCocoa.Error> { observer in
 			return self.observe(Observer(next: { value in
 				if let val = transform(value) {
 					observer.sendNext(val)
@@ -228,19 +228,19 @@ extension SignalType {
 	
 	/// Returns a signal that drops `Error` sending `replacement` terminal event
 	/// instead, defaulting to `Completed`.
-	public func ignoreError(replacement replacement: Event<Value, NoError> = .Completed) -> Signal<Value, NoError> {
+	public func ignoreError(replacement: Event<Value, NoError> = .completed) -> Signal<Value, NoError> {
 		precondition(replacement.isTerminating)
 		
 		return Signal<Value, NoError> { observer in
 			return self.observe { event in
 				switch event {
-				case let .Next(value):
+				case let .next(value):
 					observer.sendNext(value)
-				case .Failed:
+				case .failed:
 					observer.action(replacement)
-				case .Completed:
+				case .completed:
 					observer.sendCompleted()
-				case .Interrupted:
+				case .interrupted:
 					observer.sendInterrupted()
 				}
 			}
@@ -252,14 +252,14 @@ extension SignalType {
 	///
 	/// If the interval is 0, the timeout will be scheduled immediately. The signal
 	/// must complete synchronously (or on a faster scheduler) to avoid the timeout.
-	public func timeoutAfter(interval: NSTimeInterval, withEvent event: Event<Value, Error>, onScheduler scheduler: DateSchedulerType) -> Signal<Value, Error> {
+	public func timeoutAfter(_ interval: TimeInterval, withEvent event: Event<Value, ReactiveCocoa.Error>, onScheduler scheduler: DateSchedulerType) -> Signal<Value, ReactiveCocoa.Error> {
 		precondition(interval >= 0)
 		precondition(event.isTerminating)
 		
 		return Signal { observer in
 			let disposable = CompositeDisposable()
 			
-			let date = scheduler.currentDate.dateByAddingTimeInterval(interval)
+			let date = scheduler.currentDate.addingTimeInterval(interval)
 			disposable += scheduler.scheduleAfter(date) {
 				observer.action(event)
 			}
@@ -270,19 +270,19 @@ extension SignalType {
 	}
 }
 
-extension SignalType where Value: SequenceType {
+extension SignalType where Value: Sequence {
 	/// Returns a signal that flattens sequences of elements. The inverse of `collect`.
-	public func uncollect() -> Signal<Value.Generator.Element, Error> {
-		return Signal<Value.Generator.Element, Error> { observer in
+	public func uncollect() -> Signal<Value.Iterator.Element, ReactiveCocoa.Error> {
+		return Signal<Value.Iterator.Element, ReactiveCocoa.Error> { observer in
 			return self.observe { event in
 				switch event {
-				case let .Next(sequence):
+				case let .next(sequence):
 					sequence.forEach { observer.sendNext($0) }
-				case let .Failed(error):
+				case let .failed(error):
 					observer.sendFailed(error)
-				case .Completed:
+				case .completed:
 					observer.sendCompleted()
-				case .Interrupted:
+				case .interrupted:
 					observer.sendInterrupted()
 				}
 			}
@@ -295,9 +295,9 @@ extension SignalProducerType {
 	/// Buckets each received value into a group based on the key returned
 	/// from `grouping`. Termination events on the original signal are
 	/// also forwarded to each producer group.
-	public func groupBy<Key: Hashable>(grouping: Value -> Key) -> SignalProducer<(Key, SignalProducer<Value, Error>), Error> {
-		return SignalProducer<(Key, SignalProducer<Value, Error>), Error> { observer, disposable in
-			var groups: [Key: Signal<Value, Error>.Observer] = [:]
+	public func groupBy<Key: Hashable>(_ grouping: (Value) -> Key) -> SignalProducer<(Key, SignalProducer<Value, ReactiveCocoa.Error>), ReactiveCocoa.Error> {
+		return SignalProducer<(Key, SignalProducer<Value, ReactiveCocoa.Error>), ReactiveCocoa.Error> { observer, disposable in
+			var groups: [Key: Signal<Value, ReactiveCocoa.Error>.Observer] = [:]
 			
 			let lock = NSRecursiveLock()
 			lock.name = "me.neilpa.rex.groupBy"
@@ -308,7 +308,7 @@ extension SignalProducerType {
 				lock.lock()
 				var group = groups[key]
 				if group == nil {
-					let (producer, sink) = SignalProducer<Value, Error>.buffer()
+					let (producer, sink) = SignalProducer<Value, ReactiveCocoa.Error>.buffer()
 					observer.sendNext(key, producer)
 					
 					groups[key] = sink
@@ -335,13 +335,13 @@ extension SignalProducerType {
 	
 	/// Applies `transform` to values from self with non-`nil` results unwrapped and
 	/// forwared on the returned producer.
-	public func filterMap<U>(transform: Value -> U?) -> SignalProducer<U, Error> {
+	public func filterMap<U>(_ transform: (Value) -> U?) -> SignalProducer<U, ReactiveCocoa.Error> {
 		return lift { $0.filterMap(transform) }
 	}
 	
 	/// Returns a producer that drops `Error` sending `replacement` terminal event
 	/// instead, defaulting to `Completed`.
-	public func ignoreError(replacement replacement: Event<Value, NoError> = .Completed) -> SignalProducer<Value, NoError> {
+	public func ignoreError(replacement: Event<Value, NoError> = .completed) -> SignalProducer<Value, NoError> {
 		precondition(replacement.isTerminating)
 		return lift { $0.ignoreError(replacement: replacement) }
 	}
@@ -351,14 +351,14 @@ extension SignalProducerType {
 	///
 	/// If the interval is 0, the timeout will be scheduled immediately. The producer
 	/// must complete synchronously (or on a faster scheduler) to avoid the timeout.
-	public func timeoutAfter(interval: NSTimeInterval, withEvent event: Event<Value, Error>, onScheduler scheduler: DateSchedulerType) -> SignalProducer<Value, Error> {
+	public func timeoutAfter(_ interval: TimeInterval, withEvent event: Event<Value, ReactiveCocoa.Error>, onScheduler scheduler: DateSchedulerType) -> SignalProducer<Value, ReactiveCocoa.Error> {
 		return lift { $0.timeoutAfter(interval, withEvent: event, onScheduler: scheduler) }
 	}
 }
 
-extension SignalProducerType where Value: SequenceType {
+extension SignalProducerType where Value: Sequence {
 	/// Returns a producer that flattens sequences of elements. The inverse of `collect`.
-	public func uncollect() -> SignalProducer<Value.Generator.Element, Error> {
+	public func uncollect() -> SignalProducer<Value.Iterator.Element, ReactiveCocoa.Error> {
 		return lift { $0.uncollect() }
 	}
 }

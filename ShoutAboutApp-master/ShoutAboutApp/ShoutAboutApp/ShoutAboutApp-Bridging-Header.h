@@ -5,10 +5,11 @@
 #import "ChatAsyncPhotoMedia.h"
 
 
-//small talk #import "UIImageView+WebCache.h"
-#import "UIAppearance+Swift.h"
+//small talk
+//#import "UIImageView+WebCache.h"
+//#import "UIAppearance+Swift.h"
 
-
+#import <SDWebImage/UIImageView+WebCache.h>
 #import <XMPPFramework/XMPPFramework.h>
 #import <Reachability/Reachability.h>
 //#import <XMPPFramework/DDXML.h>

@@ -11,12 +11,12 @@ import UIKit
 // Mohit
 protocol FeedsTableViewCellProtocol {
     
-    func likebuttonClicked(cell:FeedsTableViewCell, button:UIButton)
-    func dislikebuttonClicked(cell:FeedsTableViewCell, button:UIButton)
-    func picbuttonClicked(cell:FeedsTableViewCell, button:UIButton)
-    func likeCountbuttonClicked(cell:FeedsTableViewCell, button:UIButton)
-    func dislikeCountbuttonClicked(cell:FeedsTableViewCell, button:UIButton)
-    func screenMoveClicked(cell:FeedsTableViewCell, button: UIButton)
+    func likebuttonClicked(_ cell:FeedsTableViewCell, button:UIButton)
+    func dislikebuttonClicked(_ cell:FeedsTableViewCell, button:UIButton)
+    func picbuttonClicked(_ cell:FeedsTableViewCell, button:UIButton)
+    func likeCountbuttonClicked(_ cell:FeedsTableViewCell, button:UIButton)
+    func dislikeCountbuttonClicked(_ cell:FeedsTableViewCell, button:UIButton)
+    func screenMoveClicked(_ cell:FeedsTableViewCell, button: UIButton)
     
     
 }
@@ -49,38 +49,38 @@ class FeedsTableViewCell: UITableViewCell
         // Initialization code
     }
 
-    override func setSelected(selected: Bool, animated: Bool)
+    override func setSelected(_ selected: Bool, animated: Bool)
     {
         super.setSelected(selected, animated: animated)
     }
     
-    @IBAction func likebuttonClicked(button:UIButton){
+    @IBAction func likebuttonClicked(_ button:UIButton){
         
         self.delegate?.likebuttonClicked(self, button:button)
     }
     
-    @IBAction func dislikebuttonClicked(button:UIButton){
+    @IBAction func dislikebuttonClicked(_ button:UIButton){
         
         self.delegate?.dislikebuttonClicked(self, button:button)
     }
     
-    @IBAction func picbuttonClicked(button:UIButton)
+    @IBAction func picbuttonClicked(_ button:UIButton)
     {
         self.delegate?.picbuttonClicked(self, button:button)
         
     }
 
     
-    @IBAction func likeCountbuttonClicked(button:UIButton){
+    @IBAction func likeCountbuttonClicked(_ button:UIButton){
         self.delegate?.likeCountbuttonClicked(self, button:button)
     }
 
-    @IBAction func dislikeCountbuttonClicked(button:UIButton){
+    @IBAction func dislikeCountbuttonClicked(_ button:UIButton){
         self.delegate?.dislikeCountbuttonClicked(self, button:button)
     }
     
     
-    @IBAction func screenMoveClicked(button: UIButton){
+    @IBAction func screenMoveClicked(_ button: UIButton){
         self.delegate?.screenMoveClicked(self, button: button)
     }
     

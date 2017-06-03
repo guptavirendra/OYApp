@@ -137,66 +137,66 @@ class SearchPerson:PersonContact, NSCoding
     required init?(coder aDecoder: NSCoder)
     {
         super.init()
-        if let id = aDecoder.decodeObjectForKey("idString") as? Int
+        if let id = aDecoder.decodeObject(forKey: "idString") as? Int
         {
             idString = id
         }
-        if let status = aDecoder.decodeObjectForKey("status") as? String
+        if let status = aDecoder.decodeObject(forKey: "status") as? String
         {
             self.status = status
         }
-        if let name = aDecoder.decodeObjectForKey("name") as? String
+        if let name = aDecoder.decodeObject(forKey: "name") as? String
         {
             self.name = name
         }
-        if let email = aDecoder.decodeObjectForKey("email") as? String
+        if let email = aDecoder.decodeObject(forKey: "email") as? String
         {
             self.email = email
         }
-        if let mobileNumber = aDecoder.decodeObjectForKey("mobileNumber") as? String
+        if let mobileNumber = aDecoder.decodeObject(forKey: "mobileNumber") as? String
         {
             self.mobileNumber = mobileNumber
         }
-        if let created_at = aDecoder.decodeObjectForKey("created_at") as? String
+        if let created_at = aDecoder.decodeObject(forKey: "created_at") as? String
         {
             self.created_at = created_at
         }
-        if let updated_at = aDecoder.decodeObjectForKey("updated_at") as? String
+        if let updated_at = aDecoder.decodeObject(forKey: "updated_at") as? String
         {
             self.updated_at = updated_at
         }
-        if let dob = aDecoder.decodeObjectForKey("dob") as? String
+        if let dob = aDecoder.decodeObject(forKey: "dob") as? String
         {
             self.dob = dob
         }
-        if let birthday = aDecoder.decodeObjectForKey("birthday") as? String
+        if let birthday = aDecoder.decodeObject(forKey: "birthday") as? String
         {
             self.birthday = birthday
         }
-        if let gender = aDecoder.decodeObjectForKey("gender") as? String
+        if let gender = aDecoder.decodeObject(forKey: "gender") as? String
         {
             self.gender = gender
         }
-        if let address = aDecoder.decodeObjectForKey("address") as? String
+        if let address = aDecoder.decodeObject(forKey: "address") as? String
         {
             self.address = address
         }
-        if let website = aDecoder.decodeObjectForKey("website") as? String
+        if let website = aDecoder.decodeObject(forKey: "website") as? String
         {
             self.website = website
         }
-        if let photo = aDecoder.decodeObjectForKey("photo") as? String
+        if let photo = aDecoder.decodeObject(forKey: "photo") as? String
         {
             self.photo = photo
         }
         
-        if let ratingAverage = aDecoder.decodeObjectForKey("ratingAverage") as? [RatingAverage]
+        if let ratingAverage = aDecoder.decodeObject(forKey: "ratingAverage") as? [RatingAverage]
         {
             self.ratingAverage = ratingAverage
             
         }
         
-        if let reviewCount = aDecoder.decodeObjectForKey("reviewCount") as? [ReviewCount]
+        if let reviewCount = aDecoder.decodeObject(forKey: "reviewCount") as? [ReviewCount]
         {
             self.reviewCount = reviewCount
             
@@ -206,28 +206,28 @@ class SearchPerson:PersonContact, NSCoding
     }
     
     
-    func encodeWithCoder(aCoder: NSCoder)
+    func encode(with aCoder: NSCoder)
     {
-        aCoder.encodeObject(idString, forKey: "idString")
-        aCoder.encodeObject(idString, forKey: "status")
-        aCoder.encodeObject(name, forKey: "name")
-        aCoder.encodeObject(email, forKey: "email")
-        aCoder.encodeObject(mobileNumber, forKey: "mobileNumber")
-        aCoder.encodeObject(created_at, forKey: "created_at")
-        aCoder.encodeObject(updated_at, forKey: "updated_at")
-        aCoder.encodeObject(dob, forKey: "dob")
-        aCoder.encodeObject(birthday, forKey: "birthday")
-        aCoder.encodeObject(gender, forKey: "gender")
-        aCoder.encodeObject(address, forKey: "address")
-        aCoder.encodeObject(website, forKey: "website")
-        aCoder.encodeObject(photo, forKey: "photo")
-        aCoder.encodeObject(ratingAverage, forKey: "ratingAverage")
-        aCoder.encodeObject(reviewCount, forKey: "reviewCount")
+        aCoder.encode(idString, forKey: "idString")
+        aCoder.encode(idString, forKey: "status")
+        aCoder.encode(name, forKey: "name")
+        aCoder.encode(email, forKey: "email")
+        aCoder.encode(mobileNumber, forKey: "mobileNumber")
+        aCoder.encode(created_at, forKey: "created_at")
+        aCoder.encode(updated_at, forKey: "updated_at")
+        aCoder.encode(dob, forKey: "dob")
+        aCoder.encode(birthday, forKey: "birthday")
+        aCoder.encode(gender, forKey: "gender")
+        aCoder.encode(address, forKey: "address")
+        aCoder.encode(website, forKey: "website")
+        aCoder.encode(photo, forKey: "photo")
+        aCoder.encode(ratingAverage, forKey: "ratingAverage")
+        aCoder.encode(reviewCount, forKey: "reviewCount")
     }
     
-    class func archivePeople(people:[SearchPerson]) -> NSData
+    class func archivePeople(_ people:[SearchPerson]) -> Data
     {
-        let archivedObject = NSKeyedArchiver.archivedDataWithRootObject(people as NSArray)
+        let archivedObject = NSKeyedArchiver.archivedData(withRootObject: people as NSArray)
         return archivedObject
     }
     

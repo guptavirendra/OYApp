@@ -30,7 +30,7 @@ class LoginViewController: UIViewController {
   
   // MARK: View Lifecycle
   
-  override func viewWillAppear(animated: Bool)
+  override func viewWillAppear(_ animated: Bool)
   {
     super.viewWillAppear(animated)
     //NSNotificationCenter.defaultCenter().addObserver(self, selector:  #selector(self.keyboardWillShowNotification(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
@@ -39,18 +39,18 @@ class LoginViewController: UIViewController {
    
   }
   
-  override func viewWillDisappear(animated: Bool) {
+  override func viewWillDisappear(_ animated: Bool) {
     super.viewWillDisappear(animated)
     //NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
     //NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
   }
   
-  @IBAction func loginDidTouch(sender: AnyObject)
+  @IBAction func loginDidTouch(_ sender: AnyObject)
   {
     
     if nameField?.text != "" { // 1
         
-        FIRAuth.auth()?.signInAnonymouslyWithCompletion({ (user, error) in
+        FIRAuth.auth()?.signInAnonymously(completion: { (user, error) in
             
         // 2
             if let err = error { // 3
@@ -58,30 +58,30 @@ class LoginViewController: UIViewController {
                 return
             }
             
-            self.performSegueWithIdentifier("LoginToChat", sender: nil) // 4
+            self.performSegue(withIdentifier: "LoginToChat", sender: nil) // 4
         })
     }
   }
   
   // MARK: - Notifications
   
-  func keyboardWillShowNotification(notification: NSNotification)
+  func keyboardWillShowNotification(_ notification: Notification)
     {
      
   }
   
-  func keyboardWillHideNotification(notification: NSNotification)
+  func keyboardWillHideNotification(_ notification: Notification)
     {
       bottomLayoutGuideConstraint.constant = 48
   }
     
     // MARK: Navigation
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-         super.prepareForSegue(segue, sender: sender)
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+         super.prepare(for: segue, sender: sender)
    
         
-        let navVc = segue.destinationViewController as! UINavigationController // 1
+        let navVc = segue.destination as! UINavigationController // 1
         let channelVc = navVc.viewControllers.first as! ChannelListViewController // 2
         
         channelVc.senderDisplayName = nameField?.text // 3

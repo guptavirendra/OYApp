@@ -18,27 +18,27 @@ import NYTPhotoViewer
 import ChameleonFramework
 
 class ConversationViewController: JSQMessagesViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate { //UIScrollViewDelegate {
-	private let outgoingBubbleImageView = JSQMessagesBubbleImageFactory().outgoingMessagesBubbleImageWithColor(UIColor.redColor() /*(UIApplication.sharedApplication().delegate as! AppDelegate).selfColor!.lightenByPercentage(0.07)*/)
-	private let outgoingTaillessBubbleImageView = JSQMessagesBubbleImageFactory(bubbleImage: UIImage.jsq_bubbleCompactTaillessImage(), capInsets: UIEdgeInsetsZero).outgoingMessagesBubbleImageWithColor(UIColor.redColor()/*(UIApplication.sharedApplication().delegate as! AppDelegate).selfColor!.lightenByPercentage(0.145)*/)
-	private let incomingBubbleImageView = JSQMessagesBubbleImageFactory().incomingMessagesBubbleImageWithColor(UIColor.redColor()/*(UIApplication.sharedApplication().delegate as! AppDelegate).globalColor?.lightenByPercentage(0.07)*/)
-	private let incomingTaillessBubbleImageView = JSQMessagesBubbleImageFactory(bubbleImage: UIImage.jsq_bubbleCompactTaillessImage(), capInsets: UIEdgeInsetsZero).incomingMessagesBubbleImageWithColor(UIColor.redColor()/*(UIApplication.sharedApplication().delegate as! AppDelegate).globalColor!.lightenByPercentage(0.145)*/)
+	fileprivate let outgoingBubbleImageView = JSQMessagesBubbleImageFactory().outgoingMessagesBubbleImage(with: UIColor.red /*(UIApplication.sharedApplication().delegate as! AppDelegate).selfColor!.lightenByPercentage(0.07)*/)
+	fileprivate let outgoingTaillessBubbleImageView = JSQMessagesBubbleImageFactory(bubble: UIImage.jsq_bubbleCompactTailless(), capInsets: UIEdgeInsets.zero).outgoingMessagesBubbleImage(with: UIColor.red/*(UIApplication.sharedApplication().delegate as! AppDelegate).selfColor!.lightenByPercentage(0.145)*/)
+	fileprivate let incomingBubbleImageView = JSQMessagesBubbleImageFactory().incomingMessagesBubbleImage(with: UIColor.red/*(UIApplication.sharedApplication().delegate as! AppDelegate).globalColor?.lightenByPercentage(0.07)*/)
+	fileprivate let incomingTaillessBubbleImageView = JSQMessagesBubbleImageFactory(bubble: UIImage.jsq_bubbleCompactTailless(), capInsets: UIEdgeInsets.zero).incomingMessagesBubbleImage(with: UIColor.red/*(UIApplication.sharedApplication().delegate as! AppDelegate).globalColor!.lightenByPercentage(0.145)*/)
 
-	private var senderImageUrl: String!
+	fileprivate var senderImageUrl: String!
 	
-	private unowned var xmppClient: STXMPPClient
-	private let chattingWith: STContact
+	fileprivate unowned var xmppClient: STXMPPClient
+	fileprivate let chattingWith: STContact
 	let viewModel: ConversationViewModel
-	private let searchViewModel: SearchViewModel
-	private var prevMessagesLen = 0
-	private let headerCellIdentifier = "MoreMessages"
-	private var showLoadingMoreIndicator = MutableProperty<Bool>(false)
-	private var showingLoadingMoreIndicator = false
-	private var keyboardShown = MutableProperty<Bool>(false)
+	fileprivate let searchViewModel: SearchViewModel
+	fileprivate var prevMessagesLen = 0
+	fileprivate let headerCellIdentifier = "MoreMessages"
+	fileprivate var showLoadingMoreIndicator = MutableProperty<Bool>(false)
+	fileprivate var showingLoadingMoreIndicator = false
+	fileprivate var keyboardShown = MutableProperty<Bool>(false)
 	
 	var gameData: STGameData?
 	var gameView: WebGameView?
 	
-	private var ytSearchView: UITableView?
+	fileprivate var ytSearchView: UITableView?
 	
 	init(chattingWith: STContact, xmpp: STXMPPClient) {
 		self.xmppClient = xmpp
@@ -57,36 +57,36 @@ class ConversationViewController: JSQMessagesViewController, UINavigationControl
 		self.senderDisplayName = self.chattingWith.username//User.username
 		super.viewDidLoad()
 		self.inputToolbar!.contentView!.leftBarButtonItem = JSQMessagesToolbarButtonFactory.defaultAccessoryButtonItem()
-		self.inputToolbar!.contentView?.backgroundColor = UIColor.whiteColor()
-		self.collectionView!.collectionViewLayout.outgoingAvatarViewSize = CGSizeZero //Don't show own avatar
+		self.inputToolbar!.contentView?.backgroundColor = UIColor.white
+		self.collectionView!.collectionViewLayout.outgoingAvatarViewSize = CGSize.zero //Don't show own avatar
 		self.automaticallyScrollsToMostRecentMessage = true
 		setupBindings()
-		self.collectionView!.registerClass(UICollectionViewCell.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: headerCellIdentifier)
+		self.collectionView!.register(UICollectionViewCell.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: headerCellIdentifier)
 		self.title = chattingWith.displayName
 		
-		self.collectionView?.backgroundColor = (UIApplication.sharedApplication().delegate as! AppDelegate).backgroundColor!
+		self.collectionView?.backgroundColor = (UIApplication.shared.delegate as! AppDelegate).backgroundColor!
 	}
 	
-	override func viewDidAppear(animated: Bool) {
+	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
 		collectionView!.collectionViewLayout.springinessEnabled = false
 	}
 	
-	private func setupBindings() {
+	fileprivate func setupBindings() {
 		self.setupMessageBindings()
 		self.setupChatStateBindings()
 		self.setupKeyboardBindings()
 		self.setupSearchViewBindings()
 	}
 	
-	private func setupMessageBindings() {
+	fileprivate func setupMessageBindings() {
 		self.showLoadingMoreIndicator <~ self.viewModel.loadingMoreContent
 		self.viewModel.disposer.addDisposable(
 			self.showLoadingMoreIndicator.producer
 				.start {
 					[unowned self] event in
 					switch event {
-					case let .Next(shouldShow):
+					case let .next(shouldShow):
 						if shouldShow == false && self.showingLoadingMoreIndicator == true {
 							//Get rid of the current activity spinner
 							self.showingLoadingMoreIndicator = false
@@ -104,7 +104,7 @@ class ConversationViewController: JSQMessagesViewController, UINavigationControl
 				.start {
 					[unowned self] event in
 					switch event {
-					case let .Next(messages):
+					case let .next(messages):
 						if self.viewModel.messagesLoadFromDb { //We don't animate messages coming from db load
 							self.collectionView!.reloadData()
 							
@@ -116,7 +116,7 @@ class ConversationViewController: JSQMessagesViewController, UINavigationControl
 							//When loading new messages from DB due to loadMore gesture, scroll the position to the new messages that were loaded
 							let howManyNewMessages = self.viewModel.messages.value.count - self.prevMessagesLen
 							if self.showLoadingMoreIndicator.value == true && howManyNewMessages > 0 && self.viewModel.messages.value.count > howManyNewMessages {
-								self.collectionView!.scrollToItemAtIndexPath(NSIndexPath(forItem: howManyNewMessages - 1, inSection: 0), atScrollPosition: .Top, animated: false)
+								self.collectionView!.scrollToItem(at: IndexPath(item: howManyNewMessages - 1, section: 0), at: .top, animated: false)
 							}
 							self.showLoadingMoreIndicator.value = false
 							
@@ -143,7 +143,7 @@ class ConversationViewController: JSQMessagesViewController, UINavigationControl
 				.start {
 					[unowned self] event in
 					switch event {
-					case let .Next(index):
+					case let .next(index):
 						if index != nil {
 							//let path = NSIndexPath(forItem: index!, inSection: 0)
 							//self.collectionView!.reloadItemsAtIndexPaths([path])
@@ -163,7 +163,7 @@ class ConversationViewController: JSQMessagesViewController, UINavigationControl
 		)
 	}
 	
-	private func setupChatStateBindings() {
+	fileprivate func setupChatStateBindings() {
 		self.viewModel.disposer.addDisposable(
 			self.viewModel.typing <~ self.inputToolbar!.contentView!.textView!.rac_textSignal().toSignalProducer()
 				.discardError()
@@ -192,8 +192,8 @@ class ConversationViewController: JSQMessagesViewController, UINavigationControl
 				.start {
 					[unowned self] event in
 					switch event {
-					case let .Next(enabled):
-						self.inputToolbar!.contentView!.rightBarButtonItem!.enabled = enabled
+					case let .next(enabled):
+						self.inputToolbar!.contentView!.rightBarButtonItem!.isEnabled = enabled
 					default:
 						break
 					}
@@ -206,7 +206,7 @@ class ConversationViewController: JSQMessagesViewController, UINavigationControl
 				.start {
 					[unowned self] event in
 					switch event {
-					case let .Next(displayed):
+					case let .next(displayed):
 						self.showTypingIndicator = displayed
 						if (self.showTypingIndicator) {
 							let scrollViewHeight = self.collectionView!.frame.size.height
@@ -215,7 +215,7 @@ class ConversationViewController: JSQMessagesViewController, UINavigationControl
 							let maxDistanceFromBottom: CGFloat = 100.0
 							let nearBottom = scrollOffset + scrollViewHeight + maxDistanceFromBottom >= scrollContentSizeHeight + statusBarHeight()
 							if nearBottom {
-								self.scrollToBottomAnimated(true)
+								self.scrollToBottom(animated: true)
 							}
 						}
 					default:
@@ -225,14 +225,14 @@ class ConversationViewController: JSQMessagesViewController, UINavigationControl
 		)
 	}
 	
-	private func setupKeyboardBindings() {
+	fileprivate func setupKeyboardBindings() {
 		self.keyboardShown <~ self.viewModel.keyboardShown
 		self.viewModel.disposer.addDisposable(
 			self.keyboardShown.producer
 				.start {
 					[unowned self] event in
 					switch event {
-					case let .Next(shown):
+					case let .next(shown):
 						if shown && self.gameView != nil {
 							self.gameView!.moveToHighPoint(true)
 						} else if !shown && self.gameView != nil {
@@ -245,7 +245,7 @@ class ConversationViewController: JSQMessagesViewController, UINavigationControl
 		)
 	}
 	
-	private func setupSearchViewBindings() {
+	fileprivate func setupSearchViewBindings() {
 		self.searchViewModel.disposer.addDisposable(
 			self.searchViewModel.typing <~ self.inputToolbar!.contentView!.textView!.rac_textSignal().toSignalProducer()
 				.discardError()
@@ -268,7 +268,7 @@ class ConversationViewController: JSQMessagesViewController, UINavigationControl
 			.start {
 				[unowned self] event in
 				switch event {
-				case let .Next(enabled):
+				case let .next(enabled):
 					if enabled {
 						if self.ytSearchView == nil {
 							let frame = self.collectionView!.frame
@@ -298,7 +298,7 @@ class ConversationViewController: JSQMessagesViewController, UINavigationControl
 				.start {
 					[unowned self] event in
 					switch event {
-					case let .Next(msgToSend):
+					case let .next(msgToSend):
 						self.removeSearchView()
 						self.sendMessage(msgToSend)
 					default:
@@ -314,9 +314,9 @@ class ConversationViewController: JSQMessagesViewController, UINavigationControl
 				.start {
 					[unowned self] event in
 					switch event {
-					case let .Next(msgToShow):
+					case let .next(msgToShow):
 						self.removeSearchView()
-						TSMessage.showNotificationWithTitle(msgToShow, type: TSMessageNotificationType.Error)
+						TSMessage.showNotification(withTitle: msgToShow, type: TSMessageNotificationType.error)
 					default:
 						break
 					}
@@ -324,7 +324,7 @@ class ConversationViewController: JSQMessagesViewController, UINavigationControl
 		)
 	}
 
-	private func removeSearchView() {
+	fileprivate func removeSearchView() {
 		if self.ytSearchView != nil {
 			self.ytSearchView?.removeFromSuperview()
 			self.ytSearchView = nil
@@ -333,16 +333,16 @@ class ConversationViewController: JSQMessagesViewController, UINavigationControl
 	}
 	
 	//Message has been added to viewcontroller. May be mine or someone elses
-	func newMessageAdded(message: STMessage) {
+	func newMessageAdded(_ message: STMessage) {
 		JSQSystemSoundPlayer.jsq_playMessageReceivedSound()
-		self.finishReceivingMessageAnimated(true)
+		self.finishReceivingMessage(animated: true)
 		if message.senderId != User.senderId {
 			self.messageReceived(message)
 		}
 	}
 	
 	//A new message received from network (Not from DB)
-	func messageReceived(message: STMessage) {
+	func messageReceived(_ message: STMessage) {
 		//Realtime multiplayer support
 		if message.isGameMediaMessage {
 			let gameData: JSON = message.attachment!.json
@@ -352,27 +352,27 @@ class ConversationViewController: JSQMessagesViewController, UINavigationControl
 	
 	// ACTIONS
 	
-	override func didPressSendButton(button: UIButton!, withMessageText text: String!, senderId: String!, senderDisplayName: String!, date: NSDate!) {
+	override func didPressSend(_ button: UIButton!, withMessageText text: String!, senderId: String!, senderDisplayName: String!, date: Date!) {
 		JSQSystemSoundPlayer.jsq_playMessageSentSound()
 		sendMessage(text)
 		
-		self.finishSendingMessageAnimated(true)
+		self.finishSendingMessage(animated: true)
 	}
 	
-	override func didPressAccessoryButton(sender: UIButton!) {
+	override func didPressAccessoryButton(_ sender: UIButton!) {
 		self.presentPhotoAction()
 	}
 	
-	override func collectionView(collectionView: JSQMessagesCollectionView!, messageDataForItemAtIndexPath indexPath: NSIndexPath!) -> JSQMessageData! {
+	override func collectionView(_ collectionView: JSQMessagesCollectionView!, messageDataForItemAt indexPath: IndexPath!) -> JSQMessageData! {
 		return self.viewModel.messages.value[indexPath.item]
 	}
 	
-	override func collectionView(collectionView: JSQMessagesCollectionView!, avatarImageDataForItemAtIndexPath indexPath: NSIndexPath!) -> JSQMessageAvatarImageDataSource! {
+	override func collectionView(_ collectionView: JSQMessagesCollectionView!, avatarImageDataForItemAt indexPath: IndexPath!) -> JSQMessageAvatarImageDataSource! {
 		let message = self.viewModel.messages.value[indexPath.item]
 		if message.senderId != User.senderId && self.shouldPresentAvatar(indexPath) {
 			let avatarId = "small-\(message.senderId)"
 			if AvatarUtils.avatars[avatarId] == nil {
-				AvatarUtils.setupAvatarImage(avatarId, displayName: message.senderDisplayName, fontSize: UIFont.smallSystemFontSize())
+				AvatarUtils.setupAvatarImage(avatarId, displayName: message.senderDisplayName, fontSize: UIFont.smallSystemFontSize)
 			}
 		
 			return AvatarUtils.avatars[avatarId]
@@ -381,7 +381,7 @@ class ConversationViewController: JSQMessagesViewController, UINavigationControl
 		return nil
 	}
 	
-	private func shouldPresentAvatar(indexPath: NSIndexPath) -> Bool {
+	fileprivate func shouldPresentAvatar(_ indexPath: IndexPath) -> Bool {
 		if indexPath.row + 1 < self.viewModel.messages.value.count {
 			let message = self.viewModel.messages.value[indexPath.item]
 			let nextMessage = self.viewModel.messages.value[indexPath.row + 1]
@@ -399,7 +399,7 @@ class ConversationViewController: JSQMessagesViewController, UINavigationControl
 	
 	//Timestamps
 	
-	override func collectionView(collectionView: JSQMessagesCollectionView!, layout collectionViewLayout: JSQMessagesCollectionViewFlowLayout!, heightForCellTopLabelAtIndexPath indexPath: NSIndexPath!) -> CGFloat {
+	override func collectionView(_ collectionView: JSQMessagesCollectionView!, layout collectionViewLayout: JSQMessagesCollectionViewFlowLayout!, heightForCellTopLabelAt indexPath: IndexPath!) -> CGFloat {
 		if self.shouldPresentTimestamp(indexPath.row) {
 			return kJSQMessagesCollectionViewCellLabelHeightDefault
 		}
@@ -407,20 +407,20 @@ class ConversationViewController: JSQMessagesViewController, UINavigationControl
 		return 0.0
 	}
 	
-	override func collectionView(collectionView: JSQMessagesCollectionView!, attributedTextForCellTopLabelAtIndexPath indexPath: NSIndexPath!) -> NSAttributedString! {
+	override func collectionView(_ collectionView: JSQMessagesCollectionView!, attributedTextForCellTopLabelAt indexPath: IndexPath!) -> NSAttributedString! {
 		if shouldPresentTimestamp(indexPath.row) {
 			let message = self.viewModel.messages.value[indexPath.row]
-			return JSQMessagesTimestampFormatter.sharedFormatter().attributedTimestampForDate(message.date)
+			return JSQMessagesTimestampFormatter.shared().attributedTimestamp(for: message.date)
 		}
 		
 		return nil
 	}
 	
-	private func shouldPresentTimestamp(indexPathRow: Int) -> Bool {
+	fileprivate func shouldPresentTimestamp(_ indexPathRow: Int) -> Bool {
 		if indexPathRow - 1 >= 0 {
 			let message = self.viewModel.messages.value[indexPathRow]
 			let prevMessage = self.viewModel.messages.value[indexPathRow - 1]
-			let deltaSeconds = message.date.timeIntervalSinceDate(prevMessage.date)
+			let deltaSeconds = message.date.timeIntervalSince(prevMessage.date)
 			//If a message has been within 5 minutes of prev message, we don't give it a new timestamp
 			if deltaSeconds < (5*60) {
 				return false
@@ -432,7 +432,7 @@ class ConversationViewController: JSQMessagesViewController, UINavigationControl
 	
 	//End timestamps
 	
-	override func collectionView(collectionView: JSQMessagesCollectionView!, messageBubbleImageDataForItemAtIndexPath indexPath: NSIndexPath!) -> JSQMessageBubbleImageDataSource! {
+	override func collectionView(_ collectionView: JSQMessagesCollectionView!, messageBubbleImageDataForItemAt indexPath: IndexPath!) -> JSQMessageBubbleImageDataSource! {
 		let message = self.viewModel.messages.value[indexPath.row]
 		if (message.senderId == User.senderId) {
 			if self.shouldPresentAvatar(indexPath) {
@@ -449,19 +449,19 @@ class ConversationViewController: JSQMessagesViewController, UINavigationControl
 		}
 	}
 	
-	override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+	override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
 		return self.viewModel.messages.value.count
 	}
 	
-	override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-		let cell = super.collectionView(collectionView, cellForItemAtIndexPath: indexPath) as! JSQMessagesCollectionViewCell
+	override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+		let cell = super.collectionView(collectionView, cellForItemAt: indexPath) as! JSQMessagesCollectionViewCell
 		let message = self.viewModel.messages.value[indexPath.item]
 		
 		if cell.textView != nil {
 			if message.senderId == senderId {
-				cell.textView!.textColor = (UIApplication.sharedApplication().delegate as! AppDelegate).darkColor!
+				cell.textView!.textColor = (UIApplication.shared.delegate as! AppDelegate).darkColor!
 			} else {
-				cell.textView!.textColor = UIColor.whiteColor()
+				cell.textView!.textColor = UIColor.white
 			}
 			
 			let attributes : [String:AnyObject] = [NSForegroundColorAttributeName:cell.textView!.textColor!, NSUnderlineStyleAttributeName: 1]
@@ -472,8 +472,8 @@ class ConversationViewController: JSQMessagesViewController, UINavigationControl
         //TODO NOTE! This causes sender avatar to turn GREY (selected)! This happens only with "initials" type avatar because JSQMessageAvatarImageFactory
         //sets the highlighed image as grey
         if message.isPhotoMediaMessage {
-            cell.highlighted = true
-            cell.selected = true
+            cell.isHighlighted = true
+            cell.isSelected = true
         }
         
         return cell
@@ -481,7 +481,7 @@ class ConversationViewController: JSQMessagesViewController, UINavigationControl
 	
 	
 	// View  usernames above bubbles
-	override func collectionView(collectionView: JSQMessagesCollectionView!, attributedTextForMessageBubbleTopLabelAtIndexPath indexPath: NSIndexPath!) -> NSAttributedString! {
+	override func collectionView(_ collectionView: JSQMessagesCollectionView!, attributedTextForMessageBubbleTopLabelAt indexPath: IndexPath!) -> NSAttributedString! {
 		/*
 		Testing not having display names in chat for cleanliness
 		let message = self.viewModel.messages.value[indexPath.item];
@@ -505,7 +505,7 @@ class ConversationViewController: JSQMessagesViewController, UINavigationControl
 		return nil
 	}
 	
-	override func collectionView(collectionView: JSQMessagesCollectionView!, layout collectionViewLayout: JSQMessagesCollectionViewFlowLayout!, heightForMessageBubbleTopLabelAtIndexPath indexPath: NSIndexPath!) -> CGFloat {
+	override func collectionView(_ collectionView: JSQMessagesCollectionView!, layout collectionViewLayout: JSQMessagesCollectionViewFlowLayout!, heightForMessageBubbleTopLabelAt indexPath: IndexPath!) -> CGFloat {
 		let message = self.viewModel.messages.value[indexPath.item]
 		
 		// Sent by me, skip
@@ -524,20 +524,20 @@ class ConversationViewController: JSQMessagesViewController, UINavigationControl
 		return kJSQMessagesCollectionViewCellLabelHeightDefault
 	}
 	
-	override func collectionView(collectionView: JSQMessagesCollectionView!, attributedTextForCellBottomLabelAtIndexPath indexPath: NSIndexPath!) -> NSAttributedString! {
+	override func collectionView(_ collectionView: JSQMessagesCollectionView!, attributedTextForCellBottomLabelAt indexPath: IndexPath!) -> NSAttributedString! {
 		let message = self.viewModel.messages.value[indexPath.item];
 		if message.senderId == User.senderId {
 			let checkmark: String = "✔︎"
-			var textColor: UIColor = UIColor.lightGrayColor()
+			var textColor: UIColor = UIColor.lightGray
 			switch message.deliveryStatus {
-			case .Sent:
-				textColor = UIColor.whiteColor()
-			case .ServerAck:
-				textColor = UIColor.lightGrayColor()
-			case .Delivered:
-				textColor = UIColor.orangeColor()
-			case .Read:
-				textColor = UIColor.greenColor()
+			case .sent:
+				textColor = UIColor.white
+			case .serverAck:
+				textColor = UIColor.lightGray
+			case .delivered:
+				textColor = UIColor.orange
+			case .read:
+				textColor = UIColor.green
 			}
 			
 			return NSAttributedString(string: checkmark, attributes: [NSForegroundColorAttributeName: textColor])
@@ -547,7 +547,7 @@ class ConversationViewController: JSQMessagesViewController, UINavigationControl
 				let gameType = gameData["gameType"].string
 				let gameConfig = Configuration.games[gameType!]
 				if gameConfig!.continuous {
-					return NSAttributedString(string: "                    Your turn to make a move", attributes: [NSFontAttributeName: UIFont.boldSystemFontOfSize(UIFont.smallSystemFontSize()), NSForegroundColorAttributeName: FlatRed()])
+					return NSAttributedString(string: "                    Your turn to make a move", attributes: [NSFontAttributeName: UIFont.boldSystemFont(ofSize: UIFont.smallSystemFontSize), NSForegroundColorAttributeName: FlatRed()])
 				}
 			}
 		}
@@ -555,13 +555,13 @@ class ConversationViewController: JSQMessagesViewController, UINavigationControl
 		return nil
 	}
 	
-	override func collectionView(collectionView: JSQMessagesCollectionView!, layout collectionViewLayout: JSQMessagesCollectionViewFlowLayout!, heightForCellBottomLabelAtIndexPath indexPath: NSIndexPath!) -> CGFloat {
+	override func collectionView(_ collectionView: JSQMessagesCollectionView!, layout collectionViewLayout: JSQMessagesCollectionViewFlowLayout!, heightForCellBottomLabelAt indexPath: IndexPath!) -> CGFloat {
 		//To uses for the label. "Your turn" on game messages from other person and delivery status on your messages
 		
 		//Only send the info for latest message in the stream if it is from me and it has been acked by the server
 		let message = self.viewModel.messages.value[indexPath.item]
 		if message.senderId == User.senderId {
-			if indexPath.item == (self.viewModel.messages.value.count - 1) && message.deliveryStatus != .Sent {
+			if indexPath.item == (self.viewModel.messages.value.count - 1) && message.deliveryStatus != .sent {
 				return 15.0
 			}
 		} else {
@@ -573,7 +573,7 @@ class ConversationViewController: JSQMessagesViewController, UINavigationControl
 		return 0.0
 	}
 	
-	override func collectionView(collectionView: JSQMessagesCollectionView!, didTapMessageBubbleAtIndexPath indexPath: NSIndexPath!) {
+	override func collectionView(_ collectionView: JSQMessagesCollectionView!, didTapMessageBubbleAt indexPath: IndexPath!) {
 		self.hideKeyboard()
 
 		let message = self.viewModel.messages.value[indexPath.row]
@@ -585,7 +585,7 @@ class ConversationViewController: JSQMessagesViewController, UINavigationControl
 			//Check if the game can be tapped open
 			if gameConfig!.continuous { //Continous games can be tapped open if it's your turn
 				if message.senderId == User.senderId {
-					TSMessage.showNotificationWithTitle("It's not your turn.", type: TSMessageNotificationType.Warning)
+					TSMessage.showNotification(withTitle: "It's not your turn.", type: TSMessageNotificationType.warning)
 					return
 				}
 			} else {
@@ -595,8 +595,8 @@ class ConversationViewController: JSQMessagesViewController, UINavigationControl
 			let outgoing = message.senderId == User.senderId
 			
 			//Find the location of the message on screen and present the game
-			let attributes: UICollectionViewLayoutAttributes = self.collectionView!.layoutAttributesForItemAtIndexPath(indexPath)!
-			let frame: CGRect  = self.collectionView!.convertRect(attributes.frame, toView:self.view)
+			let attributes: UICollectionViewLayoutAttributes = self.collectionView!.layoutAttributesForItem(at: indexPath)!
+			let frame: CGRect  = self.collectionView!.convert(attributes.frame, to:self.view)
 			let cellOrigin: CGPoint = frame.origin;
 			self.presentGame(gameType!, gameData:gameData, tapPoint:cellOrigin, outgoing:outgoing)
 		} else if message.isPhotoMediaMessage {
@@ -610,7 +610,7 @@ class ConversationViewController: JSQMessagesViewController, UINavigationControl
 			
 			let photo = MessagePhoto(image: image)
 			let photosViewController: NYTPhotosViewController = NYTPhotosViewController(photos: [photo], initialPhoto: photo)
-			self.presentViewController(photosViewController, animated: true, completion: nil)
+			self.present(photosViewController, animated: true, completion: nil)
 		} else if message.media != nil {
 			//(message.media as! STTappableMedia).tapped()
 		}
@@ -631,18 +631,18 @@ class ConversationViewController: JSQMessagesViewController, UINavigationControl
 		*/
 	}
 	
-	override func collectionView(collectionView: JSQMessagesCollectionView!, didTapCellAtIndexPath indexPath: NSIndexPath!, touchLocation: CGPoint) {
+	override func collectionView(_ collectionView: JSQMessagesCollectionView!, didTapCellAt indexPath: IndexPath!, touchLocation: CGPoint) {
 		NSLog("didTapCellAtIndexPath")
 		self.hideKeyboard()
 	}
 	
-	override func collectionView(collectionView: JSQMessagesCollectionView!, didTapAvatarImageView avatarImageView: UIImageView!, atIndexPath indexPath: NSIndexPath!) {
+	override func collectionView(_ collectionView: JSQMessagesCollectionView!, didTapAvatarImageView avatarImageView: UIImageView!, at indexPath: IndexPath!) {
 		NSLog("didTapAvatarImageView")
 	}
 	
 	//UIScrollView delegation - Checking if more content should be loaded
 	
-	override func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+	override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
 		if (decelerate) { //Still moving
 			return
 		}
@@ -650,17 +650,17 @@ class ConversationViewController: JSQMessagesViewController, UINavigationControl
 		self.loadMoreContent()
 	}
 	
-	override func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+	override func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
 		self.loadMoreContent()
 	}
 	
 	//Using tap to nav bar
-	override func scrollViewDidScrollToTop(scrollView: UIScrollView) {
+	override func scrollViewDidScroll(toTop scrollView: UIScrollView) {
 		self.loadMoreContent()
 	}
 	
-	private func loadMoreContent() {
-		if (CGRectEqualToRect(self.collectionView!.frame, CGRectZero)) {
+	fileprivate func loadMoreContent() {
+		if (self.collectionView!.frame.equalTo(CGRect.zero)) {
 			return
 		}
 		
@@ -671,17 +671,17 @@ class ConversationViewController: JSQMessagesViewController, UINavigationControl
 		if (nearTop) {
 			self.showLoadingMoreIndicator.value = true
 			collectionView!.reloadData() //To reload the view and show the activity spinner if the loading takes a while
-			dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.25 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), { //Give the spinner a tick to show
+			DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(0.25 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: { //Give the spinner a tick to show
 				[weak self] in
 				self?.viewModel.loadMore()
 			})
 		}
 	}
 	
-	override func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
+	override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
 		if kind == UICollectionElementKindSectionHeader {
-			let header: UICollectionViewCell = collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: headerCellIdentifier, forIndexPath: indexPath) as! UICollectionViewCell
-			let spinner = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
+			let header: UICollectionViewCell = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerCellIdentifier, for: indexPath) as! UICollectionViewCell
+			let spinner = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
 			spinner.startAnimating()
 			header.addSubview(spinner)
 			spinner.snp_makeConstraints { (make) -> Void in
@@ -692,43 +692,43 @@ class ConversationViewController: JSQMessagesViewController, UINavigationControl
 			return header
 		}
 		
-		return super.collectionView(collectionView, viewForSupplementaryElementOfKind: kind, atIndexPath: indexPath)
+		return super.collectionView(collectionView, viewForSupplementaryElementOfKind: kind, at: indexPath)
 	}
 	
 	//Overrides superclasses ability to show load more messages button. Makes room for our loading more spinner if needed
-	override func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+	override func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
 		if !self.showLoadingMoreIndicator.value {
-			return CGSizeZero
+			return CGSize.zero
 		}
 		
-		return CGSizeMake(100, 50);
+		return CGSize(width: 100, height: 50);
 	}
 	
 	//Image handling
-	private func presentPhotoAction() {
+	fileprivate func presentPhotoAction() {
 		self.hideKeyboard()
 		
-		let alert = UIAlertController(title: "Pick an image", message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
-		let photo = UIAlertAction(title: "Take a Photo", style: UIAlertActionStyle.Default) { alert in
-			self.presentImagePicker(UIImagePickerControllerSourceType.Camera)
+		let alert = UIAlertController(title: "Pick an image", message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
+		let photo = UIAlertAction(title: "Take a Photo", style: UIAlertActionStyle.default) { alert in
+			self.presentImagePicker(UIImagePickerControllerSourceType.camera)
 		}
-		let library = UIAlertAction(title: "Photo Library", style: UIAlertActionStyle.Default) { alert in
-			self.presentImagePicker(UIImagePickerControllerSourceType.PhotoLibrary)
+		let library = UIAlertAction(title: "Photo Library", style: UIAlertActionStyle.default) { alert in
+			self.presentImagePicker(UIImagePickerControllerSourceType.photoLibrary)
 		}
-		let cancelButton = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel) { alert in
+		let cancelButton = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel) { alert in
 		}
-		let chessButton = UIAlertAction(title: "Chess", style: UIAlertActionStyle.Default) { alert in
+		let chessButton = UIAlertAction(title: "Chess", style: UIAlertActionStyle.default) { alert in
 			self.presentGame("chess", gameData:nil, tapPoint:nil, outgoing: true)
 			self.sendMessage("Started a new chess game!", image: nil)
 		}
-		let chessButton2 = UIAlertAction(title: "Start a new game (delete old)", style: UIAlertActionStyle.Default) { alert in
+		let chessButton2 = UIAlertAction(title: "Start a new game (delete old)", style: UIAlertActionStyle.default) { alert in
 			self.presentGame("chess", gameData:nil, tapPoint:nil, outgoing: true)
 			self.sendMessage("Deleted the old game and started a new!", image: nil)
 			//Delete previous game messages.
 			self.viewModel.deleteAllPreviousMessagesOfType(STGameData.contentTypeForGameType("chess"))
 		}
 		
-		let button2048 = UIAlertAction(title: "2048", style: UIAlertActionStyle.Default) { alert in
+		let button2048 = UIAlertAction(title: "2048", style: UIAlertActionStyle.default) { alert in
 			self.presentGame("2048", gameData:nil, tapPoint:nil, outgoing: true)
 		}
 		
@@ -744,19 +744,19 @@ class ConversationViewController: JSQMessagesViewController, UINavigationControl
 		alert.addAction(photo)
 		alert.addAction(library)
 		alert.addAction(cancelButton)
-		self.presentViewController(alert, animated: true, completion: nil)
+		self.present(alert, animated: true, completion: nil)
 	}
 	
-	private func presentImagePicker(sourceType: UIImagePickerControllerSourceType) {
+	fileprivate func presentImagePicker(_ sourceType: UIImagePickerControllerSourceType) {
 		let picker: UIImagePickerController = UIImagePickerController()
 		picker.delegate = self
 		picker.sourceType = sourceType
 		picker.mediaTypes = [kUTTypeImage as String]
-		self.presentViewController(picker, animated: true, completion: nil)
+		self.present(picker, animated: true, completion: nil)
 	}
 	
-	func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
-		self.dismissViewControllerAnimated(true, completion: nil)
+	func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+		self.dismiss(animated: true, completion: nil)
 		
 		if info[UIImagePickerControllerMediaType] as! String == kUTTypeImage as String {
 			let image: UIImage = info[UIImagePickerControllerOriginalImage] as! UIImage
@@ -766,13 +766,13 @@ class ConversationViewController: JSQMessagesViewController, UINavigationControl
 		}
 	}
 	
-	func imagePickerControllerDidCancel(picker: UIImagePickerController) {
-		self.dismissViewControllerAnimated(true, completion: nil)
+	func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+		self.dismiss(animated: true, completion: nil)
 	}
 	
 	//Game handling
 	
-	func gameNotified(gameData: STGameData) {
+	func gameNotified(_ gameData: STGameData) {
 		self.gameData = gameData
 		let gameConf = Configuration.games[gameData.data["gameType"].stringValue]
 		if gameConf!.continuous && gameConf!.players > 1 {
@@ -787,11 +787,11 @@ class ConversationViewController: JSQMessagesViewController, UINavigationControl
 		}
 	}
 	
-	func presentGame(gameType: String, gameData: JSON?, tapPoint: CGPoint?, outgoing: Bool) {
+	func presentGame(_ gameType: String, gameData: JSON?, tapPoint: CGPoint?, outgoing: Bool) {
 		self.hideKeyboard()
 
 		if (self.gameView == nil) {
-			let superview: UIView = UIApplication.sharedApplication().keyWindow!
+			let superview: UIView = UIApplication.shared.keyWindow!
 			var useTapPoint: CGPoint? = tapPoint
 			if tapPoint == nil {
 				useTapPoint = CGPoint(x: superview.frame.origin.x + superview.frame.width / 2, y: superview.frame.height - 60) //Low center
@@ -803,7 +803,7 @@ class ConversationViewController: JSQMessagesViewController, UINavigationControl
 				.start {
 					[unowned self] event in
 					switch event {
-					case let .Next(next):
+					case let .next(next):
 						let notifiedGameData: STGameData? = next
 						self.gameNotified(notifiedGameData!)
 					default:
@@ -822,15 +822,15 @@ class ConversationViewController: JSQMessagesViewController, UINavigationControl
 	}
 	
 	//Private methods
-	private func hideKeyboard() {
+	fileprivate func hideKeyboard() {
 		self.inputToolbar!.contentView!.textView!.resignFirstResponder()
 	}
 	
-	private func sendMessage(text: String!, image: UIImage? = nil) {
+	fileprivate func sendMessage(_ text: String!, image: UIImage? = nil) {
 		self.viewModel.sendMessage(text, image:image)
 	}
 	
-	private func sendGameMessage(text: String, data: STGameData, deleteOwnOnly: Bool = false) {
+	fileprivate func sendGameMessage(_ text: String, data: STGameData, deleteOwnOnly: Bool = false) {
 		self.viewModel.sendGameMessage(text, data: data, deleteOwnOnly: deleteOwnOnly)
 	}
 }

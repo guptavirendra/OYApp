@@ -36,37 +36,37 @@ struct User {
 		}
 		
 		set(value) {
-			NSUserDefaults.standardUserDefaults().setObject(value, forKey: "displayName")
+			UserDefaults.standard.set(value, forKey: "displayName")
 		}
 	}
 
 	static var initialConversationsSyncNeeded: Bool {
 		get {
 			//Only do this if this was not a new user (may have conversations from previous logins)
-			let newUser = NSUserDefaults.standardUserDefaults().objectForKey("new") as? Bool
-			let syncNeeded = NSUserDefaults.standardUserDefaults().objectForKey("initialConversationsSyncNeeded") as? Bool
+			let newUser = UserDefaults.standard.object(forKey: "new") as? Bool
+			let syncNeeded = UserDefaults.standard.object(forKey: "initialConversationsSyncNeeded") as? Bool
 			return ((newUser == nil || newUser == false) && (syncNeeded == nil || syncNeeded == true))
 		}
 		
 		set(value)
         {
-			NSUserDefaults.standardUserDefaults().setBool(value, forKey: "initialConversationsSyncNeeded")
+			UserDefaults.standard.set(value, forKey: "initialConversationsSyncNeeded")
 		}
 	}
 	
-	static func loggedInWith(data: JSON) {
-		let defaults = NSUserDefaults.standardUserDefaults()
-		defaults.setValuesForKeysWithDictionary(data.dictionaryObject!)
+	static func loggedInWith(_ data: JSON) {
+		let defaults = UserDefaults.standard
+		defaults.setValuesForKeys(data.dictionaryObject!)
 	}
 	
 	static func isLoggedIn() -> Bool {
-		return NSUserDefaults.standardUserDefaults().objectForKey("username") != nil
+		return UserDefaults.standard.object(forKey: "username") != nil
 	}
 	
 	static func logOut() {
 		Digits.sharedInstance().logOut()
 		STXMPPClient.sharedInstance?.disconnect()
-		let appDomain = NSBundle.mainBundle().bundleIdentifier
-		NSUserDefaults.standardUserDefaults().removePersistentDomainForName(appDomain!)
+		let appDomain = Bundle.main.bundleIdentifier
+		UserDefaults.standard.removePersistentDomain(forName: appDomain!)
 	}
 }

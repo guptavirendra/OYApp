@@ -12,18 +12,18 @@ import JSQMessagesViewController
 class AvatarUtils: NSObject {
 	static var avatars = Dictionary<String, JSQMessagesAvatarImage>()
 
-	static func setupAvatarImage(id: String, displayName: String, fontSize: CGFloat) {
+	static func setupAvatarImage(_ id: String, displayName: String, fontSize: CGFloat) {
 		let diameter = UInt(kJSQMessagesCollectionViewAvatarSizeDefault)
-		let jsqImage: JSQMessagesAvatarImage = JSQMessagesAvatarImageFactory.avatarImageWithUserInitials(AvatarUtils.getInitials(displayName),
-			backgroundColor: UIColor.whiteColor(),
-			textColor: UIColor.blackColor(),
-			font: UIFont.systemFontOfSize(fontSize),
+		let jsqImage: JSQMessagesAvatarImage = JSQMessagesAvatarImageFactory.avatarImage(withUserInitials: AvatarUtils.getInitials(displayName),
+			backgroundColor: UIColor.white,
+			textColor: UIColor.black,
+			font: UIFont.systemFont(ofSize: fontSize),
 			diameter: diameter)
 		
 		AvatarUtils.avatars[id] = jsqImage
 	}
 	
-	static private func getInitials(name: String) -> String {
+	static fileprivate func getInitials(_ name: String) -> String {
 		return name.characters.split { token in
 			return token == " "
 		}

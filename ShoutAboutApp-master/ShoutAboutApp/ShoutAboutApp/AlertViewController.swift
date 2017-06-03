@@ -11,11 +11,11 @@ class AlertViewController: UIViewController,AlertTableViewCellProtocol
     override func viewDidLoad()
     {
         super.viewDidLoad()
-        self.navigationController!.navigationBar.tintColor = UIColor.whiteColor();
+        self.navigationController!.navigationBar.tintColor = UIColor.white;
     }
     
     
-    override func viewWillAppear(animated: Bool)
+    override func viewWillAppear(_ animated: Bool)
     {
         super.viewWillAppear(animated)
         self.ConfigureVariable()
@@ -24,9 +24,9 @@ class AlertViewController: UIViewController,AlertTableViewCellProtocol
     func ConfigureVariable()
     {
         
-        let appUserId = NSUserDefaults.standardUserDefaults().objectForKey(kapp_user_id) as! Int
+        let appUserId = UserDefaults.standard.object(forKey: kapp_user_id) as! Int
         
-        let appUserToken = NSUserDefaults.standardUserDefaults().objectForKey(kapp_user_token) as! String
+        let appUserToken = UserDefaults.standard.object(forKey: kapp_user_token) as! String
         
         _ = [kapp_user_id:String(appUserId), kapp_user_token :appUserToken]
         loadAlertAPICall()
@@ -38,13 +38,13 @@ class AlertViewController: UIViewController,AlertTableViewCellProtocol
         super.didReceiveMemoryWarning()
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
         return self.responseData.data.count
     }
     
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
+    func tableView(_ tableView: UITableView, cellForRowAtIndexPath indexPath: IndexPath) -> UITableViewCell
     {
         
         let dataList = responseData.data[indexPath.row]
@@ -55,7 +55,7 @@ class AlertViewController: UIViewController,AlertTableViewCellProtocol
             
         }
 
-        let cell = tableView.dequeueReusableCellWithIdentifier("AlertTableViewCell", forIndexPath: indexPath) as? AlertTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "AlertTableViewCell", for: indexPath) as? AlertTableViewCell
         
         
         print(comModel.performed.name)
@@ -71,11 +71,11 @@ class AlertViewController: UIViewController,AlertTableViewCellProtocol
         
         let string_to_color = "\(comModel.action) you."
         
-        let range = (main_string as NSString).rangeOfString(string_to_color)
+        let range = (main_string as NSString).range(of: string_to_color)
         
         let attributedString = NSMutableAttributedString(string:main_string)
         
-        attributedString.addAttribute(NSForegroundColorAttributeName, value: UIColor.blackColor(), range: range)
+        attributedString.addAttribute(NSForegroundColorAttributeName, value: UIColor.black, range: range)
         
         cell?.nameLabel.attributedText = attributedString
         
@@ -89,13 +89,13 @@ class AlertViewController: UIViewController,AlertTableViewCellProtocol
     
     
     
-     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath)
+     func tableView(_ tableView: UITableView, didSelectRowAtIndexPath indexPath: IndexPath)
      {
         let dataList = responseData.data[indexPath.row]
         let alert_id =  String(dataList.id)
         let post_id  =  String(dataList.post.id)
         
-        let alertsPostViewController = self.storyboard?.instantiateViewControllerWithIdentifier("AlertsPostViewController") as! AlertsPostViewController
+        let alertsPostViewController = self.storyboard?.instantiateViewController(withIdentifier: "AlertsPostViewController") as! AlertsPostViewController
         
        alertsPostViewController.alert_id = alert_id
        alertsPostViewController.post_id  = post_id
@@ -106,7 +106,7 @@ class AlertViewController: UIViewController,AlertTableViewCellProtocol
     
 
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat
+    func tableView(_ tableView: UITableView, heightForRowAtIndexPath indexPath: IndexPath) -> CGFloat
     {
        
             return 110
@@ -115,7 +115,7 @@ class AlertViewController: UIViewController,AlertTableViewCellProtocol
 
     // Mohit
     
-    @IBAction func reportAtspam(sender: UIButton)
+    @IBAction func reportAtspam(_ sender: UIButton)
     {
         
         
@@ -136,7 +136,7 @@ class AlertViewController: UIViewController,AlertTableViewCellProtocol
             DataSessionManger.sharedInstance.getAlertlist( { (response, deserializedResponse) in
                 print("deserializedResponse \(deserializedResponse)")
                 
-                dispatch_async(dispatch_get_main_queue(), {
+                DispatchQueue.main.async(execute: {
                     
                 self.responseData = deserializedResponse
                 
@@ -152,7 +152,7 @@ class AlertViewController: UIViewController,AlertTableViewCellProtocol
                 }, onError: { (error) in
                     
                     print("error \(error)")
-                    dispatch_async(dispatch_get_main_queue(),{
+                    DispatchQueue.main.async(execute: {
                             self.view.removeSpinner()
                     })
             })
@@ -161,16 +161,16 @@ class AlertViewController: UIViewController,AlertTableViewCellProtocol
     
     
     
-    func picbuttonClicked(cell:AlertTableViewCell, button:UIButton)
+    func picbuttonClicked(_ cell:AlertTableViewCell, button:UIButton)
     {
-        if self.tableView.indexPathForCell(cell) != nil
+        if self.tableView.indexPath(for: cell) != nil
         {
-            if let indexPath = self.tableView.indexPathForCell(cell)
+            if let indexPath = self.tableView.indexPath(for: cell)
             {
                 let dataList = responseData.data[indexPath.row]
                 let comModel = dataList.post
                 
-                let chatVc = self.storyboard?.instantiateViewControllerWithIdentifier("photopreviewViewController") as? photopreviewViewController
+                let chatVc = self.storyboard?.instantiateViewController(withIdentifier: "photopreviewViewController") as? photopreviewViewController
                 chatVc!.picname = comModel.performed.photo
                 self.navigationController!.pushViewController(chatVc!, animated: true)
             }

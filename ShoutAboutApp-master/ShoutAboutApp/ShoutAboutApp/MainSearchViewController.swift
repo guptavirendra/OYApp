@@ -8,13 +8,13 @@
 
 import UIKit
 import TSMessages
-import ReactiveCocoa
+//import ReactiveCocoa
 import XMPPFramework
 import xmpp_messenger_ios
 
 class MainSearchViewController: UIViewController, ContactTableViewCellProtocol
 {
-    var xmppClient: STXMPPClient?
+    
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var menuButton: UIBarButtonItem!
     @IBOutlet weak var searchButton:UIButton!
@@ -28,25 +28,25 @@ class MainSearchViewController: UIViewController, ContactTableViewCellProtocol
     {
         super.viewDidLoad()
         self.searchButton.layer.cornerRadius = 5.0
-        self.navigationController?.navigationBarHidden = true
-        self.searchButton.setImage(UIImage(named: "tab_search-h@x")!.imageWithRenderingMode(.AlwaysTemplate), forState: .Normal)
-        self.searchButton.tintColor = UIColor.grayColor()
+        self.navigationController?.isNavigationBarHidden = true
+        self.searchButton.setImage(UIImage(named: "tab_search-h@x")!.withRenderingMode(.alwaysTemplate), for: UIControlState())
+        self.searchButton.tintColor = UIColor.gray
         
         
         
-        let appUserId = NSUserDefaults.standardUserDefaults().objectForKey(kapp_user_id)
-        let stringID = String(appUserId!)
+        let appUserId = UserDefaults.standard.object(forKey: kapp_user_id)
+        let stringID = String(describing: appUserId!)
         let ejabberID = stringID+"@localhost"
         
         
         OneChat.sharedInstance.connect(username: ejabberID, password: "12345") { (stream, error) -> Void in
             if let _ = error
             {
-                let alertController = UIAlertController(title: "Sorry", message: "An error occured: \(error)", preferredStyle: UIAlertControllerStyle.Alert)
-                alertController.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: { (UIAlertAction) -> Void in
+                let alertController = UIAlertController(title: "Sorry", message: "An error occured: \(String(describing: error))", preferredStyle: UIAlertControllerStyle.alert)
+                alertController.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: { (UIAlertAction) -> Void in
                     //do something
                 }))
-                self.presentViewController(alertController, animated: true, completion: nil)
+                self.present(alertController, animated: true, completion: nil)
             } else
             {
                 
@@ -59,14 +59,14 @@ class MainSearchViewController: UIViewController, ContactTableViewCellProtocol
         // Dispose of any resources that can be recreated.
     }
     
-    override func viewWillAppear(animated: Bool)
+    override func viewWillAppear(_ animated: Bool)
     {
         super.viewWillAppear(animated)
-         self.navigationController?.navigationBarHidden = true
+         self.navigationController?.isNavigationBarHidden = true
         if let historydata = self.retrievePearson()
         {
             
-            allValidContacts = historydata.reverse()
+            allValidContacts = historydata.reversed()
             self.tableView.reloadData()
             
         }
@@ -76,8 +76,8 @@ class MainSearchViewController: UIViewController, ContactTableViewCellProtocol
     }
     func retrievePearson() -> [SearchPerson]?
     {
-        if let unarchivedObject = NSUserDefaults.standardUserDefaults().objectForKey(searchHistory) as? NSData {
-            return NSKeyedUnarchiver.unarchiveObjectWithData(unarchivedObject) as? [SearchPerson]
+        if let unarchivedObject = UserDefaults.standard.object(forKey: searchHistory) as? Data {
+            return NSKeyedUnarchiver.unarchiveObject(with: unarchivedObject) as? [SearchPerson]
         }
         return nil
     }
@@ -93,7 +93,7 @@ class MainSearchViewController: UIViewController, ContactTableViewCellProtocol
     }
     */
 
-    override func viewDidAppear(animated: Bool)
+    override func viewDidAppear(_ animated: Bool)
     {
         super.viewDidAppear(animated)
         self.getProfileData()
@@ -106,13 +106,13 @@ class MainSearchViewController: UIViewController, ContactTableViewCellProtocol
 
 extension MainSearchViewController
 {
-    @IBAction func searchButtonClicked(button:UIButton)
+    @IBAction func searchButtonClicked(_ button:UIButton)
     {
         
-        let searchViewController = self.storyboard?.instantiateViewControllerWithIdentifier("SearchViewController") as? SearchViewController
+        let searchViewController = self.storyboard?.instantiateViewController(withIdentifier: "SearchViewController") as? SearchViewController
         let nav = UINavigationController(rootViewController: searchViewController!)
          nav.navigationBar.barTintColor = appColor
-        self.presentViewController(nav, animated: true, completion: nil)
+        self.present(nav, animated: true, completion: nil)
         //self.navigationController!.pushViewController(searchViewController!, animated: true)
         
     }
@@ -121,18 +121,18 @@ extension MainSearchViewController
 extension MainSearchViewController
 {
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
         return  allValidContacts.count //objects.count
         
     }
     
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
+    func tableView(_ tableView: UITableView, cellForRowAtIndexPath indexPath: IndexPath) -> UITableViewCell
     {
         
         
-        let cell = tableView.dequeueReusableCellWithIdentifier("contact", forIndexPath: indexPath) as! ContactTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "contact", for: indexPath) as! ContactTableViewCell
         cell.delegate = self
         
         let personContact = self.allValidContacts[indexPath.row]
@@ -144,19 +144,19 @@ extension MainSearchViewController
         
         // if personContact.app_user_token != nil
         // {
-        cell.revieBbutton!.hidden = false
-        cell.rateView?.hidden    = false
-        cell.ratingLabel!.hidden  = false
+        cell.revieBbutton!.isHidden = false
+        cell.rateView?.isHidden    = false
+        cell.ratingLabel!.isHidden  = false
         
         if let count = personContact.reviewCount.first?.count
         {
             
             let title:String = String(count) + " reviews"
-            cell.revieBbutton!.setTitle(title, forState: .Normal)
+            cell.revieBbutton!.setTitle(title, for: UIControlState())
         }else
         {
             let title:String = String(0) + " reviews"
-            cell.revieBbutton!.setTitle(title, forState: .Normal)
+            cell.revieBbutton!.setTitle(title, for: UIControlState())
         }
         if let ratingAverage = personContact.ratingAverage.first?.average
         {
@@ -181,7 +181,7 @@ extension MainSearchViewController
         if let urlString = personContact.photo
         {
             
-            cell.profileImageView.sd_setImageWithURL(NSURL(string:urlString ), placeholderImage: UIImage(named: "profile"))
+            //cell.profileImageView.setImage(with: URL(string:urlString ), placeholderImage: UIImage(named: "profile"))
             
         }else
         {
@@ -190,55 +190,55 @@ extension MainSearchViewController
         return cell
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat
+    func tableView(_ tableView: UITableView, heightForRowAtIndexPath indexPath: IndexPath) -> CGFloat
     {
         return UITableViewAutomaticDimension
     }
     
-    func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: IndexPath) -> CGFloat
     {
         return 100.0
         
     }
     
     //MARK: CALL
-    func buttonClicked(cell: ContactTableViewCell, button: UIButton)
+    func buttonClicked(_ cell: ContactTableViewCell, button: UIButton)
     {
-        if self.tableView.indexPathForCell(cell) != nil
+        if self.tableView.indexPath(for: cell) != nil
         {
-            let indexPath = self.tableView.indexPathForCell(cell)
+            let indexPath = self.tableView.indexPath(for: cell)
             let personContact = allValidContacts[indexPath!.row]
             if button.titleLabel?.text == " Call"
             {
                 let personContact = allValidContacts[indexPath!.row]
                 let   phone = "tel://"+personContact.mobileNumber
-                UIApplication.sharedApplication().openURL(NSURL(string: phone)!)
+                UIApplication.shared.openURL(URL(string: phone)!)
             }
             else if button.titleLabel?.text == " Chat"
             {
                 let stringID = String(personContact.idString)
                 let ejabberID = stringID+"@localhost"
                 let user =  OneRoster.userFromRosterForJID(jid: ejabberID)
-                print("\(OneRoster.buddyList.sections)")
+                print("\(String(describing: OneRoster.buddyList.sections))")
                 //let chattingViewController = self.storyboard?.instantiateViewControllerWithIdentifier("ChattingViewController") as? ChattingViewController
                 
                 //let user =   OneRoster.userFromRosterAtIndexPath(indexPath: indexPath!)
                 
-                let chatVc = self.storyboard?.instantiateViewControllerWithIdentifier("ChatsViewController") as? ChatsViewController
+                let chatVc = self.storyboard?.instantiateViewController(withIdentifier: "ChatsViewController") as? ChatsViewController
                 
                 chatVc!.senderDisplayName = ProfileManager.sharedInstance.personalProfile.name
                 chatVc?.senderId          = String(ProfileManager.sharedInstance.personalProfile.idString)
                 chatVc?.reciepientPerson         = personContact
                 chatVc?.recipient = user
-                self.navigationController?.navigationBarHidden = false
+                self.navigationController?.isNavigationBarHidden = false
                 self.navigationController!.pushViewController(chatVc!, animated: true)
                 
             }
-            else if ((button.titleLabel?.text?.containsString("reviews")) != nil)
+            else if ((button.titleLabel?.text?.contains("reviews")) != nil)
             {
                 
                 let personContact = allValidContacts[(indexPath?.row)!]
-                let rateANdReviewViewController = self.storyboard?.instantiateViewControllerWithIdentifier("RateANdReviewViewController") as? RateANdReviewViewController
+                let rateANdReviewViewController = self.storyboard?.instantiateViewController(withIdentifier: "RateANdReviewViewController") as? RateANdReviewViewController
                 rateANdReviewViewController?.idString = String(personContact.idString)
                 rateANdReviewViewController?.name = personContact.name
                 if let _ = personContact.photo
@@ -246,13 +246,13 @@ extension MainSearchViewController
                     rateANdReviewViewController?.photo = personContact.photo!
                 }
                 self.navigationController?.navigationBar.tintColor = appColor
-                self.navigationController?.navigationBar.hidden = false
+                self.navigationController?.navigationBar.isHidden = false
                 self.navigationController!.pushViewController(rateANdReviewViewController!, animated: true)
                 
                 
             }else
             {
-                let profileViewController = self.storyboard?.instantiateViewControllerWithIdentifier("NewProfileViewController") as? NewProfileViewController
+                let profileViewController = self.storyboard?.instantiateViewController(withIdentifier: "NewProfileViewController") as? NewProfileViewController
                 profileViewController?.personalProfile = personContact
                // self.navigationController?.navigationBar.tintColor = appColor
                 self.navigationController!.pushViewController(profileViewController!, animated: true)
@@ -263,10 +263,10 @@ extension MainSearchViewController
 
 extension MainSearchViewController
 {
-    @IBAction func Clicked(sender:AnyObject)
+    @IBAction func Clicked(_ sender:AnyObject)
     {
         
-        let chatVc = self.storyboard?.instantiateViewControllerWithIdentifier("AlertViewController") as? AlertViewController
+        let chatVc = self.storyboard?.instantiateViewController(withIdentifier: "AlertViewController") as? AlertViewController
         self.navigationController!.pushViewController(chatVc!, animated: true)
         
 }
@@ -274,8 +274,8 @@ extension MainSearchViewController
     
      func clearSearchHistory(){
         
-        let defaults = NSUserDefaults.standardUserDefaults()
-        defaults.removeObjectForKey(searchHistory)
+        let defaults = UserDefaults.standard
+        defaults.removeObject(forKey: searchHistory)
         
         defaults.synchronize()
         allValidContacts.removeAll()
@@ -288,13 +288,13 @@ extension MainSearchViewController
     {
         if allValidContacts.count > 0
         {
-            self.clearButtonBaseView.hidden = false
-            clearButton.userInteractionEnabled = true
+            self.clearButtonBaseView.isHidden = false
+            clearButton.isUserInteractionEnabled = true
             clearButton.alpha   = 1.0
         }else
         {
-            self.clearButtonBaseView.hidden = true
-            clearButton.userInteractionEnabled = false
+            self.clearButtonBaseView.isHidden = true
+            clearButton.isUserInteractionEnabled = false
             clearButton.alpha   = 0.5
         }
     }
@@ -302,15 +302,15 @@ extension MainSearchViewController
     @IBAction func displayClearAlert()
    {
     
-        let alert = UIAlertController(title: "Clear Recent Searchs", message: "Are you sure?", preferredStyle: UIAlertControllerStyle.Alert)
-        let okAction = UIAlertAction(title: "Yes", style: .Default)
+        let alert = UIAlertController(title: "Clear Recent Searchs", message: "Are you sure?", preferredStyle: UIAlertControllerStyle.alert)
+        let okAction = UIAlertAction(title: "Yes", style: .default)
         { (action) in
             self.clearSearchHistory()
         }
     
-        let cancelAction =  UIAlertAction(title: "No", style: .Cancel, handler: nil)
+        let cancelAction =  UIAlertAction(title: "No", style: .cancel, handler: nil)
         alert.addAction(cancelAction)
         alert.addAction(okAction)
-        self.presentViewController(alert, animated: true, completion: nil)
+        self.present(alert, animated: true, completion: nil)
     }
 }

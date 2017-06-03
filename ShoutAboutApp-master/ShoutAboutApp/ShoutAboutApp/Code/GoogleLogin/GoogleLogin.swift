@@ -12,6 +12,9 @@ import CoreData
 
 class  GoogleLogin: NSObject, GIDSignInDelegate, GIDSignInUIDelegate
 {
+    private static var __once: () = {
+            Static.instance = GoogleLogin()
+        }()
     var completionBLock: CompletionHandler?
     var vc: UIViewController?
     var peopleDataArray: Array<Dictionary<NSObject, AnyObject>> = []
@@ -25,12 +28,10 @@ class  GoogleLogin: NSObject, GIDSignInDelegate, GIDSignInUIDelegate
         struct Static
         {
             static var instance: GoogleLogin?
-            static var token: dispatch_once_t = 0
+            static var token: Int = 0
         }
         
-        dispatch_once(&Static.token) {
-            Static.instance = GoogleLogin()
-        }
+        _ = GoogleLogin.__once
         
         return Static.instance!
     }
@@ -44,7 +45,7 @@ class  GoogleLogin: NSObject, GIDSignInDelegate, GIDSignInUIDelegate
     
     
     
-    func loginWithGoogle(completion: CompletionHandler)
+    func loginWithGoogle(_ completion: CompletionHandler)
     {
         self.completionBLock = completion;
         
@@ -68,13 +69,13 @@ class  GoogleLogin: NSObject, GIDSignInDelegate, GIDSignInUIDelegate
     //MARK: - GIDSignInDelegate
     
    
-    func signIn(signIn: GIDSignIn!, didDisconnectWithUser user: GIDGoogleUser!, withError error: NSError!)
+    func sign(_ signIn: GIDSignIn!, didDisconnectWith user: GIDGoogleUser!, withError error: NSError!)
     {
         
     }
 
     
-    func signIn(signIn: GIDSignIn!, didSignInForUser user: GIDGoogleUser!, withError error: NSError!)
+    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: NSError!)
     
     {
         
@@ -87,7 +88,7 @@ class  GoogleLogin: NSObject, GIDSignInDelegate, GIDSignInUIDelegate
             let givenName  = user.profile.givenName
             let familyName = user.profile.familyName
             let email      = user.profile.email
-            let url        = user.profile.imageURLWithDimension(200)
+            let url        = user.profile.imageURL(withDimension: 200)
             
             var dict = [String : AnyObject]()
             
@@ -158,17 +159,17 @@ class  GoogleLogin: NSObject, GIDSignInDelegate, GIDSignInUIDelegate
     
     
     
-    func signIn(signIn: GIDSignIn!,
-                presentViewController viewController: UIViewController!) {
+    func sign(_ signIn: GIDSignIn!,
+                present viewController: UIViewController!) {
         
         
-         vc!.presentViewController(viewController, animated: true, completion: nil)
+         vc!.present(viewController, animated: true, completion: nil)
     }
     
     // Dismiss the "Sign in with Google" view
-    func signIn(signIn: GIDSignIn!,
-                dismissViewController viewController: UIViewController!) {
-        vc!.dismissViewControllerAnimated(true, completion: nil)
+    func sign(_ signIn: GIDSignIn!,
+                dismiss viewController: UIViewController!) {
+        vc!.dismiss(animated: true, completion: nil)
        // ActivityIndicator.stopActivityIndicatorOnView((vc?.view)!)
     }
     
@@ -176,14 +177,14 @@ class  GoogleLogin: NSObject, GIDSignInDelegate, GIDSignInUIDelegate
     //MARK: - mark get google circle friend list
     
     
-    func performGetRequest(targetURL: NSURL!, completion: (data: NSData?, HTTPStatusCode: Int, error: NSError?) -> Void) {
-        let request = NSMutableURLRequest(URL: targetURL)
-        request.HTTPMethod = "GET"
+    func performGetRequest(_ targetURL: URL!, completion: (data: Data?, HTTPStatusCode: Int, error: NSError?) -> Void) {
+        let request = NSMutableURLRequest(url: targetURL)
+        request.httpMethod = "GET"
         
-        let sessionConfiguration = NSURLSessionConfiguration.defaultSessionConfiguration()
-        let session = NSURLSession(configuration: sessionConfiguration)
-        let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
-        completion(data: data, HTTPStatusCode: (response as! NSHTTPURLResponse).statusCode, error: error)
+        let sessionConfiguration = URLSessionConfiguration.default
+        let session = URLSession(configuration: sessionConfiguration)
+        let task = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: NSError?) -> Void in
+        completion(data: data, HTTPStatusCode: (response as! HTTPURLResponse).statusCode, error: error)
         })
         task.resume()
     }
@@ -193,15 +194,15 @@ class  GoogleLogin: NSObject, GIDSignInDelegate, GIDSignInUIDelegate
     func getPeopleList()
     {
         let urlString = ("https://www.googleapis.com/plus/v1/people/me/people/visible?access_token=\(GIDSignIn.sharedInstance().currentUser.authentication.accessToken)")
-        let url = NSURL(string: urlString)
+        let url = URL(string: urlString)
         
         performGetRequest(url, completion: { (data, HTTPStatusCode, error) -> Void in
             if HTTPStatusCode == 200 && error == nil {
-                let resultsDictionary = (try! NSJSONSerialization.JSONObjectWithData(data!, options: [])) as! Dictionary<String, AnyObject>
+                let resultsDictionary = (try! JSONSerialization.jsonObject(with: data!, options: [])) as! Dictionary<String, AnyObject>
                 
                 // Get the array with people data dictionaries.
                 let peopleArray = resultsDictionary["items"] as! Array<Dictionary<String, NSObject>>
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                DispatchQueue.main.async(execute: { () -> Void in
                     self.updateDataInDB(peopleArray)
 
                 })
@@ -214,7 +215,7 @@ class  GoogleLogin: NSObject, GIDSignInDelegate, GIDSignInUIDelegate
     }
     
     
-    func updateDataInDB(arr:[[String: NSObject]])
+    func updateDataInDB(_ arr:[[String: NSObject]])
     {
        
         //let records = PlayerTemplate.buildWithGoogleUserFriends(arr);

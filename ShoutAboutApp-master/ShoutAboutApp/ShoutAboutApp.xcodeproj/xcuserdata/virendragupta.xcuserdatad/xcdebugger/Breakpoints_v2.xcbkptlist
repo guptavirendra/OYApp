@@ -6,22 +6,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ShoutAboutApp/BaseNSURLSession.swift"
-            timestampString = "514889184.350679"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1014"
-            endingLineNumber = "1014"
-            landmarkName = "configureMediaRequest(_:path:headerParam:mediaPaths:bodyDict:name:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
@@ -31,8 +15,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "183"
             endingLineNumber = "183"
-            landmarkName = "OTPViewController"
-            landmarkType = "3">
+            landmarkName = "resendButtonClicked(_:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -48,7 +32,7 @@
             startingLineNumber = "193"
             endingLineNumber = "193"
             landmarkName = "resendButtonClicked(_:)"
-            landmarkType = "5">
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -64,7 +48,7 @@
             startingLineNumber = "200"
             endingLineNumber = "200"
             landmarkName = "resendButtonClicked(_:)"
-            landmarkType = "5">
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -80,7 +64,7 @@
             startingLineNumber = "207"
             endingLineNumber = "207"
             landmarkName = "resendButtonClicked(_:)"
-            landmarkType = "5">
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -96,7 +80,7 @@
             startingLineNumber = "311"
             endingLineNumber = "311"
             landmarkName = "ContactViewController"
-            landmarkType = "3">
+            landmarkType = "4">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -112,7 +96,7 @@
             startingLineNumber = "470"
             endingLineNumber = "470"
             landmarkName = "ContactViewController"
-            landmarkType = "3">
+            landmarkType = "4">
             <Locations>
                <Location
                   shouldBeEnabled = "No"
@@ -150,22 +134,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ShoutAboutApp/BaseNSURLSession.swift"
-            timestampString = "514889184.350679"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "529"
-            endingLineNumber = "529"
-            landmarkName = "postDataWithOnFinish(_:parameters:postBody:onFinish:onError:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
@@ -175,8 +143,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "408"
             endingLineNumber = "408"
-            landmarkName = "searchBar(_:textDidChange:)"
-            landmarkType = "5">
+            landmarkName = "searchBarSearchButtonClicked(_:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -192,7 +160,7 @@
             startingLineNumber = "680"
             endingLineNumber = "680"
             landmarkName = "getProfileData(_:onFinish:onError:)"
-            landmarkType = "5">
+            landmarkType = "7">
             <Locations>
                <Location
                   shouldBeEnabled = "No"
@@ -240,7 +208,7 @@
             startingLineNumber = "742"
             endingLineNumber = "742"
             landmarkName = "feedLikeUser(_:onFinish:onError:)"
-            landmarkType = "5">
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -256,7 +224,7 @@
             startingLineNumber = "857"
             endingLineNumber = "857"
             landmarkName = "feedLikeUser(_:onFinish:onError:)"
-            landmarkType = "5">
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -271,8 +239,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "199"
             endingLineNumber = "199"
-            landmarkName = "showKeyBoard(_:)"
-            landmarkType = "5">
+            landmarkName = "tableView(_:estimatedHeightForRowAtIndexPath:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -287,8 +255,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "463"
             endingLineNumber = "463"
-            landmarkName = "showKeyBoard(_:)"
-            landmarkType = "5">
+            landmarkName = "RateANdReviewViewController"
+            landmarkType = "4">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -303,8 +271,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "451"
             endingLineNumber = "451"
-            landmarkName = "textView(_:shouldChangeTextInRange:replacementText:)"
-            landmarkType = "5">
+            landmarkName = "RateANdReviewViewController"
+            landmarkType = "4">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -319,8 +287,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "466"
             endingLineNumber = "466"
-            landmarkName = "showKeyBoard(_:)"
-            landmarkType = "5">
+            landmarkName = "RateANdReviewViewController"
+            landmarkType = "4">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -335,8 +303,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "69"
             endingLineNumber = "69"
-            landmarkName = "viewWillAppear(_:)"
-            landmarkType = "5">
+            landmarkName = "viewDidLoad()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -351,8 +319,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "63"
             endingLineNumber = "63"
-            landmarkName = "didReceiveMemoryWarning()"
-            landmarkType = "5">
+            landmarkName = "viewDidLoad()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -367,8 +335,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "33"
             endingLineNumber = "33"
-            landmarkName = "viewDidLoad()"
-            landmarkType = "5">
+            landmarkName = "&gt;(_:_:)"
+            landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -384,7 +352,7 @@
             startingLineNumber = "458"
             endingLineNumber = "458"
             landmarkName = "unspamUserID(_:onFinish:onError:)"
-            landmarkType = "5">
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -448,7 +416,7 @@
             startingLineNumber = "469"
             endingLineNumber = "469"
             landmarkName = "getUserSpamList(_:onError:)"
-            landmarkType = "5">
+            landmarkType = "7">
             <Locations>
                <Location
                   shouldBeEnabled = "No"
@@ -496,7 +464,7 @@
             startingLineNumber = "655"
             endingLineNumber = "655"
             landmarkName = "imageFileSelected(_:)"
-            landmarkType = "5">
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -512,55 +480,7 @@
             startingLineNumber = "448"
             endingLineNumber = "448"
             landmarkName = "unspamUserID(_:onFinish:onError:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ShoutAboutApp/BaseNSURLSession.swift"
-            timestampString = "514889184.350679"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1102"
-            endingLineNumber = "1102"
-            landmarkName = "postSBMediaWithOnFinish(_:headerParam:mediaPaths:bodyDict:name:onFinish:onError:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ShoutAboutApp/BaseNSURLSession.swift"
-            timestampString = "514889184.350679"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1129"
-            endingLineNumber = "1129"
-            landmarkName = "configureSBMediaRequest(_:path:headerParam:mediaPaths:bodyDict:name:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ShoutAboutApp/BaseNSURLSession.swift"
-            timestampString = "514889184.350679"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1136"
-            endingLineNumber = "1136"
-            landmarkName = "createSBBodyWithParameters(_:mediaPaths:boundary:bodyDict:)"
-            landmarkType = "5">
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -576,87 +496,7 @@
             startingLineNumber = "631"
             endingLineNumber = "631"
             landmarkName = "ProfileViewController"
-            landmarkType = "3">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ShoutAboutApp/BaseNSURLSession.swift"
-            timestampString = "514889184.350679"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1074"
-            endingLineNumber = "1074"
-            landmarkName = "postMediaWithOnFinish(_:headerParam:mediaPaths:bodyDict:name:onFinish:onError:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ShoutAboutApp/BaseNSURLSession.swift"
-            timestampString = "514889184.350679"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1018"
-            endingLineNumber = "1018"
-            landmarkName = "configurePostMediaRequest(_:headerParam:mediaPaths:bodyDict:name:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ShoutAboutApp/BaseNSURLSession.swift"
-            timestampString = "514889184.350679"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1009"
-            endingLineNumber = "1009"
-            landmarkName = "configureMediaRequest(_:path:headerParam:mediaPaths:bodyDict:name:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ShoutAboutApp/BaseNSURLSession.swift"
-            timestampString = "514889184.350679"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1029"
-            endingLineNumber = "1029"
-            landmarkName = "createBodyWithParameters(_:mediaPaths:boundary:bodyDict:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ShoutAboutApp/BaseNSURLSession.swift"
-            timestampString = "514889184.350679"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "624"
-            endingLineNumber = "624"
-            landmarkName = "startSessionTaskDataTaskWithRequest(_:onError:)"
-            landmarkType = "5">
+            landmarkType = "4">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -671,8 +511,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "748"
             endingLineNumber = "748"
-            landmarkName = "makeImageRoundedWithWidth(_:color:)"
-            landmarkType = "5">
+            landmarkName = "makeImageRoundedWithGray()"
+            landmarkType = "7">
             <Locations>
                <Location
                   shouldBeEnabled = "No"
@@ -720,7 +560,7 @@
             startingLineNumber = "92"
             endingLineNumber = "92"
             landmarkName = "otpButtonClicked(_:)"
-            landmarkType = "5">
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -736,7 +576,7 @@
             startingLineNumber = "32"
             endingLineNumber = "32"
             landmarkName = "viewDidLoad()"
-            landmarkType = "5">
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -751,8 +591,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "149"
             endingLineNumber = "149"
-            landmarkName = "tableView(_:cellForRowAtIndexPath:)"
-            landmarkType = "5">
+            landmarkName = "ContactViewController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -767,8 +607,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "215"
             endingLineNumber = "215"
-            landmarkName = "tableView(_:estimatedHeightForRowAtIndexPath:)"
-            landmarkType = "5">
+            landmarkName = "tableView(_:cellForRowAt:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -783,8 +623,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "219"
             endingLineNumber = "219"
-            landmarkName = "tableView(_:willDisplayCell:forRowAtIndexPath:)"
-            landmarkType = "5">
+            landmarkName = "tableView(_:cellForRowAt:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -800,7 +640,7 @@
             startingLineNumber = "454"
             endingLineNumber = "454"
             landmarkName = "ContactViewController"
-            landmarkType = "3">
+            landmarkType = "4">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -816,7 +656,7 @@
             startingLineNumber = "62"
             endingLineNumber = "62"
             landmarkName = "viewWillAppear(_:)"
-            landmarkType = "5">
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -832,7 +672,7 @@
             startingLineNumber = "154"
             endingLineNumber = "154"
             landmarkName = "buttonClicked(_:button:)"
-            landmarkType = "5">
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -848,71 +688,7 @@
             startingLineNumber = "143"
             endingLineNumber = "143"
             landmarkName = "getOTPForMobileNumber(_:onFinish:onError:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ShoutAboutApp/BaseNSURLSession.swift"
-            timestampString = "514889184.350679"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "720"
-            endingLineNumber = "720"
-            landmarkName = "startSessionTaskDataTaskWithRequest(_:onError:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ShoutAboutApp/BaseNSURLSession.swift"
-            timestampString = "514889184.350679"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "668"
-            endingLineNumber = "668"
-            landmarkName = "startSessionTaskDataTaskWithRequest(_:onError:)"
-            landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "ShoutAboutApp.BaseNSURLSession.(startSessionTaskDataTaskWithRequest ((response : Swift.AnyObject, deserializedResponse : Swift.AnyObject) -&gt; (), onError : (error : Swift.AnyObject) -&gt; ()) -&gt; ()).(closure #1)"
-                  moduleName = "ShoutAboutApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/virendragupta/ShoutAboutApp/ShoutAboutApp/ShoutAboutApp/BaseNSURLSession.swift"
-                  timestampString = "501263993.978457"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "667"
-                  endingLineNumber = "667"
-                  offsetFromSymbolStart = "4099">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "ShoutAboutApp.BaseNSURLSession.(startSessionTaskDataTaskWithRequest ((response : Swift.AnyObject, deserializedResponse : Swift.AnyObject) -&gt; (), onError : (error : Swift.AnyObject) -&gt; ()) -&gt; ()).(closure #1)"
-                  moduleName = "ShoutAboutApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/virendragupta/ShoutAboutApp/ShoutAboutApp/ShoutAboutApp/BaseNSURLSession.swift"
-                  timestampString = "501263993.978827"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "667"
-                  endingLineNumber = "667"
-                  offsetFromSymbolStart = "4147">
-               </Location>
-            </Locations>
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -928,7 +704,7 @@
             startingLineNumber = "87"
             endingLineNumber = "87"
             landmarkName = "tableView(_:cellForRowAtIndexPath:)"
-            landmarkType = "5">
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -944,7 +720,7 @@
             startingLineNumber = "96"
             endingLineNumber = "96"
             landmarkName = "viewDidAppear(_:)"
-            landmarkType = "5">
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -960,7 +736,7 @@
             startingLineNumber = "43"
             endingLineNumber = "43"
             landmarkName = "viewDidLoad()"
-            landmarkType = "5">
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -975,8 +751,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "193"
             endingLineNumber = "193"
-            landmarkName = "tableView(_:cellForRowAtIndexPath:)"
-            landmarkType = "5">
+            landmarkName = "tableView(_:cellForRowAt:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -992,7 +768,7 @@
             startingLineNumber = "155"
             endingLineNumber = "155"
             landmarkName = "getOTPValidateForMobileNumber(_:otp:onFinish:onError:)"
-            landmarkType = "5">
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1007,8 +783,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "118"
             endingLineNumber = "118"
-            landmarkName = "tableView(_:cellForRowAtIndexPath:)"
-            landmarkType = "5">
+            landmarkName = "viewWillAppear(_:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1023,8 +799,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "360"
             endingLineNumber = "360"
-            landmarkName = "sendTextMessage(_:)"
-            landmarkType = "5">
+            landmarkName = "ChattingViewController"
+            landmarkType = "4">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1040,7 +816,7 @@
             startingLineNumber = "213"
             endingLineNumber = "213"
             landmarkName = "postProfileImage(_:name:onFinish:onError:)"
-            landmarkType = "5">
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1134,7 +910,7 @@
             startingLineNumber = "168"
             endingLineNumber = "168"
             landmarkName = "didReceiveMemoryWarning()"
-            landmarkType = "5">
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1149,8 +925,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "365"
             endingLineNumber = "365"
-            landmarkName = "sendTextMessage(_:)"
-            landmarkType = "5">
+            landmarkName = "sendButtonClicked(_:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1165,8 +941,40 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "272"
             endingLineNumber = "272"
-            landmarkName = "getChat()"
-            landmarkType = "5">
+            landmarkName = "hideKeyBoard(_:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ShoutAboutApp.ChattingViewController.hideKeyBoard (Foundation.Notification) -&gt; ()"
+                  moduleName = "ShoutAboutApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/virendragupta/OYApp/ShoutAboutApp-master/ShoutAboutApp/ShoutAboutApp/ChattingViewController.swift"
+                  timestampString = "518184305.204589"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "274"
+                  endingLineNumber = "274"
+                  offsetFromSymbolStart = "1004">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ShoutAboutApp.ChattingViewController.(hideKeyBoard (Foundation.Notification) -&gt; ()).(closure #1)"
+                  moduleName = "ShoutAboutApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/virendragupta/OYApp/ShoutAboutApp-master/ShoutAboutApp/ShoutAboutApp/ChattingViewController.swift"
+                  timestampString = "518184305.20845"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "275"
+                  endingLineNumber = "275"
+                  offsetFromSymbolStart = "16">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

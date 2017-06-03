@@ -14,8 +14,8 @@ import xmpp_messenger_ios
 class ChatViewController: UIViewController, ChatPersionTableViewCellProtocol
 {
     
-    private lazy var channelRef: FIRDatabaseReference = FIRDatabase.database().reference().child("channels")
-    private var channelRefHandle: FIRDatabaseHandle?
+    fileprivate lazy var channelRef: FIRDatabaseReference = FIRDatabase.database().reference().child("channels")
+    fileprivate var channelRefHandle: FIRDatabaseHandle?
 
 
     @IBOutlet weak var tableView: UITableView!
@@ -37,7 +37,7 @@ class ChatViewController: UIViewController, ChatPersionTableViewCellProtocol
     {
         if let refHandle = channelRefHandle
         {
-            channelRef.removeObserverWithHandle(refHandle)
+            channelRef.removeObserver(withHandle: refHandle)
             
         }
     }
@@ -59,7 +59,7 @@ class ChatViewController: UIViewController, ChatPersionTableViewCellProtocol
     }
     */
     
-    override func viewWillAppear(animated: Bool)
+    override func viewWillAppear(_ animated: Bool)
     {
         super.viewWillAppear(animated)
         if NetworkConnectivity.isConnectedToNetwork() != true
@@ -77,24 +77,24 @@ class ChatViewController: UIViewController, ChatPersionTableViewCellProtocol
 extension ChatViewController
 {
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
         return chatPersons.count
     }
     
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
+    func tableView(_ tableView: UITableView, cellForRowAtIndexPath indexPath: IndexPath) -> UITableViewCell
     {
         
         
-        let cell = tableView.dequeueReusableCellWithIdentifier("ChatPersionTableViewCell", forIndexPath: indexPath) as! ChatPersionTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ChatPersionTableViewCell", for: indexPath) as! ChatPersionTableViewCell
         
         let chatPerson = chatPersons[indexPath.row]
         
         cell.nameLabel.text = chatPerson.name
-        if let urlString = chatPerson.photo
+        if chatPerson.photo != nil
         {
-            cell.profileView?.setImageWithURL(NSURL(string:urlString ), placeholderImage: UIImage(named: "profile"))
+            //cell.profileView?.setImageWith(URL(string:urlString ), placeholderImage: UIImage(named: "profile"))
         }
         cell.delegate = self
         
@@ -106,14 +106,14 @@ extension ChatViewController
         return cell
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat
+    func tableView(_ tableView: UITableView, heightForRowAtIndexPath indexPath: IndexPath) -> CGFloat
     {
         
         return UITableViewAutomaticDimension
         
     }
     
-    func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: IndexPath) -> CGFloat
     {
         
         return 100
@@ -124,19 +124,19 @@ extension ChatViewController
 extension ChatViewController
 {
     
-    @IBAction func Clicked(sender:AnyObject){
+    @IBAction func Clicked(_ sender:AnyObject){
         
-        let alertVc = self.storyboard?.instantiateViewControllerWithIdentifier("AlertViewController") as? AlertViewController
+        let alertVc = self.storyboard?.instantiateViewController(withIdentifier: "AlertViewController") as? AlertViewController
         self.navigationController!.pushViewController(alertVc!, animated: true)
         
         
     }
     
-    func buttonClicked(cell: ChatPersionTableViewCell, button: UIButton)
+    func buttonClicked(_ cell: ChatPersionTableViewCell, button: UIButton)
     {
-        if self.tableView.indexPathForCell(cell) != nil
+        if self.tableView.indexPath(for: cell) != nil
         {
-            let indexPath = self.tableView.indexPathForCell(cell)
+            let indexPath = self.tableView.indexPath(for: cell)
             let chatPerson = chatPersons[indexPath!.row]
             
                     let stringID = String(chatPerson.idString)
@@ -147,7 +147,7 @@ extension ChatViewController
                     
                     //let user =   OneRoster.userFromRosterAtIndexPath(indexPath: indexPath!)
                     
-                    let chatVc = self.storyboard?.instantiateViewControllerWithIdentifier("ChatsViewController") as? ChatsViewController
+                    let chatVc = self.storyboard?.instantiateViewController(withIdentifier: "ChatsViewController") as? ChatsViewController
                     
                     chatVc!.senderDisplayName = ProfileManager.sharedInstance.personalProfile.name
                     chatVc?.senderId          = String(ProfileManager.sharedInstance.personalProfile.idString)
@@ -167,14 +167,14 @@ extension ChatViewController
     {
         self.view.showSpinner()
         DataSessionManger.sharedInstance.getChatList({ (response, deserializedResponse) in
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            DispatchQueue.main.async(execute: { () -> Void in
                 self.chatPersons = deserializedResponse
                 self.tableView.reloadData()
                 self.view.removeSpinner()
             })
             }) { (error) in
               
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                DispatchQueue.main.async(execute: { () -> Void in
                     self.tableView.reloadData()
                     self.view.removeSpinner()
                 })
@@ -186,14 +186,14 @@ extension ChatViewController
 extension ChatViewController
 {
     // MARK: Firebase related methods
-    private func observeChannels()
+    fileprivate func observeChannels()
     {
         // Use the observe method to listen for new
         // channels being written to the Firebase DB
-        channelRefHandle = channelRef.observeEventType(.ChildAdded, withBlock: { (snapshot) in // 1
+        channelRefHandle = channelRef.observe(.childAdded, with: { (snapshot) in // 1
             let channelData = snapshot.value as! Dictionary<String, AnyObject> // 2
             let id = snapshot.key
-            if let name = channelData["name"] as! String! where name.characters.count > 0
+            if let name = channelData["name"] as! String!, name.characters.count > 0
             {
                 let chatPerson = ChatPerson()
                 chatPerson.name = name

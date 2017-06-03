@@ -15,7 +15,7 @@ class XMPPMAMArchivingCoreDataStorage: XMPPMessageArchivingCoreDataStorage {
 		return "XMPPMAMArchiving" //XMPPMAMArchiving.xcdatamodel will be used
 	}
 	
-	override func archiveMessage(message: XMPPMessage, outgoing isOutgoing: Bool, xmppStream stream: XMPPStream) {
+	override func archiveMessage(_ message: XMPPMessage, outgoing isOutgoing: Bool, xmppStream stream: XMPPStream) {
 		let messageBody: String? = message.body()
 		if messageBody == nil {
 			//NSLog("archiveMessage message has no body. Not archiving!")
@@ -31,18 +31,18 @@ class XMPPMAMArchivingCoreDataStorage: XMPPMessageArchivingCoreDataStorage {
 			if !self.isMessageStored(message) {
 				let moc: NSManagedObjectContext? = self.managedObjectContext
 				let messageEntity: NSEntityDescription? = self.messageEntity(moc)
-				let archivedMessage: XMPPMAMArchivingMessageCoreDataObject = XMPPMAMArchivingMessageCoreDataObject(entity: messageEntity!, insertIntoManagedObjectContext: nil)
+				let archivedMessage: XMPPMAMArchivingMessageCoreDataObject = XMPPMAMArchivingMessageCoreDataObject(entity: messageEntity!, insertInto: nil)
 				
-				let myJid: XMPPJID = self.myJIDForXMPPStream(stream)
+				let myJid: XMPPJID = self.myJID(for: stream)
 				let messageJid: XMPPJID = isOutgoing ? message.to() : message.from()
 				
 				archivedMessage.id = message.id()
 				archivedMessage.senderId = message.from().user
 				archivedMessage.message = message
 				archivedMessage.body = messageBody
-				archivedMessage.bareJid = messageJid.bareJID()
+				archivedMessage.bareJid = messageJid.bare()
 				archivedMessage.streamBareJidStr = myJid.bare()
-				archivedMessage.timestamp = message.date() != nil ? message.date()! : NSDate()
+				archivedMessage.timestamp = message.date() != nil ? message.date()! : Date()
 	
 				archivedMessage.archiveId = message.archiveId()
 				archivedMessage.thread = message.thread()
@@ -56,34 +56,34 @@ class XMPPMAMArchivingCoreDataStorage: XMPPMessageArchivingCoreDataStorage {
 				if message.from().user != User.senderId {
 					//assert(archivedMessage.archiveId != nil, "Message received from other doesnt have archiveId!")
 				}
-				archivedMessage.willInsertObject()
+				archivedMessage.willInsert()
 				//NSLog("insertObject %@", archivedMessage)
 
-				moc!.insertObject(archivedMessage)
+				moc!.insert(archivedMessage)
 			}
 		}
 	}
 	
-	func markMessageDeliveryStatus(deliveryStatus: STMessage.DeliveryStatus, forMessage: String) {
+	func markMessageDeliveryStatus(_ deliveryStatus: STMessage.DeliveryStatus, forMessage: String) {
 		updateObject(forMessage, updateOp: {
 			archivedMessage in
 			archivedMessage.deliveryStatus = deliveryStatus.rawValue
 		})
 	}
 	
-	func updateArchiveId(msgId: String, archiveId: String) {
+	func updateArchiveId(_ msgId: String, archiveId: String) {
 		updateObject(msgId, updateOp: {
 			archivedMessage in
 			archivedMessage.archiveId = archiveId
 		})
 	}
 	
-	private func isMessageStored(message: XMPPMessage) -> Bool
+	fileprivate func isMessageStored(_ message: XMPPMessage) -> Bool
 	{
 		let moc: NSManagedObjectContext? = self.managedObjectContext
 		let messageEntity: NSEntityDescription? = self.messageEntity(moc)
 		
-		let msgId = message.attributeStringValueForName("id")
+		let msgId = message.attributeStringValue(forName: "id")
 		let fetchRequest = NSFetchRequest()
 		let predicate: NSPredicate = NSPredicate(format: "id == %@", msgId)
 		fetchRequest.predicate = predicate
@@ -91,7 +91,7 @@ class XMPPMAMArchivingCoreDataStorage: XMPPMessageArchivingCoreDataStorage {
 		fetchRequest.fetchLimit = 1
 		
 		do {
-			let fetchResults = try moc!.executeFetchRequest(fetchRequest) as? [XMPPMAMArchivingMessageCoreDataObject]
+			let fetchResults = try moc!.fetch(fetchRequest) as? [XMPPMAMArchivingMessageCoreDataObject]
 			return fetchResults!.count > 0
 		} catch {
 			NSLog("Error executing fetch in isMessageStored \(error)")
@@ -99,7 +99,7 @@ class XMPPMAMArchivingCoreDataStorage: XMPPMessageArchivingCoreDataStorage {
 		}
 	}
 	
-	private func updateObject(msgId: String, updateOp: (archivedMessage: XMPPMAMArchivingMessageCoreDataObject) -> (Void)) {
+	fileprivate func updateObject(_ msgId: String, updateOp: (archivedMessage: XMPPMAMArchivingMessageCoreDataObject) -> (Void)) {
 		self.scheduleBlock {
 			let moc: NSManagedObjectContext? = self.managedObjectContext
 			let messageEntity: NSEntityDescription? = self.messageEntity(moc)
@@ -111,7 +111,7 @@ class XMPPMAMArchivingCoreDataStorage: XMPPMessageArchivingCoreDataStorage {
 			fetchRequest.fetchLimit = 1
 			
 			do {
-				let fetchResults = try moc!.executeFetchRequest(fetchRequest) as? [XMPPMAMArchivingMessageCoreDataObject]
+				let fetchResults = try moc!.fetch(fetchRequest) as? [XMPPMAMArchivingMessageCoreDataObject]
 				if fetchResults!.count > 0 {
 					let archivedMessage = fetchResults![0]
 					updateOp(archivedMessage: archivedMessage)

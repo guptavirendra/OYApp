@@ -10,7 +10,31 @@ import UIKit
 import Firebase
 import Contacts
 import TSMessages
-import ReactiveCocoa
+//import ReactiveCocoa
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 class ContactManager: NSObject
 {
@@ -30,10 +54,10 @@ extension UITableView
         self.backgroundView = imageView
         
         
-        let top = NSLayoutConstraint(item: imageView, attribute: .Top, relatedBy: .Equal, toItem: self, attribute: .Top, multiplier: 1.0, constant: 0.0)
-        let leading = NSLayoutConstraint(item: imageView, attribute: .Leading, relatedBy: .Equal, toItem: self, attribute: .Leading, multiplier: 1.0, constant: 0.0)
-        let trailing = NSLayoutConstraint(item: imageView, attribute: .Trailing, relatedBy: .Equal, toItem: self, attribute: .Trailing, multiplier: 1.0, constant: 0.0)
-        let bottom = NSLayoutConstraint(item: imageView, attribute: .Bottom, relatedBy: .Equal, toItem: self, attribute: .Bottom, multiplier: 1.0, constant: 0.0)
+        let top = NSLayoutConstraint(item: imageView, attribute: .top, relatedBy: .equal, toItem: self, attribute: .top, multiplier: 1.0, constant: 0.0)
+        let leading = NSLayoutConstraint(item: imageView, attribute: .leading, relatedBy: .equal, toItem: self, attribute: .leading, multiplier: 1.0, constant: 0.0)
+        let trailing = NSLayoutConstraint(item: imageView, attribute: .trailing, relatedBy: .equal, toItem: self, attribute: .trailing, multiplier: 1.0, constant: 0.0)
+        let bottom = NSLayoutConstraint(item: imageView, attribute: .bottom, relatedBy: .equal, toItem: self, attribute: .bottom, multiplier: 1.0, constant: 0.0)
         
         self.addConstraints([top, leading, trailing, bottom])
     }
@@ -43,7 +67,7 @@ extension UITableView
 
 class JoinViewController: ProfileViewController/*, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate,*/, InputTableViewCellProtocol, ClickTableViewCellProtocol /*,UIPickerViewDataSource, UIPickerViewDelegate*/
 {
-    var xmppClient: STXMPPClient?
+    
     var objects = [CNContact]()
     var allValidContacts = [SearchPerson]()
   
@@ -74,8 +98,8 @@ class JoinViewController: ProfileViewController/*, UITableViewDataSource, UITabl
         self.getProfileData()
         self.imageView?.makeImageRounded()
         self.automaticallyAdjustsScrollViewInsets = false
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.showKeyBoard(_:)), name: UIKeyboardDidShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.hideKeyBoard(_:)), name: UIKeyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.showKeyBoard(_:)), name: NSNotification.Name.UIKeyboardDidShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.hideKeyBoard(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
         //tableView.addBackGroundImageView()
     }
@@ -88,8 +112,8 @@ class JoinViewController: ProfileViewController/*, UITableViewDataSource, UITabl
     
     deinit
     {
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardDidShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardDidShow, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
 
     
@@ -97,19 +121,19 @@ class JoinViewController: ProfileViewController/*, UITableViewDataSource, UITabl
 
 extension JoinViewController
 {
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
         return 7
     }
     
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
         if indexPath.row == 0 || indexPath.row == 1 || indexPath.row == 2 || indexPath.row == 3 || indexPath.row == 4
 
         {
         
-            let cell = tableView.dequeueReusableCellWithIdentifier("input", forIndexPath: indexPath) as! InputTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "input", for: indexPath) as! InputTableViewCell
             cell.inputTextField.delegate = self
             cell.delegate = self
             if indexPath.row == 0
@@ -139,13 +163,13 @@ extension JoinViewController
                 cell.inputImage.image = UIImage(named: kBirthDay)
                 cell.inputTextField.tag = 3
             
-                let toolBar = UIToolbar(frame: CGRectMake(0, 0, cell.inputTextField.frame.size.width, 44))
+                let toolBar = UIToolbar(frame: CGRect(x: 0, y: 0, width: cell.inputTextField.frame.size.width, height: 44))
                 
                 var items = [UIBarButtonItem]()
                 
-                let  flexibleSpaceLeft = UIBarButtonItem(barButtonSystemItem: .FlexibleSpace, target: self, action: nil)
+                let  flexibleSpaceLeft = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
                 
-                let doneButton =     UIBarButtonItem(title: "Done", style: .Done, target: self, action: #selector(JoinViewController.dissMissKeyBoard(_:)))
+                let doneButton =     UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(JoinViewController.dissMissKeyBoard(_:)))
                 
                 items.append(flexibleSpaceLeft)
                 items.append(doneButton)
@@ -154,9 +178,9 @@ extension JoinViewController
                 
                 
                 let datePicker = UIDatePicker()
-                datePicker.maximumDate = NSDate()
-                datePicker.addTarget(self, action: #selector(JoinViewController.handleDatePicker(_:)), forControlEvents: .ValueChanged)
-                datePicker.datePickerMode = .Date
+                datePicker.maximumDate = Date()
+                datePicker.addTarget(self, action: #selector(JoinViewController.handleDatePicker(_:)), for: .valueChanged)
+                datePicker.datePickerMode = .date
                 cell.inputTextField.inputView = datePicker
                 cell.inputTextField.inputAccessoryView = toolBar
                 
@@ -167,13 +191,13 @@ extension JoinViewController
                 cell.inputTextField.placeholder = kGender
                 cell.inputImage.image = UIImage(named: kGender)
                 cell.inputTextField.tag = 4
-                let toolBar = UIToolbar(frame: CGRectMake(0, 0, cell.inputTextField.frame.size.width, 44))
+                let toolBar = UIToolbar(frame: CGRect(x: 0, y: 0, width: cell.inputTextField.frame.size.width, height: 44))
                 
                 var items = [UIBarButtonItem]()
                 
-                let  flexibleSpaceLeft = UIBarButtonItem(barButtonSystemItem: .FlexibleSpace, target: self, action: nil)
+                let  flexibleSpaceLeft = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
                 
-                let doneButton =     UIBarButtonItem(title: "Done", style: .Done, target: self, action: #selector(JoinViewController.dissMissKeyBoard(_:)))
+                let doneButton =     UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(JoinViewController.dissMissKeyBoard(_:)))
                 
                 items.append(flexibleSpaceLeft)
                 items.append(doneButton)
@@ -194,12 +218,12 @@ extension JoinViewController
         
         if indexPath.row == 5 || indexPath.row == 7
         {
-        let  cell = tableView.dequeueReusableCellWithIdentifier("button", forIndexPath: indexPath) as! ClickTableViewCell
+        let  cell = tableView.dequeueReusableCell(withIdentifier: "button", for: indexPath) as! ClickTableViewCell
         cell.delegate = self
         
         if indexPath.row == 5
         {
-            cell.button.setTitle("Join", forState: .Normal)
+            cell.button.setTitle("Join", for: UIControlState())
             cell.widthConstraints?.constant = cell.contentView.bounds.size.width - 60
         }
             /*
@@ -230,7 +254,7 @@ extension JoinViewController
             
             if indexPath.row == 7
             {
-                let  cell = tableView.dequeueReusableCellWithIdentifier("FaceBookGoogleTableViewCell", forIndexPath: indexPath) as! FaceBookGoogleTableViewCell
+                let  cell = tableView.dequeueReusableCell(withIdentifier: "FaceBookGoogleTableViewCell", for: indexPath) as! FaceBookGoogleTableViewCell
                 cell.delegate = self
                  
                 
@@ -239,7 +263,7 @@ extension JoinViewController
         return cell
         }
         
-        let cell = tableView.dequeueReusableCellWithIdentifier("FaceBookGoogleTableViewCell", forIndexPath: indexPath) as! FaceBookGoogleTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "FaceBookGoogleTableViewCell", for: indexPath) as! FaceBookGoogleTableViewCell
         cell.delegate = self
                 //cell.button.setTitle("Skip", forState: .Normal)
         return cell
@@ -247,31 +271,31 @@ extension JoinViewController
       }
     
     
-    override func handleDatePicker(sender: UIDatePicker)
+    override func handleDatePicker(_ sender: UIDatePicker)
     {
-        let dateFormatter = NSDateFormatter()
+        let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         
-        self.activeTextField?.text = dateFormatter.stringFromDate(sender.date)
+        self.activeTextField?.text = dateFormatter.string(from: sender.date)
         self.dob = (self.activeTextField?.text)!
         
     }
     
     
-    override func dissMissKeyBoard(sender:UIBarButtonItem)
+    override func dissMissKeyBoard(_ sender:UIBarButtonItem)
     {
         if let datePicker =  self.activeTextField?.inputView as? UIDatePicker
         {
-            let dateFormatter = NSDateFormatter()
+            let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd"
-            self.activeTextField?.text = dateFormatter.stringFromDate(datePicker.date)
+            self.activeTextField?.text = dateFormatter.string(from: datePicker.date)
             self.dob = (self.activeTextField?.text)!
         }
         
         if let picker = self.activeTextField?.inputView as? UIPickerView
         {
            
-            self.activeTextField?.text = pickOption[ picker.selectedRowInComponent(0)]
+            self.activeTextField?.text = pickOption[ picker.selectedRow(inComponent: 0)]
             self.gender = (self.activeTextField?.text)!
             
         }
@@ -281,25 +305,25 @@ extension JoinViewController
     
     
     
-    override func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+    override func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
     
-    override func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+    override func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         return pickOption.count
     }
     
-    override func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+    override func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return pickOption[row]
     }
     
-    override func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int)
+    override func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int)
     {
         self.activeTextField?.text = pickOption[row]
     }
     
     
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
     {
         if indexPath.row == 6
         {
@@ -312,16 +336,16 @@ extension JoinViewController
 }
 extension JoinViewController
 {
-    func buttonClicked(cell: ClickTableViewCell)
+    func buttonClicked(_ cell: ClickTableViewCell)
     {
         //getFireBaseAuth()
         
         if cell.button.titleLabel?.text == "Skip"
         {
             print("Skip")
-            self.dismissViewControllerAnimated(false, completion: nil)
-            let tabBarVC = self.storyboard?.instantiateViewControllerWithIdentifier("SWRevealViewController") as? SWRevealViewController
-            let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+            self.dismiss(animated: false, completion: nil)
+            let tabBarVC = self.storyboard?.instantiateViewController(withIdentifier: "SWRevealViewController") as? SWRevealViewController
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
             appDelegate.window?.backgroundColor = UIColor(red: 236.0, green: 238.0, blue: 241.0, alpha: 1.0)
             appDelegate.window?.rootViewController = tabBarVC
             appDelegate.window?.makeKeyAndVisible()
@@ -352,113 +376,113 @@ extension JoinViewController
                 
             }*/else
             {
-                let appUserId = NSUserDefaults.standardUserDefaults().objectForKey(kapp_user_id) as! Int
-                let appUserToken = NSUserDefaults.standardUserDefaults().objectForKey(kapp_user_token) as! String
+                let appUserId = UserDefaults.standard.object(forKey: kapp_user_id) as! Int
+                let appUserToken = UserDefaults.standard.object(forKey: kapp_user_token) as! String
                 
                 
                 
-                let dict = ["name":self.name, "email":self.email, "dob":self.dob, "address":self.address, "website":"webite", kapp_user_id:String(appUserId), kapp_user_token :appUserToken, "notify_token":"text", "gender":self.gender.lowercaseString]
+                let dict = ["name":self.name, "email":self.email, "dob":self.dob, "address":self.address, "website":"webite", kapp_user_id:String(appUserId), kapp_user_token :appUserToken, "notify_token":"text", "gender":self.gender.lowercased()]
                 postData(dict)
             }
         }
         
         
-        if cell.isKindOfClass(FaceBookGoogleTableViewCell)
+        if cell.isKind(of: FaceBookGoogleTableViewCell.self)
         {
             
             if cell.button.tag == 0
             {
-                faceBookLogin()
+               // faceBookLogin()
             }else
             {
-                googleLogin()
+               // googleLogin()
             }
             
         }
     }
     
     
-    
+    /*
     func faceBookLogin()
     {
-        if ((FBSDKAccessToken.currentAccessToken()) == nil)
+        if ((FBSDKAccessToken.current()) == nil)
         {
         let fbRequest = FBRequest()
         fbRequest.loginWithFacebook({ (result, error) in
             
             var dict = [String : String]()
-            let appUserId = NSUserDefaults.standardUserDefaults().objectForKey(kapp_user_id) as! Int
-            let appUserToken = NSUserDefaults.standardUserDefaults().objectForKey(kapp_user_token) as! String
+            let appUserId = UserDefaults.standard.object(forKey: kapp_user_id) as! Int
+            let appUserToken = UserDefaults.standard.object(forKey: kapp_user_token) as! String
              dict = [ kapp_user_id:String(appUserId), kapp_user_token :appUserToken, "notify_token":"text"]
             
-            if(result!.objectForKey("name") != nil)
+            if(result!.object(forKey: "name") != nil)
             {
-                let  strFirstName: String = (result!.objectForKey("name") as? String)!
+                let  strFirstName: String = (result!.object(forKey: "name") as? String)!
                 dict["name"] = strFirstName
                 
             }
             
-            if(result!.objectForKey("id") != nil)
+            if(result!.object(forKey: "id") != nil)
             {
                 
-                let strID: String = (result!.objectForKey("id") as? String)!
+                let strID: String = (result!.object(forKey: "id") as? String)!
                 dict[self.k_id] = strID
                 
             }
             
             // if((result!.objectForKey("picture")!.objectForKey("data")!.objectForKey("url")! as! String) != nil){
-            let strUrl: String = result!.objectForKey("picture")!.objectForKey("data")!.objectForKey("url")! as! String
+            let strUrl: String = result!.object(forKey: "picture")!.object(forKey: "data")!.object(forKey: "url")! as! String
             dict[self.k_photo] = strUrl
             //}
             
             
             if strUrl.characters.count > 0
             {
-                let url = NSURL(string: strUrl)
-                let data = NSData(contentsOfURL: url!)
+                let url = URL(string: strUrl)
+                let data = try? Data(contentsOf: url!)
                 let image = UIImage(data: data!)
                 self.imageFileSelected(image!)
             }
             
-            if(result!.objectForKey("email") != nil)
+            if(result!.object(forKey: "email") != nil)
             {
                 
-                let strEmail: String = (result!.objectForKey("email") as? String)!
+                let strEmail: String = (result!.object(forKey: "email") as? String)!
                 dict["email"] = strEmail
                 
             }
-            if(result!.objectForKey("birthday") != nil)
+            if(result!.object(forKey: "birthday") != nil)
             {
                " MM/DD/YYYY"
-                let strEmail: String = (result!.objectForKey("birthday") as? String)!
-                let dateFormatter = NSDateFormatter()
+                let strEmail: String = (result!.object(forKey: "birthday") as? String)!
+                let dateFormatter = DateFormatter()
                 dateFormatter.dateFormat = "MM/dd/yyyy"
-               let date = dateFormatter.dateFromString(strEmail)
+               let date = dateFormatter.date(from: strEmail)
                 dateFormatter.dateFormat = "yyyy-MM-dd"
-                let dob = dateFormatter.stringFromDate(date!)
+                let dob = dateFormatter.string(from: date!)
                 dict["dob"] = dob
                 
             }
-            if(result!.objectForKey("location") != nil)
+            if(result!.object(forKey: "location") != nil)
             {
                 
-                let strEmail: String = (result!.objectForKey("location") as? String)!
+                let strEmail: String = (result!.object(forKey: "location") as? String)!
                 dict["address"] = strEmail
                 
             }
             
-            if(result!.objectForKey("website") != nil)
+            if(result!.object(forKey: "website") != nil)
             {
                 
-                let strEmail: String = (result!.objectForKey("website") as? String)!
+                let strEmail: String = (result!.object(forKey: "website") as? String)!
                 dict["address"] = strEmail
                 
             }
-            if(result!.objectForKey("gender") != nil)
+            if(result!.object(forKey: "gender") != nil)
             {
                 
-                let strEmail: String = (result!.objectForKey("gender") as? String)!
-                dict["gender"] = strEmail.lowercaseString
+                let strEmail: String = (result!.object(forKey: "gender") as? String)!
+                dict["gender"] = strEmail.lowercased()
                 
             }
             
@@ -478,8 +502,8 @@ extension JoinViewController
         vc: self)
         }
     }
-    
-    
+    */
+    /*
     func googleLogin()
     {
         GoogleLogin.sharedInstance.vc = self;
@@ -496,40 +520,40 @@ extension JoinViewController
             }
                 
         }
-    }
-    override func displayAlert(userMessage: String, handler: ((UIAlertAction) -> Void)?)
+    }*/
+    override func displayAlert(_ userMessage: String, handler: ((UIAlertAction) -> Void)?)
     {
-        let alert = UIAlertController(title: "Alert", message: userMessage, preferredStyle: UIAlertControllerStyle.Alert)
-        let okAction = UIAlertAction(title: "OK", style: .Default)
+        let alert = UIAlertController(title: "Alert", message: userMessage, preferredStyle: UIAlertControllerStyle.alert)
+        let okAction = UIAlertAction(title: "OK", style: .default)
         { (action) in
-            self.dismissViewControllerAnimated(false, completion: nil)
-            let tabBarVC = self.storyboard?.instantiateViewControllerWithIdentifier("tabBarVC") as? MyTabViewController
-            let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+            self.dismiss(animated: false, completion: nil)
+            let tabBarVC = self.storyboard?.instantiateViewController(withIdentifier: "tabBarVC") as? MyTabViewController
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
             appDelegate.window?.backgroundColor = UIColor(red: 236.0, green: 238.0, blue: 241.0, alpha: 1.0)
             appDelegate.window?.rootViewController = tabBarVC
             appDelegate.window?.makeKeyAndVisible()
-            
-            dispatch_async(dispatch_get_global_queue(0, 0),
-            {
+            DispatchQueue.global(qos: .userInitiated).async
+                {
+             
                             self.getContacts()
-            })
+            }
             
         }
         alert.addAction(okAction)
-        self.presentViewController(alert, animated: true, completion: nil)
+        self.present(alert, animated: true, completion: nil)
         
     }
     
-    override func postData(dict:[String:String])
+    override func postData(_ dict:[String:String])
     {
          activeTextField?.resignFirstResponder()
         self.view.showSpinner()
         DataSessionManger.sharedInstance.updateProfile(dict, onFinish: { (response, deserializedResponse) in
             if deserializedResponse is NSDictionary
             {
-                if deserializedResponse.objectForKey("success") != nil
+                if deserializedResponse.object(forKey: "success") != nil
                 {
-                    dispatch_async(dispatch_get_main_queue(), {
+                    DispatchQueue.main.async(execute: {
                         self.view.removeSpinner()
                         self.displayAlert("Success", handler: nil)
                         
@@ -539,7 +563,7 @@ extension JoinViewController
             
             
             }) { (error) in
-                dispatch_async(dispatch_get_main_queue(), {
+                DispatchQueue.main.async(execute: {
                     self.view.removeSpinner()
                     self.displayAlertMessage(error as! String)
                     
@@ -552,7 +576,7 @@ extension JoinViewController
     }
     
     
-    func getTextsForCell(text: String, cell: InputTableViewCell)
+    func getTextsForCell(_ text: String, cell: InputTableViewCell)
     {
         if cell.inputTextField.tag == 0
         {
@@ -579,45 +603,45 @@ extension JoinViewController
         }
     }
     
-    override func textFieldShouldBeginEditing(textField: UITextField) -> Bool
+    override func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool
     {
         return true
     }
     
-    override func textFieldDidBeginEditing(textField: UITextField)
+    override func textFieldDidBeginEditing(_ textField: UITextField)
     {
         self.activeTextField = textField
     }
-    override func textFieldDidEndEditing(textField: UITextField)
+    override func textFieldDidEndEditing(_ textField: UITextField)
     {
         
         
     }
     
-     override func textFieldShouldReturn(textField: UITextField) -> Bool
+     override func textFieldShouldReturn(_ textField: UITextField) -> Bool
     {
         textField.resignFirstResponder()
             return true
     }
     
-    override func showKeyBoard(notification: NSNotification)
+    override func showKeyBoard(_ notification: Notification)
     {
-        if ((activeTextField?.superview?.superview?.superview!.isKindOfClass(InputTableViewCell)) != nil)
+        if ((activeTextField?.superview?.superview?.superview!.isKind(of: InputTableViewCell.self)) != nil)
         {
             if let cell = activeTextField?.superview?.superview?.superview as? InputTableViewCell
             {
-                let dictInfo: NSDictionary = notification.userInfo!
-                let kbSize :CGSize = (dictInfo.objectForKey(UIKeyboardFrameBeginUserInfoKey)?.CGRectValue().size)!
+                let dictInfo: NSDictionary = notification.userInfo! as NSDictionary
+                let kbSize :CGSize = ((dictInfo.object(forKey: UIKeyboardFrameBeginUserInfoKey) as AnyObject).cgRectValue.size)
                 let contentInsets:UIEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: kbSize.height, right: 0)
                 self.tableView!.contentInset = contentInsets
                 self.tableView!.scrollIndicatorInsets = contentInsets
-              self.tableView!.scrollToRowAtIndexPath(self.tableView!.indexPathForCell(cell)!, atScrollPosition: .Top, animated: true)
+              self.tableView!.scrollToRow(at: self.tableView!.indexPath(for: cell)!, at: .top, animated: true)
             }
         }
     }
     
     
-    override func hideKeyBoard(notification: NSNotification)
+    override func hideKeyBoard(_ notification: Notification)
     {
        if  activeTextField != nil
         {
@@ -633,7 +657,7 @@ extension JoinViewController
     
     func getFireBaseAuth()
     {
-        FIRAuth.auth()?.signInAnonymouslyWithCompletion({ (user, error) in
+        FIRAuth.auth()?.signInAnonymously(completion: { (user, error) in
             
             // 2
             if let err = error { // 3
@@ -653,9 +677,9 @@ extension JoinViewController
     {
         let store = CNContactStore()
         
-        if CNContactStore.authorizationStatusForEntityType(.Contacts) == .NotDetermined
+        if CNContactStore.authorizationStatus(for: .contacts) == .notDetermined
         {
-            store.requestAccessForEntityType(.Contacts, completionHandler: { (authorized: Bool, error: NSError?) -> Void in
+            store.requestAccess(for: .contacts, completionHandler: { (authorized: Bool, error: NSError?) -> Void in
                 if authorized
                 {
                     self.retrieveContactsWithStore(store)
@@ -663,14 +687,14 @@ extension JoinViewController
                 {
                     self.displayCantAddContactAlert()
                 }
-            })
-        }else if CNContactStore.authorizationStatusForEntityType(.Contacts) == .Denied
+            } as! (Bool, Error?) -> Void)
+        }else if CNContactStore.authorizationStatus(for: .contacts) == .denied
         {
             self.displayCantAddContactAlert()
             
         }
             
-        else if CNContactStore.authorizationStatusForEntityType(.Contacts) == .Authorized
+        else if CNContactStore.authorizationStatus(for: .contacts) == .authorized
         {
             self.retrieveContactsWithStore(store)
         }
@@ -687,15 +711,15 @@ extension JoinViewController
         // showAlertWithMessage("You must give the app permission to add the contact first.", okAction: okAction, cancelAction: cancelAction)
         //displayAlert("You must give the app permission to add the contact first.", handler: nil)
         
-        let alert = UIAlertController(title: "Alert", message: "", preferredStyle: UIAlertControllerStyle.Alert)
-        let okAction = UIAlertAction(title: "Change Settings", style: .Default) { (action) in
+        let alert = UIAlertController(title: "Alert", message: "", preferredStyle: UIAlertControllerStyle.alert)
+        let okAction = UIAlertAction(title: "Change Settings", style: .default) { (action) in
             self.openSettings()
             
         }
-        let cancelAction =  UIAlertAction(title: "OK", style: .Cancel, handler: nil)
+        let cancelAction =  UIAlertAction(title: "OK", style: .cancel, handler: nil)
         alert.addAction(okAction)
         alert.addAction(cancelAction)
-        self.presentViewController(alert, animated: true, completion: nil)
+        self.present(alert, animated: true, completion: nil)
         
         
     }
@@ -716,31 +740,31 @@ extension JoinViewController
      
      }*/
     
-    func showAlertWithMessage(message : String, okAction:UIAlertAction, cancelAction:UIAlertAction )
+    func showAlertWithMessage(_ message : String, okAction:UIAlertAction, cancelAction:UIAlertAction )
     {
-        let alert = UIAlertController(title: "Message", message: message, preferredStyle: UIAlertControllerStyle.Alert)
+        let alert = UIAlertController(title: "Message", message: message, preferredStyle: UIAlertControllerStyle.alert)
         alert.addAction(okAction)
         alert.addAction(cancelAction)
-        self.presentViewController(alert, animated: true, completion: nil)
+        self.present(alert, animated: true, completion: nil)
         
     }
     func openSettings()
     {
-        let url = NSURL(string: UIApplicationOpenSettingsURLString)
-        UIApplication.sharedApplication().openURL(url!)
+        let url = URL(string: UIApplicationOpenSettingsURLString)
+        UIApplication.shared.openURL(url!)
     }
-    func retrieveContactsWithStore(contactStore: CNContactStore)
+    func retrieveContactsWithStore(_ contactStore: CNContactStore)
     {
         let keysToFetch = [
-            CNContactFormatter.descriptorForRequiredKeysForStyle(.FullName),
+            CNContactFormatter.descriptorForRequiredKeys(for: .fullName),
             
             CNContactPhoneNumbersKey,
-            ]
+            ] as [Any]
         
         // Get all the containers
         var allContainers: [CNContainer] = []
         do {
-            allContainers = try contactStore.containersMatchingPredicate(nil)
+            allContainers = try contactStore.containers(matching: nil)
         } catch {
             print("Error fetching containers")
         }
@@ -750,12 +774,12 @@ extension JoinViewController
         // Iterate all containers and append their contacts to our results array
         for container in allContainers
         {
-            let fetchPredicate = CNContact.predicateForContactsInContainerWithIdentifier(container.identifier)
+            let fetchPredicate = CNContact.predicateForContactsInContainer(withIdentifier: container.identifier)
             
             do
             {
-                let containerResults = try contactStore.unifiedContactsMatchingPredicate(fetchPredicate, keysToFetch: keysToFetch)
-                results.appendContentsOf(containerResults)
+                let containerResults = try contactStore.unifiedContacts(matching: fetchPredicate, keysToFetch: keysToFetch as! [CNKeyDescriptor])
+                results.append(contentsOf: containerResults)
             } catch {
                 print("Error fetching results for container")
             }
@@ -767,10 +791,10 @@ extension JoinViewController
         {
             let formatter = CNContactFormatter()
             
-            let name = formatter.stringFromContact(contact)
+            let name = formatter.string(from: contact)
             if let _ = contact.phoneNumbers.first?.value as? CNPhoneNumber
             {
-                let mobile = (contact.phoneNumbers.first?.value as! CNPhoneNumber).valueForKey("digits") as? String
+                let mobile = (contact.phoneNumbers.first?.value as! CNPhoneNumber).value(forKey: "digits") as? String
                 if name?.characters.count > 0 && mobile != nil
                 {
                     let personContact = SearchPerson()
@@ -809,11 +833,11 @@ extension JoinViewController
         
         print("json:\(stringtext)")
         
-        let trimmedString = stringtext.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+        let trimmedString = stringtext.trimmingCharacters(in: CharacterSet.whitespaces)
         
-        let appUserId = NSUserDefaults.standardUserDefaults().objectForKey(kapp_user_id) as! Int
+        let appUserId = UserDefaults.standard.object(forKey: kapp_user_id) as! Int
         
-        let appUserToken = NSUserDefaults.standardUserDefaults().objectForKey(kapp_user_token) as! String
+        let appUserToken = UserDefaults.standard.object(forKey: kapp_user_token) as! String
         
         let dict = [kapp_user_id:String(appUserId), kapp_user_token :appUserToken]
         
@@ -851,19 +875,19 @@ extension JoinViewController
         
     }
     
-    func postContactToServer(dict:[String:String], postDict:[String:String])
+    func postContactToServer(_ dict:[String:String], postDict:[String:String])
     {
         //self.view.showSpinner()
         DataSessionManger.sharedInstance.syncContactToTheServer(dict, postDict:postDict,  onFinish: { (response, deserializedResponse) in
             
             
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            DispatchQueue.main.async(execute: { () -> Void in
                 self.getContact()
                 //self.view.removeSpinner()
             })
-            if deserializedResponse.objectForKey("success") != nil
+            if deserializedResponse.object(forKey: "success") != nil
             {
-                dispatch_async(dispatch_get_main_queue(), {
+                DispatchQueue.main.async(execute: {
                     //self.view.removeSpinner()
                     self.displayAlert("Sync to server successfully ", handler: nil)
                     
@@ -872,7 +896,7 @@ extension JoinViewController
             
             
         }) { (error) in
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            DispatchQueue.main.async(execute: { () -> Void in
                 
                 self.view.removeSpinner()
             })
@@ -890,16 +914,16 @@ extension JoinViewController
         //ProfileManager.sharedInstance.syncedContactArray.removeAll
         DataSessionManger.sharedInstance.getContactListForPage( { (response, contactPerson) in
             
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            ProfileManager.sharedInstance.syncedContactArray.appendContentsOf(contactPerson.data)
+            DispatchQueue.main.async(execute: { () -> Void in
+            ProfileManager.sharedInstance.syncedContactArray.append(contentsOf: contactPerson.data)
                // self.tableView.reloadData()
                 self.saveContacts(ProfileManager.sharedInstance.syncedContactArray)
-                NSNotificationCenter.defaultCenter().postNotificationName("ContactUpdated", object: nil)
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "ContactUpdated"), object: nil)
                 self.view.removeSpinner()
             })
             
         }) { (error) in
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            DispatchQueue.main.async(execute: { () -> Void in
                // self.tableView.reloadData()
                // self.view.removeSpinner()
             })
@@ -907,19 +931,19 @@ extension JoinViewController
         }
     }
     
-    func saveContacts(person:[SearchPerson])
+    func saveContacts(_ person:[SearchPerson])
     {
         let archivedObject = SearchPerson.archivePeople(person)
-        let defaults = NSUserDefaults.standardUserDefaults()
-        defaults.removeObjectForKey(contactStored)
-        defaults.setObject(archivedObject, forKey: contactStored)
+        let defaults = UserDefaults.standard
+        defaults.removeObject(forKey: contactStored)
+        defaults.set(archivedObject, forKey: contactStored)
         defaults.synchronize()
     }
     
     
     
     //MARK: CONVERT TO JSON
-    func getJsonFromArray(array: [PersonContact]) -> String
+    func getJsonFromArray(_ array: [PersonContact]) -> String
     {
         
         let jsonCompatibleArray = array.map { model in
@@ -933,9 +957,9 @@ extension JoinViewController
         
         do
         {
-            let data = try NSJSONSerialization.dataWithJSONObject(jsonCompatibleArray, options: NSJSONWritingOptions.PrettyPrinted)
+            let data = try JSONSerialization.data(withJSONObject: jsonCompatibleArray, options: JSONSerialization.WritingOptions.prettyPrinted)
             
-            let json = NSString(data: data, encoding: NSUTF8StringEncoding)
+            let json = NSString(data: data, encoding: String.Encoding.utf8.rawValue)
             if let json = json
             {
                 errorinString = json as String
@@ -955,30 +979,5 @@ extension JoinViewController
 extension MainSearchViewController
 {
     
-    func loginXMPP()
-    {
-        xmppClient = STXMPPClient.clientForHost(Configuration.chatServer, port: 5222, user: User.username, password: User.token)
-        ProfileManager.sharedInstance.xmppClient = xmppClient
-        self.xmppClient!.connectionStatus!.observeOn(UIScheduler()).observe {
-            event in
-            switch event {
-            case let .Failed(error):
-                NSLog("FirstViewController: Connection error \(error)")
-                TSMessage.showNotificationInViewController(self, title: "XMPP connection error", subtitle: error.localizedDescription , type: TSMessageNotificationType.Error)
-                if let xmppError = STXMPPStream.XMPPError(rawValue: error.code) {
-                    if xmppError == STXMPPStream.XMPPError.AuthFailed {
-                        User.logOut()
-                        self.navigationController!.popToRootViewControllerAnimated(true)
-                    }
-                }
-            case let .Next(event):
-                let (connected, _) = event
-                if !connected {
-                    //TODO Could not connect, inform
-                }
-            default:
-                break
-            }
-        }
-    }
+    
 }

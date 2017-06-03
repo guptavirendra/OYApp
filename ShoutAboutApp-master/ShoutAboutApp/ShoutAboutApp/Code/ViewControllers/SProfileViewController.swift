@@ -16,12 +16,12 @@ class SProfileViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 		
-		self.usernameField = UITextField(frame: CGRectZero)
+		self.usernameField = UITextField(frame: CGRect.zero)
 		self.view.addSubview(self.usernameField)
 		//self.usernameField.backgroundColor = UIColor.whiteColor()
 		self.usernameField.placeholder = "Please choose a nick"
-		self.usernameField.borderStyle = UITextBorderStyle.RoundedRect
-		self.usernameField.autocorrectionType = UITextAutocorrectionType.No
+		self.usernameField.borderStyle = UITextBorderStyle.roundedRect
+		self.usernameField.autocorrectionType = UITextAutocorrectionType.no
 		usernameField.snp_makeConstraints { make in
 			make.width.equalTo(self.view).multipliedBy(0.75)
 			make.height.equalTo(self.view).multipliedBy(0.06)
@@ -35,14 +35,14 @@ class SProfileViewController: UIViewController, UITextFieldDelegate {
         super.didReceiveMemoryWarning()
     }
 	
-	func textFieldShouldReturn(textField: UITextField) -> Bool {   //delegate method
+	func textFieldShouldReturn(_ textField: UITextField) -> Bool {   //delegate method
 		textField.resignFirstResponder()
-		self.usernameField.enabled = false
-		let displayName = self.usernameField.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+		self.usernameField.isEnabled = false
+		let displayName = self.usernameField.text!.trimmingCharacters(in: CharacterSet.whitespaces)
 		let stream = STXMPPClient.sharedInstance?.stream
 		stream!.updateVCard(displayName)
 		User.displayName = displayName
-		self.dismissViewControllerAnimated(true, completion: nil)
+		self.dismiss(animated: true, completion: nil)
 		return true
 	}
 }

@@ -20,12 +20,12 @@ extension UIColor {
     
     func toHex() -> String {
         
-        let rgbaComponents = CGColorGetComponents(self.CGColor)
+        let rgbaComponents = self.cgColor.components
         var hex = "#"
         
         for index in 0...3 {
             
-            let value = UInt8(rgbaComponents[index] * 255)
+            let value = UInt8((rgbaComponents?[index])! * 255)
             
             if (index == 3 && value == 255) == false {
                 
@@ -47,17 +47,17 @@ extension UIColor {
     ///  var rgba = UIColor().fromHex(hex: "#FC93") // UIColor(red: 1.0, green: 0.8, blue: 0.6, alpha: 0.2)
     ///  var rgba = UIColor().fromHex(hex: "#FFCC9933") // UIColor(red: 1.0, green: 0.8, blue: 0.6, alpha: 0.2)
     
-    func fromHex(hex hex: String) -> UIColor! {
+    func fromHex(hex: String) -> UIColor! {
         
-        let hex = hex.lowercaseString
-        let hexCharSet = NSCharacterSet(charactersInString: "#0123456789abcdef")
+        let hex = hex.lowercased()
+        let hexCharSet = CharacterSet(charactersIn: "#0123456789abcdef")
         
-        if hex.rangeOfCharacterFromSet(hexCharSet.invertedSet, options: .CaseInsensitiveSearch) != nil {
+        if hex.rangeOfCharacter(from: hexCharSet.inverted, options: .caseInsensitive) != nil {
             
             print("Error: Unknown character in HEX string \(hex)")
             
         } else {
-            if hex.substringToIndex(hex.startIndex.advancedBy(1)) == "#" {
+            if hex.substring(to: hex.characters.index(hex.startIndex, offsetBy: 1)) == "#" {
                 
                 let hexLength = hex.characters.count
                 
@@ -80,7 +80,7 @@ extension UIColor {
                     
                     for index in 0...range {
                         
-                        var hexChar = hex.substringWithRange(Range(start: hex.startIndex.advancedBy(multiply * index + 1), end: hex.startIndex.advancedBy(multiply * index + 1 + multiply)))
+                        var hexChar = hex.substring(with: (hex.characters.index(hex.startIndex, offsetBy: multiply * index + 1) ..< hex.characters.index(hex.startIndex, offsetBy: multiply * index + 1 + multiply)))
                         
                         // Duplicate char
                         if multiply == 1 {

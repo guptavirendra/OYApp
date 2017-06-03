@@ -50,7 +50,7 @@ class Configuration: NSObject {
         static let subscribeApi = "http://localhost:4002/api"
 	#else
 		static let chatServer = "139.59.31.73"
-		static private let apiServer = "http://\(chatServer)"
+		static fileprivate let apiServer = "http://\(chatServer)"
 		static let mainApi = "http://139.59.31.73/api"
 		static let pushApi = "\(apiServer)/push/api"
         static let subscribeApi = "\(apiServer)/subscribe/api"

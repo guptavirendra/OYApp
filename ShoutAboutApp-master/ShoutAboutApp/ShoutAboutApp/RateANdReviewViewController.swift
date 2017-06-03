@@ -7,6 +7,30 @@
 //
 
 import UIKit
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 class RateANdReviewViewController: UIViewController,UITableViewDataSource, UITableViewDelegate, UITextViewDelegate, ClickTableViewCellProtocol
 {
@@ -30,7 +54,7 @@ class RateANdReviewViewController: UIViewController,UITableViewDataSource, UITab
         super.viewDidLoad()
         //setBackIndicatorImage()
         
-        let appUserId = NSUserDefaults.standardUserDefaults().objectForKey(kapp_user_id) as! Int
+        let appUserId = UserDefaults.standard.object(forKey: kapp_user_id) as! Int
         if String(appUserId) == idString
         {
             subtractCount = 3
@@ -41,9 +65,9 @@ class RateANdReviewViewController: UIViewController,UITableViewDataSource, UITab
         //self.tableView.backgroundColor = bgColor
         self.automaticallyAdjustsScrollViewInsets = false
         
-        self.navigationController?.navigationBar.hidden = false
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.showKeyBoard(_:)), name: UIKeyboardDidShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.hideKeyBoard(_:)), name: UIKeyboardWillHideNotification, object: nil)
+        self.navigationController?.navigationBar.isHidden = false
+        NotificationCenter.default.addObserver(self, selector: #selector(self.showKeyBoard(_:)), name: NSNotification.Name.UIKeyboardDidShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.hideKeyBoard(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         let tapGesture = UITapGestureRecognizer()
         self.view.addGestureRecognizer(tapGesture)
         tapGesture.addTarget(self, action: #selector(self.hideKeyBoard(_:)))
@@ -57,10 +81,10 @@ class RateANdReviewViewController: UIViewController,UITableViewDataSource, UITab
         
     }
     
-    override func viewWillAppear(animated: Bool)
+    override func viewWillAppear(_ animated: Bool)
     {
         super.viewWillAppear(animated)
-        self.navigationController?.navigationBarHidden = false
+        self.navigationController?.isNavigationBarHidden = false
         //self.navigationController?.navigationBar.tintColor = appColor
         getReview()
     }
@@ -72,32 +96,32 @@ class RateANdReviewViewController: UIViewController,UITableViewDataSource, UITab
     }
     deinit
     {
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardDidShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardDidShow, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
 }
 
 extension RateANdReviewViewController
 {
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
         return (4 - subtractCount) + reviewUser.rateReviewList.count //allValidContacts.count //objects.count
     }
     
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
         if indexPath.row == (0-subtractCount)
         {
-            let cell = tableView.dequeueReusableCellWithIdentifier("RatingTableViewCell", forIndexPath: indexPath) as! RatingTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "RatingTableViewCell", for: indexPath) as! RatingTableViewCell
             cell.nameLabel.text = name
             cell.ratingView.delegate = self
             let urlString       = photo
             if urlString.characters.count != 0
             {
                 
-                cell.profileImageView.sd_setImageWithURL(NSURL(string:urlString ), placeholderImage: UIImage(named: "profile"))
+                //cell.profileImageView.sd_setImage(with: URL(string:urlString ), placeholderImage: UIImage(named: "profile"))
                 
             }else
             {
@@ -111,8 +135,8 @@ extension RateANdReviewViewController
         }
         if indexPath.row == (1-subtractCount)
         {
-            let cell = tableView.dequeueReusableCellWithIdentifier("WriteReviewTableViewCell", forIndexPath: indexPath) as! WriteReviewTableViewCell
-            cell.textView.layer.borderColor = UIColor.blackColor().CGColor
+            let cell = tableView.dequeueReusableCell(withIdentifier: "WriteReviewTableViewCell", for: indexPath) as! WriteReviewTableViewCell
+            cell.textView.layer.borderColor = UIColor.black.cgColor
             cell.textView.text = review
             review = cell.textView.text
             cell.textView.text = review
@@ -121,10 +145,10 @@ extension RateANdReviewViewController
         
         if indexPath.row == (2-subtractCount)
         {
-            let cell = tableView.dequeueReusableCellWithIdentifier("button", forIndexPath: indexPath) as! ClickTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "button", for: indexPath) as! ClickTableViewCell
             //cell.contentView.backgroundColor = bgColor
             cell.button.layer.borderWidth = 1.0
-            cell.button.layer.borderColor = appColor.CGColor
+            cell.button.layer.borderColor = appColor.cgColor
             cell.button.layer.cornerRadius = 2.0
             cell.delegate = self
             return cell
@@ -133,13 +157,13 @@ extension RateANdReviewViewController
         if indexPath.row == (3-subtractCount)
         {
             
-            let cell = tableView.dequeueReusableCellWithIdentifier("ReviewTableViewCell", forIndexPath: indexPath) as! ReviewTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "ReviewTableViewCell", for: indexPath) as! ReviewTableViewCell
             
             let urlString       = photo
             if urlString.characters.count != 0
             {
                 
-                cell.profileImageView.sd_setImageWithURL(NSURL(string:urlString ), placeholderImage: UIImage(named: "profile"))
+                //cell.profileImageView.sd_setImage(with: URL(string:urlString ), placeholderImage: UIImage(named: "profile"))
                 
             }else
             {
@@ -161,12 +185,12 @@ extension RateANdReviewViewController
                 if totalRating > 0 && totalRating <= 1
                 {
                     
-                    message.appendContentsOf(rating)
-                    message.appendContentsOf(" rating")
+                    message.append(rating)
+                    message.append(" rating")
                 }else
                 {
-                    message.appendContentsOf(rating)
-                    message.appendContentsOf(" ratings")
+                    message.append(rating)
+                    message.append(" ratings")
                     
                 }
             }
@@ -188,19 +212,19 @@ extension RateANdReviewViewController
                     
                     if ratingFloat > 0 && ratingFloat <= 1
                     {
-                        message.appendContentsOf(", ")
+                        message.append(", ")
                     }
                 }
                 
                 if total > 0 && total <= 1
                 {
-                    message.appendContentsOf(String(Int(total)))
-                    message.appendContentsOf(" review")
+                    message.append(String(Int(total)))
+                    message.append(" review")
                     
                 }else
                 {
-                    message.appendContentsOf(String(Int(total)))
-                    message.appendContentsOf(" reviews")
+                    message.append(String(Int(total)))
+                    message.append(" reviews")
                     
                 }
             }
@@ -315,7 +339,7 @@ extension RateANdReviewViewController
             
             let rateReviewer = reviewUser.rateReviewList[(indexPath.row-(4-subtractCount))]
             
-            let cell = tableView.dequeueReusableCellWithIdentifier("UesrReviewTableViewCell", forIndexPath: indexPath) as! UesrReviewTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "UesrReviewTableViewCell", for: indexPath) as! UesrReviewTableViewCell
             cell.nameLabel.text    = rateReviewer.appUser.name
             cell.commentLabel.text = rateReviewer.review
             
@@ -327,7 +351,7 @@ extension RateANdReviewViewController
             let urlString       = rateReviewer.appUser.photo
             if urlString.characters.count != 0
             {
-                cell.profileImageView.sd_setImageWithURL(NSURL(string:urlString ), placeholderImage: UIImage(named: "profile"))
+                //cell.profileImageView.sd_setImage(with: URL(string:urlString ), placeholderImage: UIImage(named: "profile"))
                 
             }else
             {
@@ -342,7 +366,7 @@ extension RateANdReviewViewController
         
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
     {
         if indexPath.row == 0-subtractCount
         {
@@ -367,7 +391,7 @@ extension RateANdReviewViewController
         
     }
     
-    func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat
     {
         if indexPath.row == 1-subtractCount
         {
@@ -388,7 +412,7 @@ extension RateANdReviewViewController
 
 extension RateANdReviewViewController
 {
-    func textViewDidBeginEditing(textView: UITextView)
+    func textViewDidBeginEditing(_ textView: UITextView)
     {
         activeTextView = textView
         textView.becomeFirstResponder()
@@ -412,7 +436,7 @@ extension RateANdReviewViewController
      }*/
     
     
-    func textViewDidEndEditing(textView: UITextView)
+    func textViewDidEndEditing(_ textView: UITextView)
     {
         review = textView.text
         // textView.text = nil
@@ -447,7 +471,7 @@ extension RateANdReviewViewController
      
      */
     
-    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool
     {
         //review.appendContentsOf(text)
         if text == "\n"
@@ -460,9 +484,9 @@ extension RateANdReviewViewController
     
     
     
-    func showKeyBoard(notification: NSNotification)
+    func showKeyBoard(_ notification: Notification)
     {
-        if ((activeTextView?.superview?.superview?.superview?.isKindOfClass(WriteReviewTableViewCell)) != nil)
+        if ((activeTextView?.superview?.superview?.superview?.isKind(of: WriteReviewTableViewCell.self)) != nil)
         {
             if let cell = activeTextView?.superview?.superview?.superview as? WriteReviewTableViewCell
             {
@@ -473,9 +497,9 @@ extension RateANdReviewViewController
                 // self.tableView.scrollIndicatorInsets = contentInsets
                 
                 
-                if let indexPath = self.tableView.indexPathForCell(cell)
+                if let indexPath = self.tableView.indexPath(for: cell)
                 {
-                    self.tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Top, animated: true)
+                    self.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
                 }
                 
             }
@@ -483,7 +507,7 @@ extension RateANdReviewViewController
     }
     
     
-    func hideKeyBoard(notification: NSNotification)
+    func hideKeyBoard(_ notification: Notification)
     {
         
         if  activeTextView != nil
@@ -491,7 +515,7 @@ extension RateANdReviewViewController
             let contentInsets:UIEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
             self.tableView.contentInset = contentInsets
             self.tableView.scrollIndicatorInsets = contentInsets
-            self.tableView.scrollToNearestSelectedRowAtScrollPosition(.Bottom, animated: true)
+            self.tableView.scrollToNearestSelectedRow(at: .bottom, animated: true)
         }
     }
     
@@ -499,7 +523,7 @@ extension RateANdReviewViewController
 
 extension RateANdReviewViewController:RatingControlDelegate
 {
-    func buttonClicked(cell:ClickTableViewCell)
+    func buttonClicked(_ cell:ClickTableViewCell)
     {
         let ratingInt = Int(rating)
         if ratingInt == 0 || ratingInt > 5
@@ -511,13 +535,13 @@ extension RateANdReviewViewController:RatingControlDelegate
         {
             if  activeTextView != nil
             {
-                review.appendContentsOf((activeTextView?.text)!)
+                review.append((activeTextView?.text)!)
                 activeTextView?.resignFirstResponder()
             }
-            if self.tableView.indexPathForCell(cell) != nil
+            if self.tableView.indexPath(for: cell) != nil
             {
-                let appUserId = NSUserDefaults.standardUserDefaults().objectForKey(kapp_user_id) as! Int
-                let appUserToken = NSUserDefaults.standardUserDefaults().objectForKey(kapp_user_token) as! String
+                let appUserId = UserDefaults.standard.object(forKey: kapp_user_id) as! Int
+                let appUserToken = UserDefaults.standard.object(forKey: kapp_user_token) as! String
                 
                 if idString != nil
                 {
@@ -535,18 +559,18 @@ extension RateANdReviewViewController:RatingControlDelegate
         
     }
     
-    func ratingSelected(ratingInt: Int)
+    func ratingSelected(_ ratingInt: Int)
     {
         rating = String(ratingInt)
     }
     
     
-    func postReview(dict:[String:String])
+    func postReview(_ dict:[String:String])
     {
         self.view.showSpinner()
         DataSessionManger.sharedInstance.addRateReview(dict, onFinish: { (response, deserializedResponse) in
             
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            DispatchQueue.main.async(execute: { () -> Void in
                 // self.tableView.reloadData()
                 self.view.removeSpinner()
                 self.activeTextView?.text = nil
@@ -555,7 +579,7 @@ extension RateANdReviewViewController:RatingControlDelegate
             
         }) { (error) in
             
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            DispatchQueue.main.async(execute: { () -> Void in
                 // self.tableView.reloadData()
                 self.view.removeSpinner()
                 self.getReview()
@@ -568,8 +592,8 @@ extension RateANdReviewViewController:RatingControlDelegate
     func getReview()
     {
         self.view.showSpinner()
-        let appUserId = NSUserDefaults.standardUserDefaults().objectForKey(kapp_user_id) as! Int
-        let appUserToken = NSUserDefaults.standardUserDefaults().objectForKey(kapp_user_token) as! String
+        let appUserId = UserDefaults.standard.object(forKey: kapp_user_id) as! Int
+        let appUserToken = UserDefaults.standard.object(forKey: kapp_user_token) as! String
         
         if idString != nil
         {
@@ -578,7 +602,7 @@ extension RateANdReviewViewController:RatingControlDelegate
             
             DataSessionManger.sharedInstance.getContactReviewList(dict, onFinish: { (response, reviewUser) in
                 
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                DispatchQueue.main.async(execute: { () -> Void in
                     
                     self.reviewUser = reviewUser
                     self.tableView.reloadData()
@@ -587,7 +611,7 @@ extension RateANdReviewViewController:RatingControlDelegate
                 
             }) { (error) in
                 
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                DispatchQueue.main.async(execute: { () -> Void in
                     // self.tableView.reloadData()
                     self.view.removeSpinner()
                 })
@@ -601,7 +625,7 @@ extension UIViewController
 {
     func setBackIndicatorImage()
     {
-        self.navigationController?.navigationBar.tintColor = UIColor.whiteColor()
+        self.navigationController?.navigationBar.tintColor = UIColor.white
         
     }
 }

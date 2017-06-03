@@ -15,14 +15,14 @@ class WriteReviewTableViewCell: UITableViewCell
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        textView.layer.borderColor = UIColor.blackColor().CGColor
+        textView.layer.borderColor = UIColor.black.cgColor
         textView.layer.borderWidth = 1.0
         textView.layer.cornerRadius = 2.0
         //self.contentView.backgroundColor = bgColor
         // Initialization code
     }
 
-    override func setSelected(selected: Bool, animated: Bool)
+    override func setSelected(_ selected: Bool, animated: Bool)
     {
         super.setSelected(selected, animated: animated)
 

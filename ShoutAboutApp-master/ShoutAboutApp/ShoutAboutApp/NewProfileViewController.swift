@@ -53,10 +53,10 @@ class NewProfileViewController: ProfileViewController, UIPopoverPresentationCont
         {
         didSet
         {
-            self.doneButton?.hidden = false
-            self.doneButton?.setTitle("Done", forState: .Normal)
-            self.doneButton?.titleLabel?.textColor = UIColor.whiteColor()
-            self.doneButton?.setImage(nil, forState: .Normal)
+            self.doneButton?.isHidden = false
+            self.doneButton?.setTitle("Done", for: UIControlState())
+            self.doneButton?.titleLabel?.textColor = UIColor.white
+            self.doneButton?.setImage(nil, for: UIControlState())
             
         }
     }
@@ -83,9 +83,9 @@ class NewProfileViewController: ProfileViewController, UIPopoverPresentationCont
     override func viewDidLoad()
     {
         super.viewDidLoad()
-        self.doneButton?.hidden = true
+        self.doneButton?.isHidden = true
         //self.navigationController?.navigationBar.tintColor = UIColor.whiteColor();
-        self.navigationController?.navigationBar.hidden    = false
+        self.navigationController?.navigationBar.isHidden    = false
         ratReviewBaseScreen?.layer.cornerRadius = 5.0
         
     }
@@ -96,7 +96,7 @@ class NewProfileViewController: ProfileViewController, UIPopoverPresentationCont
         // Dispose of any resources that can be recreated.
     }
     
-    override func viewDidAppear(animated: Bool)
+    override func viewDidAppear(_ animated: Bool)
     {
         super.viewDidAppear(animated)
         
@@ -113,15 +113,15 @@ class NewProfileViewController: ProfileViewController, UIPopoverPresentationCont
         if isExisingContact == false
         {
             favoriteLabel?.text = "Add to Contact"
-            favoriteButton?.setImage(nil, forState: .Normal)
-            favoriteButton?.setTitle("+", forState: .Normal)
+            favoriteButton?.setImage(nil, for: UIControlState())
+            favoriteButton?.setTitle("+", for: UIControlState())
             
         }
         
         
         
-        self.view.userInteractionEnabled = self.shouldDisabledUserInteraction
-        self.navigationController?.navigationBarHidden = false
+        self.view.isUserInteractionEnabled = self.shouldDisabledUserInteraction
+        self.navigationController?.isNavigationBarHidden = false
         self.navigationController?.navigationBar.tintColor = appColor
         nameLabel?.text     = personalProfile.name
         locationLabel?.text = personalProfile.address
@@ -144,34 +144,34 @@ class NewProfileViewController: ProfileViewController, UIPopoverPresentationCont
             totalreviewString = "Total Review: 0"
         }
         
-        totalReviewButton?.setTitle(totalreviewString, forState: .Normal)
+        totalReviewButton?.setTitle(totalreviewString, for: UIControlState())
         
         
         
         if personalProfile.idString == ProfileManager.sharedInstance.personalProfile.idString
         {
-            self.spamBlockBaseView?.hidden = true
-            self.cameraButton!.hidden      = false
+            self.spamBlockBaseView?.isHidden = true
+            self.cameraButton!.isHidden      = false
             callLabel?.text                = "Status"
-            chatLabel?.hidden              = true
+            chatLabel?.isHidden              = true
             chatLabel?.text                = "Review"
             callButtonLeading?.constant    = 40.0
             callLabelLeading?.constant     = 40.0
             chatButtonWidth?.constant      = 0.0
             detailButtonTrailing?.constant = 40.0
             detailLabelTrailing?.constant  = 40.0
-            callButton?.setImage(UIImage(named: "message"), forState: .Normal)
+            callButton?.setImage(UIImage(named: "message"), for: UIControlState())
             
         }else
         {
-            self.spamBlockBaseView?.hidden = false
-            self.cameraButton!.hidden      = true
+            self.spamBlockBaseView?.isHidden = false
+            self.cameraButton!.isHidden      = true
             
         }
 
         
     }
-    override func viewWillAppear(animated: Bool)
+    override func viewWillAppear(_ animated: Bool)
     {
         super.viewWillAppear(animated)
         self.updateData()
@@ -180,12 +180,12 @@ class NewProfileViewController: ProfileViewController, UIPopoverPresentationCont
     
 
 
-    @IBAction override func goToReviewScreen(sender:UIButton)
+    @IBAction override func goToReviewScreen(_ sender:UIButton)
     {
         if sender.tag == 7
         {
             
-            let rateANdReviewViewController = self.storyboard?.instantiateViewControllerWithIdentifier("RateANdReviewViewController") as? RateANdReviewViewController
+            let rateANdReviewViewController = self.storyboard?.instantiateViewController(withIdentifier: "RateANdReviewViewController") as? RateANdReviewViewController
             
             rateANdReviewViewController?.idString = String(personalProfile.idString)
             rateANdReviewViewController?.name = personalProfile.name
@@ -201,12 +201,12 @@ class NewProfileViewController: ProfileViewController, UIPopoverPresentationCont
             let stringID = String(personalProfile.idString)
             let ejabberID = stringID+"@localhost"
             let user =  OneRoster.userFromRosterForJID(jid: ejabberID)
-            print("\(OneRoster.buddyList.sections)")
+            print("\(String(describing: OneRoster.buddyList.sections))")
             //let chattingViewController = self.storyboard?.instantiateViewControllerWithIdentifier("ChattingViewController") as? ChattingViewController
             
             //let user =   OneRoster.userFromRosterAtIndexPath(indexPath: indexPath!)
             
-            let chatVc = self.storyboard?.instantiateViewControllerWithIdentifier("ChatsViewController") as? ChatsViewController
+            let chatVc = self.storyboard?.instantiateViewController(withIdentifier: "ChatsViewController") as? ChatsViewController
             
             chatVc!.senderDisplayName = ProfileManager.sharedInstance.personalProfile.name
             chatVc?.senderId          = String(ProfileManager.sharedInstance.personalProfile.idString)
@@ -224,13 +224,13 @@ class NewProfileViewController: ProfileViewController, UIPopoverPresentationCont
         {
             
             var inputTextField: UITextField?
-            let passwordPrompt = UIAlertController(title: "Status", message: "", preferredStyle: UIAlertControllerStyle.Alert)
-            passwordPrompt.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Default, handler: nil))
-            passwordPrompt.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: { (action) -> Void in
+            let passwordPrompt = UIAlertController(title: "Status", message: "", preferredStyle: UIAlertControllerStyle.alert)
+            passwordPrompt.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.default, handler: nil))
+            passwordPrompt.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: { (action) -> Void in
                 // Now do whatever you want with inputTextField (remember to unwrap the optional)
                 
-                let appUserId = NSUserDefaults.standardUserDefaults().objectForKey(kapp_user_id) as! Int
-                let appUserToken = NSUserDefaults.standardUserDefaults().objectForKey(kapp_user_token) as! String
+                let appUserId = UserDefaults.standard.object(forKey: kapp_user_id) as! Int
+                let appUserToken = UserDefaults.standard.object(forKey: kapp_user_token) as! String
                 
                 var  email = ""
                 if let _ = self.personalProfile.email
@@ -267,34 +267,34 @@ class NewProfileViewController: ProfileViewController, UIPopoverPresentationCont
                    self.postData(dict)
                 print(" sta\(inputTextField!.text)")
             }))
-            passwordPrompt.addTextFieldWithConfigurationHandler({(textField: UITextField!) in
+            passwordPrompt.addTextField(configurationHandler: {(textField: UITextField!) in
                 textField.text        = self.personalProfile.status
                 textField.placeholder = "Status"
-                textField.borderStyle = .None
+                textField.borderStyle = .none
                 inputTextField = textField
                 
             })
             
-            presentViewController(passwordPrompt, animated: true, completion: nil)
+            present(passwordPrompt, animated: true, completion: nil)
             
             
         }else
         {
             //let personContact = allValidContacts[indexPath!.row]
             let   phone = "tel://"+personalProfile.mobileNumber
-            UIApplication.sharedApplication().openURL(NSURL(string: phone)!)
+            UIApplication.shared.openURL(URL(string: phone)!)
         }
     }
     
     
-    @IBAction func goToDetailScreen(sender:UIButton){
+    @IBAction func goToDetailScreen(_ sender:UIButton){
         
-        let navController = self.storyboard?.instantiateViewControllerWithIdentifier("prfileNav") as? UINavigationController
+        let navController = self.storyboard?.instantiateViewController(withIdentifier: "prfileNav") as? UINavigationController
         
         let profileViewController = navController?.viewControllers.first as? ProfileViewController
         profileViewController?.delegate = self
         profileViewController?.personalProfile = self.personalProfile
-        navController!.modalPresentationStyle = .Popover
+        navController!.modalPresentationStyle = .popover
         popOver = navController!.popoverPresentationController
         
         popOver.delegate = self
@@ -307,18 +307,18 @@ class NewProfileViewController: ProfileViewController, UIPopoverPresentationCont
        // navController.title = "Detail"
         //controller!.popoverPresentationController!.delegate = self
         //profileViewController!.view.backgroundColor = UIColor.clearColor()
-        profileViewController!.popoverPresentationController?.backgroundColor = UIColor.grayColor()
+        profileViewController!.popoverPresentationController?.backgroundColor = UIColor.gray
         
         
-        self.presentViewController(navController!, animated: true, completion: nil)
+        self.present(navController!, animated: true, completion: nil)
 
         
     }
     
-    func adaptivePresentationStyleForPresentationController(controller: UIPresentationController) -> UIModalPresentationStyle
+    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle
     {
         // Return no adaptive presentation style, use default presentation behaviour
-        return .None
+        return .none
     }
     
     func profileDismissied()
@@ -327,19 +327,19 @@ class NewProfileViewController: ProfileViewController, UIPopoverPresentationCont
     }
     
     
-    @IBAction func Clicked(sender:AnyObject)
+    @IBAction func Clicked(_ sender:AnyObject)
     {
        
-        self.dismissViewControllerAnimated(true, completion: nil)
+        self.dismiss(animated: true, completion: nil)
          
         
-        let alertVc = self.storyboard?.instantiateViewControllerWithIdentifier("AlertViewController") as? AlertViewController
+        let alertVc = self.storyboard?.instantiateViewController(withIdentifier: "AlertViewController") as? AlertViewController
         self.navigationController!.pushViewController(alertVc!, animated: true)
         
         
     }
     
-    @IBAction override func favoriteButtonClicked(sender:UIButton)
+    @IBAction override func favoriteButtonClicked(_ sender:UIButton)
     {
         //sender.setImage(nil, forState: .Normal)
         //sender.setTitle("+", forState: .Normal)
@@ -359,12 +359,12 @@ class NewProfileViewController: ProfileViewController, UIPopoverPresentationCont
             addNewContactVC.delegate      = self
             addNewContactVC.allowsActions = false
             let nav = UINavigationController(rootViewController: addNewContactVC)
-            let lightBlue = UIColor(hexString: "1F8DC8")
-            let medBlue = UIColor(hexString: "FFFFFF")
-            nav.navigationBar.tintColor =  appColor
-            nav.navigationBar.barTintColor = UIColor.whiteColor()
+            //let lightBlue = UIColor(hexString: "1F8DC8")
+            //let medBlue = UIColor(hexString: "FFFFFF")
+            //nav.navigationBar.tintColor =  appColor
+            //nav.navigationBar.barTintColor = UIColor.white
             
-             self.presentViewController(nav, animated: true, completion: nil)
+             self.present(nav, animated: true, completion: nil)
             
         }else
         {
@@ -374,9 +374,9 @@ class NewProfileViewController: ProfileViewController, UIPopoverPresentationCont
         
     }
     
-    func contactViewController(viewController: CNContactViewController, didCompleteWithContact contact: CNContact?)
+    func contactViewController(_ viewController: CNContactViewController, didCompleteWith contact: CNContact?)
     {
-        viewController.dismissViewControllerAnimated(true, completion: nil)
+        viewController.dismiss(animated: true, completion: nil)
         let joinVC = JoinViewController()
         joinVC.getContacts()
          

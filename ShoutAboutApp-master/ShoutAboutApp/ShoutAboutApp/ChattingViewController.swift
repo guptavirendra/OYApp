@@ -9,6 +9,30 @@
 import UIKit
 import Darwin
 import AVFoundation
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 let fmax = FLT_MAX
 
@@ -31,7 +55,7 @@ class DynamicTextView:UITextView
         
         if ((self.heightConstraint == nil))
         {
-           self.heightConstraint =   NSLayoutConstraint(item: self, attribute:.Height , relatedBy:NSLayoutRelation.Equal, toItem: nil, attribute: .Height, multiplier: 1.0, constant: size.height)
+           self.heightConstraint =   NSLayoutConstraint(item: self, attribute:.height , relatedBy:NSLayoutRelation.equal, toItem: nil, attribute: .height, multiplier: 1.0, constant: size.height)
             self.addConstraint(self.heightConstraint!)
             
             
@@ -65,10 +89,10 @@ class ChattingViewController: UIViewController, UITextViewDelegate
     override func viewDidLoad()
     {
         super.viewDidLoad()
-        self.navigationController?.navigationBar.hidden = false
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.showKeyBoard(_:)), name: UIKeyboardDidShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.hideKeyBoard(_:)), name: UIKeyboardWillHideNotification, object: nil)
-        self.toolBar.hidden = true
+        self.navigationController?.navigationBar.isHidden = false
+        NotificationCenter.default.addObserver(self, selector: #selector(self.showKeyBoard(_:)), name: NSNotification.Name.UIKeyboardDidShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.hideKeyBoard(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        self.toolBar.isHidden = true
         self.view.backgroundColor = bgColor
         self.tableView.backgroundColor = bgColor
         profileImageView.makeImageRoundedWithGray()
@@ -84,7 +108,7 @@ class ChattingViewController: UIViewController, UITextViewDelegate
     }
     
     
-    override func viewWillAppear(animated: Bool)
+    override func viewWillAppear(_ animated: Bool)
     {
         super.viewWillAppear(animated)
         if let photo  = chatPerson.photo
@@ -97,8 +121,8 @@ class ChattingViewController: UIViewController, UITextViewDelegate
 
     deinit
     {
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardDidShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardDidShow, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
 
 }
@@ -107,23 +131,23 @@ class ChattingViewController: UIViewController, UITextViewDelegate
 
 extension ChattingViewController
 {
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
         return chatArray.count
     }
     
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
+    func tableView(_ tableView: UITableView, cellForRowAtIndexPath indexPath: IndexPath) -> UITableViewCell
     {
         let chatDetail = chatArray[indexPath.row]
         print("message type \(chatDetail.message_type)")
         if chatDetail.message_type == "video" ||  chatDetail.message_type == "image"
         {
         
-            let cell = tableView.dequeueReusableCellWithIdentifier("ChatImageTableViewCell", forIndexPath: indexPath) as! ChatImageTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "ChatImageTableViewCell", for: indexPath) as! ChatImageTableViewCell
             if chatDetail.video != nil
             {
-                let url = NSURL(string: chatDetail.video!)
+                let url = URL(string: chatDetail.video!)
                 cell.imagesView.image =  self.thumbnail(sourceURL: url!)
                 cell.timeLabel.text        = chatDetail.created_at
                 
@@ -131,12 +155,12 @@ extension ChattingViewController
             
             if chatDetail.image != nil
             {
-                let url = NSURL(string: chatDetail.image!)
-               cell.imagesView.setImageWithURL(url)
+                let url = URL(string: chatDetail.image!)
+               //cell.imagesView.setImageWith(url)
             }
             return cell
         }
-        let cell = tableView.dequeueReusableCellWithIdentifier("ChattingTableViewCell", forIndexPath: indexPath) as! ChattingTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ChattingTableViewCell", for: indexPath) as! ChattingTableViewCell
         if chatDetail.text?.characters.count > 0
         {
             cell.messageLabel.text     = chatDetail.text
@@ -151,7 +175,7 @@ extension ChattingViewController
     }
     
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat
+    func tableView(_ tableView: UITableView, heightForRowAtIndexPath indexPath: IndexPath) -> CGFloat
     {
         let chatDetail = chatArray[indexPath.row]
         print("message type \(chatDetail.message_type)")
@@ -163,7 +187,7 @@ extension ChattingViewController
         
     }
     
-    func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: IndexPath) -> CGFloat
     {
         let chatDetail = chatArray[indexPath.row]
         print("message type \(chatDetail.message_type)")
@@ -175,7 +199,7 @@ extension ChattingViewController
         return 57
     }
     
-    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath)
+    func tableView(_ tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: IndexPath)
     {
         let currentCount = indexPath.row + 1
         if (currentCount < self.totalMessage)
@@ -194,12 +218,12 @@ extension ChattingViewController
 
 extension ChattingViewController
 {
-    func showKeyBoard(notification: NSNotification)
+    func showKeyBoard(_ notification: Notification)
     {
-        let dictInfo: NSDictionary = notification.userInfo!
-        let kbFrame = dictInfo.objectForKey(UIKeyboardFrameEndUserInfoKey)
-        let  animationDuration = dictInfo.objectForKey(UIKeyboardAnimationDurationUserInfoKey)?.doubleValue
-        let  keyboardFrame: CGRect  = (kbFrame?.CGRectValue())!
+        let dictInfo: NSDictionary = notification.userInfo! as NSDictionary
+        let kbFrame = dictInfo.object(forKey: UIKeyboardFrameEndUserInfoKey)
+        let  animationDuration = (dictInfo.object(forKey: UIKeyboardAnimationDurationUserInfoKey) as AnyObject).doubleValue
+        let  keyboardFrame: CGRect  = ((kbFrame as AnyObject).cgRectValue)!
         var  height:CGFloat =  keyboardFrame.size.height ;
         if (self.tabBarController?.tabBar) != nil
         {
@@ -223,39 +247,39 @@ extension ChattingViewController
          }*/
         
         
-        UIView.animateWithDuration(animationDuration!)
-        {
+        UIView.animate(withDuration: animationDuration!, animations: {
             self.view.layoutIfNeeded()
             self.tableView.layoutIfNeeded()
             if self.chatArray.count > 0
             {
-                let indexPath = NSIndexPath(forRow: self.chatArray.count - 1, inSection: 0)
-                self.tableView.selectRowAtIndexPath(indexPath, animated: true, scrollPosition: .Top)
+                let indexPath = IndexPath(row: self.chatArray.count - 1, section: 0)
+                self.tableView.selectRow(at: indexPath, animated: true, scrollPosition: .top)
                 
             }
             
-        }
+        })
+        
         
     }
     
     
-    func hideKeyBoard(notification: NSNotification)
+    func hideKeyBoard(_ notification: Notification)
     {
-        let dictInfo: NSDictionary = notification.userInfo!
-        let  animationDuration = dictInfo.objectForKey(UIKeyboardAnimationDurationUserInfoKey)?.doubleValue
+        let dictInfo: NSDictionary = notification.userInfo! as NSDictionary
+        let  animationDuration = (dictInfo.object(forKey: UIKeyboardAnimationDurationUserInfoKey) as AnyObject).doubleValue
         constraintTextFieldBottom!.constant = 0
         tableViewBottomConstant!.constant = 0;
         
         
-        UIView.animateWithDuration(animationDuration!)
-        {
+        UIView.animate(withDuration: animationDuration!, animations: {
             self.view.layoutIfNeeded()
         
-        }
+        })
+        
         
     }
     
-    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool
     {
         if text == "\n"
         {
@@ -281,18 +305,18 @@ extension ChattingViewController
         
     }
     
-    func getChatForPage(page:String)
+    func getChatForPage(_ page:String)
     {
         self.view.showSpinner()
         
        DataSessionManger.sharedInstance.getChatConversationForID(String(self.chatPerson.idString), page: page, onFinish: { (response, chatConversation) in
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+        DispatchQueue.main.async(execute: { () -> Void in
             
             self.totalMessage = chatConversation.total
             self.nextPage     = chatConversation.current_page
             self.lastPage     = chatConversation.last_page
-            self.chatArray.appendContentsOf(chatConversation.data)
-            self.chatArray.sortInPlace({ (chatdetail1, chatdetail2) -> Bool in
+            self.chatArray.append(contentsOf: chatConversation.data)
+            self.chatArray.sort(by: { (chatdetail1, chatdetail2) -> Bool in
                 chatdetail1.created_at < chatdetail2.created_at
              })
             self.tableView.reloadData()
@@ -302,7 +326,7 @@ extension ChattingViewController
         
         }) { (error) in
             
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            DispatchQueue.main.async(execute: { () -> Void in
                 
                  self.view.removeSpinner()
                 
@@ -316,15 +340,15 @@ extension ChattingViewController
 
 extension ChattingViewController
 {
-    func thumbnail(sourceURL sourceURL:NSURL) -> UIImage
+    func thumbnail(sourceURL:URL) -> UIImage
     {
-        let asset = AVAsset(URL: sourceURL)
+        let asset = AVAsset(url: sourceURL)
         let imageGenerator = AVAssetImageGenerator(asset: asset)
         let time = CMTime(seconds: 1, preferredTimescale: 1)
         
         do {
-            let imageRef = try imageGenerator.copyCGImageAtTime(time, actualTime: nil)
-            return UIImage(CGImage: imageRef)
+            let imageRef = try imageGenerator.copyCGImage(at: time, actualTime: nil)
+            return UIImage(cgImage: imageRef)
         } catch {
             print(error)
             return UIImage(named: "profile")!
@@ -334,7 +358,7 @@ extension ChattingViewController
 extension ChattingViewController
 {
     
-    @IBAction func sendButtonClicked(sender:UIButton)
+    @IBAction func sendButtonClicked(_ sender:UIButton)
     {
         chatTextView.resignFirstResponder()
         
@@ -350,18 +374,18 @@ extension ChattingViewController
             
             self.chatTextView.text = nil
             
-            sendTextMessage(message)
+            sendTextMessage(message!)
         }
     
     }
     
-    func sendTextMessage(message:String)
+    func sendTextMessage(_ message:String)
     {
         
         self.view.showSpinner()
         
         DataSessionManger.sharedInstance.sendTextMessage(String(self.chatPerson.idString), message: message, onFinish: { (response, deserializedResponse) in
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            DispatchQueue.main.async(execute: { () -> Void in
                 
                 self.view.removeSpinner()
                 self.chatArray.removeAll()
@@ -369,7 +393,7 @@ extension ChattingViewController
                 
             })
             }) { (error) in
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                DispatchQueue.main.async(execute: { () -> Void in
                     
                     self.view.removeSpinner()
                     
@@ -381,17 +405,17 @@ extension ChattingViewController
 
 extension ChattingViewController
 {
-    func setProfileImgeForURL(urlString:String)
+    func setProfileImgeForURL(_ urlString:String)
     {
-        self.profileImageView.setImageWithURL(NSURL(string:urlString ), placeholderImage: UIImage(named: "profile"))
+        //self.profileImageView.setImageWith(URL(string:urlString ), placeholderImage: UIImage(named: "profile"))
     }
     
-    @IBAction func attachButtonClicked(sender: AnyObject)
+    @IBAction func attachButtonClicked(_ sender: AnyObject)
     {
         
         
     }
-    @IBAction func callButtonClicked(sender: AnyObject)
+    @IBAction func callButtonClicked(_ sender: AnyObject)
     {
         
     }

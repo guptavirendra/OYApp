@@ -13,13 +13,13 @@ class photopreviewViewController: UIViewController {
 
         print(picname)
 
-        NSURLSession.sharedSession().dataTaskWithURL(NSURL(string: picname!)!, completionHandler: { (data, response, error) -> Void in
+        URLSession.shared.dataTask(with: URL(string: picname!)!, completionHandler: { (data, response, error) -> Void in
 //            self.view.showSpinner()
             if error != nil {
                 print(error)
                 return
             }
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            DispatchQueue.main.async(execute: { () -> Void in
                 let image = UIImage(data: data!)
                 self.previewImg.image = image
 //                self.view.removeSpinner()
@@ -30,8 +30,8 @@ class photopreviewViewController: UIViewController {
 //        previewImg.imageFromServerURL(picname!)
         
         self.navigationItem.title = "Preview"
-        self.navigationController!.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName : UIColor.whiteColor()]
-        self.navigationController!.navigationBar.tintColor = UIColor.whiteColor();
+        self.navigationController!.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName : UIColor.white]
+        self.navigationController!.navigationBar.tintColor = UIColor.white;
         
         
     }
@@ -42,9 +42,9 @@ class photopreviewViewController: UIViewController {
     }
     
 
-    @IBAction func btnPreviewClose(sender: AnyObject)
+    @IBAction func btnPreviewClose(_ sender: AnyObject)
     {
-        self.navigationController?.popViewControllerAnimated(true)
+        self.navigationController?.popViewController(animated: true)
     }
     
 

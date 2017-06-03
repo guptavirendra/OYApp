@@ -15,7 +15,7 @@ import SwiftyJSON
 class ContactsViewModel {
 	let disposer = CompositeDisposable()
 	let contacts = MutableProperty<[STContact]>([])
-	private unowned var xmppClient: STXMPPClient
+	fileprivate unowned var xmppClient: STXMPPClient
 	
 	init(xmpp: STXMPPClient) {
 		self.xmppClient = xmpp
@@ -26,11 +26,11 @@ class ContactsViewModel {
 		disposer.dispose()
 	}
 	
-	private func setupBindings() {
+	fileprivate func setupBindings() {
 		self.setupContactsFetchBindings()
 	}
 	
-	private func setupContactsFetchBindings()
+	fileprivate func setupContactsFetchBindings()
     {
 		disposer.addDisposable(
 			self.getContacts()
@@ -66,9 +66,9 @@ class ContactsViewModel {
 				.start {
 					[unowned self] event in
 					switch event {
-					case let .Next(username, vcard):
+					case let .next(username, vcard):
 						self.addContact(username, vcard:vcard)
-					case let .Failed(error):
+					case let .failed(error):
 						NSLog("Error fetching contacts \(error)")
 					default:
 						break
@@ -84,7 +84,7 @@ class ContactsViewModel {
 				.start {
 					[unowned self] event in
 					switch event {
-					case let .Next(username, vcard):
+					case let .next(username, vcard):
 						self.addContact(username, vcard:vcard)
 					default:
 						break
@@ -92,7 +92,7 @@ class ContactsViewModel {
 		})
 	}
 	
-	private func addContact(username: String, vcard: XMPPvCardTemp) {
+	fileprivate func addContact(_ username: String, vcard: XMPPvCardTemp) {
 		//Don't add self to contacts list
 		if (username == User.username || vcard.nickname == nil) {
 			//return
@@ -105,14 +105,14 @@ class ContactsViewModel {
 		var contacts = self.contacts.value
 		let contact = STContact(username: username, displayName: vcard.nickname)
 		contacts.append(contact)
-		contacts.sortInPlace { (c1, c2) in
+		contacts.sort { (c1, c2) in
 			return c1.displayName < c2.displayName
 		}
 		
 		self.contacts.value  = contacts
 	}
 	
-	private func getContacts() -> SignalProducer<Result<Any, NSError>, NSError> {
+	fileprivate func getContacts() -> SignalProducer<Result<Any, NSError>, NSError> {
 		return STHttp.get("\(Configuration.mainApi)/user_contact_list?app_user_id=31653&app_user_token=%242y%2410%246PRbH2TSZYMWqWuvQJcO%2FuW05ZnNXDYB4p7Bj8eogEJ9VVacfEJbK", auth:("31653"/*User.username*/,"%242y%2410%246PRbH2TSZYMWqWuvQJcO%2FuW05ZnNXDYB4p7Bj8eogEJ9VVacfEJbK" /*User.token*/))
 	}
 	

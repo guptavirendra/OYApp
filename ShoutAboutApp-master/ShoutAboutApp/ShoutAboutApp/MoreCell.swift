@@ -4,11 +4,11 @@ import UIKit
 
 class MoreCell: UITableViewCell {
 
-    @IBOutlet private var label: UILabel!
+    @IBOutlet fileprivate var label: UILabel!
 
     static let reuseIdentifier = "MoreCell"
 
-    lazy private var textColour = {
+    lazy fileprivate var textColour = {
         UIColor(red: 0.196, green: 0.3098, blue: 0.52, alpha: 1.0)
     }()
 

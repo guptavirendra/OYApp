@@ -24,8 +24,8 @@ class ThumbnailedYoutubeView: UIView, YTPlayerViewDelegate, UIGestureRecognizerD
 	var playbackPosition = MutableProperty<Float>(0.0)
 	
 	init(url: String, title: String?, channelTitle: String?, outgoing: Bool, size: CGSize, videoHeightOfWholeHeight: CGFloat) {
-		let frame = CGRectMake(0.0, 0.0, size.width, size.height)
-		self.videoViewSize = CGSizeMake(size.width, videoHeightOfWholeHeight)
+		let frame = CGRect(x: 0.0, y: 0.0, width: size.width, height: size.height)
+		self.videoViewSize = CGSize(width: size.width, height: videoHeightOfWholeHeight)
 		self.url = url
 		self.title = title
 		self.channelTitle = channelTitle
@@ -44,18 +44,18 @@ class ThumbnailedYoutubeView: UIView, YTPlayerViewDelegate, UIGestureRecognizerD
 		fatalError("init(coder:) has not been implemented")
 	}
 	
-	private func setupBindings() {
+	fileprivate func setupBindings() {
 		self.setupPlaybackPosMonitoringBindings()
 	}
 	
-	private func setupPlaybackPosMonitoringBindings() {
+	fileprivate func setupPlaybackPosMonitoringBindings() {
 		self.playbackPosition.producer
 			.throttle(1.0, onScheduler: QueueScheduler.mainQueueScheduler)
 			.filter { $0 > 1.0 }
 			.start {
 				event in
 				switch event {
-				case let .Next(playbackPos):
+				case let .next(playbackPos):
 					let rewinded = max(1.0, playbackPos - 2.0) //Rewind 2 secs to give the user a context where she is returning to
 					VideoStore.setPlaybackPosition(rewinded, forVideoId: self.url)
 				default:
@@ -64,29 +64,29 @@ class ThumbnailedYoutubeView: UIView, YTPlayerViewDelegate, UIGestureRecognizerD
 		}
 	}
 	
-	private func addTitleView() {
+	fileprivate func addTitleView() {
 		if title != nil {
 			//Place the frame below the video
-			let frame = CGRectMake(self.frame.origin.x, self.frame.origin.y + self.videoViewSize.height, self.frame.width, self.frame.height - self.videoViewSize.height)
+			let frame = CGRect(x: self.frame.origin.x, y: self.frame.origin.y + self.videoViewSize.height, width: self.frame.width, height: self.frame.height - self.videoViewSize.height)
 			let view = UIView(frame: frame)
-			view.backgroundColor = UIColor.whiteColor()
+			view.backgroundColor = UIColor.white
 			self.addSubview(view)
 			
 			let label = UILabel(frame: frame)
-			label.bounds = CGRectInset(view.frame, 15.0, 5.0)
+			label.bounds = view.frame.insetBy(dx: 15.0, dy: 5.0)
 			label.numberOfLines = 1
 			if channelTitle != nil {
 				label.text = "\(channelTitle): \(title)"
 			} else {
 				label.text = title
 			}
-			label.font = UIFont.systemFontOfSize(UIFont.smallSystemFontSize())
-			label.textColor = UIColor.lightGrayColor()
+			label.font = UIFont.systemFont(ofSize: UIFont.smallSystemFontSize)
+			label.textColor = UIColor.lightGray
 			self.addSubview(label)
 		}
 	}
 	
-	private func startYTViewAdd() {
+	fileprivate func startYTViewAdd() {
 		if let thumbnailImage = cachedScreenshot() {
 			//NOTE TODO! For some reason the cachedPlaceholderView bounds are 500x500 instead of 250x250 that is written to cache
 			cachedPlaceholderView = UIImageView(image: thumbnailImage)
@@ -102,15 +102,15 @@ class ThumbnailedYoutubeView: UIView, YTPlayerViewDelegate, UIGestureRecognizerD
 			self.loadPlayerView()
 		}
 		
-		cachedPlaceholderView?.contentMode = UIViewContentMode.ScaleAspectFill
+		cachedPlaceholderView?.contentMode = UIViewContentMode.scaleAspectFill
 		cachedPlaceholderView?.clipsToBounds = true
 		self.addSubview(cachedPlaceholderView!)
 	}
 
 	func handleTap(_: UIGestureRecognizer) {
 		//Put a spinner on top of the screenshot
-		let spinner = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
-		spinner.center = cachedPlaceholderView!.convertPoint(cachedPlaceholderView!.center, fromView: cachedPlaceholderView?.superview)
+		let spinner = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+		spinner.center = cachedPlaceholderView!.convert(cachedPlaceholderView!.center, from: cachedPlaceholderView?.superview)
 		cachedPlaceholderView!.addSubview(spinner)
         spinner.startAnimating()
 		self.loadPlayerView()
@@ -122,7 +122,7 @@ class ThumbnailedYoutubeView: UIView, YTPlayerViewDelegate, UIGestureRecognizerD
 		}
 		
 		//https://developers.google.com/youtube/player_parameters#autohide
-		let playerVars: [NSObject : AnyObject] = [
+		let playerVars: [AnyHashable: Any] = [
 			"controls" : 1, //Show player controls
 			"autohide" : 1, //Hide controls automatically
 			"playsinline" : 1, //Can play embedded
@@ -133,20 +133,20 @@ class ThumbnailedYoutubeView: UIView, YTPlayerViewDelegate, UIGestureRecognizerD
 		var frame = self.frame
 		frame.size = self.videoViewSize
 		ytView = YTPlayerView(frame: frame)
-		ytView!.loadWithVideoId(ThumbnailedYoutubeView.videoId(self.url)!, playerVars: playerVars)
+		ytView!.load(withVideoId: ThumbnailedYoutubeView.videoId(self.url)!, playerVars: playerVars)
 		ytView!.delegate = self
 	}
 	
-	func playerViewDidBecomeReady(playerView: YTPlayerView!) {
+	func playerViewDidBecomeReady(_ playerView: YTPlayerView!) {
 		NSLog("Playerview ready")
         self.cachedPlaceholderView?.removeFromSuperview()
         self.addSubview(self.ytView!)
         
         //If there's a screenshot available, we know that the playerViewDidBecomeReady was called from tapping the screenshot
         //-> we can start playing the video and snapshotting is not needed
-		if self.cachedPlaceholderView != nil && self.cachedPlaceholderView!.isKindOfClass(UIImageView.self) {
+		if self.cachedPlaceholderView != nil && self.cachedPlaceholderView!.isKind(of: UIImageView.self) {
 			if let playbackPos = VideoStore.playbackPosition(self.url) {
-				ytView!.seekToSeconds(playbackPos, allowSeekAhead: true)
+				ytView!.seek(toSeconds: playbackPos, allowSeekAhead: true)
 			}
 			ytView?.playVideo()
         } else {
@@ -156,77 +156,77 @@ class ThumbnailedYoutubeView: UIView, YTPlayerViewDelegate, UIGestureRecognizerD
 		}
 	}
 
-	func playerView(playerView: YTPlayerView!, didChangeToState state: YTPlayerState) {
+	func playerView(_ playerView: YTPlayerView!, didChangeTo state: YTPlayerState) {
 		switch (state) {
-		case YTPlayerState.Playing:
+		case YTPlayerState.playing:
 			NSLog("Started playback")
-		case YTPlayerState.Paused:
+		case YTPlayerState.paused:
 			NSLog("Paused playback")
-		case YTPlayerState.Buffering:
+		case YTPlayerState.buffering:
 			NSLog("Buffering playback")
-		case YTPlayerState.Queued:
+		case YTPlayerState.queued:
 			NSLog("Queued playback")
-		case YTPlayerState.Ended:
+		case YTPlayerState.ended:
 			NSLog("Ended playback")
 			VideoStore.clearPlaybackPosition(self.url)
-		case YTPlayerState.Unstarted:
+		case YTPlayerState.unstarted:
 			NSLog("Unstarted playback")
-		case YTPlayerState.Unknown:
+		case YTPlayerState.unknown:
 			NSLog("Unknown playerstate")
 		}
 	}
 
-	func playerView(playerView: YTPlayerView!, didChangeToQuality quality: YTPlaybackQuality) {
+	func playerView(_ playerView: YTPlayerView!, didChangeTo quality: YTPlaybackQuality) {
 		NSLog("playerView Changed to quality \(quality)")
 	}
 	
-	func playerView(playerView: YTPlayerView!, receivedError error: YTPlayerError) {
+	func playerView(_ playerView: YTPlayerView!, receivedError error: YTPlayerError) {
 		NSLog("Did change quality \(error)")
 	}
 	
-	func playerView(playerView: YTPlayerView!, didPlayTime playTime: Float) {
+	func playerView(_ playerView: YTPlayerView!, didPlayTime playTime: Float) {
 		//TODO you can track metrics how much time is spent watching videos
 		self.playbackPosition.value = playTime
 	}
 	
-	private func cachedScreenshot() -> UIImage? {
+	fileprivate func cachedScreenshot() -> UIImage? {
 		let hashStr = "\(self.url.hash)"
-		return SDImageCache.sharedImageCache().imageFromDiskCacheForKey(hashStr)
+		return SDImageCache.shared().imageFromDiskCache(forKey: hashStr)
 	}
 	
-	private func spinnerPlaceholderView() -> UIView? {
-		let spinner = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
-		let view = JSQMessagesMediaPlaceholderView(frame: CGRectMake(0.0, 0.0, 200.0, 120.0), backgroundColor: (UIApplication.sharedApplication().delegate as! AppDelegate).backgroundColor, activityIndicatorView: spinner)
-		view.frame = CGRectMake(0.0, 0.0, videoViewSize.width, videoViewSize.height)
+	fileprivate func spinnerPlaceholderView() -> UIView? {
+		let spinner = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+		let view = JSQMessagesMediaPlaceholderView(frame: CGRect(x: 0.0, y: 0.0, width: 200.0, height: 120.0), backgroundColor: (UIApplication.shared.delegate as! AppDelegate).backgroundColor, activityIndicatorView: spinner)
+		view.frame = CGRect(x: 0.0, y: 0.0, width: videoViewSize.width, height: videoViewSize.height)
 		return view
 	}
 	
-	private func snapShot(delay: Double) {
+	fileprivate func snapShot(_ delay: Double) {
 		let hashStr = "\(self.url.hash)"
 		//Do not recreate snapshots for images that already exist
-		if SDImageCache.sharedImageCache().imageFromDiskCacheForKey(hashStr) != nil {
+		if SDImageCache.shared().imageFromDiskCache(forKey: hashStr) != nil {
 			return
 		}
 	
 		//Displatch after to make sure that the youtube has been rendered properly
-		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(delay * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), {
+		DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(delay * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: {
 			[unowned self] in
 			let snapshot = UIImage.imageForView(self.ytView!)
 			if snapshot != nil {
 				//TODO! Caches forever, cleanup the cache regularly or figure out a TTL
-				SDImageCache.sharedImageCache().storeImage(snapshot!, forKey: hashStr)
+				SDImageCache.shared().store(snapshot!, forKey: hashStr)
 			}
 		})
 	}
 	
-	static func videoId(strUrl: String) -> String? {
+	static func videoId(_ strUrl: String) -> String? {
 		//https://www.youtube.com/watch?v=nZZpy0BHJH8
 		//Grab ?v=nZZpy0BHJH8
-		let paramsStr = strUrl.componentsSeparatedByString("?")[1]
+		let paramsStr = strUrl.components(separatedBy: "?")[1]
 		//Check if there are more params and find the one with "v"
-		let params = paramsStr.componentsSeparatedByString("&")
+		let params = paramsStr.components(separatedBy: "&")
 		for singleParamStr in params {
-			var singleParamComponents = singleParamStr.componentsSeparatedByString("=")
+			var singleParamComponents = singleParamStr.components(separatedBy: "=")
 			if singleParamComponents.count > 0 && singleParamComponents[0] == "v" {
 				return singleParamComponents[1]
 			}

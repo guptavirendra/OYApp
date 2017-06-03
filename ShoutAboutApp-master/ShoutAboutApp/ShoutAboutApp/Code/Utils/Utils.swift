@@ -10,7 +10,7 @@ import Foundation
 
 func statusBarHeight() -> CGFloat
 {
-	let statusBarSize: CGSize = UIApplication.sharedApplication().statusBarFrame.size
+	let statusBarSize: CGSize = UIApplication.shared.statusBarFrame.size
 	return CGFloat(min(Float(statusBarSize.width), Float(statusBarSize.height)))
 }
 

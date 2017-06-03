@@ -18,9 +18,9 @@ class ViewController: UIViewController
     override func viewDidLoad()
     {
         super.viewDidLoad()
-        self.navigationController?.navigationBarHidden = true
-        mobileNumberTextField.addTarget(self, action:#selector(ViewController.edited), forControlEvents:UIControlEvents.EditingChanged)
-        submitButton.userInteractionEnabled = false
+        self.navigationController?.isNavigationBarHidden = true
+        mobileNumberTextField.addTarget(self, action:#selector(ViewController.edited), for:UIControlEvents.editingChanged)
+        submitButton.isUserInteractionEnabled = false
         submitButton.alpha = 0.5
         textFieldBaseView.makeBorder()
         //self.view.backgroundColor = bgColor
@@ -32,7 +32,7 @@ class ViewController: UIViewController
         // Dispose of any resources that can be recreated.
     }
 
-    @IBAction func submitButtonClicked(sender: UIButton)
+    @IBAction func submitButtonClicked(_ sender: UIButton)
     {
         ///print hit webservice
         print("Mobile Number to Submit \(mobileNumberString)")
@@ -52,17 +52,16 @@ class ViewController: UIViewController
                 print(" response :\(response) , deserializedResponse \(deserializedResponse) ")
                 if deserializedResponse is NSDictionary
                 {
-                    if deserializedResponse.objectForKey(message) != nil
+                    if deserializedResponse.object(forKey: message) != nil
                     {
-                        let messageString = deserializedResponse.objectForKey(message) as? String
+                        let messageString = deserializedResponse.object(forKey: message) as? String
                         if messageString == otpMessage
                         {
-                            dispatch_async(dispatch_get_main_queue(),
-                                {
+                            DispatchQueue.main.async(execute: {
                                     self.view.removeSpinner()
-                                let otpViewController = self.storyboard?.instantiateViewControllerWithIdentifier("OTPViewController") as? OTPViewController
+                                let otpViewController = self.storyboard?.instantiateViewController(withIdentifier: "OTPViewController") as? OTPViewController
                                 otpViewController?.mobileNumberString = self.mobileNumberString
-                                self.presentViewController(otpViewController!, animated: true, completion: nil)
+                                self.present(otpViewController!, animated: true, completion: nil)
                                 
                             });
                             // print go ahead
@@ -75,8 +74,7 @@ class ViewController: UIViewController
                 
                 }, onError: { (error) in
                     print(" error:\(error)")
-                    dispatch_async(dispatch_get_main_queue(),
-                        {
+                    DispatchQueue.main.async(execute: {
                             self.view.removeSpinner()
                     })
                     
@@ -91,19 +89,19 @@ class ViewController: UIViewController
 
 extension ViewController:UITextFieldDelegate
 {
-    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool
     {
-        var text:NSString =  textField.text ?? ""
-        text =  text.stringByReplacingCharactersInRange(range, withString: string)
+        var text:NSString =  textField.text! as NSString 
+        text =  text.replacingCharacters(in: range, with: string) as NSString
         
         
         if text.length == 10
         {
-            submitButton.userInteractionEnabled = true
+            submitButton.isUserInteractionEnabled = true
             submitButton.alpha = 1.0
         }else
         {
-            submitButton.userInteractionEnabled = false
+            submitButton.isUserInteractionEnabled = false
             submitButton.alpha = 0.5
         }
         
@@ -115,15 +113,15 @@ extension ViewController:UITextFieldDelegate
     }
     func edited()
     {
-        print("Edited \(mobileNumberTextField.text)")
+        print("Edited \(String(describing: mobileNumberTextField.text))")
         mobileNumberString = mobileNumberTextField.text!
         if mobileNumberString.characters.count == 10
         {
-            submitButton.userInteractionEnabled = true
+            submitButton.isUserInteractionEnabled = true
             submitButton.alpha = 1.0
         }else
         {
-            submitButton.userInteractionEnabled = false
+            submitButton.isUserInteractionEnabled = false
             submitButton.alpha = 0.5
         }
 
@@ -136,22 +134,22 @@ extension UIViewController
 {
     /* Displays alert message
      */
-    func displayAlertMessage(userMessage: String)
+    func displayAlertMessage(_ userMessage: String)
     {
         
-        let alert = UIAlertController(title: "Alert", message: userMessage, preferredStyle: UIAlertControllerStyle.Alert)
-        let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil)
+        let alert = UIAlertController(title: "Alert", message: userMessage, preferredStyle: UIAlertControllerStyle.alert)
+        let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil)
         alert.addAction(okAction)
-        self.presentViewController(alert, animated: true, completion: nil)
+        self.present(alert, animated: true, completion: nil)
         
     }
     
-    func displayAlert(userMessage: String, handler: ((UIAlertAction) -> Void)?)
+    func displayAlert(_ userMessage: String, handler: ((UIAlertAction) -> Void)?)
     {
-        let alert = UIAlertController(title: "Alert", message: userMessage, preferredStyle: UIAlertControllerStyle.Alert)
-        let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: handler)
+        let alert = UIAlertController(title: "Alert", message: userMessage, preferredStyle: UIAlertControllerStyle.alert)
+        let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: handler)
         alert.addAction(okAction)
-        self.presentViewController(alert, animated: true, completion: nil)
+        self.present(alert, animated: true, completion: nil)
         
     }
 }
@@ -166,10 +164,10 @@ public extension UIView
     
     func setGraphicEffects()
     {
-        self.layer.shadowColor   = UIColor.lightGrayColor().CGColor
+        self.layer.shadowColor   = UIColor.lightGray.cgColor
         self.layer.shadowOpacity = 1.0
         self.layer.shadowRadius  = 3.0
-        self.layer.shadowOffset  = CGSizeMake(1.0, 1.0)
+        self.layer.shadowOffset  = CGSize(width: 1.0, height: 1.0)
         self.layer.masksToBounds = false
         
     }
@@ -178,15 +176,15 @@ public extension UIView
         self.showSpinner(true, userInteractionEnabled: false)
     }
     
-    public func showSpinnerWithUserInteractionEnabled(userInteractionEnabled: Bool, dimBackground: Bool)
+    public func showSpinnerWithUserInteractionEnabled(_ userInteractionEnabled: Bool, dimBackground: Bool)
     {
         self.showSpinnerInView(self, spinnerType:"", dimBackgroundEnabled: dimBackground, userInteractionEnabled: userInteractionEnabled)
     }
     
-    public func showSpinner(dimBackground: Bool, userInteractionEnabled: Bool)
+    public func showSpinner(_ dimBackground: Bool, userInteractionEnabled: Bool)
     {
         
-        let window = UIApplication.sharedApplication().keyWindow
+        let window = UIApplication.shared.keyWindow
         
         self.showSpinnerInView(window!, spinnerType: "", dimBackgroundEnabled: dimBackground, userInteractionEnabled: userInteractionEnabled)
         
@@ -194,10 +192,10 @@ public extension UIView
     }
     
     //Add ProgressView
-    public func showSpinnerInView(view:UIView, spinnerType:String, dimBackgroundEnabled: Bool, userInteractionEnabled: Bool)
+    public func showSpinnerInView(_ view:UIView, spinnerType:String, dimBackgroundEnabled: Bool, userInteractionEnabled: Bool)
     {
         self.removeSpinner()
-        dispatch_async(dispatch_get_main_queue(), { //() -> Void in
+        DispatchQueue.main.async(execute: { //() -> Void in
             
             let viewSize: CGFloat = 44
             let imageSize: CGFloat = 26
@@ -208,48 +206,48 @@ public extension UIView
             dimBackground.frame = view.frame
             if userInteractionEnabled
             {
-                dimBackground.userInteractionEnabled = false
+                dimBackground.isUserInteractionEnabled = false
             }
             else
             {
-                dimBackground.userInteractionEnabled = true
+                dimBackground.isUserInteractionEnabled = true
             }
             if dimBackgroundEnabled
             {
-                dimBackground.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.2)
+                dimBackground.backgroundColor = UIColor.black.withAlphaComponent(0.2)
             }
             else
             {
-                dimBackground.backgroundColor = UIColor.clearColor()
+                dimBackground.backgroundColor = UIColor.clear
             }
             dimBackground.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview(dimBackground)
             
-            view.addConstraint(NSLayoutConstraint.init(item: dimBackground, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: view, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0.0))
-            view.addConstraint(NSLayoutConstraint.init(item: dimBackground, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: view, attribute: NSLayoutAttribute.CenterY, multiplier: 1.0, constant: 0.0))
-            view.addConstraint(NSLayoutConstraint.init(item: dimBackground, attribute: NSLayoutAttribute.Top, relatedBy: NSLayoutRelation.Equal, toItem: view, attribute: NSLayoutAttribute.Top, multiplier: 1.0, constant: 0.0))
-            view.addConstraint(NSLayoutConstraint.init(item: dimBackground, attribute: NSLayoutAttribute.Bottom, relatedBy: NSLayoutRelation.Equal, toItem: view, attribute: NSLayoutAttribute.Bottom, multiplier: 1.0, constant: 0.0))
-            view.addConstraint(NSLayoutConstraint.init(item: dimBackground, attribute: NSLayoutAttribute.Leading, relatedBy: NSLayoutRelation.Equal, toItem: view, attribute: NSLayoutAttribute.Leading, multiplier: 1.0, constant: 0.0))
-            view.addConstraint(NSLayoutConstraint.init(item: dimBackground, attribute: NSLayoutAttribute.Trailing, relatedBy: NSLayoutRelation.Equal, toItem: view, attribute: NSLayoutAttribute.Trailing, multiplier: 1.0, constant: 0.0))
+            view.addConstraint(NSLayoutConstraint.init(item: dimBackground, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.centerX, multiplier: 1.0, constant: 0.0))
+            view.addConstraint(NSLayoutConstraint.init(item: dimBackground, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.centerY, multiplier: 1.0, constant: 0.0))
+            view.addConstraint(NSLayoutConstraint.init(item: dimBackground, attribute: NSLayoutAttribute.top, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.top, multiplier: 1.0, constant: 0.0))
+            view.addConstraint(NSLayoutConstraint.init(item: dimBackground, attribute: NSLayoutAttribute.bottom, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.bottom, multiplier: 1.0, constant: 0.0))
+            view.addConstraint(NSLayoutConstraint.init(item: dimBackground, attribute: NSLayoutAttribute.leading, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.leading, multiplier: 1.0, constant: 0.0))
+            view.addConstraint(NSLayoutConstraint.init(item: dimBackground, attribute: NSLayoutAttribute.trailing, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.trailing, multiplier: 1.0, constant: 0.0))
             
             // Progress View Background
             let progressBackground = UIView()
             progressBackground.tag = 5002
-            progressBackground.frame = CGRectMake(0, 0, viewSize, viewSize)
-            progressBackground.backgroundColor = UIColor.clearColor()
+            progressBackground.frame = CGRect(x: 0, y: 0, width: viewSize, height: viewSize)
+            progressBackground.backgroundColor = UIColor.clear
             progressBackground.translatesAutoresizingMaskIntoConstraints = false
             dimBackground.addSubview(progressBackground)
             
-            progressBackground.addConstraint(NSLayoutConstraint.init(item: progressBackground, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1.0, constant: 44))
-            progressBackground.addConstraint(NSLayoutConstraint.init(item: progressBackground, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1.0, constant: 44))
-            dimBackground.addConstraint(NSLayoutConstraint.init(item: progressBackground, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: dimBackground, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0.0))
-            dimBackground.addConstraint(NSLayoutConstraint.init(item: progressBackground, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: dimBackground, attribute: NSLayoutAttribute.CenterY, multiplier: 1.0, constant: 0.0))
+            progressBackground.addConstraint(NSLayoutConstraint.init(item: progressBackground, attribute: NSLayoutAttribute.width, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1.0, constant: 44))
+            progressBackground.addConstraint(NSLayoutConstraint.init(item: progressBackground, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1.0, constant: 44))
+            dimBackground.addConstraint(NSLayoutConstraint.init(item: progressBackground, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: dimBackground, attribute: NSLayoutAttribute.centerX, multiplier: 1.0, constant: 0.0))
+            dimBackground.addConstraint(NSLayoutConstraint.init(item: progressBackground, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: dimBackground, attribute: NSLayoutAttribute.centerY, multiplier: 1.0, constant: 0.0))
             
             // Logo Image
             let logoImage:UIImageView = UIImageView()
-            logoImage.frame = CGRectMake(0, 0, imageSize, imageSize)
+            logoImage.frame = CGRect(x: 0, y: 0, width: imageSize, height: imageSize)
             logoImage.center = progressBackground.center
-            logoImage.backgroundColor = UIColor.clearColor()
+            logoImage.backgroundColor = UIColor.clear
             //logoImage.image = UIImage.commonImageNamed("LogoImage.png")
             progressBackground.addSubview(logoImage)
             
@@ -257,24 +255,24 @@ public extension UIView
             let animation: CABasicAnimation = CABasicAnimation(keyPath: "transform.rotation.z")
             animation.duration = 2.0
             animation.repeatCount = HUGE
-            animation.fromValue = NSNumber(float: 0.0)
-            animation.toValue   = NSNumber(float: 2 * Float(M_PI))
+            animation.fromValue = NSNumber(value: 0.0 as Float)
+            animation.toValue   = NSNumber(value: 2 * Float(M_PI) as Float)
             
             // Gradient Circular
             let gradientView: UIView = GradientArcWithClearColorView().draw(progressBackground.frame)
             progressBackground.addSubview(gradientView)
-            gradientView.layer.addAnimation(animation, forKey: "rotate")
+            gradientView.layer.add(animation, forKey: "rotate")
         });
     }
     
     //Remove ProgressView
     public func removeSpinner()
     {
-        dispatch_async(dispatch_get_main_queue(), { //() -> Void in
+        DispatchQueue.main.async(execute: { //() -> Void in
             
             //if let app = UIApplication.sharedApplication().delegate as? AppDelegate, let window = app.window
             //{
-            let window = UIApplication.sharedApplication().keyWindow
+            let window = UIApplication.shared.keyWindow
             
             // If spinner view is added on Window
             if let dimView: UIView = window!.viewWithTag(5001)
@@ -306,7 +304,7 @@ public extension UIView
 class GradientArcWithClearColorView : UIView
 {
     
-    internal func draw(rect: CGRect) -> UIImageView {
+    internal func draw(_ rect: CGRect) -> UIImageView {
         // Gradient Clear Circular
         
         /* Prop */
@@ -329,20 +327,20 @@ class GradientArcWithClearColorView : UIView
         endArcColorProp.startArcColor = ColorUtil.toNotOpacityColor(color: endArcColorProp.endArcColor)
         
         // StartGradientMask
-        startGradientMaskProp.startArcColor = UIColor.blackColor()
-        startGradientMaskProp.endArcColor = UIColor.whiteColor()
+        startGradientMaskProp.startArcColor = UIColor.black
+        startGradientMaskProp.endArcColor = UIColor.white
         startGradientMaskProp.progressSize += 10.0
         startGradientMaskProp.arcLineWidth += 20.0
         
         // EndGradientMask
-        endGradientMaskProp.startArcColor = UIColor.whiteColor()
-        endGradientMaskProp.endArcColor = UIColor.blackColor()
+        endGradientMaskProp.startArcColor = UIColor.white
+        endGradientMaskProp.endArcColor = UIColor.black
         endGradientMaskProp.progressSize += 10.0
         endGradientMaskProp.arcLineWidth += 20.0
         
         // SolidMask
-        solidMaskProp.startArcColor = UIColor.blackColor()
-        solidMaskProp.endArcColor   = UIColor.blackColor()
+        solidMaskProp.startArcColor = UIColor.black
+        solidMaskProp.endArcColor   = UIColor.black
         
         /* Mask Image */
         // StartArcColorImage
@@ -384,59 +382,59 @@ class GradientArcWithClearColorView : UIView
         
         /* UIImageView */
         let imageView = UIImageView(image: image)
-        imageView.contentMode = .ScaleAspectFill
+        imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         
         return imageView
     }
     
-    internal func mask(image: UIImage, maskImage: UIImage) -> UIImage {
+    internal func mask(_ image: UIImage, maskImage: UIImage) -> UIImage {
         
-        let maskRef: CGImageRef = maskImage.CGImage!
-        let mask: CGImageRef = CGImageMaskCreate(
-            CGImageGetWidth(maskRef),
-            CGImageGetHeight(maskRef),
-            CGImageGetBitsPerComponent(maskRef),
-            CGImageGetBitsPerPixel(maskRef),
-            CGImageGetBytesPerRow(maskRef),
-            CGImageGetDataProvider(maskRef),
-            nil,
-            false)!
+        let maskRef: CGImage = maskImage.cgImage!
+        let mask: CGImage = CGImage(
+            maskWidth: maskRef.width,
+            height: maskRef.height,
+            bitsPerComponent: maskRef.bitsPerComponent,
+            bitsPerPixel: maskRef.bitsPerPixel,
+            bytesPerRow: maskRef.bytesPerRow,
+            provider: maskRef.dataProvider!,
+            decode: nil,
+            shouldInterpolate: false)!
         
-        let maskedImageRef: CGImageRef = CGImageCreateWithMask(image.CGImage, mask)!
-        let scale = UIScreen.mainScreen().scale
-        let maskedImage: UIImage = UIImage.init(CGImage: maskedImageRef, scale: scale, orientation: .Up)
+        let maskedImageRef: CGImage = image.cgImage!.masking(mask)!
+        let scale = UIScreen.main.scale
+        let maskedImage: UIImage = UIImage.init(cgImage: maskedImageRef, scale: scale, orientation: .up)
         
         return maskedImage
     }
     
-    internal func viewToUIImage(view: UIView) -> UIImage? {
+    internal func viewToUIImage(_ view: UIView) -> UIImage? {
         
-        let scale = UIScreen.mainScreen().scale
+        let scale = UIScreen.main.scale
         UIGraphicsBeginImageContextWithOptions(view.frame.size, false, scale)
-        view.layer.renderInContext(UIGraphicsGetCurrentContext()!)
+        view.layer.render(in: UIGraphicsGetCurrentContext()!)
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         
         return image
     }
     
-    internal func composite(image1 image1: UIImage, image2: UIImage, prop: Property) -> UIImage {
+    internal func composite(image1: UIImage, image2: UIImage, prop: Property) -> UIImage {
         
-        let scale = UIScreen.mainScreen().scale
+        let scale = UIScreen.main.scale
         UIGraphicsBeginImageContextWithOptions(image1.size, false, scale)
-        image1.drawInRect(
-            CGRectMake(0, 0, image1.size.width, image1.size.height),
-            blendMode: .Overlay,
+        image1.draw(
+            in: CGRect(x: 0, y: 0, width: image1.size.width, height: image1.size.height),
+            blendMode: .overlay,
             alpha: ColorUtil.toRGBA(color: prop.startArcColor).a)
-        image2.drawInRect(
-            CGRectMake(0, 0, image2.size.width, image2.size.height),
-            blendMode: .Overlay,
+        image2.draw(
+            in: CGRect(x: 0, y: 0, width: image2.size.width, height: image2.size.height),
+            blendMode: .overlay,
             alpha: ColorUtil.toRGBA(color: prop.endArcColor).a)
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         
-        return image
+        return image!
     }
 }
 
@@ -444,35 +442,35 @@ import UIKit
 
 public struct Property
 {
-    let arcLineCapStyle: CGLineCap = CGLineCap.Butt
+    let arcLineCapStyle: CGLineCap = CGLineCap.butt
     
     // Progress Size
     var progressSize: CGFloat = 44
     
     // Gradient Circular
     var arcLineWidth: CGFloat = 5.0
-    var startArcColor: UIColor = UIColor.clearColor()
-    var endArcColor: UIColor = UIColor.orangeColor()
+    var startArcColor: UIColor = UIColor.clear
+    var endArcColor: UIColor = UIColor.orange
     
     // Progress Rect
     var progressRect: CGRect
         {
         get {
-            return CGRectMake(0, 0, progressSize - arcLineWidth * 2, progressSize - arcLineWidth * 2)
+            return CGRect(x: 0, y: 0, width: progressSize - arcLineWidth * 2, height: progressSize - arcLineWidth * 2)
         }
     }
 }
 
 import UIKit
 
-public class ColorUtil {
+open class ColorUtil {
     
-    public class func toUIColor(r r: CGFloat, g: CGFloat, b: CGFloat, a: CGFloat) -> UIColor {
+    open class func toUIColor(r: CGFloat, g: CGFloat, b: CGFloat, a: CGFloat) -> UIColor {
         
         return UIColor(red: r/255.0, green: g/255.0, blue: b/255.0, alpha: a)
     }
     
-    internal class func toRGBA(color color: UIColor) -> (r: CGFloat, g: CGFloat, b: CGFloat, a: CGFloat) {
+    internal class func toRGBA(color: UIColor) -> (r: CGFloat, g: CGFloat, b: CGFloat, a: CGFloat) {
         var r: CGFloat = 0.0
         var g: CGFloat = 0.0
         var b: CGFloat = 0.0
@@ -483,10 +481,10 @@ public class ColorUtil {
         return (r, g, b, a)
     }
     
-    internal class func toNotOpacityColor(color color: UIColor) -> UIColor {
+    internal class func toNotOpacityColor(color: UIColor) -> UIColor {
         
-        if color == UIColor.clearColor() {
-            return UIColor.whiteColor()
+        if color == UIColor.clear {
+            return UIColor.white
         } else {
             return UIColor(
                 red: ColorUtil.toRGBA(color: color).r,
@@ -501,7 +499,7 @@ class ArcView : UIView {
     
     var prop: Property?
     var ratio: CGFloat = 1.0
-    var color: UIColor = UIColor.blackColor()
+    var color: UIColor = UIColor.black
     var lineWidth: CGFloat = 0.0
     
     required init?(coder aDecoder: NSCoder) {
@@ -511,18 +509,18 @@ class ArcView : UIView {
     init(frame: CGRect, lineWidth: CGFloat) {
         super.init(frame: frame)
         
-        self.backgroundColor = UIColor.clearColor()
+        self.backgroundColor = UIColor.clear
         self.layer.masksToBounds = true
         
         self.lineWidth = lineWidth
     }
     
-    override func drawRect(rect: CGRect) {
+    override func draw(_ rect: CGRect) {
         
         drawArc(rect)
     }
     
-    private func drawArc(rect: CGRect) {
+    fileprivate func drawArc(_ rect: CGRect) {
         
         guard let prop = prop else {
             return
@@ -556,7 +554,7 @@ class GradientArcView : UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        self.backgroundColor = UIColor.clearColor()
+        self.backgroundColor = UIColor.clear
         self.layer.masksToBounds = true
     }
     
@@ -564,7 +562,7 @@ class GradientArcView : UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func getGradientPointColor(ratio: CGFloat, startColor: UIColor, endColor: UIColor) -> UIColor {
+    fileprivate func getGradientPointColor(_ ratio: CGFloat, startColor: UIColor, endColor: UIColor) -> UIColor {
         
         let sColor = ColorUtil.toRGBA(color: startColor)
         let eColor = ColorUtil.toRGBA(color: endColor)
@@ -577,7 +575,7 @@ class GradientArcView : UIView {
         return UIColor(red: r, green: g, blue: b, alpha: a)
     }
     
-    override func drawRect(rect: CGRect) {
+    override func draw(_ rect: CGRect) {
         
         guard let prop = prop else {
             return
@@ -588,17 +586,17 @@ class GradientArcView : UIView {
         
         // workaround
         var limit: CGFloat = 1.0 // 32bit
-        if sizeof(limit.dynamicType) == 8 {
+        if MemoryLayout<CGFloat>.size == 8 {
             limit = 1.01 // 64bit
         }
-        
-        for var i: CGFloat = 0.0; i <= limit; i += 0.01
+        for i in stride(from: 0.0, to: 1.01, by: 0.01)
         {
+       
             
             let arcPoint: CGPoint = CGPoint(x: rect.width/2, y: rect.height/2)
             let arcRadius: CGFloat = circularRect.width/2 + prop.arcLineWidth/2
             let arcStartAngle: CGFloat = -CGFloat(M_PI_2)
-            let arcEndAngle: CGFloat = i * 2.0 * CGFloat(M_PI) - CGFloat(M_PI_2)
+            let arcEndAngle: CGFloat = CGFloat(i) * 2.0 * CGFloat(M_PI) - CGFloat(M_PI_2)
             
             if currentAngle == 0.0 {
                 currentAngle = arcStartAngle
@@ -612,7 +610,7 @@ class GradientArcView : UIView {
                                                  endAngle: arcEndAngle,
                                                  clockwise: true)
             
-            let strokeColor: UIColor = getGradientPointColor(i, startColor: prop.startArcColor, endColor: prop.endArcColor)
+            let strokeColor: UIColor = getGradientPointColor(CGFloat(i), startColor: prop.startArcColor, endColor: prop.endArcColor)
             strokeColor.setStroke()
             
             arc.lineWidth = prop.arcLineWidth
@@ -627,7 +625,7 @@ class GradientArcView : UIView {
 import UIKit
 protocol RatingControlDelegate
 {
-    func ratingSelected(ratingInt:Int)
+    func ratingSelected(_ ratingInt:Int)
 }
 
 class RatingControl: UIView
@@ -645,7 +643,7 @@ class RatingControl: UIView
     var spacing = 5
     var stars = 5
     
-    var color:UIColor = UIColor.whiteColor()
+    var color:UIColor = UIColor.white
         {
         didSet {
             for button in self.subviews
@@ -664,22 +662,22 @@ class RatingControl: UIView
         //star_red
         //star_green
         let filledStarImage = UIImage(named: "green_star_s")
-        let emptyStarImage = UIImage(named: "star")?.imageWithRenderingMode(.AlwaysTemplate)
+        let emptyStarImage = UIImage(named: "star")?.withRenderingMode(.alwaysTemplate)
         
         for  _ in 0..<5
         {
             let button = UIButton()
             
-            button.setImage(emptyStarImage, forState: .Normal)
-            button.tintColor = UIColor.whiteColor()
+            button.setImage(emptyStarImage, for: UIControlState())
+            button.tintColor = UIColor.white
             
             
-            button.setImage(filledStarImage, forState: .Selected)
-            button.setImage(filledStarImage, forState: [.Highlighted, .Selected])
+            button.setImage(filledStarImage, for: .selected)
+            button.setImage(filledStarImage, for: [.highlighted, .selected])
             
             button.adjustsImageWhenHighlighted = false
             
-            button.addTarget(self, action: #selector(RatingControl.ratingButtonTapped(_:)), forControlEvents: .TouchDown)
+            button.addTarget(self, action: #selector(RatingControl.ratingButtonTapped(_:)), for: .touchDown)
             ratingButtons += [button]
             addSubview(button)
         }
@@ -691,14 +689,14 @@ class RatingControl: UIView
         var buttonFrame = CGRect(x: 0, y: 0, width: buttonSize, height: buttonSize)
         
         // Offset each button's origin by the length of the button plus spacing.
-        for (index, button) in ratingButtons.enumerate() {
+        for (index, button) in ratingButtons.enumerated() {
             buttonFrame.origin.x = CGFloat(index * (buttonSize + spacing))
             button.frame = buttonFrame
         }
         updateButtonSelectionStates()
     }
     
-    override func intrinsicContentSize() -> CGSize {
+    override var intrinsicContentSize : CGSize {
         let buttonSize = Int(frame.size.height)
         let width = (buttonSize + spacing) * stars
         
@@ -707,40 +705,40 @@ class RatingControl: UIView
     
     // MARK: Button Action
     
-    func ratingButtonTapped(button: UIButton)
+    func ratingButtonTapped(_ button: UIButton)
     {
-        rating = ratingButtons.indexOf(button)! + 1
+        rating = ratingButtons.index(of: button)! + 1
         self.delegate?.ratingSelected(rating)
         updateButtonSelectionStates()
     }
     
     func updateButtonSelectionStates()
     {
-        for (index, button) in ratingButtons.enumerate()
+        for (index, button) in ratingButtons.enumerated()
         {
             // If the index of a button is less than the rating, that button should be selected.
             
             if rating > 3 && rating<=5
             {
                 let filledStarImage = UIImage(named: "green_star_s")
-                button.setImage(filledStarImage, forState: .Selected)
-                button.setImage(filledStarImage, forState: [.Highlighted, .Selected])
-                button.selected = index < rating
+                button.setImage(filledStarImage, for: .selected)
+                button.setImage(filledStarImage, for: [.highlighted, .selected])
+                button.isSelected = index < rating
             }else if rating > 1 && rating<=3
             {
                 let filledStarImage = UIImage(named: "orange_star_s")
                 
-                button.setImage(filledStarImage, forState: .Selected)
-                button.setImage(filledStarImage, forState: [.Highlighted, .Selected])
-                button.selected = index < rating
+                button.setImage(filledStarImage, for: .selected)
+                button.setImage(filledStarImage, for: [.highlighted, .selected])
+                button.isSelected = index < rating
                 
             }else
             {
                 let filledStarImage = UIImage(named: "red_star_s")
                 
-                button.setImage(filledStarImage, forState: .Selected)
-                button.setImage(filledStarImage, forState: [.Highlighted, .Selected])
-                button.selected = index < rating
+                button.setImage(filledStarImage, for: .selected)
+                button.setImage(filledStarImage, for: [.highlighted, .selected])
+                button.isSelected = index < rating
                 
             }
         }

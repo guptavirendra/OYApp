@@ -14,11 +14,11 @@ class MessagePhoto: NSObject, NYTPhoto
     
     var image: UIImage?
     var placeholderImage: UIImage?
-    let attributedCaptionTitle: NSAttributedString? = NSAttributedString(string: "", attributes: [NSForegroundColorAttributeName: UIColor.grayColor()])
-    let attributedCaptionCredit: NSAttributedString? = NSAttributedString(string: "", attributes: [NSForegroundColorAttributeName: UIColor.darkGrayColor()])
-    let attributedCaptionSummary: NSAttributedString? =  NSAttributedString(string: "", attributes: [NSForegroundColorAttributeName: UIColor.grayColor()])
+    let attributedCaptionTitle: NSAttributedString? = NSAttributedString(string: "", attributes: [NSForegroundColorAttributeName: UIColor.gray])
+    let attributedCaptionCredit: NSAttributedString? = NSAttributedString(string: "", attributes: [NSForegroundColorAttributeName: UIColor.darkGray])
+    let attributedCaptionSummary: NSAttributedString? =  NSAttributedString(string: "", attributes: [NSForegroundColorAttributeName: UIColor.gray])
 	
-    var imageData: NSData?
+    var imageData: Data?
      
     
     

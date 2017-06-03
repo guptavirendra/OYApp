@@ -20,7 +20,7 @@ class SearchViewDetailTableViewCell: UITableViewCell {
 	
 	override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
 		super.init(style: style, reuseIdentifier: reuseIdentifier)
-		self.searchDetails = UILabel(frame: CGRectZero)
+		self.searchDetails = UILabel(frame: CGRect.zero)
 		self.searchDetails.adjustsFontSizeToFitWidth = true
 		self.addSubview(self.searchDetails)
 		self.searchDetails!.snp_makeConstraints { make in
@@ -28,42 +28,42 @@ class SearchViewDetailTableViewCell: UITableViewCell {
 			make.right.equalTo(self.snp_right).offset(-10)
 		}
 		
-		self.subscribeButton = UIButton(frame: CGRectZero)
+		self.subscribeButton = UIButton(frame: CGRect.zero)
 		self.addSubview(subscribeButton)
-		subscribeButton.enabled = false
-		subscribeButton.backgroundColor = UIColor.whiteColor()
+		subscribeButton.isEnabled = false
+		subscribeButton.backgroundColor = UIColor.white
 		subscribeButton.layer.cornerRadius = 5
-		subscribeButton.setTitleColor(UIColor.lightGrayColor(), forState: UIControlState.Disabled)
-		subscribeButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
-		subscribeButton.setTitle("Loading...", forState: UIControlState.Disabled)
-		subscribeButton.setTitle("Subscribe", forState: UIControlState.Normal)
-		subscribeButton.titleLabel!.font = UIFont.boldSystemFontOfSize(UIFont.systemFontSize())
+		subscribeButton.setTitleColor(UIColor.lightGray, for: UIControlState.disabled)
+		subscribeButton.setTitleColor(UIColor.white, for: UIControlState())
+		subscribeButton.setTitle("Loading...", for: UIControlState.disabled)
+		subscribeButton.setTitle("Subscribe", for: UIControlState())
+		subscribeButton.titleLabel!.font = UIFont.boldSystemFont(ofSize: UIFont.systemFontSize)
 		subscribeButton.snp_makeConstraints { (make) -> Void in
 			make.width.equalTo(self).multipliedBy(0.6)
 			make.height.equalTo(self).multipliedBy(0.30)
 			make.centerX.equalTo(self)
 			make.centerY.equalTo(self)
 		}
-		subscribeButton.addTarget(self, action: #selector(SearchViewDetailTableViewCell.subscribePressed(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+		subscribeButton.addTarget(self, action: #selector(SearchViewDetailTableViewCell.subscribePressed(_:)), for: UIControlEvents.touchUpInside)
 		
-		self.unsubscribeButton = UIButton(frame: CGRectZero)
+		self.unsubscribeButton = UIButton(frame: CGRect.zero)
 		self.addSubview(unsubscribeButton)
-		unsubscribeButton.hidden = true
-		unsubscribeButton.enabled = false
+		unsubscribeButton.isHidden = true
+		unsubscribeButton.isEnabled = false
 		unsubscribeButton.backgroundColor = FlatGreen()
 		unsubscribeButton.layer.cornerRadius = 5
-		unsubscribeButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Disabled)
-		unsubscribeButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
-		unsubscribeButton.setTitle("Unsubscribing...", forState: UIControlState.Disabled)
-		unsubscribeButton.setTitle("Unsubscribe", forState: UIControlState.Normal)
-		unsubscribeButton.titleLabel!.font = UIFont.boldSystemFontOfSize(UIFont.systemFontSize())
+		unsubscribeButton.setTitleColor(UIColor.white, for: UIControlState.disabled)
+		unsubscribeButton.setTitleColor(UIColor.white, for: UIControlState())
+		unsubscribeButton.setTitle("Unsubscribing...", for: UIControlState.disabled)
+		unsubscribeButton.setTitle("Unsubscribe", for: UIControlState())
+		unsubscribeButton.titleLabel!.font = UIFont.boldSystemFont(ofSize: UIFont.systemFontSize)
 		unsubscribeButton.snp_makeConstraints { (make) -> Void in
 			make.width.equalTo(self).multipliedBy(0.6)
 			make.height.equalTo(self).multipliedBy(0.30)
 			make.centerX.equalTo(self)
 			make.centerY.equalTo(self)
 		}
-		unsubscribeButton.addTarget(self, action: "unsubscribePressed:", forControlEvents: UIControlEvents.TouchUpInside)
+		unsubscribeButton.addTarget(self, action: "unsubscribePressed:", for: UIControlEvents.touchUpInside)
 	}
 	
 	required init?(coder aDecoder: NSCoder) {
@@ -75,53 +75,53 @@ class SearchViewDetailTableViewCell: UITableViewCell {
 		// Initialization code
 	}
 	
-	func searchDetails(result: YoutubeSearchResult, searchViewModel: SearchViewModel) {
+	func searchDetails(_ result: YoutubeSearchResult, searchViewModel: SearchViewModel) {
 		self.setSubscriberCount(result)
 		self.viewModel = SubscriptionViewModel(searchResult: result, threadId: searchViewModel.currentThreadId, inConversationWith: searchViewModel.inConversationWith)
 		self.setupBindings(searchViewModel)
 		self.viewModel!.fetchDetails()
 	}
 	
-	func subscribePressed(sender: UIButton) {
+	func subscribePressed(_ sender: UIButton) {
 		self.viewModel?.subscribe()
-		subscribeButton.setTitle("Subscribing...", forState: UIControlState.Disabled)
-		subscribeButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Disabled)
-		subscribeButton.backgroundColor = UIColor.flatGreenColor()
-		subscribeButton.enabled = false
+		subscribeButton.setTitle("Subscribing...", for: UIControlState.disabled)
+		subscribeButton.setTitleColor(UIColor.white, for: UIControlState.disabled)
+		subscribeButton.backgroundColor = UIColor.flatGreen()
+		subscribeButton.isEnabled = false
 	}
 	
-	func unsubscribePressed(sender: UIButton) {
+	func unsubscribePressed(_ sender: UIButton) {
 		self.viewModel?.unsubscribe()
-		unsubscribeButton.enabled = false
+		unsubscribeButton.isEnabled = false
 	}
 	
-	private func setSubscriberCount(result: YoutubeSearchResult) {
+	fileprivate func setSubscriberCount(_ result: YoutubeSearchResult) {
 		let subscribersCount = "\(result.subscriberCount) subscribers"
 		let detailsString: NSMutableAttributedString = NSMutableAttributedString(string:subscribersCount)
-		detailsString.addAttribute(NSForegroundColorAttributeName, value: UIColor.lightGrayColor(), range: NSMakeRange(0, subscribersCount.characters.count))
-		detailsString.addAttribute(NSFontAttributeName, value: UIFont.systemFontOfSize(UIFont.smallSystemFontSize()), range: NSMakeRange(0, subscribersCount.characters.count))
+		detailsString.addAttribute(NSForegroundColorAttributeName, value: UIColor.lightGray, range: NSMakeRange(0, subscribersCount.characters.count))
+		detailsString.addAttribute(NSFontAttributeName, value: UIFont.systemFont(ofSize: UIFont.smallSystemFontSize), range: NSMakeRange(0, subscribersCount.characters.count))
 		self.searchDetails?.attributedText = detailsString
 	}
 	
-	private func setSubscribeButtonStatus(subscribedAlready: Bool) {
-		subscribeButton.enabled = !subscribedAlready
-		subscribeButton.hidden = subscribedAlready
-		if subscribeButton.enabled {
-			let app = UIApplication.sharedApplication().delegate as! AppDelegate
+	fileprivate func setSubscribeButtonStatus(_ subscribedAlready: Bool) {
+		subscribeButton.isEnabled = !subscribedAlready
+		subscribeButton.isHidden = subscribedAlready
+		if subscribeButton.isEnabled {
+			let app = UIApplication.shared.delegate as! AppDelegate
 			subscribeButton.backgroundColor = app.globalColor
 		}
 		
-		unsubscribeButton.enabled = subscribedAlready
-		unsubscribeButton.hidden = !subscribedAlready
+		unsubscribeButton.isEnabled = subscribedAlready
+		unsubscribeButton.isHidden = !subscribedAlready
 	}
 	
-	private func setupBindings(searchViewModel: SearchViewModel) {
+	fileprivate func setupBindings(_ searchViewModel: SearchViewModel) {
 		self.setupDetailsFetchedBindings()
 		self.setupSubscribedFetchedBindings()
 		self.setupSubscriptionStatusBindings(searchViewModel)
 	}
 	
-	private func setupDetailsFetchedBindings() {
+	fileprivate func setupDetailsFetchedBindings() {
 		self.viewModel!.disposer.addDisposable(
 			self.viewModel!.detailResult.producer
 				.skip(1) //Ignore the initial nil value
@@ -129,7 +129,7 @@ class SearchViewDetailTableViewCell: UITableViewCell {
 				.start {
 					[unowned self] event in
 					switch event {
-					case let .Next(searchResult):
+					case let .next(searchResult):
 						self.setSubscriberCount(searchResult!)
 					default:
 						break
@@ -138,7 +138,7 @@ class SearchViewDetailTableViewCell: UITableViewCell {
 		)
 	}
 	
-	private func setupSubscribedFetchedBindings() {
+	fileprivate func setupSubscribedFetchedBindings() {
 		self.viewModel!.disposer.addDisposable(
 			self.viewModel!.alreadySubscribedResult.producer
 				.skip(1) //Ignore the initial nil value
@@ -146,7 +146,7 @@ class SearchViewDetailTableViewCell: UITableViewCell {
 				.start {
 					[unowned self] event in
 					switch event {
-					case let .Next(subscribedAlready):
+					case let .next(subscribedAlready):
 						self.setSubscribeButtonStatus(subscribedAlready)
 					default:
 						break
@@ -155,14 +155,14 @@ class SearchViewDetailTableViewCell: UITableViewCell {
 		)
 	}
 
-	private func setupSubscriptionStatusBindings(searchViewModel: SearchViewModel) {
+	fileprivate func setupSubscriptionStatusBindings(_ searchViewModel: SearchViewModel) {
 		self.viewModel!.disposer.addDisposable(
 			self.viewModel!.subscribeSucceeded.producer
 				.skip(1) //Ignore the initial nil value
 				.start {
 					[unowned self] event in
 					switch event {
-					case let .Next(msgToSend):
+					case let .next(msgToSend):
 						self.setSubscribeButtonStatus(true)
 						searchViewModel.subscribeSucceeded.value = msgToSend
 					default:
@@ -177,7 +177,7 @@ class SearchViewDetailTableViewCell: UITableViewCell {
 				.start {
 					[unowned self] event in
 					switch event {
-					case let .Next(msgToShow):
+					case let .next(msgToShow):
 						searchViewModel.subscribeFailed.value = msgToShow
 					default:
 						break
@@ -191,7 +191,7 @@ class SearchViewDetailTableViewCell: UITableViewCell {
 				.start {
 					[unowned self] event in
 					switch event {
-					case let .Next(msgToSend):
+					case let .next(msgToSend):
 						self.setSubscribeButtonStatus(false)
 						searchViewModel.subscribeSucceeded.value = msgToSend
 					default:
@@ -206,7 +206,7 @@ class SearchViewDetailTableViewCell: UITableViewCell {
 				.start {
 					[unowned self] event in
 					switch event {
-					case let .Next(msgToShow):
+					case let .next(msgToShow):
 						searchViewModel.subscribeFailed.value = msgToShow
 					default:
 						break

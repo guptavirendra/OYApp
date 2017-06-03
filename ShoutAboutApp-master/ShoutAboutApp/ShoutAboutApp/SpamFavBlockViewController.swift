@@ -25,9 +25,9 @@ class SpamFavBlockViewController: UIViewController
     {
         super.viewDidLoad()
         self.automaticallyAdjustsScrollViewInsets = false
-        self.navigationController?.navigationBarHidden = false
+        self.navigationController?.isNavigationBarHidden = false
         self.navigationController?.navigationBar.titleTextAttributes =
-            [NSForegroundColorAttributeName: UIColor.whiteColor()]
+            [NSForegroundColorAttributeName: UIColor.white]
         
         /*if self.revealViewController() != nil
         {
@@ -67,7 +67,7 @@ class SpamFavBlockViewController: UIViewController
     func popVC()
     {
         self.revealViewController().rearViewRevealWidth = 60
-        self.navigationController?.popToRootViewControllerAnimated(true)
+        self.navigationController?.popToRootViewController(animated: true)
     }
     
     
@@ -76,7 +76,7 @@ class SpamFavBlockViewController: UIViewController
         self.view.showSpinner()
         DataSessionManger.sharedInstance.getBlockUserList({ (response, blockUserArray) in
             
-            dispatch_async(dispatch_get_main_queue(), {
+            DispatchQueue.main.async(execute: {
                 self.view.removeSpinner()
                 self.allValidContacts.removeAll()
                 self.allValidContacts = blockUserArray
@@ -85,24 +85,24 @@ class SpamFavBlockViewController: UIViewController
             
             }) { (error) in
                 
-                dispatch_async(dispatch_get_main_queue(), {
+                DispatchQueue.main.async(execute: {
                     self.view.removeSpinner()
                 });
             }
     }
     
     
-    func unBlock(userId:String)
+    func unBlock(_ userId:String)
     {
         self.view.showSpinner()
         DataSessionManger.sharedInstance.unblockUserID(userId, onFinish: { (response, deserializedResponse) in
-            dispatch_async(dispatch_get_main_queue(), {
+            DispatchQueue.main.async(execute: {
                 self.view.removeSpinner()
                 self.blockList()
                 
             });
             }) { (error) in
-                dispatch_async(dispatch_get_main_queue(), {
+                DispatchQueue.main.async(execute: {
                     self.view.removeSpinner()
                     
                     
@@ -115,7 +115,7 @@ class SpamFavBlockViewController: UIViewController
     {
         self.view.showSpinner()
         DataSessionManger.sharedInstance.getUserfavoriteList({ (response, favUserArray) in
-            dispatch_async(dispatch_get_main_queue(), {
+            DispatchQueue.main.async(execute: {
                 self.view.removeSpinner()
                 self.allValidContacts.removeAll()
                 self.allValidContacts = favUserArray
@@ -123,7 +123,7 @@ class SpamFavBlockViewController: UIViewController
                 
             });
             }) { (error) in
-                dispatch_async(dispatch_get_main_queue(), {
+                DispatchQueue.main.async(execute: {
                     self.view.removeSpinner()
                     
                     
@@ -132,17 +132,17 @@ class SpamFavBlockViewController: UIViewController
     }
     
     
-    func unFavorite(userId:String)
+    func unFavorite(_ userId:String)
     {
         self.view.showSpinner()
         DataSessionManger.sharedInstance.unfavouriteUserID(userId, onFinish: { (response, deserializedResponse) in
-            dispatch_async(dispatch_get_main_queue(), {
+            DispatchQueue.main.async(execute: {
                 self.view.removeSpinner()
                 self.favoriteList()
                 
             });
             }) { (error) in
-                dispatch_async(dispatch_get_main_queue(), {
+                DispatchQueue.main.async(execute: {
                     self.view.removeSpinner()
                     
                     
@@ -153,14 +153,14 @@ class SpamFavBlockViewController: UIViewController
     {
         self.view.showSpinner()
         DataSessionManger.sharedInstance.getUserSpamList({ (response, spamUserArray) in
-            dispatch_async(dispatch_get_main_queue(), {
+            DispatchQueue.main.async(execute: {
                 self.view.removeSpinner()
                 self.allValidContacts.removeAll()
                 self.allValidContacts = spamUserArray
                 self.tableView?.reloadData()
             });
             }) { (error) in
-                dispatch_async(dispatch_get_main_queue(), {
+                DispatchQueue.main.async(execute: {
                     self.view.removeSpinner()
                     
                     
@@ -168,19 +168,19 @@ class SpamFavBlockViewController: UIViewController
         }
     }
     
-    func unSpam(userId:String)
+    func unSpam(_ userId:String)
     {
         
         self.view.showSpinner()
         DataSessionManger.sharedInstance.unspamUserID(userId, onFinish: { (response, deserializedResponse) in
-            dispatch_async(dispatch_get_main_queue(), {
+            DispatchQueue.main.async(execute: {
                 self.view.removeSpinner()
                 self.spamList()
                 
             });
 
             }) { (error) in
-                dispatch_async(dispatch_get_main_queue(), {
+                DispatchQueue.main.async(execute: {
                     self.view.removeSpinner()
                     
                     
@@ -193,17 +193,17 @@ class SpamFavBlockViewController: UIViewController
 extension SpamFavBlockViewController:ContactTableViewCellProtocol
 {
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
         return  allValidContacts.count //objects.count
         
     }
     
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
+    func tableView(_ tableView: UITableView, cellForRowAtIndexPath indexPath: IndexPath) -> UITableViewCell
     {
         
-        let cell = tableView.dequeueReusableCellWithIdentifier("contact", forIndexPath: indexPath) as! ContactTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "contact", for: indexPath) as! ContactTableViewCell
         cell.delegate = self
         
         let personContact = allValidContacts[indexPath.row]
@@ -224,17 +224,17 @@ extension SpamFavBlockViewController:ContactTableViewCellProtocol
         switch favSpamBlock
         {
         case .fav:
-            cell.blockButton?.setTitle("UnFavorite", forState: .Normal)
-            cell.blockButton?.setImage(UIImage( named: "unfav"), forState: .Normal)
+            cell.blockButton?.setTitle("UnFavorite", for: UIControlState())
+            cell.blockButton?.setImage(UIImage( named: "unfav"), for: UIControlState())
             break
         case .spam:
-            cell.blockButton?.setTitle("UnSpam", forState: .Normal)
-            cell.blockButton?.setImage(UIImage( named: "spamGray"), forState: .Normal)
+            cell.blockButton?.setTitle("UnSpam", for: UIControlState())
+            cell.blockButton?.setImage(UIImage( named: "spamGray"), for: UIControlState())
             
             break
         case .block:
-             cell.blockButton?.setTitle("UnBlock", forState: .Normal)
-             cell.blockButton?.setImage(UIImage( named: "unblock"), forState: .Normal)
+             cell.blockButton?.setTitle("UnBlock", for: UIControlState())
+             cell.blockButton?.setImage(UIImage( named: "unblock"), for: UIControlState())
             break
             
         }
@@ -242,33 +242,33 @@ extension SpamFavBlockViewController:ContactTableViewCellProtocol
         return cell
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat
+    func tableView(_ tableView: UITableView, heightForRowAtIndexPath indexPath: IndexPath) -> CGFloat
     {
         return UITableViewAutomaticDimension
     }
     
-    func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: IndexPath) -> CGFloat
     {
         return 100.0
         
     }
     
     //MARK: CALL
-    func buttonClicked(cell: ContactTableViewCell, button: UIButton)
+    func buttonClicked(_ cell: ContactTableViewCell, button: UIButton)
     {
-        if self.tableView!.indexPathForCell(cell) != nil
+        if self.tableView!.indexPath(for: cell) != nil
         {
-            let indexPath = self.tableView!.indexPathForCell(cell)
+            let indexPath = self.tableView!.indexPath(for: cell)
             let personContact = allValidContacts[indexPath!.row]
             if button.titleLabel?.text == " Call"
             {
                 
                 let   phone = "tel://"+personContact.mobileNumber
-                UIApplication.sharedApplication().openURL(NSURL(string: phone)!)
+                UIApplication.shared.openURL(URL(string: phone)!)
             }
             else if button.titleLabel?.text == " Chat"
             {
-                let chattingViewController = self.storyboard?.instantiateViewControllerWithIdentifier("ChattingViewController") as? ChattingViewController
+                let chattingViewController = self.storyboard?.instantiateViewController(withIdentifier: "ChattingViewController") as? ChattingViewController
                 self.navigationController!.pushViewController(chattingViewController!, animated: true)
                 
             }
@@ -276,7 +276,7 @@ extension SpamFavBlockViewController:ContactTableViewCellProtocol
             {
                 
                 let personContact = allValidContacts[(indexPath?.row)!]
-                let rateANdReviewViewController = self.storyboard?.instantiateViewControllerWithIdentifier("RateANdReviewViewController") as? RateANdReviewViewController
+                let rateANdReviewViewController = self.storyboard?.instantiateViewController(withIdentifier: "RateANdReviewViewController") as? RateANdReviewViewController
                 rateANdReviewViewController?.idString = String(personContact.idString)
                 rateANdReviewViewController?.name = personContact.name
                 if let _ = personContact.photo
@@ -313,7 +313,7 @@ extension SpamFavBlockViewController:ContactTableViewCellProtocol
             
             else
             {
-                let profileViewController = self.storyboard?.instantiateViewControllerWithIdentifier("NewProfileViewController") as? NewProfileViewController
+                let profileViewController = self.storyboard?.instantiateViewController(withIdentifier: "NewProfileViewController") as? NewProfileViewController
                 profileViewController?.personalProfile = personContact
                 
                 self.navigationController!.pushViewController(profileViewController!, animated: true)

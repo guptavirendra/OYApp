@@ -33,7 +33,7 @@ class ProfileManager:NSObject
     var personalProfile:SearchPerson = SearchPerson()
     var localStoredImage:UIImage?
     var syncedContactArray = [SearchPerson]()
-    var xmppClient: STXMPPClient?
+     
     var alert_count:Int = 0
 }
 
@@ -103,7 +103,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     {
         
         super.viewDidLoad()
-        self.navigationController?.navigationBar.hidden = false
+        self.navigationController?.navigationBar.isHidden = false
         //self.navigationController?.navigationBar.tintColor = appColor
         
         //imageView!.makeImageRounded()
@@ -150,14 +150,14 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     deinit
     {
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardDidShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardDidShow, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
-    override func viewDidDisappear(animated: Bool)
+    override func viewDidDisappear(_ animated: Bool)
     {
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardDidShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardDidShow, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
         super.viewDidDisappear(animated)
     }
@@ -168,7 +168,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         // Dispose of any resources that can be recreated.
     }
     
-    override func viewWillAppear(animated: Bool)
+    override func viewWillAppear(_ animated: Bool)
     {
         super.viewWillAppear(animated)
         
@@ -207,9 +207,9 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
 
 extension ProfileViewController
 {
-    @IBAction func goToReviewScreen(sender:UIButton)
+    @IBAction func goToReviewScreen(_ sender:UIButton)
     {
-        let rateANdReviewViewController = self.storyboard?.instantiateViewControllerWithIdentifier("RateANdReviewViewController") as? RateANdReviewViewController
+        let rateANdReviewViewController = self.storyboard?.instantiateViewController(withIdentifier: "RateANdReviewViewController") as? RateANdReviewViewController
         self.navigationController!.pushViewController(rateANdReviewViewController!, animated: true)
     }
     
@@ -218,7 +218,7 @@ extension ProfileViewController
 extension ProfileViewController
 {
     
-    func setProfileImgeForURL(urlString:String)
+    func setProfileImgeForURL(_ urlString:String)
     {
         if let _ = self.imageView
         {
@@ -227,7 +227,7 @@ extension ProfileViewController
                 self.imageView!.image = ProfileManager.sharedInstance.localStoredImage
             }
             
-             self.imageView?.sd_setImageWithURL(NSURL(string:urlString ), placeholderImage: self.imageView!.image)
+             //self.imageView?.sd_setImage(with: URL(string:urlString ), placeholderImage: self.imageView!.image)
             
         
         }
@@ -263,15 +263,15 @@ extension ProfileViewController
 
 extension ProfileViewController
 {
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
         return 6
     }
     
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
-        let cell = tableView.dequeueReusableCellWithIdentifier("EditProfileTableViewCell", forIndexPath: indexPath) as! EditProfileTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "EditProfileTableViewCell", for: indexPath) as! EditProfileTableViewCell
         
         cell.delegate = self
         cell.dataTextField.delegate = self
@@ -279,7 +279,7 @@ extension ProfileViewController
         if personalProfile.idString != ProfileManager.sharedInstance.personalProfile.idString
         {
            //cell.editButton.hidden = true
-            cell.userInteractionEnabled = false
+            cell.isUserInteractionEnabled = false
             
         }
         if indexPath.row == 0
@@ -299,7 +299,7 @@ extension ProfileViewController
             cell.dataTextField.text  = personalProfile.mobileNumber
             cell.dataTextField.tag   = 1
             cell.inputImage.image = UIImage(named: "mobile")
-            cell.userInteractionEnabled = false
+            cell.isUserInteractionEnabled = false
         }
         
         
@@ -334,13 +334,13 @@ extension ProfileViewController
             cell.inputImage.image = UIImage(named: kBirthDay)
             
             
-            let toolBar = UIToolbar(frame: CGRectMake(0, 0, cell.dataTextField.frame.size.width, 44))
+            let toolBar = UIToolbar(frame: CGRect(x: 0, y: 0, width: cell.dataTextField.frame.size.width, height: 44))
             
             var items = [UIBarButtonItem]()
             
-            let  flexibleSpaceLeft = UIBarButtonItem(barButtonSystemItem: .FlexibleSpace, target: self, action: nil)
+            let  flexibleSpaceLeft = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
             
-            let doneButton =     UIBarButtonItem(title: "Done", style: .Done, target: self, action: #selector(JoinViewController.dissMissKeyBoard(_:)))
+            let doneButton =     UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(JoinViewController.dissMissKeyBoard(_:)))
             
             items.append(flexibleSpaceLeft)
             items.append(doneButton)
@@ -349,9 +349,9 @@ extension ProfileViewController
             
             
             let datePicker = UIDatePicker()
-            datePicker.maximumDate = NSDate()
-            datePicker.addTarget(self, action: #selector(JoinViewController.handleDatePicker(_:)), forControlEvents: .ValueChanged)
-            datePicker.datePickerMode = .Date
+            datePicker.maximumDate = Date()
+            datePicker.addTarget(self, action: #selector(JoinViewController.handleDatePicker(_:)), for: .valueChanged)
+            datePicker.datePickerMode = .date
             cell.dataTextField.inputView = datePicker
             cell.dataTextField.inputAccessoryView = toolBar
             
@@ -364,13 +364,13 @@ extension ProfileViewController
             cell.dataTextField.tag   = 5
             cell.inputImage.image = UIImage(named: kGender)
             
-            let toolBar = UIToolbar(frame: CGRectMake(0, 0, cell.dataTextField.frame.size.width, 44))
+            let toolBar = UIToolbar(frame: CGRect(x: 0, y: 0, width: cell.dataTextField.frame.size.width, height: 44))
             
             var items = [UIBarButtonItem]()
             
-            let  flexibleSpaceLeft = UIBarButtonItem(barButtonSystemItem: .FlexibleSpace, target: self, action: nil)
+            let  flexibleSpaceLeft = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
             
-            let doneButton =     UIBarButtonItem(title: "Done", style: .Done, target: self, action: #selector(JoinViewController.dissMissKeyBoard(_:)))
+            let doneButton =     UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(JoinViewController.dissMissKeyBoard(_:)))
             
             items.append(flexibleSpaceLeft)
             items.append(doneButton)
@@ -390,56 +390,56 @@ extension ProfileViewController
         return cell
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
     {
         return 60
     }
     
     
     
-    func handleDatePicker(sender: UIDatePicker)
+    func handleDatePicker(_ sender: UIDatePicker)
     {
-        let dateFormatter = NSDateFormatter()
+        let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         
-        self.activeTextField?.text = dateFormatter.stringFromDate(sender.date)
+        self.activeTextField?.text = dateFormatter.string(from: sender.date)
         self.birthday = (self.activeTextField?.text)!
         
     }
     
     
     
-    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
     
-    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         return pickOption.count
     }
     
-    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return pickOption[row]
     }
     
-    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int)
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int)
     {
         self.activeTextField?.text = pickOption[row]
     }
     
-    func dissMissKeyBoard(sender:UIBarButtonItem)
+    func dissMissKeyBoard(_ sender:UIBarButtonItem)
     {
         if let datePicker =  self.activeTextField?.inputView as? UIDatePicker
         {
-            let dateFormatter = NSDateFormatter()
+            let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd"
-            self.activeTextField?.text = dateFormatter.stringFromDate(datePicker.date)
+            self.activeTextField?.text = dateFormatter.string(from: datePicker.date)
             self.birthday = (self.activeTextField?.text)!
         }
         
         if let picker = self.activeTextField?.inputView as? UIPickerView
         {
             
-            self.activeTextField?.text = pickOption[ picker.selectedRowInComponent(0)]
+            self.activeTextField?.text = pickOption[ picker.selectedRow(inComponent: 0)]
             self.gender = (self.activeTextField?.text)!
             
         }
@@ -448,7 +448,7 @@ extension ProfileViewController
     }
 
     
-    func getTextForCell(text: String, cell: EditProfileTableViewCell)
+    func getTextForCell(_ text: String, cell: EditProfileTableViewCell)
     {
         if cell.dataTextField.tag == 0
         {
@@ -476,49 +476,49 @@ extension ProfileViewController
             self.gender = text
         }
     }
-    func editButtonClickedForCell(cell:EditProfileTableViewCell)
+    func editButtonClickedForCell(_ cell:EditProfileTableViewCell)
     {
     }
     
-    func textFieldShouldBeginEditing(textField: UITextField) -> Bool
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool
     {
         return true
     }
     
-    func textFieldDidBeginEditing(textField: UITextField)
+    func textFieldDidBeginEditing(_ textField: UITextField)
     {
         self.activeTextField = textField
     }
-    func textFieldDidEndEditing(textField: UITextField)
+    func textFieldDidEndEditing(_ textField: UITextField)
     {
         
         
     }
     
-    func textFieldShouldReturn(textField: UITextField) -> Bool
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool
     {
         textField.resignFirstResponder()
         return true
     }
     
-    func showKeyBoard(notification: NSNotification)
+    func showKeyBoard(_ notification: Notification)
     {
-        if ((activeTextField?.superview?.superview?.superview!.isKindOfClass(EditProfileTableViewCell)) != nil)
+        if ((activeTextField?.superview?.superview?.superview!.isKind(of: EditProfileTableViewCell.self)) != nil)
         {
             if let cell = activeTextField?.superview?.superview?.superview as? EditProfileTableViewCell
             {
-                let dictInfo: NSDictionary = notification.userInfo!
-                let kbSize :CGSize = (dictInfo.objectForKey(UIKeyboardFrameBeginUserInfoKey)?.CGRectValue().size)!
+                let dictInfo: NSDictionary = notification.userInfo! as NSDictionary
+                let kbSize :CGSize = ((dictInfo.object(forKey: UIKeyboardFrameBeginUserInfoKey) as AnyObject).cgRectValue.size)
                 let contentInsets:UIEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: kbSize.height, right: 0)
                 self.tableView!.contentInset = contentInsets
                 self.tableView!.scrollIndicatorInsets = contentInsets
-                self.tableView!.scrollToRowAtIndexPath(self.tableView!.indexPathForCell(cell)!, atScrollPosition: .Top, animated: true)
+                self.tableView!.scrollToRow(at: self.tableView!.indexPath(for: cell)!, at: .top, animated: true)
             }
         }
     }
     
     
-    func hideKeyBoard(notification: NSNotification)
+    func hideKeyBoard(_ notification: Notification)
     {
         
         if  activeTextField != nil
@@ -531,22 +531,20 @@ extension ProfileViewController
 
     
     
-    func postData(dict:[String:String])
+    func postData(_ dict:[String:String])
     {
         activeTextField?.resignFirstResponder()
         self.view.showSpinner()
         DataSessionManger.sharedInstance.updateProfile(dict, onFinish: { (response, deserializedResponse) in
             
-            dispatch_async(dispatch_get_main_queue(),
-                {
+            DispatchQueue.main.async(execute: {
                     self.view.removeSpinner()
                 })
             if deserializedResponse is NSDictionary
             {
-                if deserializedResponse.objectForKey("success") != nil
+                if deserializedResponse.object(forKey: "success") != nil
                 {
-                    dispatch_async(dispatch_get_main_queue(),
-                        {
+                    DispatchQueue.main.async(execute: {
                         //self.view.removeSpinner()
                         
                         self.getProfileData()
@@ -554,10 +552,10 @@ extension ProfileViewController
                         //self.displayAlertMessage("Success")
                     });
                 }
-                 if  let dict = deserializedResponse.objectForKey("validation_error") as? NSDictionary
+                 if  let dict = deserializedResponse.object(forKey: "validation_error") as? NSDictionary
                 {
                     let keys = dict.allKeys
-                    if  let errorMessage = dict.objectForKey(keys.first!) as? String
+                    if  let errorMessage = dict.object(forKey: keys.first!) as? String
                     {
                         self.displayAlertMessage(errorMessage)
                     }
@@ -566,7 +564,7 @@ extension ProfileViewController
                 
             }
         }) { (error) in
-            dispatch_async(dispatch_get_main_queue(), {
+            DispatchQueue.main.async(execute: {
                 self.view.removeSpinner()
                 self.displayAlertMessage(error as! String)
             });
@@ -576,42 +574,42 @@ extension ProfileViewController
 
 extension ProfileViewController
 {
-    @IBAction func cameraButtonClicked(sender:UIButton)
+    @IBAction func cameraButtonClicked(_ sender:UIButton)
     {
-        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet) // 1
-        let firstAction = UIAlertAction(title: "Take Photo", style: .Default) { (alert: UIAlertAction!) -> Void in
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet) // 1
+        let firstAction = UIAlertAction(title: "Take Photo", style: .default) { (alert: UIAlertAction!) -> Void in
             NSLog("You pressed button one")
             
-            if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera)
+            if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera)
             {
                 let imagePicker = UIImagePickerController()
                 imagePicker.delegate = self
-                imagePicker.sourceType = UIImagePickerControllerSourceType.Camera;
+                imagePicker.sourceType = UIImagePickerControllerSourceType.camera;
                 imagePicker.allowsEditing = false
-                self.presentViewController(imagePicker, animated: true, completion: nil)
+                self.present(imagePicker, animated: true, completion: nil)
             }
             
         } // 2
         
-        let secondAction = UIAlertAction(title: "Choose Photo", style: .Default) { (alert: UIAlertAction!) -> Void in
+        let secondAction = UIAlertAction(title: "Choose Photo", style: .default) { (alert: UIAlertAction!) -> Void in
             NSLog("You pressed button two")
             let imagePicker = UIImagePickerController()
             imagePicker.delegate = self
-            imagePicker.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
+            imagePicker.sourceType = UIImagePickerControllerSourceType.photoLibrary
             imagePicker.mediaTypes = [kUTTypeImage as String]
             imagePicker.allowsEditing = false
-            self.presentViewController(imagePicker, animated: true,
+            self.present(imagePicker, animated: true,
                                        completion: nil)
         } // 3
         
-        let thirdAction = UIAlertAction(title: "Cancel", style: .Cancel) { (alert: UIAlertAction!) -> Void in
+        let thirdAction = UIAlertAction(title: "Cancel", style: .cancel) { (alert: UIAlertAction!) -> Void in
             NSLog("You pressed button two")
         } // 3
         
         alert.addAction(firstAction) // 4
         alert.addAction(secondAction) // 5
         alert.addAction(thirdAction) // 5
-        presentViewController(alert, animated: true, completion:nil) // 6
+        present(alert, animated: true, completion:nil) // 6
     }
     
     /*
@@ -632,13 +630,13 @@ extension ProfileViewController
     }
     */
     
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject])
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any])
     {
         
         if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
             
             let storyboard = UIStoryboard(name: "Crop", bundle: nil)
-            let vc = storyboard.instantiateViewControllerWithIdentifier("cropper-vc") as! CropperViewController
+            let vc = storyboard.instantiateViewController(withIdentifier: "cropper-vc") as! CropperViewController
             vc._image = pickedImage
             vc.delegate = self
             
@@ -648,22 +646,22 @@ extension ProfileViewController
 
     
     
-    func imageFileSelected(selectedImage: UIImage)
+    func imageFileSelected(_ selectedImage: UIImage)
     {
         
         ProfileManager.sharedInstance.localStoredImage = selectedImage
-        let currentTime = NSDate().timeIntervalSince1970 as NSTimeInterval
+        let currentTime = Date().timeIntervalSince1970 as TimeInterval
         let extensionPathStr = "profile\(currentTime).jpg"
-        let documentsDirectory = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true)[0]
+        let documentsDirectory = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true)[0]
         let fullPathToFile = "\(documentsDirectory)/\(extensionPathStr)"
         
         print(fullPathToFile)
         
-        let imageData: NSData = UIImageJPEGRepresentation(selectedImage, 0.5)!
+        let imageData: Data = UIImageJPEGRepresentation(selectedImage, 0.5)!
         
         
         
-        imageData.writeToFile(fullPathToFile, atomically: true)
+        try? imageData.write(to: URL(fileURLWithPath: fullPathToFile), options: [.atomic])
         
         let imagePath =  [ "photo"]
         
@@ -676,15 +674,14 @@ extension ProfileViewController
         {
            self.view.showSpinner()
             DataSessionManger.sharedInstance.postProfileImage(mediaPathArray, name: imagePath, onFinish: { (response, deserializedResponse) in
-                dispatch_async(dispatch_get_main_queue(), {
+                DispatchQueue.main.async(execute: {
                     self.view.removeSpinner()
                     //self.displayAlert("Success", handler: self.handler)
                     
                 });
                 
                 }) { (error) in
-                    dispatch_async(dispatch_get_main_queue(),
-                                   {
+                    DispatchQueue.main.async(execute: {
                         self.view.removeSpinner()
                         
                         
@@ -694,9 +691,9 @@ extension ProfileViewController
     }
 
     
-    func imagePickerControllerDidCancel(picker: UIImagePickerController)
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController)
     {
-        picker.dismissViewControllerAnimated(true, completion: nil)
+        picker.dismiss(animated: true, completion: nil)
     }
     
 
@@ -713,10 +710,10 @@ public extension UIView
         self.layer.cornerRadius = self.frame.size.width / 2
         self.clipsToBounds = true
         self.layer.borderWidth = 1.0
-        self.layer.borderColor = UIColor.whiteColor().CGColor
+        self.layer.borderColor = UIColor.white.cgColor
     }
     
-    func makeImageRoundedWithWidth(widthFloat:CGFloat, color:UIColor)
+    func makeImageRoundedWithWidth(_ widthFloat:CGFloat, color:UIColor)
     {
         /*
         
@@ -737,19 +734,19 @@ public extension UIView
         self.layer.masksToBounds = false
  */
         self.clipsToBounds = true
-        self.layer.borderColor =  UIColor.lightGrayColor().CGColor
+        self.layer.borderColor =  UIColor.lightGray.cgColor
         self.layer.borderWidth = 1
         self.layer.cornerRadius = self.frame.size.width / 2
-        self.layer.shadowColor   = UIColor.lightGrayColor().CGColor
+        self.layer.shadowColor   = UIColor.lightGray.cgColor
         self.layer.shadowOpacity = 1.0
         self.layer.shadowRadius  = 3.0
-        self.layer.shadowOffset  = CGSizeMake(1.0, 1.0)
+        self.layer.shadowOffset  = CGSize(width: 1.0, height: 1.0)
         self.layer.masksToBounds = true
     }
     
     func makeImageRoundedWithGray()
     {
-        makeImageRoundedWithWidth(3.0, color: UIColor.grayColor())
+        makeImageRoundedWithWidth(3.0, color: UIColor.gray)
     }
     
     
@@ -758,7 +755,7 @@ public extension UIView
         self.layer.cornerRadius = 3.0
         self.clipsToBounds     = true
         self.layer.borderWidth = 1.0
-        self.layer.borderColor = UIColor.blackColor().CGColor
+        self.layer.borderColor = UIColor.black.cgColor
         
     }
 }
@@ -771,7 +768,7 @@ extension MainSearchViewController
         self.view.showSpinner()
         DataSessionManger.sharedInstance.getProfileData("",onFinish: { (response, personalProfile) in
             
-            dispatch_async(dispatch_get_main_queue(), {
+            DispatchQueue.main.async(execute: {
                 self.view.removeSpinner()
                 
                 ProfileManager.sharedInstance.personalProfile = personalProfile
@@ -780,7 +777,7 @@ extension MainSearchViewController
             
         }) { (error) in
             
-            dispatch_async(dispatch_get_main_queue(), {
+            DispatchQueue.main.async(execute: {
                 self.view.removeSpinner()
                 
                 
@@ -793,24 +790,24 @@ extension MainSearchViewController
 
 extension ProfileViewController
 {
-    func croppedImage(image: UIImage, vc:UIViewController)
+    func croppedImage(_ image: UIImage, vc:UIViewController)
     {
-        vc.dismissViewControllerAnimated(true, completion: nil)
+        vc.dismiss(animated: true, completion: nil)
         imageView!.image = image
 
         ProfileManager.sharedInstance.localStoredImage = image
-        let currentTime = NSDate().timeIntervalSince1970 as NSTimeInterval
+        let currentTime = Date().timeIntervalSince1970 as TimeInterval
         let extensionPathStr = "profile\(currentTime).jpg"
-        let documentsDirectory = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true)[0]
+        let documentsDirectory = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true)[0]
         let fullPathToFile = "\(documentsDirectory)/\(extensionPathStr)"
 
         print(fullPathToFile)
 
-        let imageData: NSData = UIImageJPEGRepresentation(image, 0.5)!
+        let imageData: Data = UIImageJPEGRepresentation(image, 0.5)!
 
 
 
-        imageData.writeToFile(fullPathToFile, atomically: true)
+        try? imageData.write(to: URL(fileURLWithPath: fullPathToFile), options: [.atomic])
 
         let imagePath =  [ "photo"]
 
@@ -823,7 +820,7 @@ extension ProfileViewController
         {
             self.view.showSpinner()
             DataSessionManger.sharedInstance.postProfileImage(mediaPathArray, name: imagePath, onFinish: { (response, deserializedResponse) in
-            dispatch_async(dispatch_get_main_queue(), {
+            DispatchQueue.main.async(execute: {
             self.view.removeSpinner()
             //self.displayAlert("Success", handler: self.handler)
                 self.getProfileData()
@@ -831,8 +828,7 @@ extension ProfileViewController
             });
 
             }) { (error) in
-            dispatch_async(dispatch_get_main_queue(),
-            {
+            DispatchQueue.main.async(execute: {
             self.view.removeSpinner()
 
 
@@ -846,10 +842,10 @@ extension ProfileViewController
         self.view.showSpinner()
         DataSessionManger.sharedInstance.getProfileData(String(personalProfile.idString),onFinish: { (response, personalProfile) in
             
-            dispatch_async(dispatch_get_main_queue(), {
+            DispatchQueue.main.async(execute: {
                 self.view.removeSpinner()
                 
-                if personalProfile.idString == ProfileManager.sharedInstance.personalProfile
+                if personalProfile.idString == ProfileManager.sharedInstance.personalProfile.idString
                 {
                     ProfileManager.sharedInstance.personalProfile = personalProfile
                     self.personalProfile = ProfileManager.sharedInstance.personalProfile
@@ -863,7 +859,7 @@ extension ProfileViewController
                     self.setProfileImgeForURL(photo)
                 }
                 
-                if self.isKindOfClass(JoinViewController) || self.isKindOfClass(NewProfileViewController)
+                if self.isKind(of: JoinViewController.self) || self.isKind(of: NewProfileViewController.self)
                 {
                     self.personalProfile = personalProfile
                     self.delegate?.profileDismissied()
@@ -871,7 +867,7 @@ extension ProfileViewController
                 }
                 else
                 {
-                    self.dismissViewControllerAnimated(true)
+                    self.dismiss(animated: true)
                     {
                         self.delegate?.profileDismissied()
                     }
@@ -882,7 +878,7 @@ extension ProfileViewController
             
         }) { (error) in
             
-            dispatch_async(dispatch_get_main_queue(), {
+            DispatchQueue.main.async(execute: {
                 self.view.removeSpinner()
                 
                 
@@ -902,25 +898,25 @@ extension ProfileViewController:UIDocumentInteractionControllerDelegate
         
     }
     
-    func showFile(urlString:String)
+    func showFile(_ urlString:String)
     {
         
-        let documents   = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0]
-        let url = NSURL(string:urlString )
+        let documents   = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+        let url = URL(string:urlString )
         
         let writePath = documents.stringByAppendingPathComponent((url?.lastPathComponent)!)
         
         
-        let documentURL = NSURL.fileURLWithPath(writePath)
+        let documentURL = URL(fileURLWithPath: writePath)
 
-        let pdfViewer:UIDocumentInteractionController = UIDocumentInteractionController(URL: documentURL)
+        let pdfViewer:UIDocumentInteractionController = UIDocumentInteractionController(url: documentURL)
         pdfViewer.delegate = self
-        pdfViewer.presentPreviewAnimated(true)
+        pdfViewer.presentPreview(animated: true)
         
     
     }
     
-    func documentInteractionControllerViewControllerForPreview(controller: UIDocumentInteractionController) -> UIViewController
+    func documentInteractionControllerViewControllerForPreview(_ controller: UIDocumentInteractionController) -> UIViewController
     {
         return self
         
@@ -930,36 +926,36 @@ extension ProfileViewController:UIDocumentInteractionControllerDelegate
 extension ProfileViewController
 {
     
-    @IBAction func favoriteButtonClicked(sender:UIButton)
+    @IBAction func favoriteButtonClicked(_ sender:UIButton)
     {
         self.view.showSpinner()
         DataSessionManger.sharedInstance.favouriteUserID(String(personalProfile.idString), onFinish: { (response, deserializedResponse) in
-            dispatch_async(dispatch_get_main_queue(), {
+            DispatchQueue.main.async(execute: {
                 self.view.removeSpinner()
                 
                 
             });
             }) { (error) in
-                dispatch_async(dispatch_get_main_queue(), {
+                DispatchQueue.main.async(execute: {
                     self.view.removeSpinner()
                     
             });
         }
     }
     
-    @IBAction func blockButtonClicked(sender:UIButton)
+    @IBAction func blockButtonClicked(_ sender:UIButton)
     {
         self.view.showSpinner()
        DataSessionManger.sharedInstance.blockUserID(String(personalProfile.idString), onFinish:
         { (response, deserializedResponse) in
         
-            dispatch_async(dispatch_get_main_queue(), {
+            DispatchQueue.main.async(execute: {
                 self.view.removeSpinner()
                 
                 
             });
         }) { (error) in
-            dispatch_async(dispatch_get_main_queue(), {
+            DispatchQueue.main.async(execute: {
                 self.view.removeSpinner()
                 
                 
@@ -968,35 +964,33 @@ extension ProfileViewController
         
     }
     
-    @IBAction func spamButtonClicked(sender:UIButton)
+    @IBAction func spamButtonClicked(_ sender:UIButton)
     {
         self.view.showSpinner()
         DataSessionManger.sharedInstance.spamUserID(String(personalProfile.idString), onFinish: { (response, deserializedResponse) in
             
-            dispatch_async(dispatch_get_main_queue(),
-                {
+            DispatchQueue.main.async(execute: {
                 self.view.removeSpinner()
                 
                 
             });
             }) { (error) in
                 
-                dispatch_async(dispatch_get_main_queue(),
-                {
+                DispatchQueue.main.async(execute: {
                     self.view.removeSpinner()
                 });
         }
     }
     
-    @IBAction func cancelButtonClicked(sender:UIButton)
+    @IBAction func cancelButtonClicked(_ sender:UIButton)
     {
-        self.dismissViewControllerAnimated(true)
+        self.dismiss(animated: true)
         {
              
         }
     }
     
-    @IBAction func submitButtonClicked(sender:UIButton)
+    @IBAction func submitButtonClicked(_ sender:UIButton)
     {
         print(" email:\(self.email), name:\(self.name),  web:\(self.birthday ), address:f \(self.address) ")
             
@@ -1026,8 +1020,8 @@ extension ProfileViewController
             }
             else
             {
-                let appUserId = NSUserDefaults.standardUserDefaults().objectForKey(kapp_user_id) as! Int
-                let appUserToken = NSUserDefaults.standardUserDefaults().objectForKey(kapp_user_token) as! String
+                let appUserId = UserDefaults.standard.object(forKey: kapp_user_id) as! Int
+                let appUserToken = UserDefaults.standard.object(forKey: kapp_user_token) as! String
                 
                 let dict = ["name":self.name, "email":self.email, "dob":self.birthday, "gender":self.gender, "address":self.address, kapp_user_id:String(appUserId), kapp_user_token :appUserToken, "notify_token":"text"]
                 postData(dict)
