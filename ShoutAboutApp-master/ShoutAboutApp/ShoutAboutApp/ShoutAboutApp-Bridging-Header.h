@@ -9,6 +9,7 @@
 //#import "UIImageView+WebCache.h"
 //#import "UIAppearance+Swift.h"
 
+#import "VideoView.h"
 #import <SDWebImage/UIImageView+WebCache.h>
 #import <XMPPFramework/XMPPFramework.h>
 #import <Reachability/Reachability.h>

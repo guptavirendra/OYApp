@@ -341,7 +341,7 @@ class DataSession: BaseNSURLSession
         var dict = NSObject.getAppUserIdAndToken()
         dict["recipient_id"] = recipentID
         dict["message_type"] = message_type
-    
+        dict[message_type]   = mediaPath?.last
         super.postMediaWithOnFinish(mCHWebServiceMethod.send_message, headerParam: dict, mediaPaths: mediaPath, bodyDict: nil, name: message_type, onFinish: { (response, deserializedResponse) in
             onFinish(response, deserializedResponse)
         }) { (error) in

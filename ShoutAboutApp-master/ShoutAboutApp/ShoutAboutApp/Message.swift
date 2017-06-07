@@ -89,6 +89,24 @@ class ImageMessage:Message
     }
 }
 
+class VideoMessage:Message
+{
+    var attachment:AttachmentVideo = AttachmentVideo()
+    {
+        didSet
+        {
+            classDict["attachment"]=attachment.getJson() as AnyObject
+        }
+    }
+    
+    override func getJson() -> String
+    {
+        classDict["attachment"] = attachment.getJson() as AnyObject
+        return super.getJson()
+    }
+}
+
+
 class Attachment:NSObject// contact
 {
     var attachmentType :Int = 4

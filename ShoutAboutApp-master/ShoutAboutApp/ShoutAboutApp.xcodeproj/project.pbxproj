@@ -46,6 +46,9 @@
 		F12C27811DCF765300AEE0A3 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F12C27801DCF765300AEE0A3 /* ChatViewController.swift */; };
 		F12C27831DCF85CB00AEE0A3 /* RateANdReviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F12C27821DCF85CB00AEE0A3 /* RateANdReviewViewController.swift */; };
 		F12EF5451EB0786F004FDF09 /* TCViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F12EF5441EB0786F004FDF09 /* TCViewController.swift */; };
+		F1394F6E1EE41BFD00552898 /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1394F6D1EE41BFD00552898 /* Photos.framework */; };
+		F1394F721EE448A700552898 /* VideoView.m in Sources */ = {isa = PBXBuildFile; fileRef = F1394F701EE448A700552898 /* VideoView.m */; };
+		F1394F731EE448A700552898 /* VideoView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F1394F711EE448A700552898 /* VideoView.xib */; };
 		F13AD92E1EACE617009B88F1 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F13AD92D1EACE617009B88F1 /* SWRevealViewController.m */; };
 		F13F2A841EC844B100A43F82 /* AlertsPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F13F2A831EC844B100A43F82 /* AlertsPostViewController.swift */; };
 		F17E085C1E0FF16500FDBF0B /* AKImageCropperOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F17E08511E0FF16500FDBF0B /* AKImageCropperOverlayView.swift */; };
@@ -134,6 +137,10 @@
 		F12C27821DCF85CB00AEE0A3 /* RateANdReviewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RateANdReviewViewController.swift; sourceTree = "<group>"; };
 		F12EF5411EAD0DCF004FDF09 /* ARLRDBD.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = ARLRDBD.TTF; sourceTree = "<group>"; };
 		F12EF5441EB0786F004FDF09 /* TCViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TCViewController.swift; sourceTree = "<group>"; };
+		F1394F6D1EE41BFD00552898 /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
+		F1394F6F1EE448A700552898 /* VideoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoView.h; sourceTree = "<group>"; };
+		F1394F701EE448A700552898 /* VideoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoView.m; sourceTree = "<group>"; };
+		F1394F711EE448A700552898 /* VideoView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VideoView.xib; sourceTree = "<group>"; };
 		F13AD92C1EACE617009B88F1 /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRevealViewController.h; sourceTree = "<group>"; };
 		F13AD92D1EACE617009B88F1 /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
 		F13F2A831EC844B100A43F82 /* AlertsPostViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertsPostViewController.swift; sourceTree = "<group>"; };
@@ -175,6 +182,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F1394F6E1EE41BFD00552898 /* Photos.framework in Frameworks */,
 				F11EC3BE1E20DEA7001374E9 /* ContactsUI.framework in Frameworks */,
 				F1D1F7E61DEE05D20046DBB2 /* Pods_ShoutAboutApp.framework in Frameworks */,
 			);
@@ -186,6 +194,7 @@
 		6617F68A4E185EE720CE3C08 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F1394F6D1EE41BFD00552898 /* Photos.framework */,
 				F11EC3BD1E20DEA7001374E9 /* ContactsUI.framework */,
 				17F0E7E11A503618876EE71A /* Pods_ShoutAboutApp.framework */,
 			);
@@ -313,6 +322,9 @@
 		F12C274F1DCE45A800AEE0A3 /* ShoutAboutApp */ = {
 			isa = PBXGroup;
 			children = (
+				F1394F6F1EE448A700552898 /* VideoView.h */,
+				F1394F701EE448A700552898 /* VideoView.m */,
+				F1394F711EE448A700552898 /* VideoView.xib */,
 				F13AD92B1EACE617009B88F1 /* SWReveal */,
 				8ECC94E11E659B5F00B12787 /* Alert */,
 				F17E0A251E3D23B60023F4B3 /* ShoutAboutApp.entitlements */,
@@ -472,6 +484,7 @@
 				F12C275B1DCE45A800AEE0A3 /* LaunchScreen.storyboard in Resources */,
 				F12C27581DCE45A800AEE0A3 /* Assets.xcassets in Resources */,
 				F17E08641E0FF16500FDBF0B /* Crop.storyboard in Resources */,
+				F1394F731EE448A700552898 /* VideoView.xib in Resources */,
 				F1227AF91E070FE7002D9CE3 /* ContactTableViewCell.xib in Resources */,
 				F12C27561DCE45A800AEE0A3 /* Main.storyboard in Resources */,
 				F11B75FE1DE373AD0075DDCB /* GoogleService-Info.plist in Resources */,
@@ -556,6 +569,7 @@
 				F12713B21DCFC105005928AD /* WriteReviewTableViewCell.swift in Sources */,
 				F12C27791DCF497F00AEE0A3 /* ContactTableViewCell.swift in Sources */,
 				F1DD72041DEAADF800DE0A12 /* ChatsViewController.swift in Sources */,
+				F1394F721EE448A700552898 /* VideoView.m in Sources */,
 				F12C27831DCF85CB00AEE0A3 /* RateANdReviewViewController.swift in Sources */,
 				F12713B01DCF9E9F005928AD /* RatingTableViewCell.swift in Sources */,
 				F12C27751DCF07BB00AEE0A3 /* ClickTableViewCell.swift in Sources */,

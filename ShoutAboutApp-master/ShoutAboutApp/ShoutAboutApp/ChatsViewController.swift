@@ -11,6 +11,7 @@ import xmpp_messenger_ios
 import JSQMessagesViewController
 import XMPPFramework
 import MobileCoreServices
+import Photos
 
 
 class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate  {
@@ -38,9 +39,11 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
             
             if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera)
             {
+            
                 let imagePicker = UIImagePickerController()
                 imagePicker.delegate = self
                 imagePicker.sourceType = UIImagePickerControllerSourceType.camera;
+                imagePicker.mediaTypes = [kUTTypeImage as String, kUTTypeVideo as String, kUTTypeAudio as String, kUTTypeMovie as String]
                 imagePicker.allowsEditing = false
                 self.present(imagePicker, animated: true, completion: nil)
             }
@@ -49,13 +52,16 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
         
         let secondAction = UIAlertAction(title: "Photo & Video Library", style: .default) { (alert: UIAlertAction!) -> Void in
             NSLog("You pressed button two")
-            let imagePicker = UIImagePickerController()
-            imagePicker.delegate = self
-            imagePicker.sourceType = UIImagePickerControllerSourceType.savedPhotosAlbum
-            imagePicker.mediaTypes = [kUTTypeImage as String, kUTTypeVideo as String, kUTTypeAudio as String]
-            imagePicker.allowsEditing = false
-            self.present(imagePicker, animated: true,
-                                       completion: nil)
+            if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.photoLibrary)
+            {
+                let imagePicker = UIImagePickerController()
+                imagePicker.delegate = self
+                imagePicker.sourceType = UIImagePickerControllerSourceType.photoLibrary
+                imagePicker.mediaTypes = [kUTTypeImage as String, kUTTypeVideo as String, kUTTypeAudio as String, kUTTypeMovie as String]
+                imagePicker.allowsEditing = false
+                self.present(imagePicker, animated: true,
+                                           completion: nil)
+            }
         } // 3
         
         let thirdAction = UIAlertAction(title: "Location", style: .default) { (alert: UIAlertAction!) -> Void in
@@ -231,7 +237,7 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
     
     override func didPressSend(_ button: UIButton!, withMessageText text: String!, senderId: String!, senderDisplayName: String!, date: Date!) {
         let fullMessage = JSQMessage(senderId: OneChat.sharedInstance.xmppStream?.myJID.bare(), senderDisplayName: OneChat.sharedInstance.xmppStream?.myJID.bare(), date: Date(), text: text)
-        messages.add(fullMessage)
+        messages.add(fullMessage!)
         
         if let recipient = recipient
         {
@@ -239,7 +245,7 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
             message._id = (OneChat.sharedInstance.xmppStream?.generateUUID())!
             message._isRead = false
             message.msg     = text
-            message.msgType = 1
+            message.msgType = 0
             message.senderId = senderId
             message.receiverId  = recipient.jidStr
             
@@ -282,60 +288,346 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
         {
             if let messageDict = NSObject.convertStringToDictionary(message.text)
             {
-                if let msgText = messageDict["msg"] as? String
+                let messageType  = messageDict["msgType"] as! Int
+                switch messageType
                 {
-                    if msgText.characters.count > 0
+                case 0:
+                    if let msgText = messageDict["msg"] as? String, msgText.characters.count > 0
                     {
-                         self.messages.add(message)
                         
+                        let fullMessage = JSQMessage(senderId: message.senderId, senderDisplayName: message.senderId, date: message.date, text: msgText)
+                        self.messages.add(fullMessage!)
                     }
+                    
+                    break
+                case 1:
+                    break
+                case 2:
+                    break
+                case 3:
+                    break
+                case 4:
+                    if let attachment = messageDict["attachment"] as? NSDictionary
+                    {
+                        let _id  = messageDict["_id"] as? String
+                        if let  localUrl = attachment.object(forKey: "localUrl") as? String
+                        {
+                            let attachmentType = attachment.object(forKey: "attachmentType") as! Int
+                            if attachmentType == 4 && localUrl.characters.count > 0
+                            {
+                                let  serverUrl = attachment.object(forKey: "serverUrl") as? String
+                                
+                                self.addLocalURLFile(url: localUrl,serverURL:serverUrl, message: message, _id: _id!)
+                                
+                            }
+                        }
+                            
+                        else if let  serverUrl = attachment.object(forKey: "serverUrl") as? String
+                        {
+                            let attachmentType = attachment.object(forKey: "attachmentType") as! Int
+                            if attachmentType == 4 && serverUrl.characters.count > 0
+                            {
+                                self.downloadMediaForIndexPath(url: serverUrl, message: message,_id: _id!)
+                            }
+                        }
+                    }
+                    break
+                case 5:
+                    break
+                case 6:
+                    break
+                case 7:
+                    break
+                case 8:
+                    if let attachment = messageDict["attachment"] as? NSDictionary
+                    {
+                        let _id  = messageDict["_id"] as? String
+                        if let  localUrl = attachment.object(forKey: "localUrl") as? String
+                        {
+                            let attachmentType = attachment.object(forKey: "attachmentType") as! Int
+                            if attachmentType == 8 && localUrl.characters.count > 0
+                            {
+                                let  serverUrl = attachment.object(forKey: "serverUrl") as? String
+                                
+                                 self.addLocalVideoURLFile(url: localUrl, serverURL: serverUrl, message: message, _id: _id!)
+                                
+                            }
+                        }
+                            
+                        else if let  serverUrl = attachment.object(forKey: "serverUrl") as? String
+                        {
+                            let attachmentType = attachment.object(forKey: "attachmentType") as! Int
+                            if attachmentType == 8 && serverUrl.characters.count > 0
+                            {
+                                self.downloadVideoForIndexPath(url: serverUrl, message: message, _id: _id!)
+                            }
+                        }
+                    }
+                    break
+                case 9:
+                    break
+                case 10:
+                    break
+                case 11:
+                    break
+                case 12:
+                    break
+                    
+                default:
+                    break
+                    
+                }
+                
+                
+                
+                
+                
+                
+                
+                
+                /*
+                let messageType  = messageDict["msgType"] as! Int
+                if let msgText = messageDict["msg"] as? String, msgText.characters.count > 0 && messageType == 0
+                {
+                    self.messages.add(message)
+                        
                 }
                 else if let attachment = messageDict["attachment"] as? NSDictionary
                 {
-                    if let  localUrl = attachment.object(forKey: "serverUrl") as? String
+                    if let  localUrl = attachment.object(forKey: "localUrl") as? String
                     {
                         let attachmentType = attachment.object(forKey: "attachmentType") as! Int
                         if attachmentType == 4 && localUrl.characters.count > 0
                         {
-                            self.downloadMediaForIndexPath(url: localUrl, message: message)
-                            //self.downloadMediaForIndexPath(indexPath: indexPath, url: localUrl)
-                            //                        if let url = NSURL(string: localUrl )
-                            //                        {
-                            //
-                            //                            let imageData = ChatAsyncPhotoMedia(URL: url as URL!)
-                            //                            message  =  JSQMessage(senderId: message.senderId, senderDisplayName: message.senderId, date:  message.date, media: imageData)
-                            //                            
-                            //                        }
+                            self.addLocalURLFile(url: localUrl, message: message)
+                            
+                        }
+                    }
+                    
+                    else if let  serverUrl = attachment.object(forKey: "serverUrl") as? String
+                    {
+                        let attachmentType = attachment.object(forKey: "attachmentType") as! Int
+                        if attachmentType == 4 && serverUrl.characters.count > 0
+                        {
+                            self.downloadMediaForIndexPath(url: serverUrl, message: message)
                         }
                     }
                 }
+            }*/
+                
             }
             
         }
     }
     
-    func downloadMediaForIndexPath(url:String, message:JSQMessage)
+    
+    
+    func messageType(messageType:Int, messageDict:NSDictionary )
+    {
+        
+        switch messageType
+        {
+        case 0:
+            
+            break
+        case 1:
+            break
+        case 2:
+            break
+        case 3:
+            break
+        case 4:
+            break
+        case 5:
+            break
+        case 6:
+            break
+        case 7:
+            break
+        case 8:
+            break
+        case 9:
+            break
+        case 10:
+            break
+        case 11:
+            break
+        case 12:
+            break
+            
+        default:
+            break
+            
+        }
+    }
+    
+    
+    
+    func downloadMediaForIndexPath(url:String, message:JSQMessage, _id:String)
     {
         if let mediaItem = JSQPhotoMediaItem(maskAsOutgoing: message.senderId == self.senderId)
         {
             let fullMessage =   JSQMessage(senderId: message.senderId, senderDisplayName: message.senderId, date:  message.date, media: mediaItem)
             self.messages.add(fullMessage!)
-           DispatchQueue.global().async
+            DispatchQueue.global().async
             {
                DataSessionManger.sharedInstance.downloadImageWithURL(url, downloadedImageData: { (data, test) in
                 
-                let image  =  UIImage(data: data!)
-                mediaItem.image = image
-                DispatchQueue.main.async(execute: { () -> Void in
-                self.collectionView.reloadData()
-                })
+                    let image  =  UIImage(data: data!)
                 
+                    UIImageWriteToSavedPhotosAlbum(image!, nil, nil, nil)
+                    //let currentTime = Date().timeIntervalSince1970 as TimeInterval
+                    let extensionPathStr = "\(_id).jpg"
+                    let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+                    let fullPathToFile = "\(documentsDirectory)/\(extensionPathStr)"
+                    
+                    print(fullPathToFile)
+                    
+                    let imageData: Data = UIImageJPEGRepresentation(image!, 0.5)!
+                    
+                    try? imageData.write(to: URL(fileURLWithPath: fullPathToFile), options: [.atomic])
                 
+                    mediaItem.image = image
+                    DispatchQueue.main.async(execute: { () -> Void in
+                        self.collectionView.reloadData()
+                    })
                })
-                
+            }
         }
     }
+    
+    
+    func downloadVideoForIndexPath(url:String, message:JSQMessage, _id:String)
+    {
+        if let mediaItem = JSQVideoMediaItem(maskAsOutgoing: message.senderId == self.senderId)
+        {
+            let fullMessage =   JSQMessage(senderId: message.senderId, senderDisplayName: message.senderId, date:  message.date, media: mediaItem)
+            self.messages.add(fullMessage!)
+        
+            DispatchQueue.global(qos: .background).async
+            {
+                if let uRL = URL(string: url),
+                    let urlData = NSData(contentsOf: uRL)
+                {
+                    let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0];
+                    let filePath="\(documentsPath)\(_id)/.mp4";
+                    try? urlData.write(to: URL(fileURLWithPath: filePath), options: [.atomic])
+                    mediaItem.fileURL = URL(fileURLWithPath: filePath)
+                    mediaItem.isReadyToPlay = true
+                    DispatchQueue.main.async(execute: { () -> Void in
+                        self.collectionView.reloadData()
+                    })
+                    
+                }
+            }
+        }
     }
+    
+    
+    func addLocalVideoURLFile(url:String, serverURL:String?, message:JSQMessage, _id:String)
+    {
+        let extensionPathStr = "\(_id).mp4"
+        let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+        let fullPathToFile = "\(documentsDirectory)/\(extensionPathStr)"
+        let  idfileURL = URL(fileURLWithPath: fullPathToFile)
+        let fileURL = URL(fileURLWithPath: url)
+        if  idfileURL.isFileURL == true
+        {
+            print("file url with path ")
+            DispatchQueue.main.async(execute: { () -> Void in
+                let mediaItem = JSQVideoMediaItem(fileURL: idfileURL, isReadyToPlay: true)
+                
+                let fullMessage =   JSQMessage(senderId: message.senderId, senderDisplayName: message.senderId, date:  message.date, media: mediaItem)
+                self.messages.add(fullMessage!)
+                self.collectionView.reloadData()
+            })
+            
+        }
+        else if fileURL.isFileURL == true
+        {
+            print("file url with path ")
+            DispatchQueue.main.async(execute: { () -> Void in
+                let mediaItem = JSQVideoMediaItem(fileURL: fileURL, isReadyToPlay: true)
+                
+                let fullMessage =   JSQMessage(senderId: message.senderId, senderDisplayName: message.senderId, date:  message.date, media: mediaItem)
+                self.messages.add(fullMessage!)
+                self.collectionView.reloadData()
+            })
+        }
+        
+        else
+        {
+            if  serverURL != nil
+            {
+                self.downloadVideoForIndexPath(url: url, message: message, _id: _id)
+                
+            }
+        }
+        
+    }
+    
+    
+    
+    func addLocalURLFile(url:String, serverURL:String?, message:JSQMessage, _id:String)
+    {
+        let extensionPathStr = "\(_id).jpg"
+        let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+        let fullPathToFile = "\(documentsDirectory)/\(extensionPathStr)"
+        let  idfileURL = URL(fileURLWithPath: fullPathToFile)
+        let fileURL = URL(fileURLWithPath: url)
+        if  let data = NSData(contentsOf: idfileURL)
+        {
+            print("file url with path ")
+            DispatchQueue.main.async(execute: { () -> Void in
+                
+                let image  =  UIImage(data: data as Data)
+                print("file url with path---- \(String(describing: image))")
+                let mediaItem = JSQPhotoMediaItem(image: image)
+                let fullMessage =   JSQMessage(senderId: message.senderId, senderDisplayName: message.senderId, date:  message.date, media: mediaItem)
+                self.messages.add(fullMessage!)
+                self.collectionView.reloadData()
+            })
+
+        }
+        else if  let data = NSData(contentsOf: fileURL)
+        {
+            print("file url with path ")
+            DispatchQueue.main.async(execute: { () -> Void in
+               
+                let image  =  UIImage(data: data as Data)
+                 print("file url with path---- \(String(describing: image))")
+                let mediaItem = JSQPhotoMediaItem(image: image)
+                let fullMessage =   JSQMessage(senderId: message.senderId, senderDisplayName: message.senderId, date:  message.date, media: mediaItem)
+                self.messages.add(fullMessage!)
+                self.collectionView.reloadData()
+            })
+        }
+        else if let fileURL = URL(string: url), let data = NSData(contentsOf: fileURL)
+        {
+            print("file url with string ")
+             DispatchQueue.main.async(execute: { () -> Void in
+                let image  =  UIImage(data: data as Data)
+                 print("file url with string---- \(String(describing: image))")
+                let mediaItem = JSQPhotoMediaItem(image: image)
+                let fullMessage =   JSQMessage(senderId: message.senderId, senderDisplayName: message.senderId, date:  message.date, media: mediaItem)
+                self.messages.add(fullMessage!)
+                self.collectionView.reloadData()
+                })
+            
+        }
+        else
+        {
+            if  serverURL != nil
+            {
+                self.downloadMediaForIndexPath(url: serverURL!, message: message, _id: _id)
+                
+            }
+        }
+        
+    }
+    
+    
+    
     
     override func collectionView(_ collectionView: JSQMessagesCollectionView!, messageBubbleImageDataForItemAt indexPath: IndexPath!) -> JSQMessageBubbleImageDataSource! {
         let message: JSQMessage = self.messages[indexPath.item] as! JSQMessage
@@ -465,6 +757,28 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
         return 0.0
     }
     
+    override func collectionView(_ collectionView: JSQMessagesCollectionView!, didTapMessageBubbleAt indexPath: IndexPath!)
+    {
+         let message: JSQMessage = self.messages[indexPath.item] as! JSQMessage
+        if message.isMediaMessage == true
+        {
+            
+            if message.media.isKind(of: JSQVideoMediaItem.self) == true
+            {
+                let  video :JSQVideoMediaItem = message.media as!JSQVideoMediaItem
+                let videoVC = VideoView()
+                
+                
+                
+            }
+            
+        }
+        
+        
+        
+        
+    }
+    
     
     // Mark: Chat message Delegates
     
@@ -473,8 +787,6 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
     {
         if message.isChatMessageWithBody()
         {
-            //let displayName = user.displayName
-            
             JSQSystemSoundPlayer.jsq_playMessageReceivedSound()
             
             if let msg = message.forName("body")?.stringValue!
@@ -483,16 +795,14 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
                 {
                     if let from = message.attribute(forName: "from")?.stringValue
                     {
-                        if let msgText = messageDict["msg"] as? String
+                        if let msgText = messageDict["msg"] as? String, msgText.characters.count > 0
                         {
                             let message = JSQMessage(senderId: from, senderDisplayName: from , date: Date(), text: msgText)
                             messages.add(message!)
                             self.finishReceivingMessage(animated: true)
-                        }
-                        
-                        if let attachment = messageDict["attachment"] as? NSDictionary
+                        }else if let attachment = messageDict["attachment"] as? NSDictionary
                         {
-                            
+                            let _id  = messageDict["_id"] as? String
                             if let  serverUrl = attachment.object(forKey: "serverUrl")
                             {
                                 if let url = URL(string: serverUrl as! String)
@@ -501,33 +811,67 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
                                     let messageType = messageDict["msgType"] as? Int
                                     if messageType == 4
                                     {
-                                    DispatchQueue.global().async{
-                                   //let imageData = ChatAsyncPhotoMedia(url: url)
-                                    
-                                        
-                                        if  let imageData =  NSData(contentsOf: url)
+                                        DispatchQueue.global().async
                                         {
-                                        let image  =  UIImage(data: imageData as Data)
-                                        let data  =  JSQPhotoMediaItem(image: image)
-                                        let fullMessage =   JSQMessage(senderId: from, senderDisplayName: from, date:  Date(), media: data!)
+                                            if  let imageData =  NSData(contentsOf: url)
+                                            {
+                                                let image  =  UIImage(data: imageData as Data)
+                                                UIImageWriteToSavedPhotosAlbum(image!, nil, nil, nil)
+                                                //let currentTime = Date().timeIntervalSince1970 as TimeInterval
+                                                let extensionPathStr = "\(_id!).jpg"
+                                                let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+                                                let fullPathToFile = "\(documentsDirectory)/\(extensionPathStr)"
+                                                
+                                                print(fullPathToFile)
+                                                
+                                                let imageData: Data = UIImageJPEGRepresentation(image!, 0.5)!
+                                                
+                                                try? imageData.write(to: URL(fileURLWithPath: fullPathToFile), options: [.atomic])
+                                                
+                                                
+                                                
+                                                
+                                                let data  =  JSQPhotoMediaItem(image: image)
+                                                let fullMessage =   JSQMessage(senderId: from, senderDisplayName: from, date:  Date(), media: data!)
                                         
-                                        DispatchQueue.main.async(execute: { () -> Void in
-                                            self.messages.add(fullMessage!)
-                                        self.finishReceivingMessage(animated: true)
-                                        })
-                                    }
+                                                DispatchQueue.main.async(execute: { () -> Void in
+                                                self.messages.add(fullMessage!)
+                                                    self.finishReceivingMessage(animated: true)
+                                                })
+                                            }
+                                        }
+                                    }else if messageType == 8
+                                    {
+                                        DispatchQueue.global().async
+                                            {
+                                                
+                                                if let urlData = NSData(contentsOf: url)
+                                                {
+                                                    let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0];
+                                                    let filePath="\(documentsPath)\(_id!)/.mp4";
+                                                     UISaveVideoAtPathToSavedPhotosAlbum(filePath, nil, nil, nil)
+                                                    try? urlData.write(to: URL(fileURLWithPath: filePath), options: [.atomic])
+                                                    print("file url with path ")
+                                                    DispatchQueue.main.async(execute: { () -> Void in
+                                                        let mediaItem = JSQVideoMediaItem(fileURL: URL(fileURLWithPath: filePath), isReadyToPlay: true)
+                                                        
+                                                        let fullMessage =   JSQMessage(senderId: from, senderDisplayName: from, date:  Date(), media: mediaItem!)
+                                                        
+                                                        DispatchQueue.main.async(execute: { () -> Void in
+                                                            self.messages.add(fullMessage!)
+                                                            self.finishReceivingMessage(animated: true)
+                                                        })
+                                                    
+                                                })
+                                                
+                                            }
+                                        }
                                         
                                     }
-                                    }
-                                    
-                                    
                                     
                                 }
                             }
-                            
                         }
-                        
-                        
                     }
                 }else
                 {
@@ -564,71 +908,6 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
         
         if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage
         {
-            DispatchQueue.main.async(execute: { () -> Void in
-                let data =  JSQPhotoMediaItem(image: pickedImage)
-                let fullMessage =   JSQMessage(senderId: OneChat.sharedInstance.xmppStream?.myJID.bare(), senderDisplayName: OneChat.sharedInstance.xmppStream?.myJID.bare(), date:  Date(), media: data)
-                self.messages.add(fullMessage!)
-                JSQSystemSoundPlayer.jsq_playMessageSentSound()
-                self.finishReceivingMessage(animated: true)
-            })
-            
-           
-
-            
-        
-            
-            
-            //self.finishSendingMessageAnimated(true)
-            
-           // DataSessionManger.sharedInstance.
-            
-        //hit webservice =
-            
-            
-            
-            let currentTime = Date().timeIntervalSince1970 as TimeInterval
-            let extensionPathStr = "profile\(currentTime).jpg"
-            let documentsDirectory = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true)[0]
-            let fullPathToFile = "\(documentsDirectory)/\(extensionPathStr)"
-            
-            print(fullPathToFile)
-            
-            let imageData: Data = UIImageJPEGRepresentation(pickedImage, 0.5)!
-            
-            try? imageData.write(to: URL(fileURLWithPath: fullPathToFile), options: [.atomic])
-            let imagePath =  [ "photo"]
-            let mediaPathArray = [fullPathToFile]
-            DataSessionManger.sharedInstance.sendVideoORImageMessage(recipient!.jidStr.replacingOccurrences(of: "@localhost", with: ""), message_type: "image", mediaPath: mediaPathArray, name: imagePath, onFinish: { (response, deserializedResponse) in
-                
-                
-                if let recipient = self.recipient
-                {
-                    let message = ImageMessage()
-                    message._id = (OneChat.sharedInstance.xmppStream?.generateUUID())!
-                    message._isRead = false
-                    message.msg     = ""
-                    message.msgType = 4
-                    message.senderId = self.senderId
-                    message.receiverId  = recipient.jidStr
-                    message.attachment.localUrl = fullPathToFile
-                    message.attachment.serverUrl =  deserializedResponse.object(forKey: "image") as! String
-                    
-                    OneMessage.sendMessage(message.getJson(), to: recipient.jidStr, completionHandler: { (stream, message) -> Void in
-                        
-                         self.finishSendingMessage(animated: true)
-                    })
-                }
-                
-                
-                }, onError: { (error) in
-                    
-            })
-            
-        }
-        
-        
-        if let video = info[UIImagePickerControllerMediaURL]
-        {
             /*
             DispatchQueue.main.async(execute: { () -> Void in
                 let data =  JSQPhotoMediaItem(image: pickedImage)
@@ -636,10 +915,121 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
                 self.messages.add(fullMessage!)
                 JSQSystemSoundPlayer.jsq_playMessageSentSound()
                 self.finishReceivingMessage(animated: true)
-            })*/
+            })
+            */
+    
             
             
             
+            if let recipient = self.recipient
+            {
+                let message = ImageMessage()
+                message._id = (OneChat.sharedInstance.xmppStream?.generateUUID())!
+                message._isRead = false
+                message.msg     = ""
+                message.msgType = 4
+                message.senderId = self.senderId
+                message.receiverId  = recipient.jidStr
+               
+                
+                UIImageWriteToSavedPhotosAlbum(pickedImage, nil, nil, nil)
+                //let currentTime = Date().timeIntervalSince1970 as TimeInterval
+                let extensionPathStr = "\(message._id).jpg"
+                let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+                let fullPathToFile = "\(documentsDirectory)/\(extensionPathStr)"
+                
+                print(fullPathToFile)
+                
+                let imageData: Data = UIImageJPEGRepresentation(pickedImage, 0.5)!
+                
+                try? imageData.write(to: URL(fileURLWithPath: fullPathToFile), options: [.atomic])
+                let imagePath =  [ "photo"]
+                let mediaPathArray = [fullPathToFile]
+                 message.attachment.localUrl = fullPathToFile
+                
+                
+                let fullMessage = JSQMessage(senderId: OneChat.sharedInstance.xmppStream?.myJID.bare(), senderDisplayName: OneChat.sharedInstance.xmppStream?.myJID.bare(), date: Date(), text: message.getJson())
+                
+                self.addMessage(message: fullMessage!)
+                JSQSystemSoundPlayer.jsq_playMessageSentSound()
+                self.finishReceivingMessage(animated: true)
+                
+            DataSessionManger.sharedInstance.sendVideoORImageMessage(recipient.jidStr.replacingOccurrences(of: "@localhost", with: ""), message_type: "image", mediaPath: mediaPathArray, name: imagePath, onFinish: { (response, deserializedResponse) in
+                    
+                    
+                    message.attachment.serverUrl =  deserializedResponse.object(forKey: "image") as! String
+                
+                    OneMessage.sendMessage(message.getJson(), to: recipient.jidStr, completionHandler: { (stream, message) -> Void in
+                    
+                    ///should update message has been sent
+                })
+                    
+                }, onError: { (error) in
+                    
+                })
+                
+            }
+        }
+        
+        
+        if let video = info[UIImagePickerControllerMediaURL]
+        {
+            
+            if let recipient = self.recipient
+            {
+                let message = VideoMessage()
+                message.attachment.attachmentType = 8
+                message._id = (OneChat.sharedInstance.xmppStream?.generateUUID())!
+                message._isRead = false
+                message.msg     = ""
+                message.msgType = 8
+                message.senderId = self.senderId
+                message.receiverId  = recipient.jidStr
+                
+                
+                
+                
+                
+                
+                //UIImageWriteToSavedPhotosAlbum(pickedImage, nil, nil, nil)
+                //let currentTime = Date().timeIntervalSince1970 as TimeInterval
+                let extensionPathStr = "\(message._id).mp4"
+                let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+                let fullPathToFile = "\(documentsDirectory)/\(extensionPathStr)"
+                
+                print(fullPathToFile)
+                UISaveVideoAtPathToSavedPhotosAlbum(fullPathToFile, nil, nil, nil)
+                let videoData = NSData(contentsOf: video as! URL)
+                
+                try? videoData?.write(to: URL(fileURLWithPath: fullPathToFile), options: [.atomic])
+                let imagePath =  ["video"]
+                let mediaPathArray = [fullPathToFile]
+                message.attachment.localUrl = fullPathToFile
+                
+                
+                let fullMessage = JSQMessage(senderId: OneChat.sharedInstance.xmppStream?.myJID.bare(), senderDisplayName: OneChat.sharedInstance.xmppStream?.myJID.bare(), date: Date(), text: message.getJson())
+                
+                self.addMessage(message: fullMessage!)
+                JSQSystemSoundPlayer.jsq_playMessageSentSound()
+                self.finishReceivingMessage(animated: true)
+                DataSessionManger.sharedInstance.sendVideoORImageMessage(recipient.jidStr.replacingOccurrences(of: "@localhost", with: ""), message_type: "video", mediaPath: mediaPathArray, name: imagePath, onFinish: { (response, deserializedResponse) in
+                    
+                    print("\(deserializedResponse)")
+                    if let video = deserializedResponse.object(forKey: "video") as? String
+                    {
+                        message.attachment.serverUrl = video
+                        
+                        OneMessage.sendMessage(message.getJson(), to: recipient.jidStr, completionHandler: { (stream, message) -> Void in
+                            
+                            ///should update message has been sent
+                        })
+                    }
+                    
+                }, onError: { (error) in
+                    
+                })
+                
+            }
         }
         picker.dismiss(animated: true, completion: nil)
     }
