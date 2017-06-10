@@ -28,6 +28,14 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
     @IBOutlet weak var statusLabel:UILabel?
     @IBOutlet weak var profilePic:UIImageView?
     
+    
+    
+    var locationManager: CLLocationManager!
+    var currentLocation:CLLocation?
+    var latitudeToSend: CLLocationDegrees?
+    var longitudeToSend: CLLocationDegrees?
+    
+    var isLocationClicked:Bool = false
     // Mark: Life Cycle
     
     
@@ -66,6 +74,7 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
         
         let thirdAction = UIAlertAction(title: "Location", style: .default) { (alert: UIAlertAction!) -> Void in
             NSLog("You pressed button two")
+            self.setupLocationManager()
         } // 3
         
         let fourthAction = UIAlertAction(title: "Contact", style: .default) { (alert: UIAlertAction!) -> Void in
@@ -312,9 +321,7 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
     
     override func collectionView(_ collectionView: JSQMessagesCollectionView!, messageDataForItemAt indexPath: IndexPath!) -> JSQMessageData!
     {
-        var message: JSQMessage = self.messages[indexPath.item] as! JSQMessage
-        
-        
+        let message: JSQMessage = self.messages[indexPath.item] as! JSQMessage
         return message
     }
     
@@ -403,6 +410,38 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
                 case 9:
                     break
                 case 10:
+                    
+                    if let attachment = messageDict["attachment"] as? NSDictionary
+                    {
+                        let _id  = messageDict["_id"] as? String
+                        if let  localUrl = attachment.object(forKey: "localUrl") as? String
+                        {
+                            let attachmentType = attachment.object(forKey: "attachmentType") as! Int
+                            if attachmentType == 10 && localUrl.characters.count > 0
+                            {
+                                let latLongArray = localUrl.components(separatedBy: "-")
+                                if let lat = latLongArray.first  , let lang = latLongArray.last
+                                {
+                                    DispatchQueue.main.async(execute: { () -> Void in
+                                        let latitudeToSend: CLLocationDegrees = Double(lat)!
+                                        let longitudeToSend: CLLocationDegrees = Double(lang)!
+                                        let locationItem =  self.buildLocationItem(latitude: latitudeToSend, longitude: longitudeToSend)
+                                        let fullMessage =   JSQMessage(senderId: message.senderId, senderDisplayName: message.senderId, date:  message.date, media: locationItem)
+                                        self.messages.add(fullMessage!)
+                                        self.collectionView.reloadData()
+                                    })
+                                    
+                                    
+                                    
+                                }
+                                
+                            }
+                        }
+                            
+                        
+                    }
+                    
+                    
                     break
                 case 11:
                     break
@@ -1008,7 +1047,7 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
         }
         
         
-        if let video = info[UIImagePickerControllerMediaURL]
+        if let video = info[UIImagePickerControllerMediaURL]  as? URL
         {
             
             if let recipient = self.recipient
@@ -1029,13 +1068,14 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
                 
                 //UIImageWriteToSavedPhotosAlbum(pickedImage, nil, nil, nil)
                 //let currentTime = Date().timeIntervalSince1970 as TimeInterval
-                let extensionPathStr = "\(message._id).mp4"
+                 let lastPathComponent = video.pathExtension
+                let extensionPathStr = "\(message._id)."+lastPathComponent
                 let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
                 let fullPathToFile = "\(documentsDirectory)/\(extensionPathStr)"
                 
                 print(fullPathToFile)
                 UISaveVideoAtPathToSavedPhotosAlbum(fullPathToFile, nil, nil, nil)
-                let videoData = NSData(contentsOf: video as! URL)
+                let videoData = NSData(contentsOf: video )
                 
                 try? videoData?.write(to: URL(fileURLWithPath: fullPathToFile), options: [.atomic])
                 let imagePath =  ["video"]
@@ -1097,3 +1137,86 @@ extension NSObject
     }
 }
 
+extension ChatsViewController : CLLocationManagerDelegate
+{
+    
+    func addMedia(media:JSQMediaItem)
+    {
+        let message = JSQMessage(senderId: self.senderId, displayName: self.senderDisplayName, media: media)!
+        //self.messages.add(fullMessage!)
+        
+        //Optional: play sent sound
+        
+        self.finishSendingMessage(animated: true)
+    }
+
+    func buildLocationItem(latitude: CLLocationDegrees, longitude: CLLocationDegrees) -> JSQLocationMediaItem {
+        let ferryBuildingInSF = CLLocation(latitude: latitude, longitude: longitude)
+        
+        let locationItem = JSQLocationMediaItem()
+        locationItem.setLocation(ferryBuildingInSF) {
+            self.collectionView!.reloadData()
+        }
+        
+        return locationItem
+    }
+
+    
+    func setupLocationManager(){
+        locationManager = CLLocationManager()
+        locationManager.delegate = self
+        self.locationManager.requestAlwaysAuthorization()
+        locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+        locationManager.startUpdatingLocation()
+        
+        isLocationClicked = true
+        
+    }
+    
+    // Below method will provide you current location.
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        
+        if isLocationClicked == true
+        {
+            isLocationClicked = false
+        let locationValue:CLLocationCoordinate2D = manager.location!.coordinate
+        
+        print("locations = \(locationValue)")
+        latitudeToSend = locationValue.latitude
+        longitudeToSend = locationValue.longitude
+        locationManager.stopUpdatingLocation()
+        
+        //let locationItem = self.buildLocationItem(latitude: self.latitudeToSend!, longitude: self.longitudeToSend!)
+        
+        ///self.addMedia(media: locationItem)
+        
+        
+        
+        let message = VideoMessage()
+        message.attachment.attachmentType = 10
+        message._id = (OneChat.sharedInstance.xmppStream?.generateUUID())!
+        message._isRead = false
+        message.msg     = ""
+        message.msgType = 10
+        message.senderId = self.senderId
+        message.receiverId  = (recipient?.jidStr)!
+        message.attachment.localUrl = String(describing: latitudeToSend!.magnitude)+"-"+String(describing: longitudeToSend!.magnitude)
+        
+        let fullMessage = JSQMessage(senderId: OneChat.sharedInstance.xmppStream?.myJID.bare(), senderDisplayName: OneChat.sharedInstance.xmppStream?.myJID.bare(), date: Date(), text: message.getJson())
+        self.addMessage(message: fullMessage!)
+        
+       OneMessage.sendMessage(message.getJson(), to: (recipient?.jidStr)!, completionHandler: { (stream, message) -> Void in
+            JSQSystemSoundPlayer.jsq_playMessageSentSound()
+            self.finishSendingMessage(animated: true)
+        })
+            
+        }
+    }
+    
+    // Below Mehtod will print error if not able to update location.
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("Error")
+        
+        
+    }
+}
