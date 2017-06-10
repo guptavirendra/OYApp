@@ -9,15 +9,25 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-//#import "utilities.h"
+#import <Foundation/Foundation.h>
+#import <CoreLocation/CoreLocation.h>
 
-#import <UIKit/UIKit.h>
-
-
+/*
 //-------------------------------------------------------------------------------------------------------------------------------------------------
-@interface VideoView : UIViewController
+@interface Location : NSObject <CLLocationManagerDelegate>
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 
-- (id)initWith:(NSURL *)url_;
+@property (strong, nonatomic) CLLocationManager *locationManager;
+
+@property (nonatomic) CLLocationCoordinate2D coordinate;
+
++ (Location *)shared;
+
++ (void)start;
++ (void)stop;
+
++ (CLLocationDegrees)latitude;
++ (CLLocationDegrees)longitude;
 
 @end
+*/

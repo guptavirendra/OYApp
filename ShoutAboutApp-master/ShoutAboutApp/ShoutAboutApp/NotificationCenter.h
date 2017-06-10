@@ -9,15 +9,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-//#import "utilities.h"
-
-#import <UIKit/UIKit.h>
-
+#import <Foundation/Foundation.h>
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
-@interface VideoView : UIViewController
+@interface NotificationCenter : NSObject
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 
-- (id)initWith:(NSURL *)url_;
++ (void)addObserver:(id)target selector:(SEL)selector name:(NSString *)name;
+
++ (void)removeObserver:(id)target;
+
++ (void)post:(NSString *)notification;
++ (void)post:(NSString *)notification afterDelay:(NSTimeInterval)delay;
 
 @end

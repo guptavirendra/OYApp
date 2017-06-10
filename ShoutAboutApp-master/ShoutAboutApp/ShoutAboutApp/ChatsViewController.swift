@@ -985,16 +985,21 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
             if message.media.isKind(of: JSQVideoMediaItem.self) == true
             {
                 let  video :JSQVideoMediaItem = message.media as!JSQVideoMediaItem
-                //let videoVC = VideoView()
+                let videoVC = VideoView(video.fileURL)
+                self.present(videoVC!, animated: true, completion: nil)
                 
+            }else if message.media.isKind(of: JSQLocationMediaItem.self) == true
+            {
+                let  location :JSQLocationMediaItem = message.media as!JSQLocationMediaItem
+                let mapVC = MapView(location.location)
+                let nav = UINavigationController(rootViewController: mapVC!)
+                self.present(nav, animated: true, completion: nil)
+
                 
                 
             }
             
         }
-        
-        
-        
         
     }
     

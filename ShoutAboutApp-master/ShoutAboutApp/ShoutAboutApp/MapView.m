@@ -9,28 +9,32 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "VideoView.h"
-#import <AVKit/AVKit.h>
-#import "NotificationCenter.h"
-#import <AVFoundation/AVFoundation.h>
+#import "MapView.h"
+#import <MapKit/MapKit.h>
+
+
 //-------------------------------------------------------------------------------------------------------------------------------------------------
-@interface VideoView()
+@interface MapView()
 {
-	NSURL *url;
-	AVPlayerViewController *controller;
+	CLLocation *location;
 }
+
+@property (strong, nonatomic) IBOutlet MKMapView *mapView;
+
 @end
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 
-@implementation VideoView
+@implementation MapView
+
+@synthesize mapView;
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
-- (id)initWith:(NSURL *)url_
+- (id)initWith:(CLLocation *)location_
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 {
 	self = [super init];
 	//---------------------------------------------------------------------------------------------------------------------------------------------
-	url = url_;
+	location = location_;
 	//---------------------------------------------------------------------------------------------------------------------------------------------
 	return self;
 }
@@ -40,8 +44,10 @@
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 {
 	[super viewDidLoad];
+	self.title = @"Map";
 	//---------------------------------------------------------------------------------------------------------------------------------------------
-	[NotificationCenter addObserver:self selector:@selector(actionDone) name:AVPlayerItemDidPlayToEndTimeNotification];
+	self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self
+																						  action:@selector(actionCancel)];
 }
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
@@ -50,34 +56,26 @@
 {
 	[super viewWillAppear:animated];
 	//---------------------------------------------------------------------------------------------------------------------------------------------
-	[[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
+	MKCoordinateRegion region;
+	region.center.latitude = location.coordinate.latitude;
+	region.center.longitude = location.coordinate.longitude;
+	region.span.latitudeDelta = 0.01;
+	region.span.longitudeDelta = 0.01;
+	[mapView setRegion:region animated:NO];
 	//---------------------------------------------------------------------------------------------------------------------------------------------
-	controller = [[AVPlayerViewController alloc] init];
-	controller.player = [AVPlayer playerWithURL:url];
-	[controller.player play];
-	//---------------------------------------------------------------------------------------------------------------------------------------------
-	[self addChildViewController:controller];
-	[self.view addSubview:controller.view];
-	controller.view.frame = self.view.frame;
-}
-
-//-------------------------------------------------------------------------------------------------------------------------------------------------
-- (void)viewWillDisappear:(BOOL)animated
-//-------------------------------------------------------------------------------------------------------------------------------------------------
-{
-	[super viewWillDisappear:animated];
-	//---------------------------------------------------------------------------------------------------------------------------------------------
-	[NotificationCenter removeObserver:self];
+	MKPointAnnotation *annotation = [[MKPointAnnotation alloc] init];
+    [mapView addAnnotation:annotation];
+    [annotation setCoordinate:location.coordinate];
+ 	//[annotation setCoordinate:location.coordinate];
 }
 
 #pragma mark - User actions
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
-- (void)actionDone
+- (void)actionCancel
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 {
 	[self dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end
-

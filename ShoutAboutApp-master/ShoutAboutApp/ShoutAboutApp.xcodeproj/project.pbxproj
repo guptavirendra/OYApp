@@ -49,6 +49,14 @@
 		F1394F6E1EE41BFD00552898 /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1394F6D1EE41BFD00552898 /* Photos.framework */; };
 		F1394F721EE448A700552898 /* VideoView.m in Sources */ = {isa = PBXBuildFile; fileRef = F1394F701EE448A700552898 /* VideoView.m */; };
 		F1394F731EE448A700552898 /* VideoView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F1394F711EE448A700552898 /* VideoView.xib */; };
+		F1394F7A1EEC792700552898 /* NotificationCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = F1394F791EEC792700552898 /* NotificationCenter.m */; };
+		F1394F7C1EEC79D300552898 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1394F7B1EEC79D300552898 /* AVFoundation.framework */; };
+		F1394F7E1EEC79DE00552898 /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1394F7D1EEC79DE00552898 /* AVKit.framework */; };
+		F1394F821EEC873700552898 /* MapView.m in Sources */ = {isa = PBXBuildFile; fileRef = F1394F801EEC873700552898 /* MapView.m */; };
+		F1394F831EEC873700552898 /* MapView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F1394F811EEC873700552898 /* MapView.xib */; };
+		F1394F851EEC87BC00552898 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1394F841EEC87BC00552898 /* MapKit.framework */; };
+		F1394F881EEC883B00552898 /* Location.m in Sources */ = {isa = PBXBuildFile; fileRef = F1394F871EEC883B00552898 /* Location.m */; };
+		F1394F8A1EEC88FC00552898 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1394F891EEC88FC00552898 /* CoreLocation.framework */; };
 		F13AD92E1EACE617009B88F1 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F13AD92D1EACE617009B88F1 /* SWRevealViewController.m */; };
 		F13F2A841EC844B100A43F82 /* AlertsPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F13F2A831EC844B100A43F82 /* AlertsPostViewController.swift */; };
 		F17E085C1E0FF16500FDBF0B /* AKImageCropperOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F17E08511E0FF16500FDBF0B /* AKImageCropperOverlayView.swift */; };
@@ -141,6 +149,17 @@
 		F1394F6F1EE448A700552898 /* VideoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoView.h; sourceTree = "<group>"; };
 		F1394F701EE448A700552898 /* VideoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoView.m; sourceTree = "<group>"; };
 		F1394F711EE448A700552898 /* VideoView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VideoView.xib; sourceTree = "<group>"; };
+		F1394F781EEC792700552898 /* NotificationCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationCenter.h; sourceTree = "<group>"; };
+		F1394F791EEC792700552898 /* NotificationCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationCenter.m; sourceTree = "<group>"; };
+		F1394F7B1EEC79D300552898 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		F1394F7D1EEC79DE00552898 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
+		F1394F7F1EEC873700552898 /* MapView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapView.h; sourceTree = "<group>"; };
+		F1394F801EEC873700552898 /* MapView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapView.m; sourceTree = "<group>"; };
+		F1394F811EEC873700552898 /* MapView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MapView.xib; sourceTree = "<group>"; };
+		F1394F841EEC87BC00552898 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		F1394F861EEC883B00552898 /* Location.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Location.h; sourceTree = "<group>"; };
+		F1394F871EEC883B00552898 /* Location.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Location.m; sourceTree = "<group>"; };
+		F1394F891EEC88FC00552898 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		F13AD92C1EACE617009B88F1 /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRevealViewController.h; sourceTree = "<group>"; };
 		F13AD92D1EACE617009B88F1 /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
 		F13F2A831EC844B100A43F82 /* AlertsPostViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertsPostViewController.swift; sourceTree = "<group>"; };
@@ -182,6 +201,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F1394F851EEC87BC00552898 /* MapKit.framework in Frameworks */,
+				F1394F8A1EEC88FC00552898 /* CoreLocation.framework in Frameworks */,
+				F1394F7E1EEC79DE00552898 /* AVKit.framework in Frameworks */,
+				F1394F7C1EEC79D300552898 /* AVFoundation.framework in Frameworks */,
 				F1394F6E1EE41BFD00552898 /* Photos.framework in Frameworks */,
 				F11EC3BE1E20DEA7001374E9 /* ContactsUI.framework in Frameworks */,
 				F1D1F7E61DEE05D20046DBB2 /* Pods_ShoutAboutApp.framework in Frameworks */,
@@ -194,6 +217,10 @@
 		6617F68A4E185EE720CE3C08 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F1394F891EEC88FC00552898 /* CoreLocation.framework */,
+				F1394F841EEC87BC00552898 /* MapKit.framework */,
+				F1394F7D1EEC79DE00552898 /* AVKit.framework */,
+				F1394F7B1EEC79D300552898 /* AVFoundation.framework */,
 				F1394F6D1EE41BFD00552898 /* Photos.framework */,
 				F11EC3BD1E20DEA7001374E9 /* ContactsUI.framework */,
 				17F0E7E11A503618876EE71A /* Pods_ShoutAboutApp.framework */,
@@ -322,9 +349,16 @@
 		F12C274F1DCE45A800AEE0A3 /* ShoutAboutApp */ = {
 			isa = PBXGroup;
 			children = (
+				F1394F781EEC792700552898 /* NotificationCenter.h */,
+				F1394F791EEC792700552898 /* NotificationCenter.m */,
 				F1394F6F1EE448A700552898 /* VideoView.h */,
 				F1394F701EE448A700552898 /* VideoView.m */,
 				F1394F711EE448A700552898 /* VideoView.xib */,
+				F1394F7F1EEC873700552898 /* MapView.h */,
+				F1394F801EEC873700552898 /* MapView.m */,
+				F1394F811EEC873700552898 /* MapView.xib */,
+				F1394F861EEC883B00552898 /* Location.h */,
+				F1394F871EEC883B00552898 /* Location.m */,
 				F13AD92B1EACE617009B88F1 /* SWReveal */,
 				8ECC94E11E659B5F00B12787 /* Alert */,
 				F17E0A251E3D23B60023F4B3 /* ShoutAboutApp.entitlements */,
@@ -486,6 +520,7 @@
 				F17E08641E0FF16500FDBF0B /* Crop.storyboard in Resources */,
 				F1394F731EE448A700552898 /* VideoView.xib in Resources */,
 				F1227AF91E070FE7002D9CE3 /* ContactTableViewCell.xib in Resources */,
+				F1394F831EEC873700552898 /* MapView.xib in Resources */,
 				F12C27561DCE45A800AEE0A3 /* Main.storyboard in Resources */,
 				F11B75FE1DE373AD0075DDCB /* GoogleService-Info.plist in Resources */,
 			);
@@ -557,6 +592,7 @@
 				F11B75FC1DE17B520075DDCB /* ChatImageTableViewCell.swift in Sources */,
 				F1C9A81F1E3DE0CD003354B6 /* NewProfileViewController.swift in Sources */,
 				8E2470B21E6ED34200864806 /* MoreCell.swift in Sources */,
+				F1394F7A1EEC792700552898 /* NotificationCenter.m in Sources */,
 				F13AD92E1EACE617009B88F1 /* SWRevealViewController.m in Sources */,
 				8EB9B7AA1E77D2E400FA4BCA /* likeDislikeViewController.swift in Sources */,
 				8ECC94E31E659B8B00B12787 /* AlertViewController.swift in Sources */,
@@ -572,6 +608,7 @@
 				F1394F721EE448A700552898 /* VideoView.m in Sources */,
 				F12C27831DCF85CB00AEE0A3 /* RateANdReviewViewController.swift in Sources */,
 				F12713B01DCF9E9F005928AD /* RatingTableViewCell.swift in Sources */,
+				F1394F821EEC873700552898 /* MapView.m in Sources */,
 				F12C27751DCF07BB00AEE0A3 /* ClickTableViewCell.swift in Sources */,
 				F12C27811DCF765300AEE0A3 /* ChatViewController.swift in Sources */,
 				F17E08661E0FF16500FDBF0B /* UIImage.swift in Sources */,
@@ -598,6 +635,7 @@
 				F12C277B1DCF75F800AEE0A3 /* SearchViewController.swift in Sources */,
 				F11B75FA1DE0C70C0075DDCB /* MyTabViewController.swift in Sources */,
 				F11689921ED9A38C00D67E7F /* Message.swift in Sources */,
+				F1394F881EEC883B00552898 /* Location.m in Sources */,
 				F12C27691DCE66D900AEE0A3 /* URLPath.swift in Sources */,
 				F12C276F1DCE77A900AEE0A3 /* OTPViewController.swift in Sources */,
 				F12C277F1DCF763F00AEE0A3 /* ProfileViewController.swift in Sources */,

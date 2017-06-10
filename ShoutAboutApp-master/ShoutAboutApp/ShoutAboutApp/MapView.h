@@ -10,14 +10,16 @@
 // THE SOFTWARE.
 
 //#import "utilities.h"
-
+#import "Location.h"
 #import <UIKit/UIKit.h>
+#import <CoreLocation/CoreLocation.h>
+
 
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
-@interface VideoView : UIViewController
+@interface MapView : UIViewController
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 
-- (id)initWith:(NSURL *)url_;
+- (id)initWith:(CLLocation *)locaton_;
 
 @end
