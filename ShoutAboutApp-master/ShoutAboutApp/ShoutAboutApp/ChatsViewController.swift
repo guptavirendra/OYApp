@@ -766,7 +766,7 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
             if message.media.isKind(of: JSQVideoMediaItem.self) == true
             {
                 let  video :JSQVideoMediaItem = message.media as!JSQVideoMediaItem
-                let videoVC = VideoView()
+                //let videoVC = VideoView()
                 
                 
                 
