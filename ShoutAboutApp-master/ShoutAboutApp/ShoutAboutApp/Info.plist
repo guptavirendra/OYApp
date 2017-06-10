@@ -86,6 +86,8 @@
 	<string>Microphone</string>
 	<key>Privacy - Contacts Usage Description </key>
 	<string>Allow to access the App.it is necessary</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Use Photo</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>TitilliumWeb-Bold.ttf</string>

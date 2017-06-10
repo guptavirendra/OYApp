@@ -113,7 +113,43 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
             self.senderId = OneChat.sharedInstance.xmppStream?.myJID.bare()
             self.senderDisplayName = OneChat.sharedInstance.xmppStream?.myJID.bare()
         }
-        
+
+        if let recipient = recipient
+        {
+            self.navigationItem.rightBarButtonItems = []
+
+            navigationItem.title = recipient.displayName
+            self.titleLabel?.text = reciepientPerson?.name  //recipient.nickname
+            //self.profilePic?.sd_setImage(with: URL(string: (reciepientPerson?.photo)!))
+
+            DispatchQueue.main.async(execute: { () -> Void in
+                let messages = OneMessage.sharedInstance.loadArchivedMessagesFrom(jid: recipient.jidStr)
+
+
+
+                for message in messages
+                {
+                    self.addMessage(message: message as! JSQMessage)
+                }
+                // Here I have to convert all data
+                self.finishReceivingMessage(animated: true)
+            })
+        } else
+        {
+            if userDetails == nil
+            {
+                self.titleLabel?.text = "New message"
+            }
+
+            self.inputToolbar!.contentView!.rightBarButtonItem!.isEnabled = false
+
+            if firstTime
+            {
+                firstTime = false
+            }
+        }
+
+
         self.collectionView!.collectionViewLayout.springinessEnabled = false
         self.inputToolbar!.contentView!.leftBarButtonItem!.isHidden = false
     }
@@ -132,7 +168,7 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
     override func viewWillAppear(_ animated: Bool)
     {
         self.navigationController?.isNavigationBarHidden = false
-        if let recipient = recipient
+        /*if let recipient = recipient
         {
             self.navigationItem.rightBarButtonItems = []
             
@@ -165,7 +201,7 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
             {
                 firstTime = false
             }
-        }
+        }*/
     }
     
     override func viewDidAppear(_ animated: Bool) {
