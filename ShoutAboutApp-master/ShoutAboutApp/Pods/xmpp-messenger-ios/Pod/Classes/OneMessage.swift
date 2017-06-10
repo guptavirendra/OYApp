@@ -316,14 +316,17 @@ extension OneMessage: XMPPStreamDelegate
 		//OneMessage.sharedInstance.didSendMessageCompletionBlock!(stream: sender, message: message)
 	}
 	
-	public func xmppStream(_ sender: XMPPStream, didReceive message: XMPPMessage) {
+	public func xmppStream(_ sender: XMPPStream, didReceive message: XMPPMessage)
+    {
 		let user = OneChat.sharedInstance.xmppRosterStorage.user(for: message.from(), xmppStream: OneChat.sharedInstance.xmppStream, managedObjectContext: OneRoster.sharedInstance.managedObjectContext_roster())
 		
-        
-		if OneChats.knownUserForJid(jidStr: (user!.jidStr))
+        if user != nil
         {
-			OneChats.addUserToChatList(jidStr: user!.jidStr)
-		}
+            if OneChats.knownUserForJid(jidStr: (user!.jidStr))
+            {
+                OneChats.addUserToChatList(jidStr: user!.jidStr)
+            }
+        }
 		
 		if message.isChatMessageWithBody()
         {
