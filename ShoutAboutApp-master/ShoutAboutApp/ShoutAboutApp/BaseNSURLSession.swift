@@ -776,31 +776,34 @@ open class BaseNSURLSession: NSObject
     // Response is in form of Data and deserializedResponse in form of dictionary
     final  func startSessionTaskDataTaskWithRequest(_ onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->())
     {
-        print(" URL path of request" + "\(mNSMutableRequest?.url)")
         
-        let lAppDelegate = UIApplication.shared.delegate as AnyObject
+        
+        
+        
         if let _ = mNSMutableRequest
         {
+            
             
             mNSURLSessionDataTask = mNSURLSession.dataTask(with: mNSMutableRequest!, completionHandler:
                 {
                     data, response, error -> Void in
                     //println("data: \(data)")
+                    print("Response: \(response)")
+                    print("error: \(error)")
                     self.mNSHTTPURLResponse = response as? HTTPURLResponse// Check Data is HTTPURl Response
                     let HttpResponseStatusClass = HttpResponseStatus()
                     var responseMessage:String
-                    print("Status Code::  \(self.mNSHTTPURLResponse?.statusCode) & URL : \(self.mNSHTTPURLResponse?.url)" )
+                    print("Status Code::  \(String(describing: self.mNSHTTPURLResponse?.statusCode)) & URL : \(String(describing: self.mNSHTTPURLResponse?.url))" )
                     
                     // First check for any error
                     if error != nil
                     {
-                        //print("Error description: \(error!.localizedFailureReason)")
+                        
                         let errors = errorDescription(error! as AnyObject)
                         onError(errors as AnyObject)
                     }
                     else
                     {
-                        var savePassword:NSString = ""
                         
                         // Here Check for status code if it is not null
                         if let statusCode = self.mNSHTTPURLResponse?.statusCode
@@ -809,96 +812,15 @@ open class BaseNSURLSession: NSObject
                             responseMessage = HttpResponseStatusClass.getResponseStatusMessage(statusCode)
                             print("Status code message" + responseMessage )
                             
-                            if(self.mNSHTTPURLResponse?.statusCode  == 401  && ( self.mNSHTTPURLResponse?.url?.lastPathComponent == "login" || self.mNSHTTPURLResponse?.url?.lastPathComponent == "changepassword" || self.mNSHTTPURLResponse?.url?.lastPathComponent == "forgotpassword"))
+                            // Response code 200 means success
+                            if(self.mNSHTTPURLResponse?.statusCode  == 200 )
                             {
-                                
-                                if let dataInAnyObject = data
-                                {
-                                    do  {
-                                        let json = try JSONSerialization.jsonObject(with: dataInAnyObject, options: .mutableLeaves) as? NSDictionary
-                                        // Check  if there is any error while converting the data
-                                        if(self.mNSError != nil)
-                                        {
-                                            print(self.mNSError!.localizedDescription)
-                                            let jsonStr = String(data: dataInAnyObject, encoding: String.Encoding.utf8)
-                                            print("Error could not parse JSON with new block:  '\(jsonStr)'")
-                                            let errors = errorDescription(self.mNSError!)
-                                            // If there is any error while converting data to dict then through error block
-                                            onError(errors as AnyObject)
-                                        }
-                                        else
-                                        {
-                                            //Here we check is there converted json dict or not
-                                            if let parseJSON = json
-                                            {
-                                                let success = parseJSON["success"] as? Int
-                                                if success == 1
-                                                {
-                                                    onError(parseJSON as AnyObject)
-                                                }
-                                                else
-                                                {
-                                                    onError(parseJSON as AnyObject)
-                                                }
-                                            }
-                                        }
-                                    }
-                                    catch   {
-                                        print("Error \(error)")
-                                    }
-                                }
-                                
-                            }
-                            else  if(self.mNSHTTPURLResponse?.statusCode  == 401 &&  savePassword.length == 0)
-                            {
-                                // "isTokenExpired"
-                                UserDefaults.standard.set(true, forKey: "isTokenExpired")
-                                NotificationCenter.default.post(name: Notification.Name(rawValue: "tokenexpirednotification"), object: self)
-                                
-                                let errors = "Session Expired."
-                                onError(errors as AnyObject)
-                                
-                            }
-                            else  if(self.mNSHTTPURLResponse?.statusCode  == 401  && (self.mNSHTTPURLResponse?.url?.lastPathComponent != "login" || self.mNSHTTPURLResponse?.url?.lastPathComponent != "changepassword" || self.mNSHTTPURLResponse?.url?.lastPathComponent != "forgotpassword"))
-                            {
-                                //                                print(self.mNSMutableRequest?.URL)
-                                //                                 print(self.mNSMutableRequest?.HTTPMethod)
-                                
-                                if  ((self.mNSMutableRequest?.url != nil && self.mNSMutableRequest?.httpMethod != nil)  )
-                                {
-                                    if let urlString = self.mNSMutableRequest?.url?.lastPathComponent
-                                    {
-                                        self.key = urlString + (self.mNSMutableRequest?.httpMethod)!
-                                    }
-                                }
-                                
-                                
-                                
-                                let dicRequest : NSMutableDictionary = NSMutableDictionary()
-                                dicRequest.setValue(self.mNSMutableRequest, forKey: self.key)
-                                
-                                
-                                
-                                
-                                
-                                                            }
-                            else  if(self.mNSHTTPURLResponse?.statusCode  == 500 && self.mNSHTTPURLResponse?.url?.lastPathComponent == "account")
-                            {
-                                var errors = "500"
-                                onError(errors as AnyObject)
-                                
-                            }
-                                // Response code 200 means success
-                            else if(self.mNSHTTPURLResponse?.statusCode  == 200)
-                            {
-                                
-                                
                                 
                                 // here we check if there is any data
                                 if let dataInAnyObject = data
                                 {
                                     do  {
-                                        let json = try JSONSerialization.jsonObject(with: dataInAnyObject, options: .mutableLeaves) as? NSDictionary
+                                        let json = try JSONSerialization.jsonObject(with: dataInAnyObject, options: .mutableLeaves) as? AnyObject
                                         // println("DeserilizedDict:"+"\(json)")
                                         
                                         // Check  if there is any error while converting the data
@@ -906,8 +828,8 @@ open class BaseNSURLSession: NSObject
                                         {
                                             
                                             print(self.mNSError!.localizedDescription)
-                                            let jsonStr = String(data: dataInAnyObject, encoding: String.Encoding.utf8)
-                                            print("Error could not parse JSON with new block:  '\(String(describing: jsonStr))'")
+                                            let jsonStr = NSString(data: dataInAnyObject, encoding: String.Encoding.utf8.rawValue)
+                                            print("Error could not parse JSON with new block:  '\(jsonStr)'")
                                             let errors = errorDescription(self.mNSError!)
                                             // If there is any error while converting data to dict then through error block
                                             onError(errors as AnyObject)
@@ -938,15 +860,27 @@ open class BaseNSURLSession: NSObject
                                                 // No need to check this but for surity used this else
                                             else
                                             {
-                                                let jsonStr = String(data: data!, encoding: String.Encoding(rawValue: String.Encoding.utf8.rawValue))
-                                                
-                                                //let errors  = (errorDescription("Error could not parse JSON: \(jsonStr)")) as AnyObject as AnyObject
-                                                //onError(errors as AnyObject )
+                                                let jsonStr = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)
+                                                print("Error could not parse JSON: \(jsonStr)")
+                                                let errors = errorDescription("Error could not parse JSON: \(String(describing: jsonStr))" as AnyObject)
+                                                onError(errors as AnyObject )
                                             }
                                         }
+                                        
+                                        
                                     }
-                                    catch   {
-                                        print("Error \(error)")
+                                    catch
+                                    {
+                                        
+                                        do  {
+                                            let json = try JSONSerialization.jsonObject(with: dataInAnyObject, options: .mutableLeaves) as? NSArray
+                                            onFinish(data! as AnyObject,json!)
+                                        }
+                                        catch
+                                        {
+                                            print("Error \(error)")
+                                            onError("\(error)" as AnyObject)
+                                        }
                                     }
                                     
                                     
