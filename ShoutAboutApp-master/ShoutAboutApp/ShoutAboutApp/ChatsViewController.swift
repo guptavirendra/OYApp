@@ -102,11 +102,11 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
         JSQMessagesCollectionViewCell.registerMenuAction(#selector(self.copyMessage))
         JSQMessagesCollectionViewCell.registerMenuAction(#selector(self.deleteMessage))
         
-     let copyMenuItem =   UIMenuItem(title: "Copy", action: #selector(self.copyMessage))
-      let deleteMenuItem =  UIMenuItem(title: "Delete", action: #selector(self.deleteMessage))
+       let copyMenuItem =   UIMenuItem(title: "forwrd", action: #selector(self.copyMessage))
+       let deleteMenuItem =  UIMenuItem(title: "Delete", action: #selector(self.deleteMessage))
         
         
-        //UIMenuController.shared.menuItems = [copyMenuItem, deleteMenuItem]
+        UIMenuController.shared.menuItems = [copyMenuItem, deleteMenuItem]
         self.profilePic?.makeImageRounded()
         
         //recipient = OneRoster.userFromRosterForJID(jid: "\(reciepientPerson)@localhost" )
@@ -165,6 +165,10 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
     
     func copyMessage()
     {
+       
+        
+        
+        
         
     }
     func deleteMessage()
@@ -419,21 +423,52 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
                             let attachmentType = attachment.object(forKey: "attachmentType") as! Int
                             if attachmentType == 10 && localUrl.characters.count > 0
                             {
-                                let latLongArray = localUrl.components(separatedBy: "-")
-                                if let lat = latLongArray.first  , let lang = latLongArray.last
+                                
+                                if let locationItem = JSQLocationMediaItem(maskAsOutgoing: message.senderId == self.senderId)
                                 {
-                                    DispatchQueue.main.async(execute: { () -> Void in
-                                        let latitudeToSend: CLLocationDegrees = Double(lat)!
-                                        let longitudeToSend: CLLocationDegrees = Double(lang)!
-                                        let locationItem =  self.buildLocationItem(latitude: latitudeToSend, longitude: longitudeToSend)
-                                        let fullMessage =   JSQMessage(senderId: message.senderId, senderDisplayName: message.senderId, date:  message.date, media: locationItem)
-                                        self.messages.add(fullMessage!)
-                                        self.collectionView.reloadData()
-                                    })
+                                    let fullMessage =   JSQMessage(senderId: message.senderId, senderDisplayName: message.senderId, date:  message.date, media: locationItem)
+                                    self.messages.add(fullMessage!)
                                     
-                                    
+                                    DispatchQueue.global(qos: .background).async
+                                        {
+                                            let latLongArray = localUrl.components(separatedBy: "-")
+                                            if let lat = latLongArray.first  , let lang = latLongArray.last
+                                            {
+                                                let latitudeToSend: CLLocationDegrees = Double(lat)!
+                                                let longitudeToSend: CLLocationDegrees = Double(lang)!
+                                                let ferryBuildingInSF = CLLocation(latitude: latitudeToSend, longitude: longitudeToSend)
+                                                //locationItem.location = ferryBuildingInSF
+                                                
+                                        locationItem.setLocation(ferryBuildingInSF, withCompletionHandler: {
+                                            DispatchQueue.main.async(execute: { () -> Void in
+                                                
+                                                self.collectionView.reloadData()
+                                            })
+                                        })
+                                                
+                                      }
+                                            
+                                            
+                                    }
                                     
                                 }
+                                
+                                
+//                                let latLongArray = localUrl.components(separatedBy: "-")
+//                                if let lat = latLongArray.first  , let lang = latLongArray.last
+//                                {
+//                                    DispatchQueue.main.async(execute: { () -> Void in
+//                                        let latitudeToSend: CLLocationDegrees = Double(lat)!
+//                                        let longitudeToSend: CLLocationDegrees = Double(lang)!
+//                                        let locationItem =  self.buildLocationItem(latitude: latitudeToSend, longitude: longitudeToSend)
+//                                        let fullMessage =   JSQMessage(senderId: message.senderId, senderDisplayName: message.senderId, date:  message.date, media: locationItem)
+//                                        self.messages.add(fullMessage!)
+//                                        //self.collectionView.reloadData()
+//                                    })
+//                                    
+//                                    
+//                                    
+//                                }
                                 
                             }
                         }
@@ -585,7 +620,7 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
                     let urlData = NSData(contentsOf: uRL)
                 {
                     let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0];
-                    let filePath="\(documentsPath)\(_id)/.mp4";
+                    let filePath="\(documentsPath)\(_id)/."+uRL.pathExtension;
                     try? urlData.write(to: URL(fileURLWithPath: filePath), options: [.atomic])
                     mediaItem.fileURL = URL(fileURLWithPath: filePath)
                     mediaItem.isReadyToPlay = true
@@ -601,10 +636,69 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
     
     func addLocalVideoURLFile(url:String, serverURL:String?, message:JSQMessage, _id:String)
     {
-        let extensionPathStr = "\(_id).mp4"
-        let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-        let fullPathToFile = "\(documentsDirectory)/\(extensionPathStr)"
-        let  idfileURL = URL(fileURLWithPath: fullPathToFile)
+        
+        if let mediaItem = JSQVideoMediaItem(maskAsOutgoing: message.senderId == self.senderId)
+        {
+            let fullMessage =   JSQMessage(senderId: message.senderId, senderDisplayName: message.senderId, date:  message.date, media: mediaItem)
+            self.messages.add(fullMessage!)
+            
+            DispatchQueue.global(qos: .background).async
+                {
+                    
+                    let extensionPathStr = "\(_id).MOV"
+                    let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+                    let fullPathToFile = "\(documentsDirectory)/\(extensionPathStr)"
+                    let  idfileURL = URL(fileURLWithPath: fullPathToFile)
+                    let fileURL = URL(fileURLWithPath: url)
+                    if  idfileURL.isFileURL == true
+                    {
+                        DispatchQueue.main.async(execute: { () -> Void in
+                        mediaItem.fileURL = idfileURL
+                        mediaItem.isReadyToPlay = true
+                            self.collectionView.reloadData()
+                        })
+                        
+                    }else if fileURL.isFileURL == true
+                    {
+                        DispatchQueue.main.async(execute: { () -> Void in
+                        mediaItem.fileURL = fileURL
+                        mediaItem.isReadyToPlay = true
+                            self.collectionView.reloadData()
+                        })
+                        
+                    }else
+                    {
+                        if  serverURL != nil
+                        {
+                            self.downloadVideoForIndexPath(url: url, message: message, _id: _id)
+                            
+                        }
+                    }
+                    
+                    /*
+                    if let uRL = URL(string: url),
+                        let urlData = NSData(contentsOf: uRL)
+                    {
+                        let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0];
+                        let filePath="\(documentsPath)\(_id)/."+uRL.pathExtension;
+                        try? urlData.write(to: URL(fileURLWithPath: filePath), options: [.atomic])
+                        mediaItem.fileURL = URL(fileURLWithPath: filePath)
+                        mediaItem.isReadyToPlay = true
+                        DispatchQueue.main.async(execute: { () -> Void in
+                            self.collectionView.reloadData()
+                        })
+                        
+                    }*/
+            }
+            
+            
+            
+            
+        }
+        
+        
+        
+        /*
         let fileURL = URL(fileURLWithPath: url)
         if  idfileURL.isFileURL == true
         {
@@ -614,7 +708,7 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
                 
                 let fullMessage =   JSQMessage(senderId: message.senderId, senderDisplayName: message.senderId, date:  message.date, media: mediaItem)
                 self.messages.add(fullMessage!)
-                self.collectionView.reloadData()
+                //self.collectionView.reloadData()
             })
             
         }
@@ -626,7 +720,7 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
                 
                 let fullMessage =   JSQMessage(senderId: message.senderId, senderDisplayName: message.senderId, date:  message.date, media: mediaItem)
                 self.messages.add(fullMessage!)
-                self.collectionView.reloadData()
+                //self.collectionView.reloadData()
             })
         }
         
@@ -638,13 +732,63 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
                 
             }
         }
-        
+        */
     }
     
     
     
     func addLocalURLFile(url:String, serverURL:String?, message:JSQMessage, _id:String)
     {
+        if let mediaItem = JSQPhotoMediaItem(maskAsOutgoing: message.senderId == self.senderId)
+        {
+            let fullMessage =   JSQMessage(senderId: message.senderId, senderDisplayName: message.senderId, date:  message.date, media: mediaItem)
+            self.messages.add(fullMessage!)
+            
+            DispatchQueue.global(qos: .background).async
+                {
+                    
+                    
+                    let extensionPathStr = "\(_id).jpg"
+                    let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+                    let fullPathToFile = "\(documentsDirectory)/\(extensionPathStr)"
+                    let  idfileURL = URL(fileURLWithPath: fullPathToFile)
+                    let fileURL = URL(fileURLWithPath: url)
+                    if  let data = NSData(contentsOf: idfileURL)
+                    {
+                        DispatchQueue.main.async(execute: { () -> Void in
+                         let image  =  UIImage(data: data as Data)
+                         mediaItem.image = image
+                         self.collectionView.reloadData()
+                        })
+                    }else if  let data = NSData(contentsOf: fileURL)
+                    {
+                        DispatchQueue.main.async(execute: { () -> Void in
+                         let image  =  UIImage(data: data as Data)
+                            mediaItem.image = image
+                            self.collectionView.reloadData()
+                        })
+                    }else if let fileURL = URL(string: url), let data = NSData(contentsOf: fileURL)
+                    {
+                        DispatchQueue.main.async(execute: { () -> Void in
+                        let image  =  UIImage(data: data as Data)
+                        mediaItem.image = image
+                        self.collectionView.reloadData()
+                        })
+                    }else
+                    {
+                        if  serverURL != nil
+                        {
+                            self.downloadMediaForIndexPath(url: serverURL!, message: message, _id: _id)
+                            
+                        }
+                    }
+
+                }
+        }
+        
+        
+        
+        /*
         let extensionPathStr = "\(_id).jpg"
         let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
         let fullPathToFile = "\(documentsDirectory)/\(extensionPathStr)"
@@ -660,7 +804,7 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
                 let mediaItem = JSQPhotoMediaItem(image: image)
                 let fullMessage =   JSQMessage(senderId: message.senderId, senderDisplayName: message.senderId, date:  message.date, media: mediaItem)
                 self.messages.add(fullMessage!)
-                self.collectionView.reloadData()
+                //self.collectionView.reloadData()
             })
 
         }
@@ -674,7 +818,7 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
                 let mediaItem = JSQPhotoMediaItem(image: image)
                 let fullMessage =   JSQMessage(senderId: message.senderId, senderDisplayName: message.senderId, date:  message.date, media: mediaItem)
                 self.messages.add(fullMessage!)
-                self.collectionView.reloadData()
+                //self.collectionView.reloadData()
             })
         }
         else if let fileURL = URL(string: url), let data = NSData(contentsOf: fileURL)
@@ -686,7 +830,7 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
                 let mediaItem = JSQPhotoMediaItem(image: image)
                 let fullMessage =   JSQMessage(senderId: message.senderId, senderDisplayName: message.senderId, date:  message.date, media: mediaItem)
                 self.messages.add(fullMessage!)
-                self.collectionView.reloadData()
+                //self.collectionView.reloadData()
                 })
             
         }
@@ -697,7 +841,7 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
                 self.downloadMediaForIndexPath(url: serverURL!, message: message, _id: _id)
                 
             }
-        }
+        }*/
         
     }
     
@@ -852,6 +996,13 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
         
         
         
+    }
+    
+    
+    
+   override func collectionView(_ collectionView: UICollectionView, shouldShowMenuForItemAt indexPath: IndexPath) -> Bool
+   {
+         return true
     }
     
     
