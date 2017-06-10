@@ -679,7 +679,7 @@ extension JoinViewController
         
         if CNContactStore.authorizationStatus(for: .contacts) == .notDetermined
         {
-            store.requestAccess(for: .contacts, completionHandler: { (authorized: Bool, error: NSError?) -> Void in
+            store.requestAccess(for: .contacts, completionHandler: ({ (authorized: Bool, error: Error?) -> Void in
                 if authorized
                 {
                     self.retrieveContactsWithStore(store)
@@ -687,7 +687,7 @@ extension JoinViewController
                 {
                     self.displayCantAddContactAlert()
                 }
-            } as! (Bool, Error?) -> Void)
+                }))
         }else if CNContactStore.authorizationStatus(for: .contacts) == .denied
         {
             self.displayCantAddContactAlert()
