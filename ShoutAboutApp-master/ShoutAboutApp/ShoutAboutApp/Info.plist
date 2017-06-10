@@ -74,6 +74,8 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>Camera</string>
 	<key>NSContactsUsageDescription</key>
 	<string>Want to acces contacts</string>
 	<key>NSLocationAlwaysUsageDescription</key>
@@ -81,7 +83,7 @@
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Do you allow this app to know your current location?</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Do you allow this app to use microphone</string>
+	<string>Microphone</string>
 	<key>Privacy - Contacts Usage Description </key>
 	<string>Allow to access the App.it is necessary</string>
 	<key>UIAppFonts</key>
