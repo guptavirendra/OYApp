@@ -142,6 +142,7 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
                 }
                 // Here I have to convert all data
                 self.finishReceivingMessage(animated: true)
+                 self.scrollToBottom(animated: true)
             })
         } else
         {
@@ -176,7 +177,20 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
         
     }
     
-    
+    func getMediaMessage()->[JSQMessage]?
+    {
+        let predicate =  NSPredicate { (msg, bind) -> Bool in
+            
+            let mesg = msg as!JSQMessage
+            if mesg.media != nil
+            {
+                return mesg.media.isKind(of: JSQPhotoMediaItem.self)
+            }
+            return false
+        }
+        
+      return  messages.filtered(using: predicate) as? [JSQMessage]
+    }
     
     override func viewWillAppear(_ animated: Bool)
     {
@@ -220,7 +234,7 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        self.scrollToBottom(animated: true)
+        //self.scrollToBottom(animated: true)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -426,7 +440,7 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
                                 
                                 if let locationItem = JSQLocationMediaItem(maskAsOutgoing: message.senderId == self.senderId)
                                 {
-                                    let fullMessage =   JSQMessage(senderId: message.senderId, senderDisplayName: message.senderId, date:  message.date, media: locationItem)
+                                    let fullMessage =   JSQMessage(senderId: message.senderId, senderDisplayName: message.senderId, date:  message.date, media: locationItem, andMessageID:_id)
                                     self.messages.add(fullMessage!)
                                     
                                     DispatchQueue.global(qos: .background).async
@@ -577,7 +591,7 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
     {
         if let mediaItem = JSQPhotoMediaItem(maskAsOutgoing: message.senderId == self.senderId)
         {
-            let fullMessage =   JSQMessage(senderId: message.senderId, senderDisplayName: message.senderId, date:  message.date, media: mediaItem)
+            let fullMessage =   JSQMessage(senderId: message.senderId, senderDisplayName: message.senderId, date:  message.date, media: mediaItem, andMessageID:_id)
             self.messages.add(fullMessage!)
             DispatchQueue.global().async
             {
@@ -611,7 +625,7 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
     {
         if let mediaItem = JSQVideoMediaItem(maskAsOutgoing: message.senderId == self.senderId)
         {
-            let fullMessage =   JSQMessage(senderId: message.senderId, senderDisplayName: message.senderId, date:  message.date, media: mediaItem)
+            let fullMessage =   JSQMessage(senderId: message.senderId, senderDisplayName: message.senderId, date:  message.date, media: mediaItem, andMessageID:_id)
             self.messages.add(fullMessage!)
         
             DispatchQueue.global(qos: .background).async
@@ -639,7 +653,7 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
         
         if let mediaItem = JSQVideoMediaItem(maskAsOutgoing: message.senderId == self.senderId)
         {
-            let fullMessage =   JSQMessage(senderId: message.senderId, senderDisplayName: message.senderId, date:  message.date, media: mediaItem)
+            let fullMessage =   JSQMessage(senderId: message.senderId, senderDisplayName: message.senderId, date:  message.date, media: mediaItem, andMessageID:_id)
             self.messages.add(fullMessage!)
             
             DispatchQueue.global(qos: .background).async
@@ -741,7 +755,7 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
     {
         if let mediaItem = JSQPhotoMediaItem(maskAsOutgoing: message.senderId == self.senderId)
         {
-            let fullMessage =   JSQMessage(senderId: message.senderId, senderDisplayName: message.senderId, date:  message.date, media: mediaItem)
+            let fullMessage =   JSQMessage(senderId: message.senderId, senderDisplayName: message.senderId, date:  message.date, media: mediaItem, andMessageID:_id)
             self.messages.add(fullMessage!)
             
             DispatchQueue.global(qos: .background).async
@@ -994,10 +1008,12 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
                 let mapVC = MapView(location.location)
                 let nav = UINavigationController(rootViewController: mapVC!)
                 self.present(nav, animated: true, completion: nil)
-
-                
-                
+            }else if message.media.isKind(of: JSQPhotoMediaItem.self) == true
+            {
+                 let imageVC = PictureView(message.messageID, self.getMediaMessage())
+                 self.present(imageVC!, animated: true, completion: nil)
             }
+            
             
         }
         
@@ -1049,7 +1065,7 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
                                                 let image  =  UIImage(data: imageData as Data)
                                                 UIImageWriteToSavedPhotosAlbum(image!, nil, nil, nil)
                                                 //let currentTime = Date().timeIntervalSince1970 as TimeInterval
-                                                let extensionPathStr = "\(_id!).jpg"
+                                                let extensionPathStr = "\(_id!)."+url.pathExtension
                                                 let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
                                                 let fullPathToFile = "\(documentsDirectory)/\(extensionPathStr)"
                                                 
@@ -1063,7 +1079,7 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
                                                 
                                                 
                                                 let data  =  JSQPhotoMediaItem(image: image)
-                                                let fullMessage =   JSQMessage(senderId: from, senderDisplayName: from, date:  Date(), media: data!)
+                                                let fullMessage =   JSQMessage(senderId: from, senderDisplayName: from, date:  Date(), media: data!, andMessageID:_id)
                                         
                                                 DispatchQueue.main.async(execute: { () -> Void in
                                                 self.messages.add(fullMessage!)
@@ -1079,14 +1095,14 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
                                                 if let urlData = NSData(contentsOf: url)
                                                 {
                                                     let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0];
-                                                    let filePath="\(documentsPath)\(_id!)/.mp4";
+                                                    let filePath="\(documentsPath)\(_id!)/."+url.pathExtension;
                                                      UISaveVideoAtPathToSavedPhotosAlbum(filePath, nil, nil, nil)
                                                     try? urlData.write(to: URL(fileURLWithPath: filePath), options: [.atomic])
                                                     print("file url with path ")
                                                     DispatchQueue.main.async(execute: { () -> Void in
                                                         let mediaItem = JSQVideoMediaItem(fileURL: URL(fileURLWithPath: filePath), isReadyToPlay: true)
                                                         
-                                                        let fullMessage =   JSQMessage(senderId: from, senderDisplayName: from, date:  Date(), media: mediaItem!)
+                                                        let fullMessage =   JSQMessage(senderId: from, senderDisplayName: from, date:  Date(), media: mediaItem!, andMessageID:_id)
                                                         
                                                         DispatchQueue.main.async(execute: { () -> Void in
                                                             self.messages.add(fullMessage!)
@@ -1102,6 +1118,45 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
                                     
                                 }
                             }
+                            if let  localUrl = attachment.object(forKey: "localUrl") as? String
+                            {
+                                let attachmentType = attachment.object(forKey: "attachmentType") as! Int
+                                if attachmentType == 10 && localUrl.characters.count > 0
+                                {
+                                    
+                                    if let locationItem = JSQLocationMediaItem(maskAsOutgoing: from == self.senderId)
+                                    {
+                                        let fullMessage =   JSQMessage(senderId: from, senderDisplayName: from, date:  Date(), media: locationItem, andMessageID:_id)
+                                        self.messages.add(fullMessage!)
+                                        
+                                        DispatchQueue.global(qos: .background).async
+                                            {
+                                                let latLongArray = localUrl.components(separatedBy: "-")
+                                                if let lat = latLongArray.first  , let lang = latLongArray.last
+                                                {
+                                                    let latitudeToSend: CLLocationDegrees = Double(lat)!
+                                                    let longitudeToSend: CLLocationDegrees = Double(lang)!
+                                                    let ferryBuildingInSF = CLLocation(latitude: latitudeToSend, longitude: longitudeToSend)
+                                                    //locationItem.location = ferryBuildingInSF
+                                                    
+                                                    locationItem.setLocation(ferryBuildingInSF, withCompletionHandler: {
+                                                        DispatchQueue.main.async(execute: { () -> Void in
+                                                            
+                                                            self.collectionView.reloadData()
+                                                        })
+                                                    })
+                                                    
+                                                }
+                                                
+                                                
+                                        }
+                                        
+                                    }
+                                    
+                                }
+                            }
+                            
+                            
                         }
                     }
                 }else
@@ -1296,16 +1351,6 @@ extension NSObject
 extension ChatsViewController : CLLocationManagerDelegate
 {
     
-    func addMedia(media:JSQMediaItem)
-    {
-        let message = JSQMessage(senderId: self.senderId, displayName: self.senderDisplayName, media: media)!
-        //self.messages.add(fullMessage!)
-        
-        //Optional: play sent sound
-        
-        self.finishSendingMessage(animated: true)
-    }
-
     func buildLocationItem(latitude: CLLocationDegrees, longitude: CLLocationDegrees) -> JSQLocationMediaItem {
         let ferryBuildingInSF = CLLocation(latitude: latitude, longitude: longitude)
         
