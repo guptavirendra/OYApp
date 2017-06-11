@@ -12,6 +12,7 @@
 #import "VideoView.h"
 #import "MapView.h"
 #import "PictureView.h"
+#import "JSQContactMediaItem.h"
 
 
 #import <SDWebImage/UIImageView+WebCache.h>

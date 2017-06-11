@@ -59,6 +59,7 @@
 		F1394F8A1EEC88FC00552898 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1394F891EEC88FC00552898 /* CoreLocation.framework */; };
 		F1394F8D1EED460A00552898 /* PictureView.m in Sources */ = {isa = PBXBuildFile; fileRef = F1394F8C1EED460A00552898 /* PictureView.m */; };
 		F1394F901EED5DB900552898 /* NYTPhotoItem.m in Sources */ = {isa = PBXBuildFile; fileRef = F1394F8F1EED5DB900552898 /* NYTPhotoItem.m */; };
+		F1394F951EEDC5C600552898 /* JSQContactMediaItem.m in Sources */ = {isa = PBXBuildFile; fileRef = F1394F941EEDC5C600552898 /* JSQContactMediaItem.m */; };
 		F13AD92E1EACE617009B88F1 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F13AD92D1EACE617009B88F1 /* SWRevealViewController.m */; };
 		F13F2A841EC844B100A43F82 /* AlertsPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F13F2A831EC844B100A43F82 /* AlertsPostViewController.swift */; };
 		F17E085C1E0FF16500FDBF0B /* AKImageCropperOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F17E08511E0FF16500FDBF0B /* AKImageCropperOverlayView.swift */; };
@@ -166,6 +167,8 @@
 		F1394F8C1EED460A00552898 /* PictureView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PictureView.m; sourceTree = "<group>"; };
 		F1394F8E1EED5DB900552898 /* NYTPhotoItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NYTPhotoItem.h; sourceTree = "<group>"; };
 		F1394F8F1EED5DB900552898 /* NYTPhotoItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NYTPhotoItem.m; sourceTree = "<group>"; };
+		F1394F931EEDC5C600552898 /* JSQContactMediaItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JSQContactMediaItem.h; path = ShoutAboutApp/JSQContactMediaItem.h; sourceTree = "<group>"; };
+		F1394F941EEDC5C600552898 /* JSQContactMediaItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JSQContactMediaItem.m; path = ShoutAboutApp/JSQContactMediaItem.m; sourceTree = "<group>"; };
 		F13AD92C1EACE617009B88F1 /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRevealViewController.h; sourceTree = "<group>"; };
 		F13AD92D1EACE617009B88F1 /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
 		F13F2A831EC844B100A43F82 /* AlertsPostViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertsPostViewController.swift; sourceTree = "<group>"; };
@@ -336,6 +339,8 @@
 		F12C27441DCE45A800AEE0A3 = {
 			isa = PBXGroup;
 			children = (
+				F1394F931EEDC5C600552898 /* JSQContactMediaItem.h */,
+				F1394F941EEDC5C600552898 /* JSQContactMediaItem.m */,
 				F1BEE4A91EDAE225004ED700 /* ChatAsyncPhotoMedia.m */,
 				F12C274F1DCE45A800AEE0A3 /* ShoutAboutApp */,
 				F12C274E1DCE45A800AEE0A3 /* Products */,
@@ -609,6 +614,7 @@
 				F11B75F01DDF844B0075DDCB /* MainSearchViewController.swift in Sources */,
 				F17E08631E0FF16500FDBF0B /* UIColor.swift in Sources */,
 				F17E085C1E0FF16500FDBF0B /* AKImageCropperOverlayView.swift in Sources */,
+				F1394F951EEDC5C600552898 /* JSQContactMediaItem.m in Sources */,
 				F17E08611E0FF16500FDBF0B /* CGRect.swift in Sources */,
 				F17E085F1E0FF16500FDBF0B /* CGFloat.swift in Sources */,
 				F17E08601E0FF16500FDBF0B /* AKImageCropperScollView.swift in Sources */,

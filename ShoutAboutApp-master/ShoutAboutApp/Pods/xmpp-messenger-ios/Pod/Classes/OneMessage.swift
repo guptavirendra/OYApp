@@ -319,6 +319,16 @@ extension OneMessage: XMPPStreamDelegate
 	public func xmppStream(_ sender: XMPPStream, didReceive message: XMPPMessage)
     {
 		let user = OneChat.sharedInstance.xmppRosterStorage.user(for: message.from(), xmppStream: OneChat.sharedInstance.xmppStream, managedObjectContext: OneRoster.sharedInstance.managedObjectContext_roster())
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
 		
         if user != nil
         {
@@ -330,7 +340,26 @@ extension OneMessage: XMPPStreamDelegate
 		
 		if message.isChatMessageWithBody()
         {
-			OneMessage.sharedInstance.delegate?.oneStream(sender, didReceiveMessage: message, from: user!)
+            if  UIApplication.shared.applicationState == .active
+            {
+                 let alert = UIAlertController(title: message.body(), message: nil, preferredStyle: .actionSheet)
+                let cancelAction =  UIAlertAction(title: "OK", style: .cancel, handler: nil)
+                 
+                alert.addAction(cancelAction)
+
+                 UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion:nil)
+            }else
+            
+            {
+               let  localNotification = UILocalNotification()
+                localNotification.alertAction = "Ok"
+                localNotification.alertBody = "recieved message"
+                UIApplication.shared.presentLocalNotificationNow(localNotification)
+                
+             
+            }
+            
+            OneMessage.sharedInstance.delegate?.oneStream(sender, didReceiveMessage: message, from: user!)
 		} else
         {
 			//was composing

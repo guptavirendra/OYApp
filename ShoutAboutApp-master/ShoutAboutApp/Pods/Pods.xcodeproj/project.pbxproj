@@ -1065,8 +1065,6 @@
 		F003E245047DDC0E5A4FEADC37590AB6 /* Api.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FE033426F240C736656BBC298AD321B /* Api.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		F0AAAFE8E84ECF9A6CBCCBBA96B16A29 /* JSQSystemSoundPlayer-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A4120283860C19C2F8EC41B40181B21 /* JSQSystemSoundPlayer-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F0AAC8C0A171F5D16D5CC4EDFCFD3AA1 /* RegexManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BE5CF0580A9D29F98D350165330CFC8 /* RegexManager.swift */; };
-		F1394F761EEC35FD00552898 /* JSQContactMediaItem.h in Headers */ = {isa = PBXBuildFile; fileRef = F1394F741EEC35FB00552898 /* JSQContactMediaItem.h */; };
-		F1394F771EEC35FD00552898 /* JSQContactMediaItem.m in Sources */ = {isa = PBXBuildFile; fileRef = F1394F751EEC35FB00552898 /* JSQContactMediaItem.m */; };
 		F17D3D26ADE94380EAEE45707FDED798 /* DDASLLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = A55BE272DA40EEE863A494A59B6B16FE /* DDASLLogger.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F18F09F27BB73812D99D1CC5244F28F6 /* UIImageView+WebCache.h in Headers */ = {isa = PBXBuildFile; fileRef = B9612811CE20A088B37C859576F5E5A1 /* UIImageView+WebCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F1DF464A359AB0725EF2770AD675A63F /* XMPPHTTPFileUpload.h in Headers */ = {isa = PBXBuildFile; fileRef = 1909C7234F9AB980A6E3AA9BA81F6E6A /* XMPPHTTPFileUpload.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -2675,8 +2673,6 @@
 		F0A210526A98071DCE4F776CDABBBCE9 /* GoogleToolboxForMac.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = GoogleToolboxForMac.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F0DF7EF8976BD3D8B6290806AA885524 /* XMPPStreamManagementStanzas.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = XMPPStreamManagementStanzas.m; path = "Extensions/XEP-0198/Private/XMPPStreamManagementStanzas.m"; sourceTree = "<group>"; };
 		F0F78A5699B07793CFF878D5C9827222 /* JSQMessage.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = JSQMessage.h; path = JSQMessagesViewController/Model/JSQMessage.h; sourceTree = "<group>"; };
-		F1394F741EEC35FB00552898 /* JSQContactMediaItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQContactMediaItem.h; sourceTree = "<group>"; };
-		F1394F751EEC35FB00552898 /* JSQContactMediaItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQContactMediaItem.m; sourceTree = "<group>"; };
 		F154435D02071C5CFACAB688821880AF /* XMPPIDTracker.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = XMPPIDTracker.m; path = Utilities/XMPPIDTracker.m; sourceTree = "<group>"; };
 		F1B1AC8B825869827AAC2F0CB22014A2 /* XMPPIQ+XEP_0060.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "XMPPIQ+XEP_0060.h"; path = "Extensions/XEP-0060/XMPPIQ+XEP_0060.h"; sourceTree = "<group>"; };
 		F1BC32F23B769C0D8E2421114708642A /* TimeZoneName.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TimeZoneName.swift; path = Sources/SwiftDate/TimeZoneName.swift; sourceTree = "<group>"; };
@@ -4140,8 +4136,6 @@
 				070D81BD4FFB3240A60BACD95A31F9FA /* JSQLocationMediaItem.h */,
 				56736410731BD5D20551CD44CD5EFF4D /* JSQLocationMediaItem.m */,
 				9B17FE7F4442A0C4445BFEB203DC7703 /* JSQMediaItem.h */,
-				F1394F741EEC35FB00552898 /* JSQContactMediaItem.h */,
-				F1394F751EEC35FB00552898 /* JSQContactMediaItem.m */,
 				3786D43F4A9BE5FCAF799D08F5BB7EEB /* JSQMediaItem.m */,
 				F0F78A5699B07793CFF878D5C9827222 /* JSQMessage.h */,
 				E860994855209E6AE9DE72E791D55F1B /* JSQMessage.m */,
@@ -5776,7 +5770,6 @@
 				042CD3EF017770BB04B03CC181E14CF8 /* BFCancellationTokenRegistration.h in Headers */,
 				962AE2FFA8C0A057E3586754E7A751B3 /* BFCancellationTokenSource.h in Headers */,
 				A75E40CA89805C928130C4B8EDBC867D /* BFExecutor.h in Headers */,
-				F1394F761EEC35FD00552898 /* JSQContactMediaItem.h in Headers */,
 				20EF6C21A196BC087854FD24CF7E2A3C /* BFMeasurementEvent.h in Headers */,
 				2ECBA559A0A5CF2C7208CA1B2652EA56 /* BFMeasurementEvent_Internal.h in Headers */,
 				91E2A116F2CAC6500A8460B30F7A9458 /* BFTask+Exceptions.h in Headers */,
@@ -7137,7 +7130,6 @@
 				10839BE4DCA013D0D5E6DDAAD1B38463 /* BFTaskCompletionSource.m in Sources */,
 				6F1C1760FC1CDD7E2E7D2AAE3A8F353F /* BFURL.m in Sources */,
 				5A54A9178928558C579D201BF7500392 /* BFWebViewAppLinkResolver.m in Sources */,
-				F1394F771EEC35FD00552898 /* JSQContactMediaItem.m in Sources */,
 				AA0283267E8DA7A4F516A18CAE3152B6 /* Bolts-dummy.m in Sources */,
 				83C94DD9A551CAEBB9000477466F9318 /* Bolts.m in Sources */,
 			);

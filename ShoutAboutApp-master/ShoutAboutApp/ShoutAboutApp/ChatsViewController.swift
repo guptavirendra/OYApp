@@ -12,9 +12,10 @@ import JSQMessagesViewController
 import XMPPFramework
 import MobileCoreServices
 import Photos
+import ContactsUI
+ 
 
-
-class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate  {
+class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CNContactPickerDelegate  {
     
     let appDelegate = UIApplication.shared.delegate as? AppDelegate
     var messages = NSMutableArray()
@@ -79,6 +80,10 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
         
         let fourthAction = UIAlertAction(title: "Contact", style: .default) { (alert: UIAlertAction!) -> Void in
             NSLog("You pressed button two")
+            let cnPicker = CNContactPickerViewController()
+            cnPicker.delegate = self
+            self.present(cnPicker, animated: true, completion: nil)
+            
         } // 3
 
         let fifthAction = UIAlertAction(title: "Cancel", style: .cancel) { (alert: UIAlertAction!) -> Void in
@@ -93,9 +98,39 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
         alert.addAction(fifthAction)// 5
         present(alert, animated: true, completion:nil) // 6
     }
+    
+    func presenceRecieved(notification:NSNotification)
+    {
+       
+        let presence = notification.object as? XMPPPresence
+        let from = presence?.fromStr()
+        if recipient?.jidStr != nil
+        {
+            if (from?.contains((recipient?.jidStr)!))!
+            {
+                statusLabel?.text = presence?.type()
+            }
+        }
+    }
+    
+    deinit {
+        
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "presenceRecieved"), object: nil)
+    }
     override func viewDidLoad()
     {
         super.viewDidLoad()
+        let time = ""
+        
+//        OneLastActivity.sendLastActivityQueryToJID((recipient?.jidStr)!) { (iq, id, elemnt) in
+//            
+//        }
+        
+         statusLabel?.text = time
+        
+        NotificationCenter.default.addObserver(self, selector:#selector(ChatsViewController.presenceRecieved(notification:)) , name: NSNotification.Name(rawValue: "presenceRecieved"), object: nil)
+        
+        
         self.navigationController?.isNavigationBarHidden = true
         
         
@@ -426,6 +461,38 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
                     }
                     break
                 case 9:
+                    if let attachment = messageDict["attachment"] as? NSDictionary
+                    {
+                        let _id  = messageDict["_id"] as? String
+                        if let  localUrl = attachment.object(forKey: "localUrl") as? String
+                        {
+                            let attachmentType = attachment.object(forKey: "attachmentType") as! Int
+                            if attachmentType == 9 && localUrl.characters.count > 0
+                            {
+                                
+                                if let locationItem = JSQContactMediaItem(maskAsOutgoing: message.senderId == self.senderId)
+                                {
+                                    let fullMessage =   JSQMessage(senderId: message.senderId, senderDisplayName: message.senderId, date:  message.date, media: locationItem, andMessageID:_id)
+                                    self.messages.add(fullMessage!)
+                                    
+                                    
+                                    DispatchQueue.global(qos: .background).async
+                                        {
+                                            locationItem.string = localUrl
+                                            DispatchQueue.main.async(execute: { () -> Void in
+                                                self.collectionView.reloadData()
+                                            })
+                                            
+                                            
+                                    }
+                                    
+                                }
+                                
+                            }
+                        }
+                        
+                        
+                    }
                     break
                 case 10:
                     
@@ -443,24 +510,32 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
                                     let fullMessage =   JSQMessage(senderId: message.senderId, senderDisplayName: message.senderId, date:  message.date, media: locationItem, andMessageID:_id)
                                     self.messages.add(fullMessage!)
                                     
+                                    
                                     DispatchQueue.global(qos: .background).async
                                         {
-                                            let latLongArray = localUrl.components(separatedBy: "-")
-                                            if let lat = latLongArray.first  , let lang = latLongArray.last
+                                            var latLongArray = localUrl.components(separatedBy: "--")
+                                            if latLongArray.count != 2
                                             {
-                                                let latitudeToSend: CLLocationDegrees = Double(lat)!
-                                                let longitudeToSend: CLLocationDegrees = Double(lang)!
-                                                let ferryBuildingInSF = CLLocation(latitude: latitudeToSend, longitude: longitudeToSend)
-                                                //locationItem.location = ferryBuildingInSF
-                                                
-                                        locationItem.setLocation(ferryBuildingInSF, withCompletionHandler: {
-                                            DispatchQueue.main.async(execute: { () -> Void in
-                                                
-                                                self.collectionView.reloadData()
-                                            })
-                                        })
-                                                
-                                      }
+                                                latLongArray = localUrl.components(separatedBy: "-")
+                                            }
+                                            if let lat = latLongArray.first, let lang = latLongArray.last
+                                            {
+                                                if let doublevalue = Double(lat),let doublevalue2 =  Double(lang)
+                                                {
+                                                    let latitudeToSend: CLLocationDegrees = doublevalue
+                                                    let longitudeToSend: CLLocationDegrees = doublevalue2
+                                                    let ferryBuildingInSF = CLLocation(latitude: latitudeToSend, longitude: longitudeToSend)
+                                                    //locationItem.location = ferryBuildingInSF
+                                                    
+                                                    locationItem.setLocation(ferryBuildingInSF, withCompletionHandler: {
+                                                        DispatchQueue.main.async(execute: { () -> Void in
+                                                            
+                                                            self.collectionView.reloadData()
+                                                        })
+                                                    })
+                                                    
+                                                }
+                                            }
                                             
                                             
                                     }
@@ -1042,7 +1117,8 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
                 {
                     if let from = message.attribute(forName: "from")?.stringValue
                     {
-                        if let msgText = messageDict["msg"] as? String, msgText.characters.count > 0
+                        let messageType = messageDict["msgType"] as! Int
+                        if let msgText = messageDict["msg"] as? String, msgText.characters.count > 0, messageType == 0
                         {
                             let message = JSQMessage(senderId: from, senderDisplayName: from , date: Date(), text: msgText)
                             messages.add(message!)
@@ -1055,7 +1131,7 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
                                 if let url = URL(string: serverUrl as! String)
                                 {
                                     
-                                    let messageType = messageDict["msgType"] as? Int
+                                    
                                     if messageType == 4
                                     {
                                         DispatchQueue.global().async
@@ -1131,21 +1207,28 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
                                         
                                         DispatchQueue.global(qos: .background).async
                                             {
-                                                let latLongArray = localUrl.components(separatedBy: "-")
+                                                var latLongArray = localUrl.components(separatedBy: "--")
+                                                if latLongArray.count != 2
+                                                {
+                                                    latLongArray = localUrl.components(separatedBy: "-")
+                                                }
                                                 if let lat = latLongArray.first  , let lang = latLongArray.last
                                                 {
-                                                    let latitudeToSend: CLLocationDegrees = Double(lat)!
-                                                    let longitudeToSend: CLLocationDegrees = Double(lang)!
-                                                    let ferryBuildingInSF = CLLocation(latitude: latitudeToSend, longitude: longitudeToSend)
-                                                    //locationItem.location = ferryBuildingInSF
-                                                    
-                                                    locationItem.setLocation(ferryBuildingInSF, withCompletionHandler: {
-                                                        DispatchQueue.main.async(execute: { () -> Void in
-                                                            
-                                                            self.collectionView.reloadData()
+                                                    if let doublevalue = Double(lat),let doublevalue2 =  Double(lang)
+                                                    {
+                                                        let latitudeToSend: CLLocationDegrees = doublevalue
+                                                        let longitudeToSend: CLLocationDegrees = doublevalue2
+                                                        let ferryBuildingInSF = CLLocation(latitude: latitudeToSend, longitude: longitudeToSend)
+                                                        //locationItem.location = ferryBuildingInSF
+                                                        
+                                                        locationItem.setLocation(ferryBuildingInSF, withCompletionHandler: {
+                                                            DispatchQueue.main.async(execute: { () -> Void in
+                                                                
+                                                                self.collectionView.reloadData()
+                                                            })
                                                         })
-                                                    })
                                                     
+                                                    }
                                                 }
                                                 
                                                 
@@ -1154,8 +1237,32 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
                                     }
                                     
                                 }
+                                if attachmentType == 9 && localUrl.characters.count > 0
+                                {
+                                    
+                                    if let locationItem = JSQContactMediaItem(maskAsOutgoing: from == self.senderId)
+                                    {
+                                        let fullMessage =   JSQMessage(senderId: from, senderDisplayName: from, date:  Date(), media: locationItem, andMessageID:_id)
+                                        self.messages.add(fullMessage!)
+                                        
+                                        
+                                        DispatchQueue.global(qos: .background).async
+                                            {
+                                                locationItem.string = localUrl
+                                                DispatchQueue.main.async(execute: { () -> Void in
+                                                    self.collectionView.reloadData()
+                                                })
+                                                
+                                                
+                                        }
+                                        
+                                    }
+                                    
+                                }
+                                
+                                
+                                
                             }
-                            
                             
                         }
                     }
@@ -1415,9 +1522,52 @@ extension ChatsViewController : CLLocationManagerDelegate
     }
     
     // Below Mehtod will print error if not able to update location.
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error)
+    {
         print("Error")
         
         
     }
+    
+    func contactPicker(_ picker: CNContactPickerViewController, didSelect contacts: [CNContact]) {
+        contacts.forEach { contact in
+            
+            let formatter = CNContactFormatter()
+            
+            let name = formatter.string(from: contact)
+            if let phone = contact.phoneNumbers.first?.value
+            {
+                let mobile = phone.value(forKey: "digits") as? String
+                if (name?.characters.count)! > 0
+                {
+                    let message = VideoMessage()
+                    message.attachment.attachmentType = 9
+                    message._id = (OneChat.sharedInstance.xmppStream?.generateUUID())!
+                    message._isRead = false
+                    message.msg     = ""
+                    message.msgType = 9
+                    message.senderId = self.senderId
+                    message.receiverId  = (recipient?.jidStr)!
+                    message.attachment.localUrl = name!+"-"+mobile!
+                    let fullMessage = JSQMessage(senderId: OneChat.sharedInstance.xmppStream?.myJID.bare(), senderDisplayName: OneChat.sharedInstance.xmppStream?.myJID.bare(), date: Date(), text: message.getJson())
+                    self.addMessage(message: fullMessage!)
+                    
+                    OneMessage.sendMessage(message.getJson(), to: (recipient?.jidStr)!, completionHandler: { (stream, message) -> Void in
+                        JSQSystemSoundPlayer.jsq_playMessageSentSound()
+                        self.finishSendingMessage(animated: true)
+                    })
+                    
+                }
+            }
+            
+            
+
+            print()
+        }
+    }
+    func contactPickerDidCancel(_ picker: CNContactPickerViewController) {
+        print("Cancel Contact Picker")
+    }
+    
+    
 }

@@ -47,7 +47,9 @@ open class OnePresence: NSObject {
 
 extension OnePresence: XMPPStreamDelegate {
 	
-	public func xmppStream(_ sender: XMPPStream, didReceive presence: XMPPPresence) {
+	public func xmppStream(_ sender: XMPPStream, didReceive presence: XMPPPresence)
+    {
+         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "presenceRecieved"), object: presence)
 		print("did received presence : \(presence)")
 	}
 }
