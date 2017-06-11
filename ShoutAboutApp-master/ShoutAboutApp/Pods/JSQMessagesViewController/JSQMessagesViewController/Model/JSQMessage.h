@@ -29,6 +29,7 @@
  */
 @interface JSQMessage : NSObject <JSQMessageData, NSCoding, NSCopying>
 
+@property (copy, nonatomic, readonly) NSString *messageID;
 /**
  *  Returns the string identifier that uniquely identifies the user who sent the message. 
  */
@@ -130,6 +131,10 @@
                senderDisplayName:(NSString *)senderDisplayName
                             date:(NSDate *)date
                            media:(id<JSQMessageMediaData>)media;
+- (instancetype)initWithSenderId:(NSString *)senderId
+               senderDisplayName:(NSString *)senderDisplayName
+                            date:(NSDate *)date
+                           media:(id<JSQMessageMediaData>)media andMessageID:(NSString*)messageID;
 
 /**
  *  Not a valid initializer.

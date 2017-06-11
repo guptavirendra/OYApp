@@ -11,6 +11,8 @@
 
 #import "VideoView.h"
 #import "MapView.h"
+#import "PictureView.h"
+
 
 #import <SDWebImage/UIImageView+WebCache.h>
 #import <XMPPFramework/XMPPFramework.h>

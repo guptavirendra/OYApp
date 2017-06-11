@@ -57,6 +57,8 @@
 		F1394F851EEC87BC00552898 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1394F841EEC87BC00552898 /* MapKit.framework */; };
 		F1394F881EEC883B00552898 /* Location.m in Sources */ = {isa = PBXBuildFile; fileRef = F1394F871EEC883B00552898 /* Location.m */; };
 		F1394F8A1EEC88FC00552898 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1394F891EEC88FC00552898 /* CoreLocation.framework */; };
+		F1394F8D1EED460A00552898 /* PictureView.m in Sources */ = {isa = PBXBuildFile; fileRef = F1394F8C1EED460A00552898 /* PictureView.m */; };
+		F1394F901EED5DB900552898 /* NYTPhotoItem.m in Sources */ = {isa = PBXBuildFile; fileRef = F1394F8F1EED5DB900552898 /* NYTPhotoItem.m */; };
 		F13AD92E1EACE617009B88F1 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F13AD92D1EACE617009B88F1 /* SWRevealViewController.m */; };
 		F13F2A841EC844B100A43F82 /* AlertsPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F13F2A831EC844B100A43F82 /* AlertsPostViewController.swift */; };
 		F17E085C1E0FF16500FDBF0B /* AKImageCropperOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F17E08511E0FF16500FDBF0B /* AKImageCropperOverlayView.swift */; };
@@ -160,6 +162,10 @@
 		F1394F861EEC883B00552898 /* Location.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Location.h; sourceTree = "<group>"; };
 		F1394F871EEC883B00552898 /* Location.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Location.m; sourceTree = "<group>"; };
 		F1394F891EEC88FC00552898 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		F1394F8B1EED460A00552898 /* PictureView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PictureView.h; sourceTree = "<group>"; };
+		F1394F8C1EED460A00552898 /* PictureView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PictureView.m; sourceTree = "<group>"; };
+		F1394F8E1EED5DB900552898 /* NYTPhotoItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NYTPhotoItem.h; sourceTree = "<group>"; };
+		F1394F8F1EED5DB900552898 /* NYTPhotoItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NYTPhotoItem.m; sourceTree = "<group>"; };
 		F13AD92C1EACE617009B88F1 /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRevealViewController.h; sourceTree = "<group>"; };
 		F13AD92D1EACE617009B88F1 /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
 		F13F2A831EC844B100A43F82 /* AlertsPostViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertsPostViewController.swift; sourceTree = "<group>"; };
@@ -359,6 +365,10 @@
 				F1394F811EEC873700552898 /* MapView.xib */,
 				F1394F861EEC883B00552898 /* Location.h */,
 				F1394F871EEC883B00552898 /* Location.m */,
+				F1394F8B1EED460A00552898 /* PictureView.h */,
+				F1394F8C1EED460A00552898 /* PictureView.m */,
+				F1394F8E1EED5DB900552898 /* NYTPhotoItem.h */,
+				F1394F8F1EED5DB900552898 /* NYTPhotoItem.m */,
 				F13AD92B1EACE617009B88F1 /* SWReveal */,
 				8ECC94E11E659B5F00B12787 /* Alert */,
 				F17E0A251E3D23B60023F4B3 /* ShoutAboutApp.entitlements */,
@@ -632,6 +642,7 @@
 				F12C27651DCE643D00AEE0A3 /* NetworkConnectivity.swift in Sources */,
 				F18839331DD8D26400362B1B /* LeftViewController.swift in Sources */,
 				F12C27771DCF3DFA00AEE0A3 /* ContactViewController.swift in Sources */,
+				F1394F8D1EED460A00552898 /* PictureView.m in Sources */,
 				F12C277B1DCF75F800AEE0A3 /* SearchViewController.swift in Sources */,
 				F11B75FA1DE0C70C0075DDCB /* MyTabViewController.swift in Sources */,
 				F11689921ED9A38C00D67E7F /* Message.swift in Sources */,
@@ -641,6 +652,7 @@
 				F12C277F1DCF763F00AEE0A3 /* ProfileViewController.swift in Sources */,
 				F18839231DD83BE400362B1B /* ReviewTableViewCell.swift in Sources */,
 				F12C27731DCF079E00AEE0A3 /* InputTableViewCell.swift in Sources */,
+				F1394F901EED5DB900552898 /* NYTPhotoItem.m in Sources */,
 				F1DD72051DEAADF800DE0A12 /* LoginViewController.swift in Sources */,
 				F12C27511DCE45A800AEE0A3 /* AppDelegate.swift in Sources */,
 			);

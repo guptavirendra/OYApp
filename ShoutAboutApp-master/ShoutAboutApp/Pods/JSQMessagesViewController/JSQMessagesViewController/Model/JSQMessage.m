@@ -70,6 +70,20 @@
     }
     return self;
 }
+- (instancetype)initWithSenderId:(NSString *)senderId
+               senderDisplayName:(NSString *)senderDisplayName
+                            date:(NSDate *)date
+                           media:(id<JSQMessageMediaData>)media andMessageID:(NSString*)messageID
+{
+    NSParameterAssert(messageID != nil);
+    self = [self initWithSenderId:senderId senderDisplayName:senderDisplayName date:date media:media];
+    if (self)
+    {
+        _messageID = messageID;
+    }
+    return self;
+    
+}
 
 - (instancetype)initWithSenderId:(NSString *)senderId
                senderDisplayName:(NSString *)senderDisplayName
