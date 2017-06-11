@@ -60,6 +60,37 @@
 		F1394F8D1EED460A00552898 /* PictureView.m in Sources */ = {isa = PBXBuildFile; fileRef = F1394F8C1EED460A00552898 /* PictureView.m */; };
 		F1394F901EED5DB900552898 /* NYTPhotoItem.m in Sources */ = {isa = PBXBuildFile; fileRef = F1394F8F1EED5DB900552898 /* NYTPhotoItem.m */; };
 		F1394F951EEDC5C600552898 /* JSQContactMediaItem.m in Sources */ = {isa = PBXBuildFile; fileRef = F1394F941EEDC5C600552898 /* JSQContactMediaItem.m */; };
+		F1394F9F1EEDDCEA00552898 /* advert.m in Sources */ = {isa = PBXBuildFile; fileRef = F1394F981EEDDCEA00552898 /* advert.m */; };
+		F1394FA01EEDDCEA00552898 /* AdvertCustomView.m in Sources */ = {isa = PBXBuildFile; fileRef = F1394F9A1EEDDCEA00552898 /* AdvertCustomView.m */; };
+		F1394FA11EEDDCEA00552898 /* AdvertCustomView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F1394F9B1EEDDCEA00552898 /* AdvertCustomView.xib */; };
+		F1394FA21EEDDCEA00552898 /* AdvertPremiumView.m in Sources */ = {isa = PBXBuildFile; fileRef = F1394F9D1EEDDCEA00552898 /* AdvertPremiumView.m */; };
+		F1394FA31EEDDCEA00552898 /* AdvertPremiumView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F1394F9E1EEDDCEA00552898 /* AdvertPremiumView.xib */; };
+		F1394FCA1EEDDE2D00552898 /* IQ_FDWaveformView.m in Sources */ = {isa = PBXBuildFile; fileRef = F1394FA71EEDDE2D00552898 /* IQ_FDWaveformView.m */; };
+		F1394FCB1EEDDE2D00552898 /* IQAudioCropperViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F1394FA91EEDDE2D00552898 /* IQAudioCropperViewController.m */; };
+		F1394FCC1EEDDE2D00552898 /* IQAudioRecorderConstraints.m in Sources */ = {isa = PBXBuildFile; fileRef = F1394FAB1EEDDE2D00552898 /* IQAudioRecorderConstraints.m */; };
+		F1394FCD1EEDDE2D00552898 /* IQAudioRecorderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F1394FAD1EEDDE2D00552898 /* IQAudioRecorderViewController.m */; };
+		F1394FCE1EEDDE2D00552898 /* IQCropSelectionBeginView.m in Sources */ = {isa = PBXBuildFile; fileRef = F1394FAF1EEDDE2D00552898 /* IQCropSelectionBeginView.m */; };
+		F1394FCF1EEDDE2D00552898 /* IQCropSelectionEndView.m in Sources */ = {isa = PBXBuildFile; fileRef = F1394FB11EEDDE2D00552898 /* IQCropSelectionEndView.m */; };
+		F1394FD01EEDDE2D00552898 /* IQCropSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = F1394FB31EEDDE2D00552898 /* IQCropSelectionView.m */; };
+		F1394FD11EEDDE2D00552898 /* IQMessageDisplayView.m in Sources */ = {isa = PBXBuildFile; fileRef = F1394FB51EEDDE2D00552898 /* IQMessageDisplayView.m */; };
+		F1394FD21EEDDE2D00552898 /* IQPlaybackDurationView.m in Sources */ = {isa = PBXBuildFile; fileRef = F1394FB71EEDDE2D00552898 /* IQPlaybackDurationView.m */; };
+		F1394FD31EEDDE2D00552898 /* NSString+IQTimeIntervalFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = F1394FB91EEDDE2D00552898 /* NSString+IQTimeIntervalFormatter.m */; };
+		F1394FD41EEDDE2D00552898 /* audio_record.png in Resources */ = {isa = PBXBuildFile; fileRef = F1394FBB1EEDDE2D00552898 /* audio_record.png */; };
+		F1394FD51EEDDE2D00552898 /* audio_record@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1394FBC1EEDDE2D00552898 /* audio_record@2x.png */; };
+		F1394FD61EEDDE2D00552898 /* audio_record@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1394FBD1EEDDE2D00552898 /* audio_record@3x.png */; };
+		F1394FD71EEDDE2D00552898 /* microphone_access.png in Resources */ = {isa = PBXBuildFile; fileRef = F1394FBE1EEDDE2D00552898 /* microphone_access.png */; };
+		F1394FD81EEDDE2D00552898 /* microphone_access@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1394FBF1EEDDE2D00552898 /* microphone_access@2x.png */; };
+		F1394FD91EEDDE2D00552898 /* microphone_access@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1394FC01EEDDE2D00552898 /* microphone_access@3x.png */; };
+		F1394FDA1EEDDE2D00552898 /* scissor.png in Resources */ = {isa = PBXBuildFile; fileRef = F1394FC11EEDDE2D00552898 /* scissor.png */; };
+		F1394FDB1EEDDE2D00552898 /* scissor@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1394FC21EEDDE2D00552898 /* scissor@2x.png */; };
+		F1394FDC1EEDDE2D00552898 /* scissor@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1394FC31EEDDE2D00552898 /* scissor@3x.png */; };
+		F1394FDD1EEDDE2D00552898 /* stop_playing.png in Resources */ = {isa = PBXBuildFile; fileRef = F1394FC41EEDDE2D00552898 /* stop_playing.png */; };
+		F1394FDE1EEDDE2D00552898 /* stop_playing@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1394FC51EEDDE2D00552898 /* stop_playing@2x.png */; };
+		F1394FDF1EEDDE2D00552898 /* stop_playing@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1394FC61EEDDE2D00552898 /* stop_playing@3x.png */; };
+		F1394FE01EEDDE2D00552898 /* stop_recording.png in Resources */ = {isa = PBXBuildFile; fileRef = F1394FC71EEDDE2D00552898 /* stop_recording.png */; };
+		F1394FE11EEDDE2D00552898 /* stop_recording@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1394FC81EEDDE2D00552898 /* stop_recording@2x.png */; };
+		F1394FE21EEDDE2D00552898 /* stop_recording@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1394FC91EEDDE2D00552898 /* stop_recording@3x.png */; };
+		F1394FE61EEDE61900552898 /* SCSiriWaveformView.m in Sources */ = {isa = PBXBuildFile; fileRef = F1394FE51EEDE61900552898 /* SCSiriWaveformView.m */; };
 		F13AD92E1EACE617009B88F1 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F13AD92D1EACE617009B88F1 /* SWRevealViewController.m */; };
 		F13F2A841EC844B100A43F82 /* AlertsPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F13F2A831EC844B100A43F82 /* AlertsPostViewController.swift */; };
 		F17E085C1E0FF16500FDBF0B /* AKImageCropperOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F17E08511E0FF16500FDBF0B /* AKImageCropperOverlayView.swift */; };
@@ -169,6 +200,51 @@
 		F1394F8F1EED5DB900552898 /* NYTPhotoItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NYTPhotoItem.m; sourceTree = "<group>"; };
 		F1394F931EEDC5C600552898 /* JSQContactMediaItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JSQContactMediaItem.h; path = ShoutAboutApp/JSQContactMediaItem.h; sourceTree = "<group>"; };
 		F1394F941EEDC5C600552898 /* JSQContactMediaItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JSQContactMediaItem.m; path = ShoutAboutApp/JSQContactMediaItem.m; sourceTree = "<group>"; };
+		F1394F971EEDDCEA00552898 /* advert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = advert.h; sourceTree = "<group>"; };
+		F1394F981EEDDCEA00552898 /* advert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = advert.m; sourceTree = "<group>"; };
+		F1394F991EEDDCEA00552898 /* AdvertCustomView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdvertCustomView.h; sourceTree = "<group>"; };
+		F1394F9A1EEDDCEA00552898 /* AdvertCustomView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdvertCustomView.m; sourceTree = "<group>"; };
+		F1394F9B1EEDDCEA00552898 /* AdvertCustomView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AdvertCustomView.xib; sourceTree = "<group>"; };
+		F1394F9C1EEDDCEA00552898 /* AdvertPremiumView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdvertPremiumView.h; sourceTree = "<group>"; };
+		F1394F9D1EEDDCEA00552898 /* AdvertPremiumView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdvertPremiumView.m; sourceTree = "<group>"; };
+		F1394F9E1EEDDCEA00552898 /* AdvertPremiumView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AdvertPremiumView.xib; sourceTree = "<group>"; };
+		F1394FA61EEDDE2D00552898 /* IQ_FDWaveformView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IQ_FDWaveformView.h; sourceTree = "<group>"; };
+		F1394FA71EEDDE2D00552898 /* IQ_FDWaveformView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IQ_FDWaveformView.m; sourceTree = "<group>"; };
+		F1394FA81EEDDE2D00552898 /* IQAudioCropperViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IQAudioCropperViewController.h; sourceTree = "<group>"; };
+		F1394FA91EEDDE2D00552898 /* IQAudioCropperViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IQAudioCropperViewController.m; sourceTree = "<group>"; };
+		F1394FAA1EEDDE2D00552898 /* IQAudioRecorderConstraints.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IQAudioRecorderConstraints.h; sourceTree = "<group>"; };
+		F1394FAB1EEDDE2D00552898 /* IQAudioRecorderConstraints.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IQAudioRecorderConstraints.m; sourceTree = "<group>"; };
+		F1394FAC1EEDDE2D00552898 /* IQAudioRecorderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IQAudioRecorderViewController.h; sourceTree = "<group>"; };
+		F1394FAD1EEDDE2D00552898 /* IQAudioRecorderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IQAudioRecorderViewController.m; sourceTree = "<group>"; };
+		F1394FAE1EEDDE2D00552898 /* IQCropSelectionBeginView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IQCropSelectionBeginView.h; sourceTree = "<group>"; };
+		F1394FAF1EEDDE2D00552898 /* IQCropSelectionBeginView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IQCropSelectionBeginView.m; sourceTree = "<group>"; };
+		F1394FB01EEDDE2D00552898 /* IQCropSelectionEndView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IQCropSelectionEndView.h; sourceTree = "<group>"; };
+		F1394FB11EEDDE2D00552898 /* IQCropSelectionEndView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IQCropSelectionEndView.m; sourceTree = "<group>"; };
+		F1394FB21EEDDE2D00552898 /* IQCropSelectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IQCropSelectionView.h; sourceTree = "<group>"; };
+		F1394FB31EEDDE2D00552898 /* IQCropSelectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IQCropSelectionView.m; sourceTree = "<group>"; };
+		F1394FB41EEDDE2D00552898 /* IQMessageDisplayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IQMessageDisplayView.h; sourceTree = "<group>"; };
+		F1394FB51EEDDE2D00552898 /* IQMessageDisplayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IQMessageDisplayView.m; sourceTree = "<group>"; };
+		F1394FB61EEDDE2D00552898 /* IQPlaybackDurationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IQPlaybackDurationView.h; sourceTree = "<group>"; };
+		F1394FB71EEDDE2D00552898 /* IQPlaybackDurationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IQPlaybackDurationView.m; sourceTree = "<group>"; };
+		F1394FB81EEDDE2D00552898 /* NSString+IQTimeIntervalFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+IQTimeIntervalFormatter.h"; sourceTree = "<group>"; };
+		F1394FB91EEDDE2D00552898 /* NSString+IQTimeIntervalFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+IQTimeIntervalFormatter.m"; sourceTree = "<group>"; };
+		F1394FBB1EEDDE2D00552898 /* audio_record.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = audio_record.png; sourceTree = "<group>"; };
+		F1394FBC1EEDDE2D00552898 /* audio_record@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "audio_record@2x.png"; sourceTree = "<group>"; };
+		F1394FBD1EEDDE2D00552898 /* audio_record@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "audio_record@3x.png"; sourceTree = "<group>"; };
+		F1394FBE1EEDDE2D00552898 /* microphone_access.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = microphone_access.png; sourceTree = "<group>"; };
+		F1394FBF1EEDDE2D00552898 /* microphone_access@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "microphone_access@2x.png"; sourceTree = "<group>"; };
+		F1394FC01EEDDE2D00552898 /* microphone_access@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "microphone_access@3x.png"; sourceTree = "<group>"; };
+		F1394FC11EEDDE2D00552898 /* scissor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = scissor.png; sourceTree = "<group>"; };
+		F1394FC21EEDDE2D00552898 /* scissor@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "scissor@2x.png"; sourceTree = "<group>"; };
+		F1394FC31EEDDE2D00552898 /* scissor@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "scissor@3x.png"; sourceTree = "<group>"; };
+		F1394FC41EEDDE2D00552898 /* stop_playing.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = stop_playing.png; sourceTree = "<group>"; };
+		F1394FC51EEDDE2D00552898 /* stop_playing@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "stop_playing@2x.png"; sourceTree = "<group>"; };
+		F1394FC61EEDDE2D00552898 /* stop_playing@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "stop_playing@3x.png"; sourceTree = "<group>"; };
+		F1394FC71EEDDE2D00552898 /* stop_recording.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = stop_recording.png; sourceTree = "<group>"; };
+		F1394FC81EEDDE2D00552898 /* stop_recording@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "stop_recording@2x.png"; sourceTree = "<group>"; };
+		F1394FC91EEDDE2D00552898 /* stop_recording@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "stop_recording@3x.png"; sourceTree = "<group>"; };
+		F1394FE41EEDE61900552898 /* SCSiriWaveformView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCSiriWaveformView.h; sourceTree = "<group>"; };
+		F1394FE51EEDE61900552898 /* SCSiriWaveformView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCSiriWaveformView.m; sourceTree = "<group>"; };
 		F13AD92C1EACE617009B88F1 /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRevealViewController.h; sourceTree = "<group>"; };
 		F13AD92D1EACE617009B88F1 /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
 		F13F2A831EC844B100A43F82 /* AlertsPostViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertsPostViewController.swift; sourceTree = "<group>"; };
@@ -360,6 +436,8 @@
 		F12C274F1DCE45A800AEE0A3 /* ShoutAboutApp */ = {
 			isa = PBXGroup;
 			children = (
+				F1394FA41EEDDE2D00552898 /* IQAudioRecorderController */,
+				F1394F961EEDDCEA00552898 /* advert */,
 				F1394F781EEC792700552898 /* NotificationCenter.h */,
 				F1394F791EEC792700552898 /* NotificationCenter.m */,
 				F1394F6F1EE448A700552898 /* VideoView.h */,
@@ -413,6 +491,89 @@
 				F1DD71FD1DE8B81700DE0A12 /* TitilliumWeb-SemiBold.ttf */,
 			);
 			path = ShoutAboutApp;
+			sourceTree = "<group>";
+		};
+		F1394F961EEDDCEA00552898 /* advert */ = {
+			isa = PBXGroup;
+			children = (
+				F1394F971EEDDCEA00552898 /* advert.h */,
+				F1394F981EEDDCEA00552898 /* advert.m */,
+				F1394F991EEDDCEA00552898 /* AdvertCustomView.h */,
+				F1394F9A1EEDDCEA00552898 /* AdvertCustomView.m */,
+				F1394F9B1EEDDCEA00552898 /* AdvertCustomView.xib */,
+				F1394F9C1EEDDCEA00552898 /* AdvertPremiumView.h */,
+				F1394F9D1EEDDCEA00552898 /* AdvertPremiumView.m */,
+				F1394F9E1EEDDCEA00552898 /* AdvertPremiumView.xib */,
+			);
+			path = advert;
+			sourceTree = "<group>";
+		};
+		F1394FA41EEDDE2D00552898 /* IQAudioRecorderController */ = {
+			isa = PBXGroup;
+			children = (
+				F1394FE31EEDE61900552898 /* SCSiriWaveformView */,
+				F1394FA51EEDDE2D00552898 /* FDWaveformView */,
+				F1394FA81EEDDE2D00552898 /* IQAudioCropperViewController.h */,
+				F1394FA91EEDDE2D00552898 /* IQAudioCropperViewController.m */,
+				F1394FAA1EEDDE2D00552898 /* IQAudioRecorderConstraints.h */,
+				F1394FAB1EEDDE2D00552898 /* IQAudioRecorderConstraints.m */,
+				F1394FAC1EEDDE2D00552898 /* IQAudioRecorderViewController.h */,
+				F1394FAD1EEDDE2D00552898 /* IQAudioRecorderViewController.m */,
+				F1394FAE1EEDDE2D00552898 /* IQCropSelectionBeginView.h */,
+				F1394FAF1EEDDE2D00552898 /* IQCropSelectionBeginView.m */,
+				F1394FB01EEDDE2D00552898 /* IQCropSelectionEndView.h */,
+				F1394FB11EEDDE2D00552898 /* IQCropSelectionEndView.m */,
+				F1394FB21EEDDE2D00552898 /* IQCropSelectionView.h */,
+				F1394FB31EEDDE2D00552898 /* IQCropSelectionView.m */,
+				F1394FB41EEDDE2D00552898 /* IQMessageDisplayView.h */,
+				F1394FB51EEDDE2D00552898 /* IQMessageDisplayView.m */,
+				F1394FB61EEDDE2D00552898 /* IQPlaybackDurationView.h */,
+				F1394FB71EEDDE2D00552898 /* IQPlaybackDurationView.m */,
+				F1394FB81EEDDE2D00552898 /* NSString+IQTimeIntervalFormatter.h */,
+				F1394FB91EEDDE2D00552898 /* NSString+IQTimeIntervalFormatter.m */,
+				F1394FBA1EEDDE2D00552898 /* Resources */,
+			);
+			path = IQAudioRecorderController;
+			sourceTree = "<group>";
+		};
+		F1394FA51EEDDE2D00552898 /* FDWaveformView */ = {
+			isa = PBXGroup;
+			children = (
+				F1394FA61EEDDE2D00552898 /* IQ_FDWaveformView.h */,
+				F1394FA71EEDDE2D00552898 /* IQ_FDWaveformView.m */,
+			);
+			path = FDWaveformView;
+			sourceTree = "<group>";
+		};
+		F1394FBA1EEDDE2D00552898 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				F1394FBB1EEDDE2D00552898 /* audio_record.png */,
+				F1394FBC1EEDDE2D00552898 /* audio_record@2x.png */,
+				F1394FBD1EEDDE2D00552898 /* audio_record@3x.png */,
+				F1394FBE1EEDDE2D00552898 /* microphone_access.png */,
+				F1394FBF1EEDDE2D00552898 /* microphone_access@2x.png */,
+				F1394FC01EEDDE2D00552898 /* microphone_access@3x.png */,
+				F1394FC11EEDDE2D00552898 /* scissor.png */,
+				F1394FC21EEDDE2D00552898 /* scissor@2x.png */,
+				F1394FC31EEDDE2D00552898 /* scissor@3x.png */,
+				F1394FC41EEDDE2D00552898 /* stop_playing.png */,
+				F1394FC51EEDDE2D00552898 /* stop_playing@2x.png */,
+				F1394FC61EEDDE2D00552898 /* stop_playing@3x.png */,
+				F1394FC71EEDDE2D00552898 /* stop_recording.png */,
+				F1394FC81EEDDE2D00552898 /* stop_recording@2x.png */,
+				F1394FC91EEDDE2D00552898 /* stop_recording@3x.png */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		F1394FE31EEDE61900552898 /* SCSiriWaveformView */ = {
+			isa = PBXGroup;
+			children = (
+				F1394FE41EEDE61900552898 /* SCSiriWaveformView.h */,
+				F1394FE51EEDE61900552898 /* SCSiriWaveformView.m */,
+			);
+			path = SCSiriWaveformView;
 			sourceTree = "<group>";
 		};
 		F13AD92B1EACE617009B88F1 /* SWReveal */ = {
@@ -532,11 +693,28 @@
 			files = (
 				F12C275B1DCE45A800AEE0A3 /* LaunchScreen.storyboard in Resources */,
 				F12C27581DCE45A800AEE0A3 /* Assets.xcassets in Resources */,
+				F1394FDE1EEDDE2D00552898 /* stop_playing@2x.png in Resources */,
 				F17E08641E0FF16500FDBF0B /* Crop.storyboard in Resources */,
+				F1394FD71EEDDE2D00552898 /* microphone_access.png in Resources */,
+				F1394FD41EEDDE2D00552898 /* audio_record.png in Resources */,
 				F1394F731EE448A700552898 /* VideoView.xib in Resources */,
+				F1394FDA1EEDDE2D00552898 /* scissor.png in Resources */,
 				F1227AF91E070FE7002D9CE3 /* ContactTableViewCell.xib in Resources */,
 				F1394F831EEC873700552898 /* MapView.xib in Resources */,
+				F1394FD61EEDDE2D00552898 /* audio_record@3x.png in Resources */,
+				F1394FD81EEDDE2D00552898 /* microphone_access@2x.png in Resources */,
 				F12C27561DCE45A800AEE0A3 /* Main.storyboard in Resources */,
+				F1394FD91EEDDE2D00552898 /* microphone_access@3x.png in Resources */,
+				F1394FDF1EEDDE2D00552898 /* stop_playing@3x.png in Resources */,
+				F1394FD51EEDDE2D00552898 /* audio_record@2x.png in Resources */,
+				F1394FE21EEDDE2D00552898 /* stop_recording@3x.png in Resources */,
+				F1394FA11EEDDCEA00552898 /* AdvertCustomView.xib in Resources */,
+				F1394FDB1EEDDE2D00552898 /* scissor@2x.png in Resources */,
+				F1394FDD1EEDDE2D00552898 /* stop_playing.png in Resources */,
+				F1394FA31EEDDCEA00552898 /* AdvertPremiumView.xib in Resources */,
+				F1394FE11EEDDE2D00552898 /* stop_recording@2x.png in Resources */,
+				F1394FDC1EEDDE2D00552898 /* scissor@3x.png in Resources */,
+				F1394FE01EEDDE2D00552898 /* stop_recording.png in Resources */,
 				F11B75FE1DE373AD0075DDCB /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -599,25 +777,31 @@
 				F17E085E1E0FF16500FDBF0B /* CropperViewController.swift in Sources */,
 				F1BEE4AA1EDAE225004ED700 /* ChatAsyncPhotoMedia.m in Sources */,
 				F1ACAD781E217DDC004AECAB /* SpamFavBlockViewController.swift in Sources */,
+				F1394FCF1EEDDE2D00552898 /* IQCropSelectionEndView.m in Sources */,
 				F17E08651E0FF16500FDBF0B /* ImageViewController.swift in Sources */,
 				F11B75F61DE071FB0075DDCB /* ChatPersionTableViewCell.swift in Sources */,
 				8E10820C1E6D718400544467 /* AlertTableViewCell.swift in Sources */,
 				8E317FD61E7AAABF00E47CDD /* PrivacyPolicyViewController.swift in Sources */,
+				F1394FD31EEDDE2D00552898 /* NSString+IQTimeIntervalFormatter.m in Sources */,
 				F17E08621E0FF16500FDBF0B /* AKImageCropperTouchView.swift in Sources */,
 				F11B75FC1DE17B520075DDCB /* ChatImageTableViewCell.swift in Sources */,
 				F1C9A81F1E3DE0CD003354B6 /* NewProfileViewController.swift in Sources */,
 				8E2470B21E6ED34200864806 /* MoreCell.swift in Sources */,
 				F1394F7A1EEC792700552898 /* NotificationCenter.m in Sources */,
 				F13AD92E1EACE617009B88F1 /* SWRevealViewController.m in Sources */,
+				F1394FD21EEDDE2D00552898 /* IQPlaybackDurationView.m in Sources */,
 				8EB9B7AA1E77D2E400FA4BCA /* likeDislikeViewController.swift in Sources */,
 				8ECC94E31E659B8B00B12787 /* AlertViewController.swift in Sources */,
+				F1394FCC1EEDDE2D00552898 /* IQAudioRecorderConstraints.m in Sources */,
 				F11B75F01DDF844B0075DDCB /* MainSearchViewController.swift in Sources */,
 				F17E08631E0FF16500FDBF0B /* UIColor.swift in Sources */,
 				F17E085C1E0FF16500FDBF0B /* AKImageCropperOverlayView.swift in Sources */,
 				F1394F951EEDC5C600552898 /* JSQContactMediaItem.m in Sources */,
 				F17E08611E0FF16500FDBF0B /* CGRect.swift in Sources */,
+				F1394FE61EEDE61900552898 /* SCSiriWaveformView.m in Sources */,
 				F17E085F1E0FF16500FDBF0B /* CGFloat.swift in Sources */,
 				F17E08601E0FF16500FDBF0B /* AKImageCropperScollView.swift in Sources */,
+				F1394FA21EEDDCEA00552898 /* AdvertPremiumView.m in Sources */,
 				F12713B21DCFC105005928AD /* WriteReviewTableViewCell.swift in Sources */,
 				F12C27791DCF497F00AEE0A3 /* ContactTableViewCell.swift in Sources */,
 				F1DD72041DEAADF800DE0A12 /* ChatsViewController.swift in Sources */,
@@ -630,8 +814,11 @@
 				F17E08661E0FF16500FDBF0B /* UIImage.swift in Sources */,
 				8EA72D671E7BD48C00425AC9 /* subViewController.swift in Sources */,
 				8EA72D691E7BEEAF00425AC9 /* settingCell.swift in Sources */,
+				F1394FCE1EEDDE2D00552898 /* IQCropSelectionBeginView.m in Sources */,
 				8E8033811E7932B100BADA63 /* photopreviewViewController.swift in Sources */,
 				F12EF5451EB0786F004FDF09 /* TCViewController.swift in Sources */,
+				F1394FCB1EEDDE2D00552898 /* IQAudioCropperViewController.m in Sources */,
+				F1394FD11EEDDE2D00552898 /* IQMessageDisplayView.m in Sources */,
 				F12C277D1DCF761D00AEE0A3 /* FeedsViewController.swift in Sources */,
 				F12C276B1DCE6DDF00AEE0A3 /* DataSession.swift in Sources */,
 				F18839291DD877C000362B1B /* ChattingViewController.swift in Sources */,
@@ -640,16 +827,20 @@
 				F1A1D13C1E2BA1C2004A4E8E /* FeedsTableViewCell.swift in Sources */,
 				F188392B1DD8A76B00362B1B /* ChattingTableViewCell.swift in Sources */,
 				F12C27711DCEFDE100AEE0A3 /* JoinViewController.swift in Sources */,
+				F1394FD01EEDDE2D00552898 /* IQCropSelectionView.m in Sources */,
 				F18839271DD86A6F00362B1B /* EditProfileTableViewCell.swift in Sources */,
 				F17E085D1E0FF16500FDBF0B /* AKImageCropperView.swift in Sources */,
+				F1394FCA1EEDDE2D00552898 /* IQ_FDWaveformView.m in Sources */,
 				F12C27531DCE45A800AEE0A3 /* ViewController.swift in Sources */,
 				F1DD72031DEAADF800DE0A12 /* ChannelListViewController.swift in Sources */,
 				F13F2A841EC844B100A43F82 /* AlertsPostViewController.swift in Sources */,
 				F12C27651DCE643D00AEE0A3 /* NetworkConnectivity.swift in Sources */,
 				F18839331DD8D26400362B1B /* LeftViewController.swift in Sources */,
 				F12C27771DCF3DFA00AEE0A3 /* ContactViewController.swift in Sources */,
+				F1394FA01EEDDCEA00552898 /* AdvertCustomView.m in Sources */,
 				F1394F8D1EED460A00552898 /* PictureView.m in Sources */,
 				F12C277B1DCF75F800AEE0A3 /* SearchViewController.swift in Sources */,
+				F1394FCD1EEDDE2D00552898 /* IQAudioRecorderViewController.m in Sources */,
 				F11B75FA1DE0C70C0075DDCB /* MyTabViewController.swift in Sources */,
 				F11689921ED9A38C00D67E7F /* Message.swift in Sources */,
 				F1394F881EEC883B00552898 /* Location.m in Sources */,
@@ -661,6 +852,7 @@
 				F1394F901EED5DB900552898 /* NYTPhotoItem.m in Sources */,
 				F1DD72051DEAADF800DE0A12 /* LoginViewController.swift in Sources */,
 				F12C27511DCE45A800AEE0A3 /* AppDelegate.swift in Sources */,
+				F1394F9F1EEDDCEA00552898 /* advert.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

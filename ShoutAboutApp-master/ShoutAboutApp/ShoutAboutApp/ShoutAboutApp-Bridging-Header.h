@@ -14,7 +14,7 @@
 #import "PictureView.h"
 #import "JSQContactMediaItem.h"
 
-
+#import "IQAudioRecorderViewController.h"
 #import <SDWebImage/UIImageView+WebCache.h>
 #import <XMPPFramework/XMPPFramework.h>
 #import <Reachability/Reachability.h>

@@ -351,7 +351,7 @@ class NewProfileViewController: ProfileViewController, UIPopoverPresentationCont
 
            // con.familyName = "Appleseed"
             con.phoneNumbers.append(CNLabeledValue(
-                label: "Mobile Number", value: CNPhoneNumber(stringValue:             personalProfile.mobileNumber
+                label: "Mobile Number", value: CNPhoneNumber(stringValue: personalProfile.mobileNumber
           )))
             
             let addNewContactVC = CNContactViewController(forNewContact: con)

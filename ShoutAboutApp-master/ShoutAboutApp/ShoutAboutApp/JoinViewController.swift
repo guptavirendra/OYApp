@@ -792,23 +792,18 @@ extension JoinViewController
             let formatter = CNContactFormatter()
             
             let name = formatter.string(from: contact)
-            if let _ = contact.phoneNumbers.first?.value as? CNPhoneNumber
+            if let phone = contact.phoneNumbers.first?.value
             {
-                let mobile = (contact.phoneNumbers.first?.value as! CNPhoneNumber).value(forKey: "digits") as? String
+                let mobile = phone.value(forKey: "digits") as? String
                 if name?.characters.count > 0 && mobile != nil
                 {
                     let personContact = SearchPerson()
                     personContact.name = name!
                     personContact.mobileNumber =  mobile!
                     allValidContacts.append(personContact)
-                    
-                    
                 }
                 
             }
-            
-            
-            
         }
         
         //1ProfileManager.sharedInstance.syncedContactArray.appendContentsOf(allValidContacts)
