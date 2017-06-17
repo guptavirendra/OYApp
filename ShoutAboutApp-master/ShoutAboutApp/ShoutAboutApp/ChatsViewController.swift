@@ -15,7 +15,7 @@ import Photos
 import ContactsUI
  
 
-class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CNContactPickerDelegate  {
+class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CNContactPickerDelegate, IQAudioRecorderViewControllerDelegate  {
     
     let appDelegate = UIApplication.shared.delegate as? AppDelegate
     var messages = NSMutableArray()
@@ -73,6 +73,12 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
             }
         } // 3
         
+        
+        let thirdAction1 = UIAlertAction(title: "Audio", style: .default) { (alert: UIAlertAction!) -> Void in
+            NSLog("You pressed button two")
+            self.actionAudio()
+        } // 3
+        
         let thirdAction = UIAlertAction(title: "Location", style: .default) { (alert: UIAlertAction!) -> Void in
             NSLog("You pressed button two")
             self.setupLocationManager()
@@ -94,10 +100,13 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
         alert.addAction(firstAction) // 4
         alert.addAction(secondAction) // 5
         alert.addAction(thirdAction)
+        alert.addAction(thirdAction1)
         alert.addAction(fourthAction)
         alert.addAction(fifthAction)// 5
         present(alert, animated: true, completion:nil) // 6
     }
+    
+    
     
     func presenceRecieved(notification:NSNotification)
     {
@@ -388,15 +397,41 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
                 switch messageType
                 {
                 case 0:
+                    
                     if let msgText = messageDict["msg"] as? String, msgText.characters.count > 0
                     {
-                        
                         let fullMessage = JSQMessage(senderId: message.senderId, senderDisplayName: message.senderId, date: message.date, text: msgText)
                         self.messages.add(fullMessage!)
                     }
                     
                     break
                 case 1:
+                    if let attachment = messageDict["attachment"] as? NSDictionary
+                    {
+                        let _id  = messageDict["_id"] as? String
+                        if let  localUrl = attachment.object(forKey: "localUrl") as? String
+                        {
+                            print("Audio URL\(localUrl)")
+                            let attachmentType = attachment.object(forKey: "attachmentType") as! Int
+                            if attachmentType == 1 && localUrl.characters.count > 0
+                            {
+                                let  serverUrl = attachment.object(forKey: "serverUrl") as? String
+                                self.addLocalAudioURLFile(url: localUrl, serverURL: serverUrl, message: message, _id: _id!)
+                               // self.addLocalURLFile(url: localUrl,serverURL:serverUrl, message: message, _id: _id!)
+                                
+                            }
+                        }
+                            
+                        else if let  serverUrl = attachment.object(forKey: "serverUrl") as? String
+                        {
+                            print("Audio URL\(serverUrl)")
+                            let attachmentType = attachment.object(forKey: "attachmentType") as! Int
+                            if attachmentType == 1 && serverUrl.characters.count > 0
+                            {
+                                self.downloadAudioForIndexPath(url: serverUrl, message: message,_id: _id!)
+                            }
+                        }
+                    }
                     break
                 case 2:
                     break
@@ -412,7 +447,6 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
                             if attachmentType == 4 && localUrl.characters.count > 0
                             {
                                 let  serverUrl = attachment.object(forKey: "serverUrl") as? String
-                                
                                 self.addLocalURLFile(url: localUrl,serverURL:serverUrl, message: message, _id: _id!)
                                 
                             }
@@ -444,8 +478,7 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
                             if attachmentType == 8 && localUrl.characters.count > 0
                             {
                                 let  serverUrl = attachment.object(forKey: "serverUrl") as? String
-                                
-                                 self.addLocalVideoURLFile(url: localUrl, serverURL: serverUrl, message: message, _id: _id!)
+                                self.addLocalVideoURLFile(url: localUrl, serverURL: serverUrl, message: message, _id: _id!)
                                 
                             }
                         }
@@ -696,6 +729,44 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
     }
     
     
+    func downloadAudioForIndexPath(url:String, message:JSQMessage, _id:String)
+    {
+        /*if */let mediaItem = JSQAudioMediaItem(audioViewAttributes: JSQAudioMediaViewAttributes())
+        //{
+            
+            let fullMessage =   JSQMessage(senderId: message.senderId, senderDisplayName: message.senderId, date:  message.date, media: mediaItem, andMessageID:_id)
+            self.messages.add(fullMessage!)
+            DispatchQueue.global().async
+                {
+                    DataSessionManger.sharedInstance.downloadImageWithURL(url, downloadedImageData: { (data, test) in
+                        
+                        let extensionPathStr = "\(_id)."+URL(fileURLWithPath: url).pathExtension
+
+                         //let currentTime = Date().timeIntervalSince1970 as TimeInterval
+                         let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+                        let fullPathToFile = "\(documentsDirectory)/\(extensionPathStr)"
+                        
+                        print(fullPathToFile)
+                        
+                        
+                            
+                            try? data?.write(to: URL(fileURLWithPath: fullPathToFile), options: [.atomic])
+                            mediaItem.audioData = data
+                             
+                            
+                        
+                        
+                        
+                        
+                        
+                        DispatchQueue.main.async(execute: { () -> Void in
+                            self.collectionView.reloadData()
+                        })
+                    })
+            }
+        //}
+    }
+    
     func downloadVideoForIndexPath(url:String, message:JSQMessage, _id:String)
     {
         if let mediaItem = JSQVideoMediaItem(maskAsOutgoing: message.senderId == self.senderId)
@@ -723,6 +794,61 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
     }
     
     
+    
+    func addLocalAudioURLFile(url:String, serverURL:String?, message:JSQMessage, _id:String)
+    {
+        let mediaItem = JSQAudioMediaItem(audioViewAttributes: JSQAudioMediaViewAttributes())
+        //{
+            mediaItem.appliesMediaViewMaskAsOutgoing = message.senderId == self.senderId
+            let fullMessage =   JSQMessage(senderId: message.senderId, senderDisplayName: message.senderId, date:  message.date, media: mediaItem, andMessageID:_id)
+            self.messages.add(fullMessage!)
+            
+            DispatchQueue.global(qos: .background).async
+                {
+                    
+                    
+                    let extensionPathStr = "\(_id)."+URL(fileURLWithPath: url).pathExtension
+                    let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+                    let fullPathToFile = "\(documentsDirectory)/\(extensionPathStr)"
+                    let idfileURL = URL(fileURLWithPath: fullPathToFile)
+                    let fileURL = URL(fileURLWithPath: url)
+                    if  let data = NSData(contentsOf: idfileURL)
+                    {
+                        DispatchQueue.main.async(execute: { () -> Void in
+                            
+                            
+                            mediaItem.audioData = data as Data
+                            self.collectionView.reloadData()
+                        })
+                    }else if  let data = NSData(contentsOf: fileURL)
+                    {
+                        DispatchQueue.main.async(execute: { () -> Void in
+                            
+                            mediaItem.audioData = data as Data
+                            self.collectionView.reloadData()
+                        })
+                    }else if let fileURL = URL(string: url), let data = NSData(contentsOf: fileURL)
+                    {
+                        DispatchQueue.main.async(execute: { () -> Void in
+                            
+                            mediaItem.audioData = data as Data
+                            self.collectionView.reloadData()
+                        })
+                    }else
+                    {
+                        if  serverURL != nil
+                        {
+                            self.downloadAudioForIndexPath(url: serverURL!, message: message, _id: _id)
+                            
+                        }
+                    }
+                    
+            }
+        //}
+    }
+    
+    
+
     func addLocalVideoURLFile(url:String, serverURL:String?, message:JSQMessage, _id:String)
     {
         
@@ -823,6 +949,11 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
         }
         */
     }
+    
+    
+    
+    
+
     
     
     
@@ -1087,6 +1218,16 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
             {
                  let imageVC = PictureView(message.messageID, self.getMediaMessage())
                  self.present(imageVC!, animated: true, completion: nil)
+            }else if message.media.isKind(of: JSQContactMediaItem.self) == true
+            {
+                if (message.senderId == self.senderId)
+                {
+                    
+                }else
+                {
+                    
+                }
+                
             }
             
             
@@ -1188,6 +1329,34 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
                                                 })
                                                 
                                             }
+                                        }
+                                        
+                                    }
+                                    else if messageType == 1
+                                    {
+                                        DispatchQueue.global().async
+                                            {
+                                                
+                                                if let urlData = NSData(contentsOf: url)
+                                                {
+                                                    let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0];
+                                                    let filePath="\(documentsPath)\(_id!)/."+url.pathExtension;
+                                                    
+                                                    try? urlData.write(to: URL(fileURLWithPath: filePath), options: [.atomic])
+                                                    print("file url with path ")
+                                                    DispatchQueue.main.async(execute: { () -> Void in
+                                                        let mediaItem = JSQAudioMediaItem(data: urlData as Data, audioViewAttributes: JSQAudioMediaViewAttributes())
+                                                        
+                                                        let fullMessage =   JSQMessage(senderId: from, senderDisplayName: from, date:  Date(), media: mediaItem, andMessageID:_id)
+                                                        
+                                                        DispatchQueue.main.async(execute: { () -> Void in
+                                                            self.messages.add(fullMessage!)
+                                                            self.finishReceivingMessage(animated: true)
+                                                        })
+                                                        
+                                                    })
+                                                    
+                                                }
                                         }
                                         
                                     }
@@ -1458,6 +1627,20 @@ extension NSObject
 extension ChatsViewController : CLLocationManagerDelegate
 {
     
+    func actionAudio()
+    {
+        let controller = IQAudioRecorderViewController()
+        controller.delegate = self
+        controller.title = "R"
+        controller.maximumRecordDuration = 300;
+        controller.allowCropping = false;
+        controller.audioFormat = ._caf
+        //self.presentAudioRecorderViewControllerAnimated(controller)
+        self.presentBlurredAudioRecorderViewControllerAnimated(controller)
+        
+    }
+
+    
     func buildLocationItem(latitude: CLLocationDegrees, longitude: CLLocationDegrees) -> JSQLocationMediaItem {
         let ferryBuildingInSF = CLLocation(latitude: latitude, longitude: longitude)
         
@@ -1570,4 +1753,70 @@ extension ChatsViewController : CLLocationManagerDelegate
     }
     
     
+    func audioRecorderController(_ controller: IQAudioRecorderViewController, didFinishWithAudioAtPath filePath: String)
+    {
+          let video = URL(fileURLWithPath: filePath)
+          if let recipient = self.recipient
+            {
+                let message = VideoMessage()
+                message.attachment.attachmentType = 1
+                message._id = (OneChat.sharedInstance.xmppStream?.generateUUID())!
+                message._isRead = false
+                message.msg     = ""
+                message.msgType = 1
+                message.senderId = self.senderId
+                message.receiverId  = recipient.jidStr
+                
+                
+                
+                
+                
+                
+                //UIImageWriteToSavedPhotosAlbum(pickedImage, nil, nil, nil)
+                //let currentTime = Date().timeIntervalSince1970 as TimeInterval
+                let lastPathComponent = video.pathExtension
+                let extensionPathStr = "\(message._id)."+lastPathComponent
+                let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+                let fullPathToFile = "\(documentsDirectory)/\(extensionPathStr)"
+                
+                print(fullPathToFile)
+                
+                let videoData = NSData(contentsOf: video )
+                
+                try? videoData?.write(to: URL(fileURLWithPath: fullPathToFile), options: [.atomic])
+                let imagePath =  ["Audio"]
+                let mediaPathArray = [fullPathToFile]
+                message.attachment.localUrl = fullPathToFile
+                
+                
+                let fullMessage = JSQMessage(senderId: OneChat.sharedInstance.xmppStream?.myJID.bare(), senderDisplayName: OneChat.sharedInstance.xmppStream?.myJID.bare(), date: Date(), text: message.getJson())
+                
+                self.addMessage(message: fullMessage!)
+                JSQSystemSoundPlayer.jsq_playMessageSentSound()
+                self.finishReceivingMessage(animated: true)
+                DataSessionManger.sharedInstance.sendVideoORImageMessage(recipient.jidStr.replacingOccurrences(of: "@localhost", with: ""), message_type: "video", mediaPath: mediaPathArray, name: imagePath, onFinish: { (response, deserializedResponse) in
+                    
+                    print("\(deserializedResponse)")
+                    if let video = deserializedResponse.object(forKey: "video") as? String
+                    {
+                        message.attachment.serverUrl = video
+                        
+                        OneMessage.sendMessage(message.getJson(), to: recipient.jidStr, completionHandler: { (stream, message) -> Void in
+                            
+                            ///should update message has been sent
+                        })
+                    }
+                    
+                }, onError: { (error) in
+                    
+                })
+                
+            }
+        
+        
+        
+        controller.dismiss(animated: true, completion: nil)
+        
+        
+    }
 }
