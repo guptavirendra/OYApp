@@ -90,7 +90,7 @@
         
         UILabel* messagelabel = [[UILabel alloc]init];
         messagelabel.frame = CGRectMake(5, 65.0f, size.width-10, 25);
-        messagelabel.text  = @"Add to Contact";
+        messagelabel.text  = self.isAddToContact ? @"Add to Contact" : @"View Contact";
         mobilelabel.font = [UIFont boldSystemFontOfSize:16];
         messagelabel.textAlignment = NSTextAlignmentCenter;
         namelabel.textColor = [UIColor  whiteColor];

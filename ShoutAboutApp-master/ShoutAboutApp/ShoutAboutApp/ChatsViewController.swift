@@ -13,9 +13,9 @@ import XMPPFramework
 import MobileCoreServices
 import Photos
 import ContactsUI
- 
+import LocationPicker
 
-class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CNContactPickerDelegate, IQAudioRecorderViewControllerDelegate  {
+class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CNContactPickerDelegate, IQAudioRecorderViewControllerDelegate, CNContactViewControllerDelegate  {
     
     let appDelegate = UIApplication.shared.delegate as? AppDelegate
     var messages = NSMutableArray()
@@ -37,6 +37,8 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
     var longitudeToSend: CLLocationDegrees?
     
     var isLocationClicked:Bool = false
+    
+    var messagesOriginal = NSMutableArray()
     // Mark: Life Cycle
     
     
@@ -129,6 +131,8 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
     override func viewDidLoad()
     {
         super.viewDidLoad()
+        
+        self.tabBarController?.tabBar.isHidden = true
         let time = ""
         
 //        OneLastActivity.sendLastActivityQueryToJID((recipient?.jidStr)!) { (iq, id, elemnt) in
@@ -144,10 +148,10 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
         
         
         JSQMessagesCollectionViewCell.registerMenuAction(#selector(self.copyMessage))
-        JSQMessagesCollectionViewCell.registerMenuAction(#selector(self.deleteMessage))
+        JSQMessagesCollectionViewCell.registerMenuAction(#selector(self.deleteMessage(indexPath:)))
         
        let copyMenuItem =   UIMenuItem(title: "forwrd", action: #selector(self.copyMessage))
-       let deleteMenuItem =  UIMenuItem(title: "Delete", action: #selector(self.deleteMessage))
+       let deleteMenuItem =  UIMenuItem(title: "Delete", action: #selector(self.deleteMessage(indexPath:)))
         
         
         UIMenuController.shared.menuItems = [copyMenuItem, deleteMenuItem]
@@ -176,11 +180,11 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
             //self.profilePic?.sd_setImage(with: URL(string: (reciepientPerson?.photo)!))
 
             DispatchQueue.main.async(execute: { () -> Void in
-                let messages = OneMessage.sharedInstance.loadArchivedMessagesFrom(jid: recipient.jidStr)
+            self.messagesOriginal = OneMessage.sharedInstance.loadArchivedMessagesFrom(jid: recipient.jidStr)
 
 
 
-                for message in messages
+                for message in self.messagesOriginal
                 {
                     self.addMessage(message: message as! JSQMessage)
                 }
@@ -216,8 +220,28 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
         
         
     }
-    func deleteMessage()
+    func deleteMessage(indexPath:NSIndexPath)
     {
+        let msg: JSQMessage = self.messages[indexPath.item] as! JSQMessage
+        if let _id  = msg.messageID
+        {
+            let predicate =  NSPredicate { (msg, bind) -> Bool in
+             
+                let mesg = msg as!JSQMessage
+                return mesg.text.contains(_id)
+            }
+            let toDeleteArray =  self.messagesOriginal.filtered(using: predicate) as? [JSQMessage]
+            let message: JSQMessage = (toDeleteArray?.first)!
+            let finalDeleteArray = NSMutableArray()
+            for mesege in toDeleteArray!
+            {
+                finalDeleteArray.add(mesege.text)
+            }
+            
+            OneMessage.sharedInstance.deleteMessagesFrom(jid: message.senderId, messages: finalDeleteArray)
+            self.messages.removeObject(at: indexPath.item)
+            self.collectionView.reloadData()
+        }
         
     }
     
@@ -273,6 +297,12 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
                 firstTime = false
             }
         }*/
+        
+        locationManager = CLLocationManager()
+        locationManager.delegate = self
+        self.locationManager.requestAlwaysAuthorization()
+        locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+        locationManager.startUpdatingLocation()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -374,11 +404,22 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
         {
             return true
         }
-        if action == #selector(self.deleteMessage)
+        if action == #selector(self.deleteMessage(indexPath:))
         {
             return true
         }
         return false
+    }
+    
+    
+    override func collectionView(_ collectionView: UICollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?)
+    {
+        if action == #selector(self.deleteMessage(indexPath:))
+        {
+            self.deleteMessage(indexPath: indexPath as NSIndexPath)
+        }
+        
+        
     }
     
     override func collectionView(_ collectionView: JSQMessagesCollectionView!, messageDataForItemAt indexPath: IndexPath!) -> JSQMessageData!
@@ -394,13 +435,14 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
             if let messageDict = NSObject.convertStringToDictionary(message.text)
             {
                 let messageType  = messageDict["msgType"] as! Int
+                let _id  = messageDict["_id"] as? String
                 switch messageType
                 {
                 case 0:
                     
                     if let msgText = messageDict["msg"] as? String, msgText.characters.count > 0
                     {
-                        let fullMessage = JSQMessage(senderId: message.senderId, senderDisplayName: message.senderId, date: message.date, text: msgText)
+                        let fullMessage = JSQMessage(senderId: message.senderId, senderDisplayName: message.senderId, date: message.date, text: msgText, andMessageID:_id)
                         self.messages.add(fullMessage!)
                     }
                     
@@ -408,7 +450,7 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
                 case 1:
                     if let attachment = messageDict["attachment"] as? NSDictionary
                     {
-                        let _id  = messageDict["_id"] as? String
+                        
                         if let  localUrl = attachment.object(forKey: "localUrl") as? String
                         {
                             print("Audio URL\(localUrl)")
@@ -507,7 +549,7 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
                                 {
                                     let fullMessage =   JSQMessage(senderId: message.senderId, senderDisplayName: message.senderId, date:  message.date, media: locationItem, andMessageID:_id)
                                     self.messages.add(fullMessage!)
-                                    
+                                    locationItem.isAddToContact = message.senderId != self.senderId
                                     
                                     DispatchQueue.global(qos: .background).async
                                         {
@@ -1220,19 +1262,39 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
                  self.present(imageVC!, animated: true, completion: nil)
             }else if message.media.isKind(of: JSQContactMediaItem.self) == true
             {
-                if (message.senderId == self.senderId)
+                
+                let contact : JSQContactMediaItem = message.media as! JSQContactMediaItem
+                let  contactArray = contact.string.components(separatedBy: "-")
+                                
+                if let name = contactArray.first
                 {
                     
-                }else
-                {
+                    let con = CNMutableContact()
+                    con.givenName  = name
+                    
+                    // con.familyName = "Appleseed"
+                    if let mobile = contactArray.last
+                    {
+                        con.phoneNumbers.append(CNLabeledValue(
+                            label: "Mobile Number", value: CNPhoneNumber(stringValue: mobile
+                        )))
+                    }
+                    
+                    let addNewContactVC = CNContactViewController(forNewContact: con)
+                    addNewContactVC.contactStore = CNContactStore()
+                    addNewContactVC.delegate      = self
+                    addNewContactVC.allowsActions = false
+                    if (message.senderId == self.senderId)
+                    {
+                        addNewContactVC.allowsEditing = false
+                    }
+                    let nav = UINavigationController(rootViewController: addNewContactVC)
+                    self.present(nav, animated: true, completion: nil)
                     
                 }
                 
             }
-            
-            
         }
-        
     }
     
     
@@ -1653,6 +1715,99 @@ extension ChatsViewController : CLLocationManagerDelegate
     }
 
     
+    
+    
+    
+    func setupLocationManager(){
+        
+        
+        
+       
+        
+        
+        
+        let locationPicker = LocationPickerViewController()
+        
+        // you can optionally set initial location
+        if  let coordinates =  currentLocation?.coordinate
+        {
+           let  location = Location(name: "my current location", location: nil,
+                                placemark: MKPlacemark(coordinate: coordinates, addressDictionary: [:]))
+            
+            
+            locationPicker.location = location
+        }
+        
+        // button placed on right bottom corner
+        locationPicker.showCurrentLocationButton = true // default: true
+        
+        // default: navigation bar's `barTintColor` or `.whiteColor()`
+        locationPicker.currentLocationButtonBackground = .blue
+        
+        // ignored if initial location is given, shows that location instead
+        locationPicker.showCurrentLocationInitially = true // default: true
+        
+        locationPicker.mapType = .standard // default: .Hybrid
+        
+        // for searching, see `MKLocalSearchRequest`'s `region` property
+        locationPicker.useCurrentLocationAsHint = true // default: false
+        
+        locationPicker.searchBarPlaceholder = "Search places" // default: "Search or enter an address"
+        
+        locationPicker.searchHistoryLabel = "Previously searched" // default: "Search History"
+        
+        // optional region distance to be used for creation region when user selects place from search results
+        locationPicker.resultRegionDistance = 500 // default: 600
+        
+        locationPicker.completion =
+            { location in
+                
+               
+                
+                
+                    
+                    
+                    let locationValue:CLLocationCoordinate2D = (location?.location.coordinate)!
+                    
+                    print("locations = \(locationValue)")
+                    self.latitudeToSend = locationValue.latitude
+                    self.longitudeToSend = locationValue.longitude
+                    self.locationManager.stopUpdatingLocation()
+                    
+                    //let locationItem = self.buildLocationItem(latitude: self.latitudeToSend!, longitude: self.longitudeToSend!)
+                    
+                    ///self.addMedia(media: locationItem)
+                    
+                    
+                    
+                    let message = VideoMessage()
+                    message.attachment.attachmentType = 10
+                    message._id = (OneChat.sharedInstance.xmppStream?.generateUUID())!
+                    message._isRead = false
+                    message.msg     = ""
+                    message.msgType = 10
+                    message.senderId = self.senderId
+                    message.receiverId  = (self.recipient?.jidStr)!
+                    message.attachment.localUrl = String(describing: self.latitudeToSend!.magnitude)+"-"+String(describing: self.longitudeToSend!.magnitude)
+                    
+                    let fullMessage = JSQMessage(senderId: OneChat.sharedInstance.xmppStream?.myJID.bare(), senderDisplayName: OneChat.sharedInstance.xmppStream?.myJID.bare(), date: Date(), text: message.getJson())
+                    self.addMessage(message: fullMessage!)
+                    
+                    OneMessage.sendMessage(message.getJson(), to: (self.recipient?.jidStr)!, completionHandler: { (stream, message) -> Void in
+                        JSQSystemSoundPlayer.jsq_playMessageSentSound()
+                        self.finishSendingMessage(animated: true)
+                    })
+                    
+                
+            // do some awesome stuff with location
+        }
+        
+        let nav = UINavigationController(rootViewController: locationPicker)
+        self.navigationController?.pushViewController(locationPicker, animated: false)
+       // self.present(nav, animated: true, completion: nil)
+        
+    }
+    /*
     func setupLocationManager(){
         locationManager = CLLocationManager()
         locationManager.delegate = self
@@ -1663,45 +1818,12 @@ extension ChatsViewController : CLLocationManagerDelegate
         isLocationClicked = true
         
     }
-    
+    */
     // Below method will provide you current location.
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
-        if isLocationClicked == true
-        {
-            isLocationClicked = false
-        let locationValue:CLLocationCoordinate2D = manager.location!.coordinate
+        currentLocation = manager.location!
         
-        print("locations = \(locationValue)")
-        latitudeToSend = locationValue.latitude
-        longitudeToSend = locationValue.longitude
-        locationManager.stopUpdatingLocation()
-        
-        //let locationItem = self.buildLocationItem(latitude: self.latitudeToSend!, longitude: self.longitudeToSend!)
-        
-        ///self.addMedia(media: locationItem)
-        
-        
-        
-        let message = VideoMessage()
-        message.attachment.attachmentType = 10
-        message._id = (OneChat.sharedInstance.xmppStream?.generateUUID())!
-        message._isRead = false
-        message.msg     = ""
-        message.msgType = 10
-        message.senderId = self.senderId
-        message.receiverId  = (recipient?.jidStr)!
-        message.attachment.localUrl = String(describing: latitudeToSend!.magnitude)+"-"+String(describing: longitudeToSend!.magnitude)
-        
-        let fullMessage = JSQMessage(senderId: OneChat.sharedInstance.xmppStream?.myJID.bare(), senderDisplayName: OneChat.sharedInstance.xmppStream?.myJID.bare(), date: Date(), text: message.getJson())
-        self.addMessage(message: fullMessage!)
-        
-       OneMessage.sendMessage(message.getJson(), to: (recipient?.jidStr)!, completionHandler: { (stream, message) -> Void in
-            JSQSystemSoundPlayer.jsq_playMessageSentSound()
-            self.finishSendingMessage(animated: true)
-        })
-            
-        }
     }
     
     // Below Mehtod will print error if not able to update location.
@@ -1818,5 +1940,10 @@ extension ChatsViewController : CLLocationManagerDelegate
         controller.dismiss(animated: true, completion: nil)
         
         
+    }
+    
+    func contactViewController(_ viewController: CNContactViewController, didCompleteWith contact: CNContact?)
+    {
+        viewController.dismiss(animated: true, completion: nil)
     }
 }

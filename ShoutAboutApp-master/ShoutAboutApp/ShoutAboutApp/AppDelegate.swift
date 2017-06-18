@@ -51,7 +51,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate/*, GIDSignInDelegate*/
     var darkColor: UIColor?
     var selfColor: UIColor?
     var highlightColor: UIColor?
-    let watchdog = Watchdog(threshold: 0.016) //60 frames a second
+    //let watchdog = Watchdog(threshold: 0.016) //60 frames a second
     let crashlytics = Crashlytics.sharedInstance()
     
     /*****************************/
@@ -137,6 +137,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate/*, GIDSignInDelegate*/
          //UINavigationBar.appearance().barTintColor = lightBlue //UIColor.whiteColor()
            //UINavigationBar.appearance().tintColor =  medBlue//appColor
           UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
+        UINavigationBar.appearance().isTranslucent = false
+        UINavigationBar.appearance().barTintColor =  appColor  //(rgba: "#2c8eb5")
+        UINavigationBar.appearance().tintColor = UIColor.white
+        UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName:UIColor.white]
         
         
         let attributes = [

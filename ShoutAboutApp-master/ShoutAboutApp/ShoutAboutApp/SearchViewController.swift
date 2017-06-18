@@ -187,7 +187,7 @@ extension SearchViewController
         cell.mobileLabel?.text = personContact.mobileNumber
         if let urlString = personContact.photo
         {
-            //cell.profileImageView.sd_setImage(with: URL(string:urlString ), placeholderImage: UIImage(named: "profile"))
+            cell.profileImageView.sd_setImage(with: URL(string:urlString ), placeholderImage: UIImage(named: "profile"))
             
         }else
         {

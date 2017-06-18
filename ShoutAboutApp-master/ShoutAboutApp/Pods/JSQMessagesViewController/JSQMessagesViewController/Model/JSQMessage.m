@@ -47,6 +47,21 @@
     return self;
 }
 
+- (instancetype)initWithSenderId:(NSString *)senderId
+               senderDisplayName:(NSString *)senderDisplayName
+                            date:(NSDate *)date
+                            text:(NSString *)text andMessageID:(NSString*)messageID
+{
+    NSParameterAssert(text != nil);
+    
+    self = [self initWithSenderId:senderId senderDisplayName:senderDisplayName date:date isMedia:NO];
+    if (self) {
+        _text = [text copy];
+        _messageID = messageID;
+    }
+    return self;
+}
+
 + (instancetype)messageWithSenderId:(NSString *)senderId
                         displayName:(NSString *)displayName
                               media:(id<JSQMessageMediaData>)media

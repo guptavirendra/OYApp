@@ -135,6 +135,10 @@
                senderDisplayName:(NSString *)senderDisplayName
                             date:(NSDate *)date
                            media:(id<JSQMessageMediaData>)media andMessageID:(NSString*)messageID;
+- (instancetype)initWithSenderId:(NSString *)senderId
+               senderDisplayName:(NSString *)senderDisplayName
+                            date:(NSDate *)date
+                            text:(NSString *)text andMessageID:(NSString*)messageID;
 
 /**
  *  Not a valid initializer.

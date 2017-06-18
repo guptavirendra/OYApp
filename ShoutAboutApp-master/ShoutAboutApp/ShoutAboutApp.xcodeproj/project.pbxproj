@@ -114,11 +114,30 @@
 		F1ACAD781E217DDC004AECAB /* SpamFavBlockViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1ACAD771E217DDC004AECAB /* SpamFavBlockViewController.swift */; };
 		F1BEE4AA1EDAE225004ED700 /* ChatAsyncPhotoMedia.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BEE4A91EDAE225004ED700 /* ChatAsyncPhotoMedia.m */; };
 		F1C9A81F1E3DE0CD003354B6 /* NewProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1C9A81E1E3DE0CD003354B6 /* NewProfileViewController.swift */; };
+		F1CB2A401EF5B8D300EEF64F /* LocationPicker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1CB2A3D1EF5B8AC00EEF64F /* LocationPicker.framework */; };
+		F1CB2A501EF5BB1F00EEF64F /* LocationPicker.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F1CB2A3D1EF5B8AC00EEF64F /* LocationPicker.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		F1D1F7E61DEE05D20046DBB2 /* Pods_ShoutAboutApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17F0E7E11A503618876EE71A /* Pods_ShoutAboutApp.framework */; };
 		F1DD72031DEAADF800DE0A12 /* ChannelListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1DD72001DEAADF800DE0A12 /* ChannelListViewController.swift */; };
 		F1DD72041DEAADF800DE0A12 /* ChatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1DD72011DEAADF800DE0A12 /* ChatsViewController.swift */; };
 		F1DD72051DEAADF800DE0A12 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1DD72021DEAADF800DE0A12 /* LoginViewController.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		F1CB2A3C1EF5B8AC00EEF64F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F1CB2A381EF5B8AC00EEF64F /* LocationPicker.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = B62462FF1B68A4DE00646DE2;
+			remoteInfo = LocationPicker;
+		};
+		F1CB2A3E1EF5B8C300EEF64F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F1CB2A381EF5B8AC00EEF64F /* LocationPicker.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = B62462FE1B68A4DE00646DE2;
+			remoteInfo = LocationPicker;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		F1D1F7D91DEE05C60046DBB2 /* Embed Frameworks */ = {
@@ -127,6 +146,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				F1CB2A501EF5BB1F00EEF64F /* LocationPicker.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -271,6 +291,7 @@
 		F1ACAD771E217DDC004AECAB /* SpamFavBlockViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpamFavBlockViewController.swift; sourceTree = "<group>"; };
 		F1BEE4A91EDAE225004ED700 /* ChatAsyncPhotoMedia.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = ChatAsyncPhotoMedia.m; path = ShoutAboutApp/ChatAsyncPhotoMedia.m; sourceTree = "<group>"; };
 		F1C9A81E1E3DE0CD003354B6 /* NewProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewProfileViewController.swift; sourceTree = "<group>"; };
+		F1CB2A381EF5B8AC00EEF64F /* LocationPicker.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = LocationPicker.xcodeproj; sourceTree = "<group>"; };
 		F1DD71F91DE8B81700DE0A12 /* TitilliumWeb-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "TitilliumWeb-Bold.ttf"; sourceTree = "<group>"; };
 		F1DD71FA1DE8B81700DE0A12 /* TitilliumWeb-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "TitilliumWeb-Italic.ttf"; sourceTree = "<group>"; };
 		F1DD71FB1DE8B81700DE0A12 /* TitilliumWeb-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "TitilliumWeb-Light.ttf"; sourceTree = "<group>"; };
@@ -286,6 +307,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F1CB2A401EF5B8D300EEF64F /* LocationPicker.framework in Frameworks */,
 				F1394F851EEC87BC00552898 /* MapKit.framework in Frameworks */,
 				F1394F8A1EEC88FC00552898 /* CoreLocation.framework in Frameworks */,
 				F1394F7E1EEC79DE00552898 /* AVKit.framework in Frameworks */,
@@ -415,6 +437,7 @@
 		F12C27441DCE45A800AEE0A3 = {
 			isa = PBXGroup;
 			children = (
+				F1CB2A381EF5B8AC00EEF64F /* LocationPicker.xcodeproj */,
 				F1394F931EEDC5C600552898 /* JSQContactMediaItem.h */,
 				F1394F941EEDC5C600552898 /* JSQContactMediaItem.m */,
 				F1BEE4A91EDAE225004ED700 /* ChatAsyncPhotoMedia.m */,
@@ -618,6 +641,14 @@
 			name = LoginAndOTP;
 			sourceTree = "<group>";
 		};
+		F1CB2A391EF5B8AC00EEF64F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F1CB2A3D1EF5B8AC00EEF64F /* LocationPicker.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -636,6 +667,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				F1CB2A3F1EF5B8C300EEF64F /* PBXTargetDependency */,
 			);
 			name = ShoutAboutApp;
 			productName = ShoutAboutApp;
@@ -679,12 +711,28 @@
 			mainGroup = F12C27441DCE45A800AEE0A3;
 			productRefGroup = F12C274E1DCE45A800AEE0A3 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = F1CB2A391EF5B8AC00EEF64F /* Products */;
+					ProjectRef = F1CB2A381EF5B8AC00EEF64F /* LocationPicker.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				F12C274C1DCE45A800AEE0A3 /* ShoutAboutApp */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		F1CB2A3D1EF5B8AC00EEF64F /* LocationPicker.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = LocationPicker.framework;
+			remoteRef = F1CB2A3C1EF5B8AC00EEF64F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		F12C274B1DCE45A800AEE0A3 /* Resources */ = {
@@ -857,6 +905,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		F1CB2A3F1EF5B8C300EEF64F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = LocationPicker;
+			targetProxy = F1CB2A3E1EF5B8C300EEF64F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		F12C27541DCE45A800AEE0A3 /* Main.storyboard */ = {

@@ -212,7 +212,7 @@ extension SpamFavBlockViewController:ContactTableViewCellProtocol
         if let urlString = personContact.photo
         {
             
-            ///cell.profileImageView.setImageWithURL(NSURL(string:urlString ), placeholderImage: UIImage(named: "profile"))
+            cell.profileImageView.sd_setImage(with: NSURL(string:urlString ) as! URL, placeholderImage: UIImage(named: "profile"))
             
         }else
         {

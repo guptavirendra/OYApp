@@ -1,5 +1,5 @@
 import Foundation
-
+/*
 /// Class for logging excessive blocking on the main thread.
 @objc final public class Watchdog: NSObject {
     fileprivate let pingThread: PingThread
@@ -64,3 +64,4 @@ private final class PingThread: Thread {
         }
     }
 }
+*/

@@ -62,6 +62,7 @@ class ChatViewController: UIViewController, ChatPersionTableViewCellProtocol
     override func viewWillAppear(_ animated: Bool)
     {
         super.viewWillAppear(animated)
+        self.tabBarController?.tabBar.isHidden = false
         if NetworkConnectivity.isConnectedToNetwork() != true
         {
             self.displayAlertMessage("No Internet Connection")
@@ -94,7 +95,7 @@ extension ChatViewController
         cell.nameLabel.text = chatPerson.name
         if chatPerson.photo != nil
         {
-            //cell.profileView?.setImageWith(URL(string:urlString ), placeholderImage: UIImage(named: "profile"))
+            cell.profileView?.sd_setImage(with: URL(string:chatPerson.photo! ), placeholderImage: UIImage(named: "profile"))
         }
         cell.delegate = self
         

@@ -139,7 +139,7 @@ class SearchPerson:PersonContact, NSCoding
         super.init()
         if let id = aDecoder.decodeObject(forKey: "idString") as? Int
         {
-            idString = id
+            self.idString = id
         }
         if let status = aDecoder.decodeObject(forKey: "status") as? String
         {

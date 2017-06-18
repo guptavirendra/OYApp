@@ -133,6 +133,7 @@ class ContactViewController: UIViewController, UITableViewDataSource, UITableVie
     override func viewWillAppear(_ animated: Bool)
     {
         super.viewWillAppear(animated)
+        self.tabBarController?.tabBar.isHidden = false
         syncContactArray =  ProfileManager.sharedInstance.syncedContactArray
         
         DispatchQueue.global().async 
@@ -218,7 +219,7 @@ extension ContactViewController
         if personContact.photo != nil
         {
             
-            //cell.profileImageView.setImageWith(URL(string:urlString ), placeholderImage: UIImage(named: "profile"))
+            cell.profileImageView.sd_setImage(with: URL(string:personContact.photo! ), placeholderImage: UIImage(named: "profile"))
             
         }else
         {
@@ -266,6 +267,7 @@ extension ContactViewController
             }
             else if button.titleLabel?.text == " Chat"
             {
+                
                 let stringID = String(personContact.idString)
                 let ejabberID = stringID+"@localhost"
                 let user =  OneRoster.userFromRosterForJID(jid: ejabberID)

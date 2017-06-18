@@ -62,6 +62,7 @@ class MainSearchViewController: UIViewController, ContactTableViewCellProtocol
     override func viewWillAppear(_ animated: Bool)
     {
         super.viewWillAppear(animated)
+        self.tabBarController?.tabBar.isHidden = false
          self.navigationController?.isNavigationBarHidden = true
         if let historydata = self.retrievePearson()
         {
@@ -181,7 +182,7 @@ extension MainSearchViewController
         if let urlString = personContact.photo
         {
             
-            //cell.profileImageView.setImage(with: URL(string:urlString ), placeholderImage: UIImage(named: "profile"))
+            cell.profileImageView.sd_setImage(with: URL(string:urlString ), placeholderImage: UIImage(named: "profile"))
             
         }else
         {

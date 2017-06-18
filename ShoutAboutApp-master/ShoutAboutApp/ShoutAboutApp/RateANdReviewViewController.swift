@@ -121,7 +121,7 @@ extension RateANdReviewViewController
             if urlString.characters.count != 0
             {
                 
-                //cell.profileImageView.sd_setImage(with: URL(string:urlString ), placeholderImage: UIImage(named: "profile"))
+                cell.profileImageView.sd_setImage(with: URL(string:urlString ), placeholderImage: UIImage(named: "profile"))
                 
             }else
             {
@@ -163,7 +163,7 @@ extension RateANdReviewViewController
             if urlString.characters.count != 0
             {
                 
-                //cell.profileImageView.sd_setImage(with: URL(string:urlString ), placeholderImage: UIImage(named: "profile"))
+                cell.profileImageView.sd_setImage(with: URL(string:urlString ), placeholderImage: UIImage(named: "profile"))
                 
             }else
             {
@@ -351,7 +351,7 @@ extension RateANdReviewViewController
             let urlString       = rateReviewer.appUser.photo
             if urlString.characters.count != 0
             {
-                //cell.profileImageView.sd_setImage(with: URL(string:urlString ), placeholderImage: UIImage(named: "profile"))
+                cell.profileImageView.sd_setImage(with: URL(string:urlString ), placeholderImage: UIImage(named: "profile"))
                 
             }else
             {
@@ -439,8 +439,8 @@ extension RateANdReviewViewController
     func textViewDidEndEditing(_ textView: UITextView)
     {
         review = textView.text
-        // textView.text = nil
-        //textView.resignFirstResponder()
+        textView.text = nil
+        textView.resignFirstResponder()
     }
     /*
      - (void)textViewDidEndEditing:(UITextView *)textView

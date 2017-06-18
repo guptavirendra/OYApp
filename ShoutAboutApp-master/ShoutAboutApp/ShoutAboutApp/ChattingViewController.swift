@@ -407,7 +407,7 @@ extension ChattingViewController
 {
     func setProfileImgeForURL(_ urlString:String)
     {
-        //self.profileImageView.setImageWith(URL(string:urlString ), placeholderImage: UIImage(named: "profile"))
+        self.profileImageView.sd_setImage(with: URL(string:urlString ), placeholderImage: UIImage(named: "profile"))
     }
     
     @IBAction func attachButtonClicked(_ sender: AnyObject)

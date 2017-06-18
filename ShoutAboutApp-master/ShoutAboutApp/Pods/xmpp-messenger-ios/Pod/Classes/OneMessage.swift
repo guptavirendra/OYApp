@@ -255,12 +255,12 @@ open class OneMessage: NSObject {
 	}
 	
 	open func deleteMessagesFrom(jid: String, messages: NSArray) {
-        messages.enumerateObjects({ (message, idx, stop) -> Void in
+        messages.enumerateObjects({ (messagestr, idx, stop) -> Void in
             let moc = self.xmppMessageStorage?.mainThreadManagedObjectContext
             let entityDescription = NSEntityDescription.entity(forEntityName: "XMPPMessageArchiving_Message_CoreDataObject", in: moc!)
             let request = NSFetchRequest<NSFetchRequestResult>()
-            let predicateFormat = "messageStr like %@ "
-            let predicate = NSPredicate(format: predicateFormat, message as! String)
+            let predicateFormat = "messageStr  contains[cd] %@ "
+            let predicate = NSPredicate(format: predicateFormat, messagestr as! String)
             
             request.predicate = predicate
             request.entity = entityDescription
@@ -275,9 +275,14 @@ open class OneMessage: NSObject {
                     } catch _ {
                         element = nil
                     }
-                    
-                    if element.attributeStringValue(forName: "messageStr") == message as! String {
-                        moc?.delete(message as! NSManagedObject)
+                   
+                    print(" element \(element)")
+                    if element != nil, let str =  element.forName("body")?.stringValue
+                    {
+                        if str == (messagestr as! String)
+                        {
+                            moc?.delete(message as! NSManagedObject)
+                        }
                     }
                 }
             } catch _ {
@@ -319,17 +324,6 @@ extension OneMessage: XMPPStreamDelegate
 	public func xmppStream(_ sender: XMPPStream, didReceive message: XMPPMessage)
     {
 		let user = OneChat.sharedInstance.xmppRosterStorage.user(for: message.from(), xmppStream: OneChat.sharedInstance.xmppStream, managedObjectContext: OneRoster.sharedInstance.managedObjectContext_roster())
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-		
         if user != nil
         {
             if OneChats.knownUserForJid(jidStr: (user!.jidStr))
