@@ -13,18 +13,16 @@ class TCViewController: UIViewController
 
     @IBOutlet weak var tcButton: UIButton!
     @IBOutlet weak var tcTextView:UITextView!
-    override func viewDidLoad() {
+    override func viewDidLoad()
+    {
         super.viewDidLoad()
-
         self.navigationController?.isNavigationBarHidden = true
         
-        //NSMutableAttributedString * str = [[NSMutableAttributedString alloc] initWithString:@"Google"];
-        //[str addAttribute: NSLinkAttributeName value: @"http://www.google.com" range: NSMakeRange(0, str.length)];
-        //yourTextView.attributedText = str;
+        
         
         let fontTitilliumRegular =  "TitilliumWeb-Regular"
        
-        let fontTitle               =  UIFont.systemFont(ofSize: 17)//UIFont(name:fontTitilliumRegular, size:17)!
+        let fontTitle               =  UIFont.systemFont(ofSize: 17)// 
         let myAttribute = [ NSFontAttributeName: fontTitle ]
         let intitiaString = NSMutableAttributedString(string: "Tap \"Agree & Continue \" to accept the OYAPP ", attributes:myAttribute )
         
@@ -42,26 +40,14 @@ class TCViewController: UIViewController
         tcTextView.backgroundColor = self.view.backgroundColor
         tcTextView.textAlignment = NSTextAlignment.center
          
-        // Do any additional setup after loading the view.
+        
     }
 
     override func didReceiveMemoryWarning()
     {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-    
     
     @IBAction func tcButtonClicked(_ sender:UIButton)
     {

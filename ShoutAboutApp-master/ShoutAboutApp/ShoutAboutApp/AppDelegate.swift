@@ -10,13 +10,6 @@ import UIKit
 import Firebase
 import FirebaseMessaging
 import xmpp_messenger_ios
-
- 
-
-/*
- Small Talk Header
- */
-
 import UIKit
 import XMPPFramework
 import Fabric
@@ -30,7 +23,7 @@ import DeepLinkKit
 import youtube_ios_player_helper
 import Watchdog
 
-/***** cloase******/
+/***** close******/
 
 @UIApplicationMain
 
@@ -54,49 +47,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate/*, GIDSignInDelegate*/
     //let watchdog = Watchdog(threshold: 0.016) //60 frames a second
     let crashlytics = Crashlytics.sharedInstance()
     
-    /*****************************/
-    //MARK:// GET CONTACT
-    func retrieveContacts() -> [SearchPerson]?
-    {
-        if let unarchivedObject = UserDefaults.standard.object(forKey: contactStored) as? Data {
-            return NSKeyedUnarchiver.unarchiveObject(with: unarchivedObject) as? [SearchPerson]
-        }
-        return nil
-    }
-    
-    
-    //MARK: Refresh Token
-    func tokenRefreshNotification(_ notification: Notification)
-    {
-        if let refreshedToken = FIRInstanceID.instanceID().token()
-        {
-            print("InstanceID token: \(refreshedToken)")
-        }
-        // Connect to FCM since connection may have failed when attempted before having a token.
-        connectToFcm()
-    }
-    
     
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool
     {
-        
-        OneChat.start(true, delegate: nil) { (stream, error) -> Void in
-            print (stream)
-            if let _ = error
-            {
-                //handle start errors here
-                print("errors from appdelegate")
-            } else {
-                print("Yayyyy")
-                //Activate online UI
-            }
-        }
-        
-        
-        
-        
-        
+        /* xmpp calling */
+        connetToXmpp()
+        navBarAppearence()
+        loadFirstScreen()
+    
         // Initialize google sign-in
         var configureError: NSError?
         GGLContext.sharedInstance().configureWithError(&configureError)
@@ -120,70 +79,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate/*, GIDSignInDelegate*/
     /* Small talk block*/    //self.window!.rootViewController = UINavigationController(rootViewController: controller)
         //self.window!.backgroundColor = UIColor.whiteColor()
         //self.window!.rootViewController?.navigationController?.navigationBarHidden = true
-//        let darkBlue = UIColor(hexString: "2C3E50")
-//        let red = UIColor(hexString: "E74C3C")
-//        let light = UIColor(hexString: "ECF0F1")
-//        let lightBlue = UIColor(hexString: "1F8DC8")
-//        let medBlue = UIColor(hexString: "FFFFFF")
-//        self.backgroundColor = light
-//        self.darkColor = darkBlue
-//        self.selfColor = UIColor.white
-//        self.highlightColor = red
-        //UIBarButtonItem.appearance().tintColor = lightBlue
-        //UIBarButtonItem.my_appearanceWhenContainedIn(UISearchBar.self).tintColor = lightBlue
-       // UIBarButtonItem.my_appearanceWhenContainedIn(UINavigationBar.self).tintColor = lightBlue
-        //UIBarButtonItem.my_appearanceWhenContainedIn(UIToolbar.self).tintColor = lightBlue
+
         
-         //UINavigationBar.appearance().barTintColor = lightBlue //UIColor.whiteColor()
-           //UINavigationBar.appearance().tintColor =  medBlue//appColor
-          UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
-        UINavigationBar.appearance().isTranslucent = false
-        UINavigationBar.appearance().barTintColor =  appColor  //(rgba: "#2c8eb5")
-        UINavigationBar.appearance().tintColor = UIColor.white
-        UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName:UIColor.white]
-        
-        
-        let attributes = [
-            NSForegroundColorAttributeName : UIColor.white,
-            NSFontAttributeName : UIFont.systemFont(ofSize: 13)
-        ]
-        UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).setTitleTextAttributes(attributes, for: UIControlState())
-        
-       // UITableViewCell.appearance().backgroundColor = light
-       // UICollectionView.appearance().backgroundColor = light
-       // UIScrollView.appearance().backgroundColor = light
-        //UITableView.appearance().backgroundColor = light
-        
-        NotificationCenter.default.addObserver(self,
-                                                         selector: #selector(tokenRefreshNotification(_:)),
-                                                         name: NSNotification.Name.firInstanceIDTokenRefresh,
-                                                         object: nil)
+        //NotificationCenter.default.addObserver(self,selector: #selector(tokenRefreshNotification(_:)),
+                                                        // name: NSNotification.Name.firInstanceIDTokenRefresh,
+                                                        // object: nil)
         
       //  UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.LightContent
         
 
-        let appUserId = UserDefaults.standard.object(forKey: kapp_user_id)
-        let appUserToken = UserDefaults.standard.object(forKey: kapp_user_token)
-        
-        
-        
-        if appUserId != nil && appUserToken != nil
-        {
-            
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let appDelegate = UIApplication.shared.delegate as! AppDelegate
-             let tabBarVC = storyboard.instantiateViewController(withIdentifier: "tabBarVC") as? MyTabViewController
-            
-            appDelegate.window?.backgroundColor = UIColor(red: 236.0, green: 238.0, blue: 241.0, alpha: 1.0)
-            appDelegate.window?.rootViewController = tabBarVC
-            appDelegate.window?.makeKeyAndVisible()
-            
-            if let contactStored = self.retrieveContacts()
-            {
-                ProfileManager.sharedInstance.syncedContactArray.append(contentsOf: contactStored)
-            }
-            
-        }
         
         
         FIRApp.configure()
@@ -225,38 +129,39 @@ class AppDelegate: UIResponder, UIApplicationDelegate/*, GIDSignInDelegate*/
         return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
 }
 
-    func applicationWillResignActive(_ application: UIApplication) {
-        // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-        // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
+    func applicationWillResignActive(_ application: UIApplication)
+    {
+        
     }
 
-    func applicationDidEnterBackground(_ application: UIApplication) {
-        // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
-        // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    func applicationDidEnterBackground(_ application: UIApplication)
+    {
         
-        
-       // FIRMessaging.messaging().disconnect()
         print("Disconnected from FCM.")
 
     }
 
-    func applicationWillEnterForeground(_ application: UIApplication) {
+    func applicationWillEnterForeground(_ application: UIApplication)
+    {
         // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
     }
 
-    func applicationDidBecomeActive(_ application: UIApplication) {
-        // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    func applicationDidBecomeActive(_ application: UIApplication)
+    {
+        
     }
 
-    func applicationWillTerminate(_ application: UIApplication) {
-        // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    func applicationWillTerminate(_ application: UIApplication)
+    {
+        
     }
     
     
     func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool
     {
         
-        if (FBSDKApplicationDelegate.sharedInstance().application(application, open: url, sourceApplication: sourceApplication, annotation: annotation)) {
+        if (FBSDKApplicationDelegate.sharedInstance().application(application, open: url, sourceApplication: sourceApplication, annotation: annotation))
+        {
             
             return true;
         }
@@ -346,4 +251,106 @@ func application(_ application: UIApplication, didReceiveRemoteNotification user
     
     print(userInfo)
     FIRMessaging.messaging().appDidReceiveMessage(userInfo)
+}
+  
+  
+  
+  /*****************************/
+  //MARK:// GET CONTACT
+  func retrieveContacts() -> [SearchPerson]?
+  {
+    if let unarchivedObject = UserDefaults.standard.object(forKey: contactStored) as? Data {
+        return NSKeyedUnarchiver.unarchiveObject(with: unarchivedObject) as? [SearchPerson]
+    }
+    return nil
+  }
+  
+  
+  //MARK: Refresh Token
+  func tokenRefreshNotification(_ notification: Notification)
+  {
+    if let refreshedToken = FIRInstanceID.instanceID().token()
+    {
+        print("InstanceID token: \(refreshedToken)")
+    }
+    // Connect to FCM since connection may have failed when attempted before having a token.
+    connectToFcm()
+  }
+  
+  
+  func connetToXmpp()
+  {
+    OneChat.start(true, delegate: nil) { (stream, error) -> Void in
+        print (stream)
+        if let _ = error
+        {
+            //handle start errors here
+            print("errors from appdelegate")
+        } else {
+            print("Yayyyy")
+            //Activate online UI
+        }
+    }
+  }
+
+  func navBarAppearence()
+  {
+    //        let darkBlue = UIColor(hexString: "2C3E50")
+    //        let red = UIColor(hexString: "E74C3C")
+    //        let light = UIColor(hexString: "ECF0F1")
+    //        let lightBlue = UIColor(hexString: "1F8DC8")
+    //        let medBlue = UIColor(hexString: "FFFFFF")
+    //        self.backgroundColor = light
+    //        self.darkColor = darkBlue
+    //        self.selfColor = UIColor.white
+    //        self.highlightColor = red
+    //UIBarButtonItem.appearance().tintColor = lightBlue
+    //UIBarButtonItem.my_appearanceWhenContainedIn(UISearchBar.self).tintColor = lightBlue
+    // UIBarButtonItem.my_appearanceWhenContainedIn(UINavigationBar.self).tintColor = lightBlue
+    //UIBarButtonItem.my_appearanceWhenContainedIn(UIToolbar.self).tintColor = lightBlue
+    
+    //UINavigationBar.appearance().barTintColor = lightBlue //UIColor.whiteColor()
+    //UINavigationBar.appearance().tintColor =  medBlue//appColor
+    UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
+    UINavigationBar.appearance().isTranslucent = false
+    UINavigationBar.appearance().barTintColor =  appColor  //(rgba: "#2c8eb5")
+    UINavigationBar.appearance().tintColor = UIColor.white
+    UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName:UIColor.white]
+    
+    
+    let attributes = [
+        NSForegroundColorAttributeName : UIColor.white,
+        NSFontAttributeName : UIFont.systemFont(ofSize: 13)
+    ]
+    UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).setTitleTextAttributes(attributes, for: UIControlState())
+    
+    // UITableViewCell.appearance().backgroundColor = light
+    // UICollectionView.appearance().backgroundColor = light
+    // UIScrollView.appearance().backgroundColor = light
+    //UITableView.appearance().backgroundColor = light
+    
+    
+  }
+  
+  func loadFirstScreen()
+  {
+    let appUserId = UserDefaults.standard.object(forKey: kapp_user_id)
+    let appUserToken = UserDefaults.standard.object(forKey: kapp_user_token)
+    
+    if appUserId != nil && appUserToken != nil
+    {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let tabBarVC = storyboard.instantiateViewController(withIdentifier: "tabBarVC") as? MyTabViewController
+        
+        appDelegate.window?.backgroundColor = UIColor(red: 236.0, green: 238.0, blue: 241.0, alpha: 1.0)
+        appDelegate.window?.rootViewController = tabBarVC
+        appDelegate.window?.makeKeyAndVisible()
+        
+        if let contactStored = retrieveContacts()
+        {
+            ProfileManager.sharedInstance.syncedContactArray.append(contentsOf: contactStored)
+        }
+        
+    }
 }

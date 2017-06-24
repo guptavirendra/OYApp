@@ -227,7 +227,7 @@ extension ProfileViewController
                 self.imageView!.image = ProfileManager.sharedInstance.localStoredImage
             }
             
-             //self.imageView?.sd_setImage(with: URL(string:urlString ), placeholderImage: self.imageView!.image)
+             self.imageView?.sd_setImage(with: URL(string:urlString ), placeholderImage: self.imageView!.image)
             
         
         }

@@ -10,6 +10,7 @@ import UIKit
 import Firebase
 import Contacts
 import TSMessages
+
 //import ReactiveCocoa
 // FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
 // Consider refactoring the code to use the non-optional operators.
@@ -339,7 +340,7 @@ extension JoinViewController
     func buttonClicked(_ cell: ClickTableViewCell)
     {
         //getFireBaseAuth()
-        
+        /*
         if cell.button.titleLabel?.text == "Skip"
         {
             print("Skip")
@@ -350,7 +351,7 @@ extension JoinViewController
             appDelegate.window?.rootViewController = tabBarVC
             appDelegate.window?.makeKeyAndVisible()
 
-        }
+        }*/
         
         if cell.button.titleLabel?.text == "Join"
         {
@@ -392,7 +393,7 @@ extension JoinViewController
             
             if cell.button.tag == 0
             {
-               // faceBookLogin()
+                faceBookLogin()
             }else
             {
                // googleLogin()
@@ -401,8 +402,6 @@ extension JoinViewController
         }
     }
     
-    
-    /*
     func faceBookLogin()
     {
         if ((FBSDKAccessToken.current()) == nil)
@@ -431,7 +430,7 @@ extension JoinViewController
             }
             
             // if((result!.objectForKey("picture")!.objectForKey("data")!.objectForKey("url")! as! String) != nil){
-            let strUrl: String = result!.object(forKey: "picture")!.object(forKey: "data")!.object(forKey: "url")! as! String
+            let strUrl: String = ((result!.object(forKey: "picture")! as AnyObject).object(forKey: "data")! as AnyObject).object(forKey: "url")! as! String
             dict[self.k_photo] = strUrl
             //}
             
@@ -502,7 +501,7 @@ extension JoinViewController
         vc: self)
         }
     }
-    */
+ 
     /*
     func googleLogin()
     {

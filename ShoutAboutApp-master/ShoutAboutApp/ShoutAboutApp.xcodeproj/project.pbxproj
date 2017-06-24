@@ -59,7 +59,6 @@
 		F1394F8A1EEC88FC00552898 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1394F891EEC88FC00552898 /* CoreLocation.framework */; };
 		F1394F8D1EED460A00552898 /* PictureView.m in Sources */ = {isa = PBXBuildFile; fileRef = F1394F8C1EED460A00552898 /* PictureView.m */; };
 		F1394F901EED5DB900552898 /* NYTPhotoItem.m in Sources */ = {isa = PBXBuildFile; fileRef = F1394F8F1EED5DB900552898 /* NYTPhotoItem.m */; };
-		F1394F951EEDC5C600552898 /* JSQContactMediaItem.m in Sources */ = {isa = PBXBuildFile; fileRef = F1394F941EEDC5C600552898 /* JSQContactMediaItem.m */; };
 		F1394F9F1EEDDCEA00552898 /* advert.m in Sources */ = {isa = PBXBuildFile; fileRef = F1394F981EEDDCEA00552898 /* advert.m */; };
 		F1394FA01EEDDCEA00552898 /* AdvertCustomView.m in Sources */ = {isa = PBXBuildFile; fileRef = F1394F9A1EEDDCEA00552898 /* AdvertCustomView.m */; };
 		F1394FA11EEDDCEA00552898 /* AdvertCustomView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F1394F9B1EEDDCEA00552898 /* AdvertCustomView.xib */; };
@@ -112,7 +111,8 @@
 		F18839331DD8D26400362B1B /* LeftViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18839321DD8D26400362B1B /* LeftViewController.swift */; };
 		F1A1D13C1E2BA1C2004A4E8E /* FeedsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A1D13B1E2BA1C1004A4E8E /* FeedsTableViewCell.swift */; };
 		F1ACAD781E217DDC004AECAB /* SpamFavBlockViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1ACAD771E217DDC004AECAB /* SpamFavBlockViewController.swift */; };
-		F1BEE4AA1EDAE225004ED700 /* ChatAsyncPhotoMedia.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BEE4A91EDAE225004ED700 /* ChatAsyncPhotoMedia.m */; };
+		F1BEF8E81EFE75D20083EAB9 /* JSQContactMediaItem.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BEF8E71EFE75D20083EAB9 /* JSQContactMediaItem.m */; };
+		F1BEF8EB1EFE8AAC0083EAB9 /* FBRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1BEF8EA1EFE8AAC0083EAB9 /* FBRequest.swift */; };
 		F1C9A81F1E3DE0CD003354B6 /* NewProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1C9A81E1E3DE0CD003354B6 /* NewProfileViewController.swift */; };
 		F1CB2A401EF5B8D300EEF64F /* LocationPicker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1CB2A3D1EF5B8AC00EEF64F /* LocationPicker.framework */; };
 		F1CB2A501EF5BB1F00EEF64F /* LocationPicker.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F1CB2A3D1EF5B8AC00EEF64F /* LocationPicker.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -218,8 +218,6 @@
 		F1394F8C1EED460A00552898 /* PictureView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PictureView.m; sourceTree = "<group>"; };
 		F1394F8E1EED5DB900552898 /* NYTPhotoItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NYTPhotoItem.h; sourceTree = "<group>"; };
 		F1394F8F1EED5DB900552898 /* NYTPhotoItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NYTPhotoItem.m; sourceTree = "<group>"; };
-		F1394F931EEDC5C600552898 /* JSQContactMediaItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JSQContactMediaItem.h; path = ShoutAboutApp/JSQContactMediaItem.h; sourceTree = "<group>"; };
-		F1394F941EEDC5C600552898 /* JSQContactMediaItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JSQContactMediaItem.m; path = ShoutAboutApp/JSQContactMediaItem.m; sourceTree = "<group>"; };
 		F1394F971EEDDCEA00552898 /* advert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = advert.h; sourceTree = "<group>"; };
 		F1394F981EEDDCEA00552898 /* advert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = advert.m; sourceTree = "<group>"; };
 		F1394F991EEDDCEA00552898 /* AdvertCustomView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdvertCustomView.h; sourceTree = "<group>"; };
@@ -289,7 +287,9 @@
 		F18839321DD8D26400362B1B /* LeftViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeftViewController.swift; sourceTree = "<group>"; };
 		F1A1D13B1E2BA1C1004A4E8E /* FeedsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedsTableViewCell.swift; sourceTree = "<group>"; };
 		F1ACAD771E217DDC004AECAB /* SpamFavBlockViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpamFavBlockViewController.swift; sourceTree = "<group>"; };
-		F1BEE4A91EDAE225004ED700 /* ChatAsyncPhotoMedia.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = ChatAsyncPhotoMedia.m; path = ShoutAboutApp/ChatAsyncPhotoMedia.m; sourceTree = "<group>"; };
+		F1BEF8E61EFE75D20083EAB9 /* JSQContactMediaItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQContactMediaItem.h; sourceTree = "<group>"; };
+		F1BEF8E71EFE75D20083EAB9 /* JSQContactMediaItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQContactMediaItem.m; sourceTree = "<group>"; };
+		F1BEF8EA1EFE8AAC0083EAB9 /* FBRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBRequest.swift; sourceTree = "<group>"; };
 		F1C9A81E1E3DE0CD003354B6 /* NewProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewProfileViewController.swift; sourceTree = "<group>"; };
 		F1CB2A381EF5B8AC00EEF64F /* LocationPicker.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = LocationPicker.xcodeproj; sourceTree = "<group>"; };
 		F1DD71F91DE8B81700DE0A12 /* TitilliumWeb-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "TitilliumWeb-Bold.ttf"; sourceTree = "<group>"; };
@@ -438,9 +438,6 @@
 			isa = PBXGroup;
 			children = (
 				F1CB2A381EF5B8AC00EEF64F /* LocationPicker.xcodeproj */,
-				F1394F931EEDC5C600552898 /* JSQContactMediaItem.h */,
-				F1394F941EEDC5C600552898 /* JSQContactMediaItem.m */,
-				F1BEE4A91EDAE225004ED700 /* ChatAsyncPhotoMedia.m */,
 				F12C274F1DCE45A800AEE0A3 /* ShoutAboutApp */,
 				F12C274E1DCE45A800AEE0A3 /* Products */,
 				EC5B94B300868CAF9510C548 /* Pods */,
@@ -459,36 +456,15 @@
 		F12C274F1DCE45A800AEE0A3 /* ShoutAboutApp */ = {
 			isa = PBXGroup;
 			children = (
+				F1BEF8E91EFE8AAC0083EAB9 /* FBLogin */,
 				F1394FA41EEDDE2D00552898 /* IQAudioRecorderController */,
 				F1394F961EEDDCEA00552898 /* advert */,
-				F1394F781EEC792700552898 /* NotificationCenter.h */,
-				F1394F791EEC792700552898 /* NotificationCenter.m */,
-				F1394F6F1EE448A700552898 /* VideoView.h */,
-				F1394F701EE448A700552898 /* VideoView.m */,
-				F1394F711EE448A700552898 /* VideoView.xib */,
-				F1394F7F1EEC873700552898 /* MapView.h */,
-				F1394F801EEC873700552898 /* MapView.m */,
-				F1394F811EEC873700552898 /* MapView.xib */,
-				F1394F861EEC883B00552898 /* Location.h */,
-				F1394F871EEC883B00552898 /* Location.m */,
-				F1394F8B1EED460A00552898 /* PictureView.h */,
-				F1394F8C1EED460A00552898 /* PictureView.m */,
-				F1394F8E1EED5DB900552898 /* NYTPhotoItem.h */,
-				F1394F8F1EED5DB900552898 /* NYTPhotoItem.m */,
+				F1BEF8E41EFE5CCD0083EAB9 /* Chat */,
 				F13AD92B1EACE617009B88F1 /* SWReveal */,
 				8ECC94E11E659B5F00B12787 /* Alert */,
 				F17E0A251E3D23B60023F4B3 /* ShoutAboutApp.entitlements */,
 				F17E08561E0FF16500FDBF0B /* CGRect.swift */,
-				F17E08511E0FF16500FDBF0B /* AKImageCropperOverlayView.swift */,
-				F17E08521E0FF16500FDBF0B /* AKImageCropperView.swift */,
-				F17E08531E0FF16500FDBF0B /* CropperViewController.swift */,
-				F17E08541E0FF16500FDBF0B /* CGFloat.swift */,
-				F17E08551E0FF16500FDBF0B /* AKImageCropperScollView.swift */,
-				F17E08571E0FF16500FDBF0B /* AKImageCropperTouchView.swift */,
-				F17E08581E0FF16500FDBF0B /* UIColor.swift */,
-				F17E08591E0FF16500FDBF0B /* Crop.storyboard */,
-				F17E085A1E0FF16500FDBF0B /* ImageViewController.swift */,
-				F17E085B1E0FF16500FDBF0B /* UIImage.swift */,
+				F1BEF8E51EFE5CDF0083EAB9 /* CropImage */,
 				F16FC7271DD64BCC009CC979 /* Network */,
 				F18839311DD8CF0A00362B1B /* LoginAndOTP */,
 				F12C27721DCF079E00AEE0A3 /* InputTableViewCell.swift */,
@@ -639,6 +615,55 @@
 				F12C27701DCEFDE100AEE0A3 /* JoinViewController.swift */,
 			);
 			name = LoginAndOTP;
+			sourceTree = "<group>";
+		};
+		F1BEF8E41EFE5CCD0083EAB9 /* Chat */ = {
+			isa = PBXGroup;
+			children = (
+				F1BEF8E61EFE75D20083EAB9 /* JSQContactMediaItem.h */,
+				F1BEF8E71EFE75D20083EAB9 /* JSQContactMediaItem.m */,
+				F1394F781EEC792700552898 /* NotificationCenter.h */,
+				F1394F791EEC792700552898 /* NotificationCenter.m */,
+				F1394F6F1EE448A700552898 /* VideoView.h */,
+				F1394F701EE448A700552898 /* VideoView.m */,
+				F1394F711EE448A700552898 /* VideoView.xib */,
+				F1394F7F1EEC873700552898 /* MapView.h */,
+				F1394F801EEC873700552898 /* MapView.m */,
+				F1394F811EEC873700552898 /* MapView.xib */,
+				F1394F861EEC883B00552898 /* Location.h */,
+				F1394F871EEC883B00552898 /* Location.m */,
+				F1394F8B1EED460A00552898 /* PictureView.h */,
+				F1394F8C1EED460A00552898 /* PictureView.m */,
+				F1394F8E1EED5DB900552898 /* NYTPhotoItem.h */,
+				F1394F8F1EED5DB900552898 /* NYTPhotoItem.m */,
+			);
+			name = Chat;
+			sourceTree = "<group>";
+		};
+		F1BEF8E51EFE5CDF0083EAB9 /* CropImage */ = {
+			isa = PBXGroup;
+			children = (
+				F17E08511E0FF16500FDBF0B /* AKImageCropperOverlayView.swift */,
+				F17E08521E0FF16500FDBF0B /* AKImageCropperView.swift */,
+				F17E08531E0FF16500FDBF0B /* CropperViewController.swift */,
+				F17E08541E0FF16500FDBF0B /* CGFloat.swift */,
+				F17E08551E0FF16500FDBF0B /* AKImageCropperScollView.swift */,
+				F17E08571E0FF16500FDBF0B /* AKImageCropperTouchView.swift */,
+				F17E08581E0FF16500FDBF0B /* UIColor.swift */,
+				F17E08591E0FF16500FDBF0B /* Crop.storyboard */,
+				F17E085A1E0FF16500FDBF0B /* ImageViewController.swift */,
+				F17E085B1E0FF16500FDBF0B /* UIImage.swift */,
+			);
+			name = CropImage;
+			sourceTree = "<group>";
+		};
+		F1BEF8E91EFE8AAC0083EAB9 /* FBLogin */ = {
+			isa = PBXGroup;
+			children = (
+				F1BEF8EA1EFE8AAC0083EAB9 /* FBRequest.swift */,
+			);
+			name = FBLogin;
+			path = Code/FBLogin;
 			sourceTree = "<group>";
 		};
 		F1CB2A391EF5B8AC00EEF64F /* Products */ = {
@@ -823,7 +848,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				F17E085E1E0FF16500FDBF0B /* CropperViewController.swift in Sources */,
-				F1BEE4AA1EDAE225004ED700 /* ChatAsyncPhotoMedia.m in Sources */,
 				F1ACAD781E217DDC004AECAB /* SpamFavBlockViewController.swift in Sources */,
 				F1394FCF1EEDDE2D00552898 /* IQCropSelectionEndView.m in Sources */,
 				F17E08651E0FF16500FDBF0B /* ImageViewController.swift in Sources */,
@@ -844,7 +868,6 @@
 				F11B75F01DDF844B0075DDCB /* MainSearchViewController.swift in Sources */,
 				F17E08631E0FF16500FDBF0B /* UIColor.swift in Sources */,
 				F17E085C1E0FF16500FDBF0B /* AKImageCropperOverlayView.swift in Sources */,
-				F1394F951EEDC5C600552898 /* JSQContactMediaItem.m in Sources */,
 				F17E08611E0FF16500FDBF0B /* CGRect.swift in Sources */,
 				F1394FE61EEDE61900552898 /* SCSiriWaveformView.m in Sources */,
 				F17E085F1E0FF16500FDBF0B /* CGFloat.swift in Sources */,
@@ -860,6 +883,7 @@
 				F12C27751DCF07BB00AEE0A3 /* ClickTableViewCell.swift in Sources */,
 				F12C27811DCF765300AEE0A3 /* ChatViewController.swift in Sources */,
 				F17E08661E0FF16500FDBF0B /* UIImage.swift in Sources */,
+				F1BEF8EB1EFE8AAC0083EAB9 /* FBRequest.swift in Sources */,
 				8EA72D671E7BD48C00425AC9 /* subViewController.swift in Sources */,
 				8EA72D691E7BEEAF00425AC9 /* settingCell.swift in Sources */,
 				F1394FCE1EEDDE2D00552898 /* IQCropSelectionBeginView.m in Sources */,
@@ -881,6 +905,7 @@
 				F1394FCA1EEDDE2D00552898 /* IQ_FDWaveformView.m in Sources */,
 				F12C27531DCE45A800AEE0A3 /* ViewController.swift in Sources */,
 				F1DD72031DEAADF800DE0A12 /* ChannelListViewController.swift in Sources */,
+				F1BEF8E81EFE75D20083EAB9 /* JSQContactMediaItem.m in Sources */,
 				F13F2A841EC844B100A43F82 /* AlertsPostViewController.swift in Sources */,
 				F12C27651DCE643D00AEE0A3 /* NetworkConnectivity.swift in Sources */,
 				F18839331DD8D26400362B1B /* LeftViewController.swift in Sources */,
