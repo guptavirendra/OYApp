@@ -136,8 +136,8 @@ extension LeftViewController
         {
             if ((FBSDKAccessToken.current()) != nil)
             {
-                //let fbRequest = FBRequest()
-                //fbRequest.logoutFacebook()
+                let fbRequest = FBRequest()
+                fbRequest.logoutFacebook()
             }
             
              

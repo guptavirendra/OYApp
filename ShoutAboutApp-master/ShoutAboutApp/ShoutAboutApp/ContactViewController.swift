@@ -102,7 +102,8 @@ class ContactViewController: UIViewController, UITableViewDataSource, UITableVie
         
         searchController.hidesNavigationBarDuringPresentation = false
         searchController.searchBar.isTranslucent = true
-        self.extendedLayoutIncludesOpaqueBars = false
+        self.extendedLayoutIncludesOpaqueBars = true
+        definesPresentationContext = true
     }
     
     deinit
@@ -133,7 +134,7 @@ class ContactViewController: UIViewController, UITableViewDataSource, UITableVie
     override func viewWillAppear(_ animated: Bool)
     {
         super.viewWillAppear(animated)
-        self.tabBarController?.tabBar.isHidden = false
+        //self.tabBarController?.tabBar.isHidden = false
         syncContactArray =  ProfileManager.sharedInstance.syncedContactArray
         
         DispatchQueue.global().async 

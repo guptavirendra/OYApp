@@ -66,8 +66,8 @@ class SearchViewController: UIViewController, UISearchBarDelegate,UISearchContro
         tableView.tableHeaderView = searchController.searchBar
         
         searchController.hidesNavigationBarDuringPresentation = false
-       // searchController.searchBar.translucent = true
-        //self.extendedLayoutIncludesOpaqueBars = true
+        searchController.searchBar.isTranslucent = true
+        self.extendedLayoutIncludesOpaqueBars = true
         
     }
     

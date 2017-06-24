@@ -122,7 +122,7 @@ class NewProfileViewController: ProfileViewController, UIPopoverPresentationCont
         
         self.view.isUserInteractionEnabled = self.shouldDisabledUserInteraction
         self.navigationController?.isNavigationBarHidden = false
-        self.navigationController?.navigationBar.tintColor = appColor
+        //self.navigationController?.navigationBar.tintColor = appColor
         nameLabel?.text     = personalProfile.name
         locationLabel?.text = personalProfile.address
         

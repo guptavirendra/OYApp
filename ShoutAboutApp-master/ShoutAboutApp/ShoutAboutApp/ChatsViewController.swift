@@ -132,7 +132,7 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
     {
         super.viewDidLoad()
         
-        self.tabBarController?.tabBar.isHidden = true
+        //self.tabBarController?.tabBar.isHidden = true
         let time = ""
         
 //        OneLastActivity.sendLastActivityQueryToJID((recipient?.jidStr)!) { (iq, id, elemnt) in

@@ -62,7 +62,7 @@ class MainSearchViewController: UIViewController, ContactTableViewCellProtocol
     override func viewWillAppear(_ animated: Bool)
     {
         super.viewWillAppear(animated)
-        self.tabBarController?.tabBar.isHidden = false
+        //self.tabBarController?.tabBar.isHidden = false
          self.navigationController?.isNavigationBarHidden = true
         if let historydata = self.retrievePearson()
         {
@@ -97,7 +97,7 @@ class MainSearchViewController: UIViewController, ContactTableViewCellProtocol
     override func viewDidAppear(_ animated: Bool)
     {
         super.viewDidAppear(animated)
-        self.getProfileData()
+        //self.getProfileData()
     }
     
    
@@ -112,7 +112,7 @@ extension MainSearchViewController
         
         let searchViewController = self.storyboard?.instantiateViewController(withIdentifier: "SearchViewController") as? SearchViewController
         let nav = UINavigationController(rootViewController: searchViewController!)
-         nav.navigationBar.barTintColor = appColor
+        // nav.navigationBar.barTintColor = appColor
         self.present(nav, animated: true, completion: nil)
         //self.navigationController!.pushViewController(searchViewController!, animated: true)
         
@@ -246,7 +246,7 @@ extension MainSearchViewController
                 {
                     rateANdReviewViewController?.photo = personContact.photo!
                 }
-                self.navigationController?.navigationBar.tintColor = appColor
+               // self.navigationController?.navigationBar.tintColor = appColor
                 self.navigationController?.navigationBar.isHidden = false
                 self.navigationController!.pushViewController(rateANdReviewViewController!, animated: true)
                 

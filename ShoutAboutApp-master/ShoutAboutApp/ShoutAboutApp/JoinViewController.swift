@@ -522,15 +522,16 @@ extension JoinViewController
     }*/
     override func displayAlert(_ userMessage: String, handler: ((UIAlertAction) -> Void)?)
     {
+        
         let alert = UIAlertController(title: "Alert", message: userMessage, preferredStyle: UIAlertControllerStyle.alert)
         let okAction = UIAlertAction(title: "OK", style: .default)
         { (action) in
-            self.dismiss(animated: false, completion: nil)
-            let tabBarVC = self.storyboard?.instantiateViewController(withIdentifier: "tabBarVC") as? MyTabViewController
-            let appDelegate = UIApplication.shared.delegate as! AppDelegate
-            appDelegate.window?.backgroundColor = UIColor(red: 236.0, green: 238.0, blue: 241.0, alpha: 1.0)
-            appDelegate.window?.rootViewController = tabBarVC
-            appDelegate.window?.makeKeyAndVisible()
+            //self.dismiss(animated: false, completion: nil)
+            
+            DispatchQueue.main.async(execute: {
+                
+                self.view.showSpinner()
+                });
             DispatchQueue.global(qos: .userInitiated).async
                 {
              
@@ -901,6 +902,17 @@ extension JoinViewController
     }
     
     
+    func moveToTabBar()
+    {
+        
+        let tabBarVC = self.storyboard?.instantiateViewController(withIdentifier: "tabBarVC") as? MyTabViewController
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        appDelegate.window?.backgroundColor = UIColor(red: 236.0, green: 238.0, blue: 241.0, alpha: 1.0)
+        appDelegate.window?.rootViewController = nil
+        appDelegate.window?.rootViewController = tabBarVC
+        appDelegate.window?.makeKeyAndVisible()
+    }
+    
     func getContactForPage()
     {
         //self.view.showSpinner()
@@ -911,8 +923,10 @@ extension JoinViewController
             DispatchQueue.main.async(execute: { () -> Void in
             ProfileManager.sharedInstance.syncedContactArray.append(contentsOf: contactPerson.data)
                // self.tableView.reloadData()
+                self.dismiss(animated: false, completion: nil)
                 self.saveContacts(ProfileManager.sharedInstance.syncedContactArray)
                 NotificationCenter.default.post(name: Notification.Name(rawValue: "ContactUpdated"), object: nil)
+                self.moveToTabBar()
                 self.view.removeSpinner()
             })
             
