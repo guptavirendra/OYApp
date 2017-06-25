@@ -231,14 +231,14 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
                 return mesg.text.contains(_id)
             }
             let toDeleteArray =  self.messagesOriginal.filtered(using: predicate) as? [JSQMessage]
-            let message: JSQMessage = (toDeleteArray?.first)!
+            
             let finalDeleteArray = NSMutableArray()
             for mesege in toDeleteArray!
             {
                 finalDeleteArray.add(mesege.text)
             }
             
-            OneMessage.sharedInstance.deleteMessagesFrom(jid: message.senderId, messages: finalDeleteArray)
+            OneMessage.sharedInstance.deleteMessagesFrom(jid: msg.senderId, messages: finalDeleteArray)
             self.messages.removeObject(at: indexPath.item)
             self.collectionView.reloadData()
         }

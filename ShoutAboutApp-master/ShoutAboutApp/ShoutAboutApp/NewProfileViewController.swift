@@ -361,8 +361,10 @@ class NewProfileViewController: ProfileViewController, UIPopoverPresentationCont
             let nav = UINavigationController(rootViewController: addNewContactVC)
             //let lightBlue = UIColor(hexString: "1F8DC8")
             //let medBlue = UIColor(hexString: "FFFFFF")
-            //nav.navigationBar.tintColor =  appColor
-            //nav.navigationBar.barTintColor = UIColor.white
+            
+            
+            nav.navigationBar.tintColor =  appColor
+            nav.navigationBar.barTintColor = UIColor.white
             
              self.present(nav, animated: true, completion: nil)
             
