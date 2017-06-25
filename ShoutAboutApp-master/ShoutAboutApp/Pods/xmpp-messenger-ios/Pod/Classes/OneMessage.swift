@@ -284,7 +284,13 @@ open class OneMessage: NSObject {
                             moc?.delete(message as! NSManagedObject)
                         }
                     }
+                    do {
+                        try moc?.save()
+                    } catch {
+                        fatalError("Failure to save context: \(error)")
+                    }
                 }
+
             } catch _ {
                 //catch fetch error here
             }
