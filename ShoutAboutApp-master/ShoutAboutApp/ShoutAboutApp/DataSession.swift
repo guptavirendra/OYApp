@@ -1405,8 +1405,15 @@ class DataSessionManger: NSObject
                     feedMyfeedUser.prev_page_url = prev_page_url
                 }
                 
-                feedMyfeedUser.from = (deserializedResponse.object(forKey: "from") as? Int)!
-                feedMyfeedUser.to = (deserializedResponse.object(forKey: "to") as? Int)!
+                if let from = deserializedResponse.object(forKey: "from") as? Int
+                {
+                    feedMyfeedUser.from = from
+                }
+                
+                if let to = deserializedResponse.object(forKey: "to") as? Int
+                {
+                    feedMyfeedUser.to = to
+                }
                 
                 if let  dataList = deserializedResponse.object(forKey: "data") as? [NSDictionary]
                 {
