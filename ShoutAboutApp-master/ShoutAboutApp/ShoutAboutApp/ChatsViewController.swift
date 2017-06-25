@@ -1124,16 +1124,16 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
         
         return incomingBubbleImageData
     }
-    
+    /*
     override func collectionView(_ collectionView: JSQMessagesCollectionView!, avatarImageDataForItemAt indexPath: IndexPath!) -> JSQMessageAvatarImageDataSource! {
         let message: JSQMessage = self.messages[indexPath.item] as! JSQMessage
         
         if message.senderId == self.senderId {
             if let photoData = OneChat.sharedInstance.xmppvCardAvatarModule?.photoData(for: OneChat.sharedInstance.xmppStream?.myJID) {
-                let senderAvatar = JSQMessagesAvatarImageFactory.avatarImage(with: UIImage(data: photoData), diameter: 30)
+                let senderAvatar = JSQMessagesAvatarImageFactory.avatarImage(with: UIImage(data: photoData), diameter: 1)
                 return senderAvatar
             } else {
-                let senderAvatar = JSQMessagesAvatarImageFactory.avatarImage(withUserInitials: "", backgroundColor: UIColor(white: 0.85, alpha: 1.0), textColor: UIColor(white: 0.60, alpha: 1.0), font: UIFont(name: "Helvetica Neue", size: 14.0), diameter: 30)
+                let senderAvatar = JSQMessagesAvatarImageFactory.avatarImage(withUserInitials: "", backgroundColor: UIColor(white: 0.85, alpha: 1.0), textColor: UIColor(white: 0.60, alpha: 1.0), font: UIFont(name: "Helvetica Neue", size: 14.0), diameter: 1)
                 return senderAvatar
             }
         } else {
@@ -1146,6 +1146,8 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
             }
         }
     }
+    
+    */
     
     override func collectionView(_ collectionView: JSQMessagesCollectionView!, attributedTextForCellTopLabelAt indexPath: IndexPath!) -> NSAttributedString!
     {

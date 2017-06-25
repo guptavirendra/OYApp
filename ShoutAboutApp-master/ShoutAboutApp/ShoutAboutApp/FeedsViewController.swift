@@ -137,7 +137,7 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
         // by performed person
         if let _ =  dataFeedMyfeed.performed.photo
         {
-        //cell.RUserImageView.sd_setImage(with: URL(string:dataFeedMyfeed.performed.photo!), placeholderImage: UIImage(named: "profile"))
+            cell.RUserImageView.sd_setImage(with: URL(string:dataFeedMyfeed.performed.photo!), placeholderImage: UIImage(named: "profile"))
         }
         cell.RUserImageView.makeImageRounded()
         
@@ -168,7 +168,7 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
         // effected person profile picture
         if let _ = dataFeedMyfeed.effected.photo
         {
-            //cell.UserImageView.sd_setImage(with: URL(string:dataFeedMyfeed.effected.photo!), placeholderImage: UIImage(named: "profile"))
+            cell.UserImageView.sd_setImage(with: URL(string:dataFeedMyfeed.effected.photo!), placeholderImage: UIImage(named: "profile"))
         }
         cell.UserImageView.makeImageRounded()
         
@@ -221,9 +221,9 @@ class FeedsViewController: UIViewController,FeedsTableViewCellProtocol
         cell.nameLabel.attributedText = reviewAttributeString
         cell.performedActionLabel?.text = "changed " + dataFeedMyfeed.action
         
-        //cell.UserImageView.sd_setImage(with: URL(string:dataFeedMyfeed.action_val), placeholderImage: UIImage(named: "profile"))
+        cell.UserImageView.sd_setImage(with: URL(string:dataFeedMyfeed.action_val), placeholderImage: UIImage(named: "profile"))
         cell.UserImageView.makeImageRounded()
-        //cell.RUserImageView.sd_setImage(with: URL(string:dataFeedMyfeed.performed.photo!), placeholderImage: UIImage(named: "another"))
+        cell.RUserImageView.sd_setImage(with: URL(string:dataFeedMyfeed.performed.photo!), placeholderImage: UIImage(named: "another"))
         
         //cell?.picButton2?.tag =  indexPath.row
         

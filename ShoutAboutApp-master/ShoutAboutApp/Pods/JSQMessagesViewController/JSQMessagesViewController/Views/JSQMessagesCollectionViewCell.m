@@ -292,12 +292,13 @@ static NSMutableSet *jsqMessagesCollectionViewCellActions = nil;
 
 - (void)setAvatarViewSize:(CGSize)avatarViewSize
 {
+    /*
     if (CGSizeEqualToSize(avatarViewSize, self.avatarViewSize)) {
         return;
     }
 
     [self jsq_updateConstraint:self.avatarContainerViewWidthConstraint withConstant:avatarViewSize.width];
-    [self jsq_updateConstraint:self.avatarContainerViewHeightConstraint withConstant:avatarViewSize.height];
+    [self jsq_updateConstraint:self.avatarContainerViewHeightConstraint withConstant:avatarViewSize.height];*/
 }
 
 - (void)setTextViewFrameInsets:(UIEdgeInsets)textViewFrameInsets
@@ -340,8 +341,9 @@ static NSMutableSet *jsqMessagesCollectionViewCellActions = nil;
 
 - (CGSize)avatarViewSize
 {
-    return CGSizeMake(self.avatarContainerViewWidthConstraint.constant,
-                      self.avatarContainerViewHeightConstraint.constant);
+    return CGSizeZero;
+    //return CGSizeMake(self.avatarContainerViewWidthConstraint.constant,
+                     // self.avatarContainerViewHeightConstraint.constant);
 }
 
 - (UIEdgeInsets)textViewFrameInsets
