@@ -25,13 +25,7 @@ class ChatViewController: UIViewController, ChatPersionTableViewCellProtocol
      {
         super.viewDidLoad()
         self.automaticallyAdjustsScrollViewInsets = false
-        self.tableView.addBackGroundImageView()
-       // self.tableView.backgroundColor = bgColor
-        //self.view.backgroundColor = bgColor
-
-        // Do any additional setup after loading the view.
-        observeChannels()
-    }
+     }
     
     deinit
     {
@@ -77,6 +71,7 @@ class ChatViewController: UIViewController, ChatPersionTableViewCellProtocol
 
 extension ChatViewController
 {
+
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
@@ -120,6 +115,28 @@ extension ChatViewController
         return 100
     }
     
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
+    {
+        
+        let chatPerson = chatPersons[indexPath.row]
+        let stringID = String(chatPerson.idString)
+        let ejabberID = stringID+"@localhost"
+        let user =  OneRoster.userFromRosterForJID(jid: ejabberID)
+        let chatVc = self.storyboard?.instantiateViewController(withIdentifier: "ChatsViewController") as? ChatsViewController
+        
+        chatVc!.senderDisplayName = ProfileManager.sharedInstance.personalProfile.name
+        chatVc?.senderId          = String(ProfileManager.sharedInstance.personalProfile.idString)
+        chatVc?.reciepientPerson         = chatPerson
+        chatVc?.recipient = user
+        self.navigationController!.pushViewController(chatVc!, animated: true)
+        
+    }
+    
+    
+    
+    
+    
 }
 
 extension ChatViewController
@@ -139,24 +156,22 @@ extension ChatViewController
         {
             let indexPath = self.tableView.indexPath(for: cell)
             let chatPerson = chatPersons[indexPath!.row]
-            
-                    let stringID = String(chatPerson.idString)
-                    let ejabberID = stringID+"@localhost"
-                    let user =  OneRoster.userFromRosterForJID(jid: ejabberID)
-                    print("\(OneRoster.buddyList.sections)")
-                    //let chattingViewController = self.storyboard?.instantiateViewControllerWithIdentifier("ChattingViewController") as? ChattingViewController
-                    
-                    //let user =   OneRoster.userFromRosterAtIndexPath(indexPath: indexPath!)
-                    
-                    let chatVc = self.storyboard?.instantiateViewController(withIdentifier: "ChatsViewController") as? ChatsViewController
-                    
-                    chatVc!.senderDisplayName = ProfileManager.sharedInstance.personalProfile.name
-                    chatVc?.senderId          = String(ProfileManager.sharedInstance.personalProfile.idString)
-                    chatVc?.reciepientPerson         = chatPerson
-                    chatVc?.recipient = user
-                    self.navigationController!.pushViewController(chatVc!, animated: true)
-                    
-            
+
+            let stringID = String(chatPerson.idString)
+            let ejabberID = stringID+"@localhost"
+            let user =  OneRoster.userFromRosterForJID(jid: ejabberID)
+            print("\(OneRoster.buddyList.sections)")
+            //let chattingViewController = self.storyboard?.instantiateViewControllerWithIdentifier("ChattingViewController") as? ChattingViewController
+
+            //let user =   OneRoster.userFromRosterAtIndexPath(indexPath: indexPath!)
+
+            let chatVc = self.storyboard?.instantiateViewController(withIdentifier: "ChatsViewController") as? ChatsViewController
+
+            chatVc!.senderDisplayName = ProfileManager.sharedInstance.personalProfile.name
+            chatVc?.senderId          = String(ProfileManager.sharedInstance.personalProfile.idString)
+            chatVc?.reciepientPerson         = chatPerson
+            chatVc?.recipient = user
+            self.navigationController!.pushViewController(chatVc!, animated: true)
         }
     }
     
@@ -184,30 +199,4 @@ extension ChatViewController
 }
 
 
-extension ChatViewController
-{
-    // MARK: Firebase related methods
-    fileprivate func observeChannels()
-    {
-        // Use the observe method to listen for new
-        // channels being written to the Firebase DB
-        channelRefHandle = channelRef.observe(.childAdded, with: { (snapshot) in // 1
-            let channelData = snapshot.value as! Dictionary<String, AnyObject> // 2
-            let id = snapshot.key
-            if let name = channelData["name"] as! String!, name.characters.count > 0
-            {
-                let chatPerson = ChatPerson()
-                chatPerson.name = name
-                chatPerson.idString = Int(id)!
-                self.chatPersons.append(chatPerson)
-                // 3
-               // self.channels.append(Channel(id: id, name: name))
-                self.tableView.reloadData()
-            } else {
-                print("Error! Could not decode channel data")
-            }
-        })
-    }
 
-
-}

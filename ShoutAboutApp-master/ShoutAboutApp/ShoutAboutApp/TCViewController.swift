@@ -17,11 +17,6 @@ class TCViewController: UIViewController
     {
         super.viewDidLoad()
         self.navigationController?.isNavigationBarHidden = true
-        
-        
-        
-        let fontTitilliumRegular =  "TitilliumWeb-Regular"
-       
         let fontTitle               =  UIFont.systemFont(ofSize: 17)// 
         let myAttribute = [ NSFontAttributeName: fontTitle ]
         let intitiaString = NSMutableAttributedString(string: "Tap \"Agree & Continue \" to accept the OYAPP ", attributes:myAttribute )

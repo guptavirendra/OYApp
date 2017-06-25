@@ -575,11 +575,11 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Th3-1L-Swz">
-                                                    <rect key="frame" x="30" y="5" width="540" height="35"/>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Th3-1L-Swz">
+                                                    <rect key="frame" x="30" y="5" width="316" height="35"/>
                                                     <color key="backgroundColor" red="0.1215686275" green="0.55294117649999996" blue="0.7843137255" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="540" id="D86-vY-xUm"/>
+                                                        <constraint firstAttribute="width" constant="316" id="D86-vY-xUm"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" name="TitilliumWeb-Regular" family="Titillium Web" pointSize="15"/>
                                                     <state key="normal">
@@ -593,7 +593,7 @@
                                             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="bottom" secondItem="Th3-1L-Swz" secondAttribute="bottom" constant="4" id="620-ah-aaE"/>
-                                                <constraint firstAttribute="trailing" secondItem="Th3-1L-Swz" secondAttribute="trailing" priority="250" constant="30" id="IK2-rt-7Tu"/>
+                                                <constraint firstAttribute="trailing" secondItem="Th3-1L-Swz" secondAttribute="trailing" priority="750" constant="29" id="IK2-rt-7Tu"/>
                                                 <constraint firstItem="Th3-1L-Swz" firstAttribute="top" secondItem="qxG-Vu-PcF" secondAttribute="top" constant="5" id="nTv-uo-REo"/>
                                                 <constraint firstItem="Th3-1L-Swz" firstAttribute="leading" secondItem="qxG-Vu-PcF" secondAttribute="leading" priority="250" constant="30" id="rH0-4W-rEn"/>
                                             </constraints>
@@ -2047,7 +2047,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="100" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="pyk-Sa-YXT">
-                                <rect key="frame" x="0.0" y="64" width="375" height="554"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="618"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ChatPersionTableViewCell" rowHeight="100" id="ptX-Sd-XaC" customClass="ChatPersionTableViewCell" customModule="ShoutAboutApp" customModuleProvider="target">
@@ -2202,7 +2202,7 @@
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="pyk-Sa-YXT" firstAttribute="leading" secondItem="DLp-K9-Wyy" secondAttribute="leading" id="Ncy-Fv-f2E"/>
-                            <constraint firstItem="pyk-Sa-YXT" firstAttribute="top" secondItem="DLp-K9-Wyy" secondAttribute="top" constant="64" id="my0-Y1-3oG"/>
+                            <constraint firstItem="pyk-Sa-YXT" firstAttribute="top" secondItem="DLp-K9-Wyy" secondAttribute="top" id="my0-Y1-3oG"/>
                             <constraint firstAttribute="trailing" secondItem="pyk-Sa-YXT" secondAttribute="trailing" id="nbp-u0-Ch7"/>
                             <constraint firstAttribute="bottom" secondItem="pyk-Sa-YXT" secondAttribute="bottom" id="zH2-iu-7De"/>
                         </constraints>
