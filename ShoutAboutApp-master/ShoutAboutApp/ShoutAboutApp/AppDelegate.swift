@@ -320,7 +320,7 @@ func application(_ application: UIApplication, didReceiveRemoteNotification user
     
     let attributes = [
         NSForegroundColorAttributeName : UIColor.white,
-        NSFontAttributeName : UIFont.systemFont(ofSize: 13)
+        NSFontAttributeName : UIFont.systemFont(ofSize: 15)
     ]
     UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).setTitleTextAttributes(attributes, for: UIControlState())
     
