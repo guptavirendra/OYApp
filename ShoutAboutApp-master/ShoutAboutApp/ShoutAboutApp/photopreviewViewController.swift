@@ -31,7 +31,7 @@ class photopreviewViewController: UIViewController {
         
         self.navigationItem.title = "Preview"
         self.navigationController!.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName : UIColor.white]
-        self.navigationController!.navigationBar.tintColor = UIColor.white;
+       // self.navigationController!.navigationBar.tintColor = UIColor.white;
         
         
     }

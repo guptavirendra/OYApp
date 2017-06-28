@@ -726,8 +726,15 @@ extension ContactViewController
         addNewContactVC.delegate = self
         addNewContactVC.allowsActions = false
         let nav = UINavigationController(rootViewController: addNewContactVC)
-        nav.navigationBar.tintColor =  appColor
+        nav.navigationBar.tintColor =   appColor
         nav.navigationBar.barTintColor = UIColor.white
+        let attributes = [
+            NSForegroundColorAttributeName : UIColor.white,
+            NSFontAttributeName : UIFont.systemFont(ofSize: 15)
+        ]
+       // nav.navigationItem.rightBarButtonItem?.setTitleTextAttributes(attributes, for: UIControlState())
+        //nav.navigationItem.leftBarButtonItem?.setTitleTextAttributes(attributes, for: UIControlState())
+        
         self.present(nav, animated: true, completion: nil)
     
     }

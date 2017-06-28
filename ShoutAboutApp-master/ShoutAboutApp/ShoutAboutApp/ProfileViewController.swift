@@ -840,12 +840,13 @@ extension ProfileViewController
     func  getProfileData()
     {
         self.view.showSpinner()
+        
         DataSessionManger.sharedInstance.getProfileData(String(personalProfile.idString),onFinish: { (response, personalProfile) in
             
             DispatchQueue.main.async(execute: {
                 self.view.removeSpinner()
                 
-                if personalProfile.idString == ProfileManager.sharedInstance.personalProfile.idString
+                if personalProfile.idString == ProfileManager.sharedInstance.personalProfile.idString ||  ProfileManager.sharedInstance.personalProfile.idString == 0
                 {
                     ProfileManager.sharedInstance.personalProfile = personalProfile
                     self.personalProfile = ProfileManager.sharedInstance.personalProfile
@@ -854,7 +855,7 @@ extension ProfileViewController
                     self.personalProfile = personalProfile
                     
                 }
-                if let photo  = personalProfile.photo
+                if let photo  = self.personalProfile.photo
                 {
                     self.setProfileImgeForURL(photo)
                 }

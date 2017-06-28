@@ -625,7 +625,7 @@ extension UIViewController
 {
     func setBackIndicatorImage()
     {
-        self.navigationController?.navigationBar.tintColor = UIColor.white
+        //self.navigationController?.navigationBar.tintColor = UIColor.white
         
     }
 }

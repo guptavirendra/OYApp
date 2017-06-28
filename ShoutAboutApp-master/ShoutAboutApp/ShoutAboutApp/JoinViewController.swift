@@ -92,6 +92,8 @@ class JoinViewController: ProfileViewController/*, UITableViewDataSource, UITabl
             print("do something");
     }
     
+    
+    var isLoadedFirstTime = false
     //var pickOption = ["Male", "Female"]
     override func viewDidLoad()
     {
@@ -534,7 +536,7 @@ extension JoinViewController
                 });
             DispatchQueue.global(qos: .userInitiated).async
                 {
-             
+                    
                             self.getContacts()
             }
             
@@ -555,6 +557,7 @@ extension JoinViewController
                 {
                     DispatchQueue.main.async(execute: {
                         self.view.removeSpinner()
+                        self.isLoadedFirstTime = true
                         self.displayAlert("Success", handler: nil)
                         
                     });
@@ -926,8 +929,12 @@ extension JoinViewController
                 self.dismiss(animated: false, completion: nil)
                 self.saveContacts(ProfileManager.sharedInstance.syncedContactArray)
                 NotificationCenter.default.post(name: Notification.Name(rawValue: "ContactUpdated"), object: nil)
-                self.moveToTabBar()
                 self.view.removeSpinner()
+                if self.isLoadedFirstTime
+                {
+                    self.moveToTabBar()
+                }
+                
             })
             
         }) { (error) in

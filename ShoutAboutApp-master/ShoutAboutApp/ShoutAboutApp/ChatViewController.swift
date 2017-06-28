@@ -11,7 +11,7 @@ import Firebase
 import XMPPFramework
 import xmpp_messenger_ios
 
-class ChatViewController: UIViewController, ChatPersionTableViewCellProtocol
+class ChatViewController: UIViewController, ChatPersionTableViewCellProtocol, UITableViewDelegate
 {
     
     fileprivate lazy var channelRef: FIRDatabaseReference = FIRDatabase.database().reference().child("channels")
@@ -102,14 +102,16 @@ extension ChatViewController
         return cell
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAtIndexPath indexPath: IndexPath) -> CGFloat
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
     {
+        
         
         return UITableViewAutomaticDimension
         
     }
     
-    func tableView(_ tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: IndexPath) -> CGFloat
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt  indexPath: IndexPath) -> CGFloat
     {
         
         return 100

@@ -42,7 +42,7 @@ class likeDislikeViewController: UIViewController
 
     override func viewDidLoad(){
         super.viewDidLoad()
-        self.navigationController!.navigationBar.tintColor = UIColor.white;
+        //self.navigationController!.navigationBar.tintColor = UIColor.white;
         
     }
     
@@ -105,7 +105,7 @@ class likeDislikeViewController: UIViewController
                    let profileViewController = self.storyboard?.instantiateViewController(withIdentifier: "NewProfileViewController") as? NewProfileViewController
                     profileViewController?.personalProfile = commonmodel
                     profileViewController?.isToGetPersonData = true
-                    self.navigationController?.navigationBar.tintColor = UIColor.white
+                   // self.navigationController?.navigationBar.tintColor = UIColor.white
                     self.navigationController!.pushViewController(profileViewController!, animated: true)
                 }
             }

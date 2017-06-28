@@ -323,6 +323,7 @@ func application(_ application: UIApplication, didReceiveRemoteNotification user
         NSFontAttributeName : UIFont.systemFont(ofSize: 15)
     ]
     UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).setTitleTextAttributes(attributes, for: UIControlState())
+     
     
     // UITableViewCell.appearance().backgroundColor = light
     // UICollectionView.appearance().backgroundColor = light

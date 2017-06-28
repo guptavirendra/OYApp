@@ -11,7 +11,7 @@ class AlertViewController: UIViewController,AlertTableViewCellProtocol
     override func viewDidLoad()
     {
         super.viewDidLoad()
-        self.navigationController!.navigationBar.tintColor = UIColor.white;
+       // self.navigationController!.navigationBar.tintColor = UIColor.white;
     }
     
     

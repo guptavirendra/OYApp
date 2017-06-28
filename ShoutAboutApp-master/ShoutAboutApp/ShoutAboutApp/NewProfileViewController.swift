@@ -99,7 +99,7 @@ class NewProfileViewController: ProfileViewController, UIPopoverPresentationCont
     override func viewDidAppear(_ animated: Bool)
     {
         super.viewDidAppear(animated)
-        
+        self.updateData()
         
     }
     
@@ -174,7 +174,7 @@ class NewProfileViewController: ProfileViewController, UIPopoverPresentationCont
     override func viewWillAppear(_ animated: Bool)
     {
         super.viewWillAppear(animated)
-        self.updateData()
+        
         
     }
     
@@ -363,9 +363,14 @@ class NewProfileViewController: ProfileViewController, UIPopoverPresentationCont
             //let medBlue = UIColor(hexString: "FFFFFF")
             
             
-            nav.navigationBar.tintColor =  appColor
+           nav.navigationBar.tintColor =   appColor
             nav.navigationBar.barTintColor = UIColor.white
-            
+            let attributes = [
+                NSForegroundColorAttributeName : UIColor.white,
+                NSFontAttributeName : UIFont.systemFont(ofSize: 15)
+            ]
+            //nav.navigationItem.rightBarButtonItem?.setTitleTextAttributes(attributes, for: UIControlState())
+            //nav.navigationItem.leftBarButtonItem?.setTitleTextAttributes(attributes, for: UIControlState())
              self.present(nav, animated: true, completion: nil)
             
         }else

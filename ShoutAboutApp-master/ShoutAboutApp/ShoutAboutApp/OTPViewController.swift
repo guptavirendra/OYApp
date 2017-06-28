@@ -147,7 +147,7 @@ class OTPViewController: UIViewController, UITextFieldDelegate {
                     }
                     
                     
-                    let appUserId = UserDefaults.standard.object(forKey: kapp_user_id)
+                    let appUserId = UserDefaults.standard.object(forKey: kapp_user_id) as? Int
                     let appUserToken = UserDefaults.standard.object(forKey: kapp_user_token)
                     
                     if appUserId != nil && appUserToken != nil
@@ -156,6 +156,7 @@ class OTPViewController: UIViewController, UITextFieldDelegate {
                             self.view.removeSpinner()
                             let joinViewController = self.storyboard?.instantiateViewController(withIdentifier: "JoinViewController") as? JoinViewController
                             //otpViewController?.mobileNumberString = self.mobileNumberString
+                           joinViewController?.personalProfile.idString = appUserId!
                             self.present(joinViewController!, animated: true, completion: nil)
                             
                         });

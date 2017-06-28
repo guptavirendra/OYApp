@@ -131,27 +131,28 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
     override func viewDidLoad()
     {
         super.viewDidLoad()
-        
-        //self.tabBarController?.tabBar.isHidden = true
-        let time = ""
-        
-//        OneLastActivity.sendLastActivityQueryToJID((recipient?.jidStr)!) { (iq, id, elemnt) in
-//            
-//        }
-        
-         statusLabel?.text = time
-        
-        NotificationCenter.default.addObserver(self, selector:#selector(ChatsViewController.presenceRecieved(notification:)) , name: NSNotification.Name(rawValue: "presenceRecieved"), object: nil)
-        
-        
-        self.navigationController?.isNavigationBarHidden = true
+
+    self.navigationController?.isNavigationBarHidden = true
+    //self.tabBarController?.tabBar.isHidden = true
+    let time = ""
+
+    //        OneLastActivity.sendLastActivityQueryToJID((recipient?.jidStr)!) { (iq, id, elemnt) in
+    //            
+    //        }
+
+    statusLabel?.text = time
+
+    NotificationCenter.default.addObserver(self, selector:#selector(ChatsViewController.presenceRecieved(notification:)) , name: NSNotification.Name(rawValue: "presenceRecieved"), object: nil)
         
         
-        JSQMessagesCollectionViewCell.registerMenuAction(#selector(self.copyMessage))
-        JSQMessagesCollectionViewCell.registerMenuAction(#selector(self.deleteMessage(indexPath:)))
+
         
-       let copyMenuItem =   UIMenuItem(title: "forwrd", action: #selector(self.copyMessage))
-       let deleteMenuItem =  UIMenuItem(title: "Delete", action: #selector(self.deleteMessage(indexPath:)))
+        
+    JSQMessagesCollectionViewCell.registerMenuAction(#selector(self.copyMessage))
+    JSQMessagesCollectionViewCell.registerMenuAction(#selector(self.deleteMessage(indexPath:)))
+
+    let copyMenuItem =   UIMenuItem(title: "forwrd", action: #selector(self.copyMessage))
+    let deleteMenuItem =  UIMenuItem(title: "Delete", action: #selector(self.deleteMessage(indexPath:)))
         
         
         UIMenuController.shared.menuItems = [copyMenuItem, deleteMenuItem]
@@ -795,13 +796,7 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
                             try? data?.write(to: URL(fileURLWithPath: fullPathToFile), options: [.atomic])
                             mediaItem.audioData = data
                              
-                            
-                        
-                        
-                        
-                        
-                        
-                        DispatchQueue.main.async(execute: { () -> Void in
+            DispatchQueue.main.async(execute: { () -> Void in
                             self.collectionView.reloadData()
                         })
                     })

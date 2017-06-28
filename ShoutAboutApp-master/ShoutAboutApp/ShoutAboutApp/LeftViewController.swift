@@ -57,7 +57,7 @@ class LeftViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     func setProfileImgeForURL(_ urlString:String)
     {
-        //self.profileImageView.sd_setImage(with: URL(string:urlString ), placeholderImage: UIImage(named: "profile_pic"))
+        self.profileImageView.sd_setImage(with: URL(string:urlString ), placeholderImage: UIImage(named: "profile_pic"))
     }
 }
 

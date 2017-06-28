@@ -3,6 +3,8 @@
 //
 #import "SWRevealViewController.h"
 //#import "ChatAsyncPhotoMedia.h"
+#import <SDWebImage/SDWebImageDownloader.h>
+ 
 
 
 //small talk
