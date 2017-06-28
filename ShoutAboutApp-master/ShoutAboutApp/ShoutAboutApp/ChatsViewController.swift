@@ -158,6 +158,18 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
         UIMenuController.shared.menuItems = [copyMenuItem, deleteMenuItem]
         self.profilePic?.makeImageRounded()
         
+        
+        if let urlString = reciepientPerson?.photo
+        {
+           self.profilePic?.sd_setImage(with: URL(string:urlString ), placeholderImage: UIImage(named: "profile"))
+            
+        }
+        else
+        {
+           self.profilePic?.image = UIImage(named: "profile")
+        }
+        
+        
         //recipient = OneRoster.userFromRosterForJID(jid: "\(reciepientPerson)@localhost" )
         
         //recipient = XMPPUserCoreDataStorageObject(entity: <#T##NSEntityDescription#>, insertIntoManagedObjectContext: <#T##NSManagedObjectContext?#>)
