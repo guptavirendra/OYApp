@@ -22,7 +22,6 @@ class LeftViewController: UIViewController, UITableViewDataSource, UITableViewDe
     override func viewDidLoad()
     {
         super.viewDidLoad()
-        
         choiceArray = ["Block", "Spam", "Favorites", "Settings", "Premium", "Logout"]
         profileImageView.makeImageRounded()
         
@@ -38,21 +37,30 @@ class LeftViewController: UIViewController, UITableViewDataSource, UITableViewDe
     {
         super.viewWillAppear(animated)
         self.navigationController?.isNavigationBarHidden = true
-        self.nameLabel.text = ProfileManager.sharedInstance.personalProfile.name
-         self.mobileLabel.text = ProfileManager.sharedInstance.personalProfile.mobileNumber
-        // else need to update
-        if ProfileManager.sharedInstance.localStoredImage != nil
+        
+        if ProfileManager.sharedInstance.personalProfile.idString == 0
         {
-            
-            self.profileImageView.image = ProfileManager.sharedInstance.localStoredImage
-            
-        }else
-        {
-            if let photo  = ProfileManager.sharedInstance.personalProfile.photo{
-                setProfileImgeForURL(photo)
-            }
-             
+            self.getProfileData()
         }
+        else
+        {
+            self.nameLabel.text = ProfileManager.sharedInstance.personalProfile.name
+            self.mobileLabel.text = ProfileManager.sharedInstance.personalProfile.mobileNumber
+            // else need to update
+            if ProfileManager.sharedInstance.localStoredImage != nil
+            {
+                self.profileImageView.image = ProfileManager.sharedInstance.localStoredImage
+            }
+            else
+            {
+                if let photo  = ProfileManager.sharedInstance.personalProfile.photo
+                {
+                    setProfileImgeForURL(photo)
+                }
+             
+            }
+        }
+            
     }
     
     func setProfileImgeForURL(_ urlString:String)
@@ -212,5 +220,40 @@ extension LeftViewController
             {
                 
             })
+    }
+    
+    func  getProfileData()
+    {
+        
+        let appUserId = UserDefaults.standard.object(forKey: kapp_user_id) as! Int
+        DataSessionManger.sharedInstance.getProfileData(String(appUserId),onFinish: { (response, personalProfile) in
+            
+            DispatchQueue.main.async(execute: {
+                self.view.removeSpinner()
+                
+                if personalProfile.idString == ProfileManager.sharedInstance.personalProfile.idString ||  ProfileManager.sharedInstance.personalProfile.idString == 0
+                {
+                    ProfileManager.sharedInstance.personalProfile = personalProfile
+                    self.nameLabel.text = ProfileManager.sharedInstance.personalProfile.name
+                    self.mobileLabel.text = ProfileManager.sharedInstance.personalProfile.mobileNumber
+                    
+                }
+                if let photo  = personalProfile.photo
+                {
+                    self.setProfileImgeForURL(photo)
+                }
+                
+                
+                
+            });
+            
+        }) { (error) in
+            
+            DispatchQueue.main.async(execute: {
+                
+                
+            });
+            
+        }
     }
 }

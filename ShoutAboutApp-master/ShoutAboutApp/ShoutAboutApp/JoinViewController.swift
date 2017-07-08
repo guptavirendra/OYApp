@@ -40,7 +40,6 @@ fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
 class ContactManager: NSObject
 {
     static let sharedInstance = ContactManager()
-     
 }
 
 
@@ -68,7 +67,6 @@ extension UITableView
 
 class JoinViewController: ProfileViewController/*, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate,*/, InputTableViewCellProtocol, ClickTableViewCellProtocol /*,UIPickerViewDataSource, UIPickerViewDelegate*/
 {
-    
     var objects = [CNContact]()
     var allValidContacts = [SearchPerson]()
   
@@ -83,7 +81,7 @@ class JoinViewController: ProfileViewController/*, UITableViewDataSource, UITabl
     let k_photo = "photo"
 
     var completionHandler: (Float)->Void =
-        {
+    {
         (arg: Float) -> Void in
     }
     var handler :(UIAlertAction) -> Void =

@@ -1,3 +1,4 @@
+
 //
 //  MainSearchViewController.swift
 //  ShoutAboutApp
@@ -20,10 +21,7 @@ class MainSearchViewController: UIViewController, ContactTableViewCellProtocol
     @IBOutlet weak var searchButton:UIButton!
     @IBOutlet weak var clearButton:UIButton!
     @IBOutlet weak var clearButtonBaseView:UIView!
-    
     var allValidContacts = [SearchPerson]()
-    
-    
     override func viewDidLoad()
     {
         super.viewDidLoad()

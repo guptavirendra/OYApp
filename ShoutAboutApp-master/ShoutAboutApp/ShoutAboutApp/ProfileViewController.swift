@@ -6,8 +6,6 @@
 //  Copyright © 2016 VIRENDRA GUPTA. All rights reserved.
 //
 
-
-
 class PersonalProfile:NSObject
 {
     var  idInt : Int = 0
@@ -33,11 +31,8 @@ class ProfileManager:NSObject
     var personalProfile:SearchPerson = SearchPerson()
     var localStoredImage:UIImage?
     var syncedContactArray = [SearchPerson]()
-     
     var alert_count:Int = 0
 }
-
-
 
 protocol ProfileViewControllerDelegate
 {
@@ -101,7 +96,6 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     
     override func viewDidLoad()
     {
-        
         super.viewDidLoad()
         self.navigationController?.navigationBar.isHidden = false
         //self.navigationController?.navigationBar.tintColor = appColor

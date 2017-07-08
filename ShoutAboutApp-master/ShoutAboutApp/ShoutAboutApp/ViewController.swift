@@ -13,8 +13,8 @@ class ViewController: UIViewController
     @IBOutlet weak var submitButton: UIButton!
     @IBOutlet weak var mobileNumberTextField: UITextField!
     @IBOutlet weak var textFieldBaseView:UIView!
-    
     var mobileNumberString:String = ""
+    
     override func viewDidLoad()
     {
         super.viewDidLoad()
@@ -57,11 +57,12 @@ class ViewController: UIViewController
                         let messageString = deserializedResponse.object(forKey: message) as? String
                         if messageString == otpMessage
                         {
-                            DispatchQueue.main.async(execute: {
+                            DispatchQueue.main.async(execute:
+                                {
                                     self.view.removeSpinner()
-                                let otpViewController = self.storyboard?.instantiateViewController(withIdentifier: "OTPViewController") as? OTPViewController
-                                otpViewController?.mobileNumberString = self.mobileNumberString
-                                self.present(otpViewController!, animated: true, completion: nil)
+                                    let otpViewController = self.storyboard?.instantiateViewController(withIdentifier: "OTPViewController") as? OTPViewController
+                                    otpViewController?.mobileNumberString = self.mobileNumberString
+                                    self.present(otpViewController!, animated: true, completion: nil)
                                 
                             });
                             // print go ahead
@@ -93,7 +94,6 @@ extension ViewController:UITextFieldDelegate
     {
         var text:NSString =  textField.text! as NSString 
         text =  text.replacingCharacters(in: range, with: string) as NSString
-        
         
         if text.length == 10
         {
@@ -185,7 +185,6 @@ public extension UIView
     {
         
         let window = UIApplication.shared.keyWindow
-        
         self.showSpinnerInView(window!, spinnerType: "", dimBackgroundEnabled: dimBackground, userInteractionEnabled: userInteractionEnabled)
         
         
@@ -455,7 +454,8 @@ public struct Property
     // Progress Rect
     var progressRect: CGRect
         {
-        get {
+        get
+        {
             return CGRect(x: 0, y: 0, width: progressSize - arcLineWidth * 2, height: progressSize - arcLineWidth * 2)
         }
     }
@@ -463,14 +463,17 @@ public struct Property
 
 import UIKit
 
-open class ColorUtil {
+open class ColorUtil
+{
     
-    open class func toUIColor(r: CGFloat, g: CGFloat, b: CGFloat, a: CGFloat) -> UIColor {
+    open class func toUIColor(r: CGFloat, g: CGFloat, b: CGFloat, a: CGFloat) -> UIColor
+    {
         
         return UIColor(red: r/255.0, green: g/255.0, blue: b/255.0, alpha: a)
     }
     
-    internal class func toRGBA(color: UIColor) -> (r: CGFloat, g: CGFloat, b: CGFloat, a: CGFloat) {
+    internal class func toRGBA(color: UIColor) -> (r: CGFloat, g: CGFloat, b: CGFloat, a: CGFloat)
+    {
         var r: CGFloat = 0.0
         var g: CGFloat = 0.0
         var b: CGFloat = 0.0
@@ -481,11 +484,14 @@ open class ColorUtil {
         return (r, g, b, a)
     }
     
-    internal class func toNotOpacityColor(color: UIColor) -> UIColor {
+    internal class func toNotOpacityColor(color: UIColor) -> UIColor
+    {
         
-        if color == UIColor.clear {
+        if color == UIColor.clear
+        {
             return UIColor.white
-        } else {
+        } else
+        {
             return UIColor(
                 red: ColorUtil.toRGBA(color: color).r,
                 green: ColorUtil.toRGBA(color: color).g,
@@ -495,18 +501,20 @@ open class ColorUtil {
     }
 }
 
-class ArcView : UIView {
-    
+class ArcView : UIView
+{
     var prop: Property?
     var ratio: CGFloat = 1.0
     var color: UIColor = UIColor.black
     var lineWidth: CGFloat = 0.0
     
-    required init?(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder)
+    {
         fatalError("init(coder:) has not been implemented")
     }
     
-    init(frame: CGRect, lineWidth: CGFloat) {
+    init(frame: CGRect, lineWidth: CGFloat)
+    {
         super.init(frame: frame)
         
         self.backgroundColor = UIColor.clear
@@ -547,22 +555,26 @@ class ArcView : UIView {
     }
 }
 
-class GradientArcView : UIView {
+class GradientArcView : UIView
+{
     
     internal var prop: Property?
     
-    override init(frame: CGRect) {
+    override init(frame: CGRect)
+    {
         super.init(frame: frame)
         
         self.backgroundColor = UIColor.clear
         self.layer.masksToBounds = true
     }
     
-    required init?(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder)
+    {
         fatalError("init(coder:) has not been implemented")
     }
     
-    fileprivate func getGradientPointColor(_ ratio: CGFloat, startColor: UIColor, endColor: UIColor) -> UIColor {
+    fileprivate func getGradientPointColor(_ ratio: CGFloat, startColor: UIColor, endColor: UIColor) -> UIColor
+    {
         
         let sColor = ColorUtil.toRGBA(color: startColor)
         let eColor = ColorUtil.toRGBA(color: endColor)
@@ -575,9 +587,11 @@ class GradientArcView : UIView {
         return UIColor(red: r, green: g, blue: b, alpha: a)
     }
     
-    override func draw(_ rect: CGRect) {
+    override func draw(_ rect: CGRect)
+    {
         
-        guard let prop = prop else {
+        guard let prop = prop else
+        {
             return
         }
         
@@ -621,7 +635,7 @@ class GradientArcView : UIView {
 }
 
 
-
+/*Rating control screen */
 import UIKit
 protocol RatingControlDelegate
 {
@@ -632,8 +646,10 @@ class RatingControl: UIView
 {
     // MARK: Properties
     var delegate:RatingControlDelegate?
-    var rating = 0 {
-        didSet {
+    var rating = 0
+    {
+        didSet
+        {
             setNeedsLayout()
         }
     }
@@ -645,7 +661,8 @@ class RatingControl: UIView
     
     var color:UIColor = UIColor.white
         {
-        didSet {
+        didSet
+        {
             for button in self.subviews
             {
                 button.tintColor = color
@@ -667,23 +684,19 @@ class RatingControl: UIView
         for  _ in 0..<5
         {
             let button = UIButton()
-            
             button.setImage(emptyStarImage, for: UIControlState())
             button.tintColor = UIColor.white
-            
-            
             button.setImage(filledStarImage, for: .selected)
             button.setImage(filledStarImage, for: [.highlighted, .selected])
-            
             button.adjustsImageWhenHighlighted = false
-            
             button.addTarget(self, action: #selector(RatingControl.ratingButtonTapped(_:)), for: .touchDown)
             ratingButtons += [button]
             addSubview(button)
         }
     }
     
-    override func layoutSubviews() {
+    override func layoutSubviews()
+    {
         // Set the button's width and height to a square the size of the frame's height.
         let buttonSize = Int(frame.size.height)
         var buttonFrame = CGRect(x: 0, y: 0, width: buttonSize, height: buttonSize)
@@ -696,7 +709,8 @@ class RatingControl: UIView
         updateButtonSelectionStates()
     }
     
-    override var intrinsicContentSize : CGSize {
+    override var intrinsicContentSize : CGSize
+    {
         let buttonSize = Int(frame.size.height)
         let width = (buttonSize + spacing) * stars
         

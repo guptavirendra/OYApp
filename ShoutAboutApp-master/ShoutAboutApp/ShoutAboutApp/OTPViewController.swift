@@ -38,7 +38,8 @@ class OTPViewController: UIViewController, UITextFieldDelegate {
         // Do any additional setup after loading the view.
     }
 
-    override func didReceiveMemoryWarning() {
+    override func didReceiveMemoryWarning()
+    {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
@@ -54,7 +55,8 @@ class OTPViewController: UIViewController, UITextFieldDelegate {
     }
     */
     
-    override func viewDidAppear(_ animated: Bool){
+    override func viewDidAppear(_ animated: Bool)
+    {
         
         super.viewDidAppear(animated)
         DispatchQueue.main.async(execute: {
@@ -64,7 +66,8 @@ class OTPViewController: UIViewController, UITextFieldDelegate {
     }
     
     
-    deinit{
+    deinit
+    {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
 
@@ -191,7 +194,6 @@ class OTPViewController: UIViewController, UITextFieldDelegate {
         }else
         {
             //hit webservice
-            
             startTimer()
             DataSessionManger.sharedInstance.getOTPForMobileNumber(mobileNumberString, onFinish: { (response, deserializedResponse) in
                 
@@ -224,7 +226,7 @@ extension OTPViewController
 {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool
     {
-        var text:NSString =  textField.text as! NSString ?? ""
+        var text:NSString =  textField.text! as NSString ?? ""
         text =  text.replacingCharacters(in: range, with: string) as NSString
         
         
@@ -247,7 +249,7 @@ extension OTPViewController
     
     func edited()
     {
-        print("Edited \(otpTextField.text)")
+        print("Edited \(String(describing: otpTextField.text))")
         otpString = otpTextField.text!
         if otpString.characters.count == 6
         {
@@ -275,7 +277,8 @@ extension OTPViewController
         _ = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(OTPViewController.update), userInfo: nil, repeats: true)
     }
     
-    func update() {
+    func update()
+    {
         
         if(count > 0)
         {

@@ -30,24 +30,8 @@ import Watchdog
 
 class AppDelegate: UIResponder, UIApplicationDelegate/*, GIDSignInDelegate*/
 {
-
     var window: UIWindow?
-    
-    /*
-        Small Talk variable
-     */
-    
-    //var window: UIWindow?
-    lazy var router: DPLDeepLinkRouter = DPLDeepLinkRouter()
-    var globalColor: UIColor?
-    var backgroundColor: UIColor?
-    var darkColor: UIColor?
-    var selfColor: UIColor?
-    var highlightColor: UIColor?
-    //let watchdog = Watchdog(threshold: 0.016) //60 frames a second
     let crashlytics = Crashlytics.sharedInstance()
-    
-    
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool
     {
@@ -280,7 +264,7 @@ func application(_ application: UIApplication, didReceiveRemoteNotification user
   
   func connetToXmpp()
   {
-    OneChat.start(true, delegate: nil) { (stream, error) -> Void in
+        OneChat.start(true, delegate: nil) { (stream, error) -> Void in
         print (stream)
         if let _ = error
         {
@@ -335,14 +319,14 @@ func application(_ application: UIApplication, didReceiveRemoteNotification user
   
   func loadFirstScreen()
   {
-    let appUserId = UserDefaults.standard.object(forKey: kapp_user_id)
+    /*It should be put in a mangager class*/
+    let appUserId    = UserDefaults.standard.object(forKey: kapp_user_id)
     let appUserToken = UserDefaults.standard.object(forKey: kapp_user_token)
-    
     if appUserId != nil && appUserToken != nil
     {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let storyboard  = UIStoryboard(name: "Main", bundle: nil)
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let tabBarVC = storyboard.instantiateViewController(withIdentifier: "tabBarVC") as? MyTabViewController
+        let tabBarVC    = storyboard.instantiateViewController(withIdentifier: "tabBarVC") as? MyTabViewController
         
         appDelegate.window?.backgroundColor = UIColor(red: 236.0, green: 238.0, blue: 241.0, alpha: 1.0)
         appDelegate.window?.rootViewController = tabBarVC
@@ -352,6 +336,5 @@ func application(_ application: UIApplication, didReceiveRemoteNotification user
         {
             ProfileManager.sharedInstance.syncedContactArray.append(contentsOf: contactStored)
         }
-        
     }
 }
