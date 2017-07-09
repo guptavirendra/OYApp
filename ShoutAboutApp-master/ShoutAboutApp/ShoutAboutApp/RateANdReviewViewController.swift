@@ -70,7 +70,9 @@ class RateANdReviewViewController: UIViewController,UITableViewDataSource, UITab
         NotificationCenter.default.addObserver(self, selector: #selector(self.hideKeyBoard(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         let tapGesture = UITapGestureRecognizer()
         self.view.addGestureRecognizer(tapGesture)
+        
         tapGesture.addTarget(self, action: #selector(self.hideKeyBoard(_:)))
+        //tapGesture.addTarget(self, action: #selector(self.hideKeyBoard(_:)))
         
         self.title = "Rate & Review"
 //        self.navigationController?.navigationBar.titleTextAttributes =
@@ -505,9 +507,9 @@ extension RateANdReviewViewController
             }
         }
     }
+
     
-    
-    func hideKeyBoard(_ notification: Notification)
+    func hideKeyBoard(_ notification: AnyObject)
     {
         
         if  activeTextView != nil
