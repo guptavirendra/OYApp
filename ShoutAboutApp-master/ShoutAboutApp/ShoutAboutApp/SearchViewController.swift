@@ -362,11 +362,37 @@ extension SearchViewController
                 }
                 if searchArray?.count > 30
                 {
-                    searchArray?.removeFirst()
+                    let isContains = searchArray?.contains(where: { (person) -> Bool in
+                        return person.idString == personContact.idString
+                    })
+                    if isContains == true
+                    {
+                        let index = searchArray?.index(where: { (person) -> Bool in
+                            return person.idString == personContact.idString
+                        })
+                        searchArray?.remove(at: index!)
+                        
+                    }
+                    if searchArray?.count > 30
+                    {
+                        searchArray?.removeFirst()
+                    }
                     searchArray?.append(personContact)
                     
                 }else
                 {
+                   let isContains = searchArray?.contains(where: { (person) -> Bool in
+                        return person.idString == personContact.idString
+                    })
+                    if isContains == true
+                    {
+                       let index = searchArray?.index(where: { (person) -> Bool in
+                            return person.idString == personContact.idString
+                        })
+                        
+                       searchArray?.remove(at: index!)
+                        
+                    }
                      searchArray?.append(personContact)
                     
                 }
@@ -492,8 +518,10 @@ extension SearchViewController
     
     func savePerson(_ person:[SearchPerson])
     {
+        
         let archivedObject = SearchPerson.archivePeople(person)
         let defaults = UserDefaults.standard
+        defaults.removeObject(forKey: searchHistory)
         defaults.set(archivedObject, forKey: searchHistory)
         defaults.synchronize()
     }

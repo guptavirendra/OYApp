@@ -137,9 +137,9 @@ class SearchPerson:PersonContact, NSCoding
     required init?(coder aDecoder: NSCoder)
     {
         super.init()
-        if let id = aDecoder.decodeObject(forKey: "idString") as? Int
+        if let id = aDecoder.decodeObject(forKey: "idString") as? NSNumber
         {
-            self.idString = id
+            self.idString = id.intValue
         }
         if let status = aDecoder.decodeObject(forKey: "status") as? String
         {
@@ -208,8 +208,9 @@ class SearchPerson:PersonContact, NSCoding
     
     func encode(with aCoder: NSCoder)
     {
-        aCoder.encode(idString, forKey: "idString")
-        aCoder.encode(idString, forKey: "status")
+        
+        aCoder.encode(NSNumber(value: idString), forKey: "idString")
+        aCoder.encode(status, forKey: "status")
         aCoder.encode(name, forKey: "name")
         aCoder.encode(email, forKey: "email")
         aCoder.encode(mobileNumber, forKey: "mobileNumber")

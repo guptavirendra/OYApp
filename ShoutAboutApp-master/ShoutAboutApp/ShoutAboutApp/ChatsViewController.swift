@@ -1955,4 +1955,21 @@ extension ChatsViewController : CLLocationManagerDelegate
     {
         viewController.dismiss(animated: true, completion: nil)
     }
+    
+    @IBAction func profileImageButtonClicked(sender:UIButton)
+    {
+        let lphotopreviewViewController = self.storyboard?.instantiateViewController(withIdentifier: "photopreviewViewController") as? photopreviewViewController
+        lphotopreviewViewController!.picname = reciepientPerson?.photo
+        if let  count = lphotopreviewViewController?.picname?.characters.count
+        {
+            self.navigationController!.pushViewController(lphotopreviewViewController!, animated: true)
+        }
+    }
+    
+    @IBAction func profileNameButtonClicked(sender:UIButton)
+    {
+        let profileViewController = self.storyboard?.instantiateViewController(withIdentifier: "NewProfileViewController") as? NewProfileViewController
+        profileViewController?.personalProfile = reciepientPerson!
+        self.navigationController!.pushViewController(profileViewController!, animated: true)
+    }
 }

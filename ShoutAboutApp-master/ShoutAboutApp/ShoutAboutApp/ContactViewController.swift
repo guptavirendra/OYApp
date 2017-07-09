@@ -83,7 +83,7 @@ class ContactViewController: UIViewController, UITableViewDataSource, UITableVie
         
         
         
-        self.tableView.addBackGroundImageView()
+        //self.tableView.addBackGroundImageView()
         
        // self.tableView.backgroundColor = bgColor
        // self.getContacts()
