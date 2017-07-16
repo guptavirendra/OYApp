@@ -328,4 +328,14 @@
 @property(nonatomic, weak) IBOutlet UIToolbar* forwardToolBar;
 @property(nonatomic, weak) IBOutlet NSLayoutConstraint* forwardToolBarBottomConstraints;
 
+@property(nonatomic, weak) IBOutlet UIBarButtonItem* replyOrDeleteButtonItem;
+@property(nonatomic, weak) IBOutlet UIBarButtonItem* centerButtonItem;
+@property(nonatomic, weak) IBOutlet UIBarButtonItem* shareButtonItem;
+@property(nonatomic, weak) IBOutlet UILabel* itemSelectedCount;
+
+-(IBAction)deleteOrForwordButtonCliced:(UIBarButtonItem* )sender;
+
+-(IBAction)shareButtonCliced:(UIBarButtonItem* )sender;
+
+
 @end

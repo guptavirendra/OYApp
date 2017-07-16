@@ -1178,4 +1178,14 @@ JSQMessagesKeyboardControllerDelegate>
     }
 }
 
+-(IBAction)deleteOrForwordButtonCliced:(UIBarButtonItem* )sender
+{
+    
+}
+
+-(IBAction)shareButtonCliced:(UIBarButtonItem* )sender
+{
+    
+}
+
 @end

@@ -11,10 +11,14 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="JSQMessagesViewController">
             <connections>
+                <outlet property="centerButtonItem" destination="yV5-G4-Lx3" id="75U-gb-BG2"/>
                 <outlet property="collectionView" destination="l9u-2b-4LK" id="bLP-6g-CkO"/>
                 <outlet property="forwardToolBar" destination="3hH-F2-nt3" id="tIX-Hw-dxA"/>
                 <outlet property="forwardToolBarBottomConstraints" destination="mUk-We-RSm" id="Wly-0Z-qaq"/>
                 <outlet property="inputToolbar" destination="BoD-Az-3DM" id="w74-g9-1qA"/>
+                <outlet property="itemSelectedCount" destination="gl7-NE-3kf" id="oHR-Ca-QgI"/>
+                <outlet property="replyOrDeleteButtonItem" destination="pcR-Al-76I" id="tfS-0g-BYs"/>
+                <outlet property="shareButtonItem" destination="sol-6s-fFG" id="A7q-q0-5w8"/>
                 <outlet property="toolbarBottomLayoutGuide" destination="rHs-6q-NX4" id="d6h-iu-VMX"/>
                 <outlet property="toolbarHeightConstraint" destination="HIk-02-qcW" id="jE8-xC-1eD"/>
                 <outlet property="view" destination="mUa-cS-ru4" id="nki-T1-RTI"/>
@@ -42,7 +46,11 @@
                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="44" id="sVp-yc-JGB"/>
                     </constraints>
                     <items>
-                        <barButtonItem style="done" systemItem="reply" id="pcR-Al-76I"/>
+                        <barButtonItem style="done" systemItem="reply" id="pcR-Al-76I">
+                            <connections>
+                                <action selector="deleteOrForwordButtonCliced:" destination="-1" id="UVj-lx-hDq"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem style="plain" id="yV5-G4-Lx3">
                             <view key="customView" contentMode="scaleToFill" id="yv7-jt-W21">
                                 <rect key="frame" x="51" y="5.5" width="250" height="33"/>
@@ -59,7 +67,11 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
                         </barButtonItem>
-                        <barButtonItem systemItem="action" id="sol-6s-fFG"/>
+                        <barButtonItem systemItem="action" id="sol-6s-fFG">
+                            <connections>
+                                <action selector="shareButtonCliced:" destination="-1" id="C4a-Ay-TyF"/>
+                            </connections>
+                        </barButtonItem>
                     </items>
                 </toolbar>
                 <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BoD-Az-3DM" customClass="JSQMessagesInputToolbar">

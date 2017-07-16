@@ -258,8 +258,7 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
             }
             
             OneMessage.sharedInstance.deleteMessagesFrom(jid: msg.senderId, messages: finalDeleteArray)
-            self.messages.removeObject(at: indexPath.item)
-            self.collectionView.reloadData()
+             //self.collectionView.reloadData()
         }
         
     }
@@ -439,14 +438,17 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
         self.forwardToolBarBottomConstraints?.constant = 0
         self.inputToolbar.isHidden = true
         self.forwardToolBar?.bringSubview(toFront: self.inputToolbar)
+        self.itemSelectedCount.text = String(selectedIndexArray.count) + " Selected"
         self.collectionView.reloadData()
         
         if action == #selector(self.deleteMessage(indexPath:))
         {
-            self.deleteMessage(indexPath: indexPath as NSIndexPath)
+            self.replyOrDeleteButtonItem =  UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(self.deleteOrForwordButtonCliced(_:)))
+           // self.deleteMessage(indexPath: indexPath as NSIndexPath)
         }
         if action == #selector(self.copyMessage)
         {
+           self.replyOrDeleteButtonItem =  UIBarButtonItem(barButtonSystemItem: .reply, target: self, action: #selector(self.deleteOrForwordButtonCliced(_:)))
             
         }
         
@@ -1233,7 +1235,10 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
             }
         }else
         {
-            cell.checkMarkImageView.isHidden = true
+            if cell.checkMarkImageView != nil
+            {
+                cell.checkMarkImageView.isHidden = true
+            }
             
         }
         
@@ -1301,7 +1306,7 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
             {
                 selectedIndexArray.add(indexPath)
             }
-            
+            self.itemSelectedCount.text = String(selectedIndexArray.count) + " Selected"
             self.collectionView.reloadData()
         }
     }
@@ -1321,8 +1326,8 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
             {
                 selectedIndexArray.add(indexPath)
             }
-            
-            self.collectionView.reloadData()
+             self.itemSelectedCount.text = String(selectedIndexArray.count) + " Selected"
+             self.collectionView.reloadData()
             
             
             
@@ -2057,10 +2062,51 @@ extension ChatsViewController : CLLocationManagerDelegate
     
     @IBAction func deleteORForwardCancelButtonClicked(sender:UIButton)
     {
+       self.cancelDeleteOrForward()
+    }
+    
+    
+    func cancelDeleteOrForward()
+    {
         self.isdeleteForwardMode = false
         self.cancelButton?.isHidden = true
         self.inputToolbar.isHidden = false
-
+        self.selectedIndexArray.removeAllObjects()
         self.collectionView.reloadData()
     }
+    
+    
+    @IBAction  override func  deleteOrForwordButtonCliced(_ sender:UIBarButtonItem)
+    {
+    
+        
+        var deletedArray = [JSQMessage]()
+        for indexPath in self.selectedIndexArray
+        {
+            let msg =  self.messages[(indexPath as AnyObject).row]
+            deletedArray.append(msg as! JSQMessage)
+        }
+        
+        for indexPath in self.selectedIndexArray
+        {
+            self.deleteMessage(indexPath: indexPath as! NSIndexPath)
+            
+        }
+        
+        self.messages.removeObjects(in: deletedArray)
+        self.cancelDeleteOrForward()
+    }
+    
+    
+    @IBAction  override func  shareButtonCliced(_ sender:UIBarButtonItem)
+    {
+        
+        
+    }
+
+    
+    
+    
+    
+    
 }
