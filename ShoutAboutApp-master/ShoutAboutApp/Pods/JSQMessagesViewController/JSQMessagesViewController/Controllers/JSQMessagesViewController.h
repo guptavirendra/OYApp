@@ -324,4 +324,8 @@
  */
 - (void)didReceiveMenuWillHideNotification:(NSNotification *)notification;
 
+@property(nonatomic, assign) BOOL isdeleteForwardMode;
+@property(nonatomic, weak) IBOutlet UIToolbar* forwardToolBar;
+@property(nonatomic, weak) IBOutlet NSLayoutConstraint* forwardToolBarBottomConstraints;
+
 @end

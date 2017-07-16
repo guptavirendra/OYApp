@@ -119,4 +119,7 @@
 - (void)collectionView:(JSQMessagesCollectionView *)collectionView
                 header:(JSQMessagesLoadEarlierHeaderView *)headerView didTapLoadEarlierMessagesButton:(UIButton *)sender;
 
+- (void)collectionView:(JSQMessagesCollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath;
+
+
 @end

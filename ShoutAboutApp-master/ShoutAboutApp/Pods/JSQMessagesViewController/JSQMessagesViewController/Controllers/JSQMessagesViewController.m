@@ -177,7 +177,7 @@ JSQMessagesKeyboardControllerDelegate>
 
     self.collectionView.dataSource = self;
     self.collectionView.delegate = self;
-
+ 
     self.inputToolbar.delegate = self;
     self.inputToolbar.contentView.textView.placeHolder = [NSBundle jsq_localizedStringForKey:@"new_message"];
 
@@ -546,11 +546,28 @@ JSQMessagesKeyboardControllerDelegate>
     BOOL isMediaMessage = [messageItem isMediaMessage];
 
     NSString *cellIdentifier = nil;
-    if (isMediaMessage) {
-        cellIdentifier = isOutgoingMessage ? self.outgoingMediaCellIdentifier : self.incomingMediaCellIdentifier;
-    }
-    else {
-        cellIdentifier = isOutgoingMessage ? self.outgoingCellIdentifier : self.incomingCellIdentifier;
+    
+    if (self.isdeleteForwardMode)
+    {
+        if (isMediaMessage)
+        {
+            cellIdentifier =   self.outgoingMediaCellIdentifier;
+        }
+        else
+        {
+            cellIdentifier =  self.outgoingCellIdentifier;
+        }
+        
+        
+    }else
+    {
+        if (isMediaMessage)
+        {
+            cellIdentifier = isOutgoingMessage ? self.outgoingMediaCellIdentifier : self.incomingMediaCellIdentifier;
+        }
+        else {
+            cellIdentifier = isOutgoingMessage ? self.outgoingCellIdentifier : self.incomingCellIdentifier;
+        }
     }
 
     JSQMessagesCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellIdentifier forIndexPath:indexPath];
@@ -757,7 +774,15 @@ JSQMessagesKeyboardControllerDelegate>
 
 - (void)collectionView:(JSQMessagesCollectionView *)collectionView
  didTapCellAtIndexPath:(NSIndexPath *)indexPath
-         touchLocation:(CGPoint)touchLocation { }
+         touchLocation:(CGPoint)touchLocation
+{
+    
+}
+
+- (void)collectionView:(JSQMessagesCollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+}
 
 #pragma mark - Input toolbar delegate
 

@@ -24,4 +24,6 @@
  */
 @interface JSQMessagesCollectionViewCellOutgoing : JSQMessagesCollectionViewCell
 
+
+
 @end

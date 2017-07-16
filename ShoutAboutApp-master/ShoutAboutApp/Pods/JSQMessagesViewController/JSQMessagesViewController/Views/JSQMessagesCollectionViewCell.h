@@ -202,5 +202,7 @@
  *  @warning Note that all message cells share the all actions registered here.
  */
 + (void)registerMenuAction:(SEL)action;
+@property (weak, nonatomic) IBOutlet UIImageView *checkMarkImageView;
+
 
 @end

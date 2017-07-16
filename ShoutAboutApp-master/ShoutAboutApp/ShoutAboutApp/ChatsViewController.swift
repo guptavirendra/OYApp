@@ -15,7 +15,8 @@ import Photos
 import ContactsUI
 import LocationPicker
 
-class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CNContactPickerDelegate, IQAudioRecorderViewControllerDelegate, CNContactViewControllerDelegate  {
+class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CNContactPickerDelegate, IQAudioRecorderViewControllerDelegate, CNContactViewControllerDelegate
+{
     
     let appDelegate = UIApplication.shared.delegate as? AppDelegate
     var messages = NSMutableArray()
@@ -28,6 +29,8 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
     @IBOutlet weak var titleLabel:UILabel?
     @IBOutlet weak var statusLabel:UILabel?
     @IBOutlet weak var profilePic:UIImageView?
+    @IBOutlet weak var cancelButton:UIButton?
+    
     
     
     
@@ -39,6 +42,8 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
     var isLocationClicked:Bool = false
     
     var messagesOriginal = NSMutableArray()
+    
+    var selectedIndexArray = NSMutableArray()
     // Mark: Life Cycle
     
     
@@ -131,6 +136,7 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
     override func viewDidLoad()
     {
         super.viewDidLoad()
+        self.cancelButton?.isHidden = true
 
     self.navigationController?.isNavigationBarHidden = true
     //self.tabBarController?.tabBar.isHidden = true
@@ -427,9 +433,21 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
     
     override func collectionView(_ collectionView: UICollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?)
     {
+        self.isdeleteForwardMode = true
+        self.cancelButton?.isHidden = false
+        selectedIndexArray.add(indexPath)
+        self.forwardToolBarBottomConstraints?.constant = 0
+        self.inputToolbar.isHidden = true
+        self.forwardToolBar?.bringSubview(toFront: self.inputToolbar)
+        self.collectionView.reloadData()
+        
         if action == #selector(self.deleteMessage(indexPath:))
         {
             self.deleteMessage(indexPath: indexPath as NSIndexPath)
+        }
+        if action == #selector(self.copyMessage)
+        {
+            
         }
         
         
@@ -1198,6 +1216,30 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
         let cell: JSQMessagesCollectionViewCell = super.collectionView(collectionView, cellForItemAt: indexPath) as! JSQMessagesCollectionViewCell
         let msg: JSQMessage = self.messages[indexPath.item] as! JSQMessage
         
+        
+        
+        if self.isdeleteForwardMode
+        {
+            cell.checkMarkImageView.isHidden = false
+            if self.selectedIndexArray.contains(indexPath)
+            {
+                
+                cell.checkMarkImageView.image = UIImage(named: "check_box_teal_on")
+            }else
+            {
+                
+                cell.checkMarkImageView.image = UIImage(named: "btn_selection_single_off")
+                
+            }
+        }else
+        {
+            cell.checkMarkImageView.isHidden = true
+            
+        }
+        
+        
+        
+        
         if !msg.isMediaMessage
         {
             if msg.senderId == self.senderId
@@ -1247,8 +1289,45 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
         return 0.0
     }
     
+    override func collectionView(_ collectionView: JSQMessagesCollectionView, didSelectItemAt indexPath: IndexPath)
+    {
+        if self.isdeleteForwardMode
+        {
+            if selectedIndexArray.contains(indexPath)
+            {
+                 selectedIndexArray.remove(indexPath)
+                
+            }else
+            {
+                selectedIndexArray.add(indexPath)
+            }
+            
+            self.collectionView.reloadData()
+        }
+    }
+    
+    
     override func collectionView(_ collectionView: JSQMessagesCollectionView!, didTapMessageBubbleAt indexPath: IndexPath!)
     {
+        
+        if self.isdeleteForwardMode
+        {
+            if selectedIndexArray.contains(indexPath)
+            {
+                let index = selectedIndexArray.index(of: indexPath)
+                selectedIndexArray.remove(indexPath)
+                
+            }else
+            {
+                selectedIndexArray.add(indexPath)
+            }
+            
+            self.collectionView.reloadData()
+            
+            
+            
+        }else
+        {
          let message: JSQMessage = self.messages[indexPath.item] as! JSQMessage
         if message.isMediaMessage == true
         {
@@ -1304,6 +1383,7 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
                 
             }
         }
+    }
     }
     
     
@@ -1971,5 +2051,16 @@ extension ChatsViewController : CLLocationManagerDelegate
         let profileViewController = self.storyboard?.instantiateViewController(withIdentifier: "NewProfileViewController") as? NewProfileViewController
         profileViewController?.personalProfile = reciepientPerson!
         self.navigationController!.pushViewController(profileViewController!, animated: true)
+    }
+    
+    
+    
+    @IBAction func deleteORForwardCancelButtonClicked(sender:UIButton)
+    {
+        self.isdeleteForwardMode = false
+        self.cancelButton?.isHidden = true
+        self.inputToolbar.isHidden = false
+
+        self.collectionView.reloadData()
     }
 }

@@ -155,6 +155,7 @@
     }
 
     [self.delegate collectionView:self didTapMessageBubbleAtIndexPath:indexPath];
+    
 }
 
 - (void)messagesCollectionViewCellDidTapCell:(JSQMessagesCollectionViewCell *)cell atPosition:(CGPoint)position
@@ -164,6 +165,7 @@
         return;
     }
 
+    [self.delegate collectionView:self didSelectItemAtIndexPath:indexPath];
     [self.delegate collectionView:self
             didTapCellAtIndexPath:indexPath
                     touchLocation:position];
