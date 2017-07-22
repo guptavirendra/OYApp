@@ -319,12 +319,13 @@ class DataSession: BaseNSURLSession
     func sendTextMessage(_ recipient_id:String, message:String,  onFinish:@escaping (_ response:AnyObject,_ deserializedResponse:AnyObject)->(), onError:@escaping (_ error:AnyObject)->())
     {
          var  paramdict = NSObject.getAppUserIdAndToken()
-         paramdict["recipient_id"] = recipient_id
+         paramdict["recipient_id"] = recipient_id.replacingOccurrences(of: "@localhost", with: "")
          paramdict["message_type"] = "text"
+         paramdict["text"] = message
         
-         let  postDict = ["text":message]
+         //let  postDict = ["text":message]
         
-        super.postDataWithOnFinish(mCHWebServiceMethod.send_message, parameters: paramdict as Dictionary<String, AnyObject>, postBody: postDict as Dictionary<String, AnyObject>, onFinish: { (response, deserializedResponse) in
+        super.postDataWithOnFinish(mCHWebServiceMethod.send_message, parameters: paramdict as Dictionary<String, AnyObject>, postBody: nil, onFinish: { (response, deserializedResponse) in
             onFinish(response, deserializedResponse)
 
             }) { (error) in

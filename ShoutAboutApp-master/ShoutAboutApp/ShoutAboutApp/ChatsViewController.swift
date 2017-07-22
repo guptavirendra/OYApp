@@ -31,9 +31,6 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
     @IBOutlet weak var profilePic:UIImageView?
     @IBOutlet weak var cancelButton:UIButton?
     
-    
-    
-    
     var locationManager: CLLocationManager!
     var currentLocation:CLLocation?
     var latitudeToSend: CLLocationDegrees?
@@ -137,6 +134,16 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
     {
         super.viewDidLoad()
         self.cancelButton?.isHidden = true
+        
+        
+        
+        
+        let tapGesture = UITapGestureRecognizer()
+        self.collectionView.addGestureRecognizer(tapGesture)
+        
+        tapGesture.addTarget(self, action: #selector(self.hideKeyBoard(_:)))
+        
+        
 
     self.navigationController?.isNavigationBarHidden = true
     //self.tabBarController?.tabBar.isHidden = true
@@ -404,6 +411,12 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
             message.senderId = senderId
             message.receiverId  = recipient.jidStr
             
+            DataSessionManger.sharedInstance.sendTextMessage(message.receiverId, message:text  , onFinish: { (response, deserialized) in
+                
+            }, onError: { (error) in
+                
+            })
+        
             
             OneMessage.sendMessage(message.getJson(), to: recipient.jidStr, completionHandler: { (stream, message) -> Void in
                 JSQSystemSoundPlayer.jsq_playMessageSentSound()
@@ -1296,6 +1309,7 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
     
     override func collectionView(_ collectionView: JSQMessagesCollectionView, didSelectItemAt indexPath: IndexPath)
     {
+        self.keyboardController.textView.resignFirstResponder()
         if self.isdeleteForwardMode
         {
             if selectedIndexArray.contains(indexPath)
@@ -1314,7 +1328,8 @@ class ChatsViewController: JSQMessagesViewController, OneMessageDelegate, UIImag
     
     override func collectionView(_ collectionView: JSQMessagesCollectionView!, didTapMessageBubbleAt indexPath: IndexPath!)
     {
-        
+        self.keyboardController.textView.resignFirstResponder()
+
         if self.isdeleteForwardMode
         {
             if selectedIndexArray.contains(indexPath)
@@ -2080,21 +2095,39 @@ extension ChatsViewController : CLLocationManagerDelegate
     {
     
         
-        var deletedArray = [JSQMessage]()
-        for indexPath in self.selectedIndexArray
-        {
-            let msg =  self.messages[(indexPath as AnyObject).row]
-            deletedArray.append(msg as! JSQMessage)
-        }
         
-        for indexPath in self.selectedIndexArray
-        {
-            self.deleteMessage(indexPath: indexPath as! NSIndexPath)
+         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet) // 1
+        
+        
+        let firstAction = UIAlertAction(title: "Delete "+String(selectedIndexArray.count)+" Messages", style: .destructive) { (alert: UIAlertAction!) -> Void in
+            NSLog("You pressed button one")
+            var deletedArray = [JSQMessage]()
+            for indexPath in self.selectedIndexArray
+            {
+                let msg =  self.messages[(indexPath as AnyObject).row]
+                deletedArray.append(msg as! JSQMessage)
+            }
             
+            for indexPath in self.selectedIndexArray
+            {
+                self.deleteMessage(indexPath: indexPath as! NSIndexPath)
+                
+            }
+            
+            self.messages.removeObjects(in: deletedArray)
+            self.cancelDeleteOrForward()
         }
         
-        self.messages.removeObjects(in: deletedArray)
-        self.cancelDeleteOrForward()
+        let fifthAction = UIAlertAction(title: "Cancel", style: .cancel) { (alert: UIAlertAction!) -> Void in
+            NSLog("You pressed button two")
+        } // 3
+        
+        
+        alert.addAction(firstAction) // 4
+        alert.addAction(fifthAction)// 5
+        present(alert, animated: true, completion:nil) // 6
+        
+       
     }
     
     
@@ -2103,10 +2136,11 @@ extension ChatsViewController : CLLocationManagerDelegate
         
         
     }
+    
+    
+    func hideKeyBoard(_ notification: AnyObject)
+    {
+        self.keyboardController.textView.resignFirstResponder()
 
-    
-    
-    
-    
-    
+    }
 }

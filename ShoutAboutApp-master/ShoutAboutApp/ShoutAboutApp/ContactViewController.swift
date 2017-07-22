@@ -279,7 +279,12 @@ extension ContactViewController
                 chatVc?.senderId          = String(ProfileManager.sharedInstance.personalProfile.idString)
                 chatVc?.reciepientPerson         = personContact
                 chatVc?.recipient = user
+                chatVc?.hidesBottomBarWhenPushed = true
                 self.navigationController!.pushViewController(chatVc!, animated: true)
+                
+                
+                
+                
                 
             }
             else if button.titleLabel?.text?.contains("reviews") == true

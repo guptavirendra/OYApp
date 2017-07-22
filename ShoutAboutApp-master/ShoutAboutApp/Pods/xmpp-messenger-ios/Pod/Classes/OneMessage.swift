@@ -342,12 +342,12 @@ extension OneMessage: XMPPStreamDelegate
         {
             if  UIApplication.shared.applicationState == .active
             {
-                 let alert = UIAlertController(title: message.body(), message: nil, preferredStyle: .actionSheet)
-                let cancelAction =  UIAlertAction(title: "OK", style: .cancel, handler: nil)
+                // let alert = UIAlertController(title: message.body(), message: nil, preferredStyle: .actionSheet)
+               // let cancelAction =  UIAlertAction(title: "OK", style: .cancel, handler: nil)
                  
-                alert.addAction(cancelAction)
+                //alert.addAction(cancelAction)
 
-                 UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion:nil)
+               //  UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion:nil)
             }else
             
             {

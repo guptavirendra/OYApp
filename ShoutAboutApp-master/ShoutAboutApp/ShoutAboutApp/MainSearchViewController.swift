@@ -224,6 +224,8 @@ extension MainSearchViewController
                 //let user =   OneRoster.userFromRosterAtIndexPath(indexPath: indexPath!)
                 
                 let chatVc = self.storyboard?.instantiateViewController(withIdentifier: "ChatsViewController") as? ChatsViewController
+                chatVc?.hidesBottomBarWhenPushed = true
+
                 
                 chatVc!.senderDisplayName = ProfileManager.sharedInstance.personalProfile.name
                 chatVc?.senderId          = String(ProfileManager.sharedInstance.personalProfile.idString)

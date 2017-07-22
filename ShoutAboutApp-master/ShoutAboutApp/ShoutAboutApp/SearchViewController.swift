@@ -334,6 +334,8 @@ extension SearchViewController
                 chatVc?.senderId          = String(ProfileManager.sharedInstance.personalProfile.idString)
                 chatVc?.reciepientPerson         = personContact
                 chatVc?.recipient = user
+                chatVc?.hidesBottomBarWhenPushed = true
+
                 self.navigationController?.isNavigationBarHidden = false
                 self.navigationController!.pushViewController(chatVc!, animated: true)
                 
